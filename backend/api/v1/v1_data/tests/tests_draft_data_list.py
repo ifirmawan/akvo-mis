@@ -62,6 +62,24 @@ class DraftFormDataListTestCase(TestCase, ProfileTestHelperMixin):
         for data in response.json()["data"]:
             self.assertIn(self.data.name, data["name"])
 
+    def test_administration_filter_draft_form_data_list(self):
+        response = self.client.get(
+            (
+                f"/api/v1/draft-submissions/{self.form.id}/"
+                f"?administration={self.administration.id}"
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(
+            response.json()["total"], 0
+        )
+        for data in response.json()["data"]:
+            self.assertEqual(
+                data["administration"],
+                " - ".join(self.administration.full_name.split("-")[1:])
+            )
+
     def test_unauthorized_draft_form_data_list(self):
         response = self.client.get(
             f"/api/v1/draft-submissions/{self.form.id}/",

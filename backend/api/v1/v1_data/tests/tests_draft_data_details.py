@@ -41,20 +41,15 @@ class DraftFormDataDetailsTestCase(TestCase, ProfileTestHelperMixin):
             [
                 "id",
                 "uuid",
-                "name",
                 "form",
                 "administration",
-                "geo",
-                "created_by",
-                "updated_by",
-                "created",
-                "updated",
-                "submitter",
-                "duration",
+                "datapoint_name",
+                "geolocation",
                 "answers",
             ]
         )
         self.assertEqual(response.json()["id"], self.data.id)
+        self.assertIsInstance(response.json()["answers"], dict)
 
     def test_draft_form_data_details_not_found(self):
         response = self.client.get(

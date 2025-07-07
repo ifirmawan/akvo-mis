@@ -15,6 +15,7 @@ class JobTypes:
     download = 4
     download_administration = 5
     download_entities = 6
+    download_datapoint_report = 7
 
     FieldStr = {
         send_email: "send_email",
@@ -23,6 +24,7 @@ class JobTypes:
         download: "download",
         download_administration: "download_administration",
         download_entities: "download_entities",
+        download_datapoint_report: "download_datapoint_report",
     }
 
 

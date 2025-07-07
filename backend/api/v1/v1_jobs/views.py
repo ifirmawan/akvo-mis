@@ -36,6 +36,7 @@ from api.v1.v1_jobs.serializers import (
     DownloadDataRequestSerializer,
     DownloadListSerializer,
     UploadExcelSerializer,
+    FormDataReportSerializer,
 )
 from api.v1.v1_profile.models import Administration
 from utils import storage
@@ -157,11 +158,18 @@ def download_file(request, version, file_name):
     filepath = storage.download(url)
     filename = job.result
     zip_file = open(filepath, "rb")
-    response = HttpResponse(
-        FileWrapper(zip_file),
-        content_type="application/vnd.openxmlformats-officedocument"
-        ".spreadsheetml.sheet",
-    )
+    # Set content type based on file extension
+    if filename.endswith('.docx'):
+        content_type = (
+            "application/vnd.openxmlformats-officedocument"
+            ".wordprocessingml.document"
+        )
+    else:
+        content_type = (
+            "application/vnd.openxmlformats-officedocument"
+            ".spreadsheetml.sheet"
+        )
+    response = HttpResponse(FileWrapper(zip_file), content_type=content_type)
     response["Content-Disposition"] = 'attachment; filename="%s"' % filename
     return response
 
@@ -193,6 +201,7 @@ def download_list(request, version):
         JobTypes.download,
         JobTypes.download_administration,
         JobTypes.download_entities,
+        JobTypes.download_datapoint_report,
     ]
     if request.GET.get("type"):
         job_types = [getattr(JobTypes, request.GET.get("type"))]
@@ -375,3 +384,62 @@ def upload_bulk_entities(request, version):
         },
         status=status.HTTP_200_OK,
     )
+
+
+@extend_schema(
+    tags=["Job"],
+    summary="Generate Datapoint Report",
+    parameters=[
+        OpenApiParameter(
+            name="form_id",
+            required=True,
+            type=OpenApiTypes.NUMBER,
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="selection_ids",
+            required=False,
+            type={"type": "array", "items": {"type": "number"}},
+            location=OpenApiParameter.QUERY,
+        ),
+    ],
+    responses={
+        (200, "application/json"): inline_serializer(
+            "DatapointReport",
+            fields={
+                "task_id": serializers.CharField(),
+                "file_url": serializers.CharField(),
+            },
+        )
+    },
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def download_data_report(request, version):
+    serializer = FormDataReportSerializer(data=request.GET)
+    if not serializer.is_valid():
+        return Response(
+            {"message": validate_serializers_message(serializer.errors)},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    form = serializer.validated_data.get("form_id")
+    datapoints = serializer.validated_data.get("selection_ids")
+
+    # Convert datapoints to list of IDs if provided
+    selection_ids = [dp.id for dp in datapoints] if datapoints else []
+
+    result = call_command(
+        "job_data_report",
+        form.id,
+        request.user.id,
+        "-s",
+        *selection_ids,
+    )
+    job = Jobs.objects.get(pk=result)
+    data = {
+        "task_id": job.task_id,
+        "file_url": "/download/file/{0}?type=download_datapoint_report".format(
+            job.result
+        ),
+    }
+    return Response(data, status=status.HTTP_200_OK)

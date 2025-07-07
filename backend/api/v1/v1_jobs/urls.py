@@ -5,6 +5,7 @@ from api.v1.v1_jobs.views import (
     download_status,
     download_file,
     download_list,
+    download_data_report,
     upload_bulk_administrators,
     upload_bulk_entities,
     upload_excel,
@@ -28,5 +29,9 @@ urlpatterns = [
     ),
     re_path(
         r"^(?P<version>(v1))/upload/bulk-entities", upload_bulk_entities
+    ),
+    re_path(
+        r"^(?P<version>(v1))/download/datapoint-report",
+        download_data_report
     ),
 ]

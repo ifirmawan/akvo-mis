@@ -7,10 +7,12 @@ from api.v1.v1_forms.models import Forms
 from api.v1.v1_jobs.constants import JobTypes, JobStatus, DataDownloadTypes
 from api.v1.v1_jobs.models import Jobs
 from api.v1.v1_profile.models import Administration, AdministrationAttribute
+from api.v1.v1_data.models import FormData
 from utils.custom_serializer_fields import (
     CustomPrimaryKeyRelatedField,
     CustomFileField,
     CustomChoiceField,
+    CustomListField,
 )
 
 
@@ -129,3 +131,21 @@ class DownloadListSerializer(serializers.ModelSerializer):
 class UploadExcelSerializer(serializers.Serializer):
     file = CustomFileField(validators=[FileExtensionValidator(["xlsx"])])
     is_update = serializers.BooleanField(default=False)
+
+
+class FormDataReportSerializer(serializers.Serializer):
+    form_id = CustomPrimaryKeyRelatedField(queryset=Forms.objects.none())
+    selection_ids = CustomListField(
+        child=CustomPrimaryKeyRelatedField(
+            queryset=FormData.objects.none()
+        ),
+        required=False,
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.fields.get("form_id").queryset = Forms.objects.filter(
+            parent__isnull=True
+        ).all()
+        selection_ids_field = self.fields.get("selection_ids")
+        selection_ids_field.child.queryset = FormData.objects.all()

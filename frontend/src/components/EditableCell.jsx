@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, DatePicker, Input, Select, Row, Col, Image } from "antd";
-import { config, IMAGE_EXTENSIONS, QUESTION_TYPES } from "../lib";
+import {
+  config,
+  IMAGE_EXTENSIONS,
+  QUESTION_TYPES,
+  getAnswerDisplayValue,
+  getLastAnswerDisplayValue,
+} from "../lib";
 import { isEqual } from "lodash";
 const { Option } = Select;
 import { UndoOutlined, SaveOutlined } from "@ant-design/icons";
@@ -121,48 +127,6 @@ const EditableCell = ({
     }
   }, [record, locationName, lastValue]);
 
-  const getAnswerValue = () => {
-    switch (record.type) {
-      case QUESTION_TYPES.date:
-        return value ? moment(value).format("YYYY-MM-DD") : "-";
-      case QUESTION_TYPES.multiple_option:
-        return value?.length
-          ? value
-              ?.map((v) => {
-                const option = record?.option?.find((o) => o.value === v);
-                return option?.label;
-              })
-              ?.join(", ") || "-"
-          : "-";
-      case QUESTION_TYPES.option:
-        return value?.length
-          ? record?.option?.find((o) => o.value === value[0])?.label || "-"
-          : "-";
-      default:
-        return value || value === 0 ? value : "-";
-    }
-  };
-
-  const getLastAnswerValue = () => {
-    switch (record.type) {
-      case QUESTION_TYPES.multiple_option:
-        return oldValue?.length
-          ? oldValue
-              ?.map((v) => {
-                const option = record?.option?.find((o) => o.value === v);
-                return option?.label;
-              })
-              ?.join(", ") || "-"
-          : "-";
-      case QUESTION_TYPES.option:
-        return oldValue?.length
-          ? record?.option?.find((o) => o.value === oldValue[0])?.label || "-"
-          : "-";
-      default:
-        return oldValue || oldValue === 0 ? oldValue : "-";
-    }
-  };
-
   const renderAnswerInput = () => {
     return record.type === QUESTION_TYPES.option ? (
       <Select
@@ -279,9 +243,9 @@ const EditableCell = ({
           ) : isImageType && lastValue && oldValue ? (
             <Image src={oldValue} width={100} />
           ) : lastValue ? (
-            getLastAnswerValue()
+            getLastAnswerDisplayValue(record, oldValue)
           ) : (
-            getAnswerValue()
+            getAnswerDisplayValue(record, value)
           )}
         </span>
       </Col>

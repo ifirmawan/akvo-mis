@@ -93,7 +93,11 @@ const DataFilters = ({ loading, showAdm = true, resetFilter = true }) => {
       <Row style={{ marginBottom: "16px" }}>
         <Col flex={1}>
           <Space>
-            <FormDropdown loading={loading} />
+            <FormDropdown
+              loading={loading}
+              width="100%"
+              style={{ minWidth: 300 }}
+            />
             {/* <AdvancedFiltersButton /> */}
           </Space>
         </Col>
@@ -132,7 +136,7 @@ const DataFilters = ({ loading, showAdm = true, resetFilter = true }) => {
                 }
                 onClick={goToAddForm}
               >
-                Add New
+                {text.addNewButton}
               </Button>
             </Can>
           </Space>

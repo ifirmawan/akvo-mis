@@ -9,6 +9,7 @@ const FormDropdown = ({
   loading: parentLoading = false,
   title = false,
   hidden = false,
+  width = 160,
   ...props
 }) => {
   const { forms, selectedForm, loadingForm } = store.useState((state) => state);
@@ -56,7 +57,7 @@ const FormDropdown = ({
     return (
       <Select
         placeholder={`Select Form`}
-        style={{ width: title ? "100%" : 160 }}
+        style={{ width: title ? "100%" : width }}
         onChange={(e) => {
           handleChange(e);
         }}

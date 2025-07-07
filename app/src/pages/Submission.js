@@ -162,7 +162,10 @@ const Submission = ({ navigation, route }) => {
       <View style={styles.emptyIconContainer}>
         <Icon name="document-outline" size={64} color="#C5CAE9" />
       </View>
-      <Text style={styles.emptyStateText}>{trans.emptySubmissionMessage}</Text>
+      <View style={styles.emptyStateTextContainer}>
+        <Text style={styles.emptyStateTitle}>{trans.emptySubmissionMessage1}</Text>
+        <Text style={styles.emptyStateDescription}>{trans.emptySubmissionMessage2}</Text>
+      </View>
     </View>
   );
 
@@ -196,7 +199,7 @@ const Submission = ({ navigation, route }) => {
             testID="submission-list"
             contentContainerStyle={[
               styles.flatListContent,
-              datapoints.length === 0 && styles.emptyListContent
+              datapoints.length === 0 && styles.emptyListContent,
             ]}
             ListEmptyComponent={renderEmptyState}
           />
@@ -281,11 +284,21 @@ const styles = StyleSheet.create({
   emptyIconContainer: {
     marginBottom: 20,
   },
-  emptyStateText: {
-    fontSize: 16,
+  emptyStateTextContainer: {
+    alignItems: 'center',
+  },
+  emptyStateTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#424242',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  emptyStateDescription: {
+    fontSize: 14,
     color: '#757575',
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 20,
   },
 });
 

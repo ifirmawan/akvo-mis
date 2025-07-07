@@ -7,6 +7,7 @@ from math import ceil
 from wsgiref.util import FileWrapper
 from django.utils import timezone
 from django.http import HttpResponse
+from django.db.models import Q
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
     extend_schema,
@@ -38,6 +39,8 @@ from api.v1.v1_data.serializers import (
     SubmitUpdateDraftFormSerializer,
     SubmitFormDataAnswerSerializer,
     FormDataSerializer,
+    FilterDraftFormDataSerializer,
+    DraftFormDataDetailSerializer,
 )
 from api.v1.v1_forms.constants import (
     QuestionTypes
@@ -680,12 +683,31 @@ class DraftFormDataListView(APIView):
                 type=OpenApiTypes.STR,
                 location=OpenApiParameter.QUERY,
             ),
+            OpenApiParameter(
+                name="administration",
+                required=False,
+                type=OpenApiTypes.NUMBER,
+                location=OpenApiParameter.QUERY,
+            ),
         ],
         summary="To get list of draft form data",
     )
     def get(self, request, form_id, version):
         form = get_object_or_404(Forms, pk=form_id)
         page_size = REST_FRAMEWORK.get("PAGE_SIZE")
+
+        serializer = FilterDraftFormDataSerializer(
+            data=request.GET, context={"form_id": form_id}
+        )
+        if not serializer.is_valid():
+            return Response(
+                {
+                    "message": validate_serializers_message(serializer.errors),
+                    "details": serializer.errors,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        page = serializer.validated_data.get("page", 1)
 
         # Filter draft data for this form and user
         queryset = FormData.objects_draft.filter(
@@ -694,15 +716,25 @@ class DraftFormDataListView(APIView):
         ).order_by("-created")
 
         # Apply search filter if provided
-        search = request.GET.get("search")
+        search = serializer.validated_data.get("search", None)
         if search:
             queryset = queryset.filter(name__icontains=search)
+
+        # Apply administration filter if provided
+        administration = serializer.validated_data.get("administration", None)
+        if administration:
+            adm = serializer.validated_data.get("administration")
+            adm_path = adm.path if adm.path else f"{adm.pk}."
+            queryset = queryset.filter(
+                Q(administration__path__startswith=adm_path) |
+                Q(administration=adm)
+            )
 
         paginator = PageNumberPagination()
         instance = paginator.paginate_queryset(queryset, request)
 
         data = {
-            "current": int(request.GET.get("page", "1")),
+            "current": int(page),
             "total": queryset.count(),
             "total_page": ceil(queryset.count() / page_size),
             "data": ListFormDataSerializer(
@@ -747,7 +779,7 @@ class DraftFormDataDetailView(APIView):
     permission_classes = [IsAuthenticated, IsSubmitter]
 
     @extend_schema(
-        responses=FormDataSerializer,
+        responses=DraftFormDataDetailSerializer,
         tags=["Draft Data"],
         summary="Get draft form data by ID",
     )
@@ -761,7 +793,7 @@ class DraftFormDataDetailView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(
-            FormDataSerializer(instance=draft_data).data,
+            DraftFormDataDetailSerializer(instance=draft_data).data,
             status=status.HTTP_200_OK
         )
 

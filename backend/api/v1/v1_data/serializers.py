@@ -756,3 +756,62 @@ class SubmitUpdateDraftFormSerializer(SubmitPendingFormSerializer):
 
         Answers.objects.bulk_create(answers)
         return instance
+
+
+class FilterDraftFormDataSerializer(serializers.Serializer):
+    administration = CustomPrimaryKeyRelatedField(
+        queryset=Administration.objects.none(), required=False
+    )
+    page = CustomIntegerField(
+        required=False,
+        allow_null=True,
+        default=1,
+        min_value=1,
+        help_text="Page number for pagination",
+    )
+    search = CustomCharField(
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+        max_length=225,
+        help_text="Search by name",
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.fields.get(
+            "administration"
+        ).queryset = Administration.objects.all()
+
+    class Meta:
+        fields = ["administration", "page", "search"]
+
+
+class DraftFormDataDetailSerializer(serializers.ModelSerializer):
+    answers = serializers.SerializerMethodField()
+    datapoint_name = CustomCharField(source="name")
+    geolocation = CustomListField(
+        source="geo",
+        required=False,
+        allow_null=True
+    )
+
+    @extend_schema_field(OpenApiTypes.ANY)
+    def get_answers(self, instance):
+        data_answers = instance.data_answer.all()
+        answers = {}
+        for a in data_answers:
+            answers.update(a.to_key)
+        return answers
+
+    class Meta:
+        model = FormData
+        fields = [
+            "id",
+            "uuid",
+            "form",
+            "administration",
+            "datapoint_name",
+            "geolocation",
+            "answers",
+        ]

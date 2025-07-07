@@ -41,3 +41,5 @@ requests-mock==1.11.0
 
 #sentry
 sentry-sdk==2.2.0
+# Office doc rendering
+python-docx==1.1.2

@@ -157,6 +157,15 @@ const Submission = ({ navigation, route }) => {
     </TouchableOpacity>
   );
 
+  const renderEmptyState = () => (
+    <View style={styles.emptyStateContainer}>
+      <View style={styles.emptyIconContainer}>
+        <Icon name="document-outline" size={64} color="#C5CAE9" />
+      </View>
+      <Text style={styles.emptyStateText}>{trans.emptySubmissionMessage}</Text>
+    </View>
+  );
+
   return (
     <BaseLayout
       title={route?.params?.name}
@@ -185,7 +194,11 @@ const Submission = ({ navigation, route }) => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             testID="submission-list"
-            contentContainerStyle={styles.flatListContent}
+            contentContainerStyle={[
+              styles.flatListContent,
+              datapoints.length === 0 && styles.emptyListContent
+            ]}
+            ListEmptyComponent={renderEmptyState}
           />
         </View>
       </BaseLayout.Content>
@@ -206,6 +219,9 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     padding: 8,
+  },
+  emptyListContent: {
+    flexGrow: 1,
   },
   itemContainer: {
     width: '100%',
@@ -254,6 +270,22 @@ const styles = StyleSheet.create({
   },
   redDotHide: {
     display: 'none',
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+    paddingVertical: 60,
+  },
+  emptyIconContainer: {
+    marginBottom: 20,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    color: '#757575',
+    textAlign: 'center',
+    lineHeight: 24,
   },
 });
 

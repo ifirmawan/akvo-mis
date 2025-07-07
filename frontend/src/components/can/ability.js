@@ -20,6 +20,7 @@ const defineAbilityFor = (user) => {
       can("manage", "approvals");
     }
     if (is_submitter) {
+      can("manage", "draft");
       can("manage", "submissions");
       can("manage", "mobile");
       can("create", "downloads");

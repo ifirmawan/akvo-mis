@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./style.scss";
 import { Row, Col, Divider, Table, ConfigProvider, Empty } from "antd";
 import { useNavigate } from "react-router-dom";
+import { isEmpty, union, xor, without } from "lodash";
 
 import { api, store, uiText } from "../../lib";
 import { DataFilters, Breadcrumbs, DescriptionPanel } from "../../components";
@@ -10,11 +11,12 @@ import { generateAdvanceFilterURL } from "../../util/filter";
 const ManageData = () => {
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState([]);
-  const [query, setQuery] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [updateRecord, setUpdateRecord] = useState(true);
   const [activeFilter, setActiveFilter] = useState(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
   const navigate = useNavigate();
 
   // Get form_id from URL as default selectedForm
@@ -61,32 +63,63 @@ const ManageData = () => {
 
   const columns = [
     {
+      title: "Last Updated",
+      dataIndex: "updated",
+      render: (cell, row) => cell || row.created,
+      onCell: (record) => ({
+        onClick: () => goToMonitoring(record),
+      }),
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
       filtered: true,
-      filteredValue: query.trim() === "" ? [] : [query],
       onFilter: (value, filters) =>
         filters.name.toLowerCase().includes(value.toLowerCase()),
-    },
-    {
-      title: "Last Updated",
-      dataIndex: "updated",
-      render: (cell, row) => cell || row.created,
+      onCell: (record) => ({
+        onClick: () => goToMonitoring(record),
+      }),
     },
     {
       title: "User",
       dataIndex: "created_by",
+      onCell: (record) => ({
+        onClick: () => goToMonitoring(record),
+      }),
     },
     {
       title: "Region",
       dataIndex: "administration",
+      onCell: (record) => ({
+        onClick: () => goToMonitoring(record),
+      }),
     },
   ];
 
   const handleChange = (e) => {
     setUpdateRecord(true);
     setCurrentPage(e.current);
+  };
+
+  const onSelectTableRow = ({ id }) => {
+    selectedRowKeys.includes(id)
+      ? setSelectedRowKeys(without(selectedRowKeys, id))
+      : setSelectedRowKeys([...selectedRowKeys, id]);
+  };
+
+  const onSelectAllTableRow = (isSelected) => {
+    const hasSelected = !isEmpty(selectedRowKeys);
+    const ids = dataset.filter((x) => !x?.disabled).map((x) => x.id);
+    if (!isSelected && hasSelected) {
+      setSelectedRowKeys(xor(selectedRowKeys, ids));
+    }
+    if (isSelected && !hasSelected) {
+      setSelectedRowKeys(ids);
+    }
+    if (isSelected && hasSelected) {
+      setSelectedRowKeys(union(selectedRowKeys, ids));
+    }
   };
 
   useEffect(() => {
@@ -179,7 +212,12 @@ const ManageData = () => {
 
       <div className="table-section">
         <div className="table-wrapper">
-          <DataFilters query={query} setQuery={setQuery} loading={loading} />
+          <DataFilters
+            {...{
+              loading,
+              selectedRowKeys,
+            }}
+          />
           <Divider />
           <div
             style={{ padding: 0, minHeight: "40vh" }}
@@ -209,9 +247,11 @@ const ManageData = () => {
                 }}
                 rowClassName="row-normal sticky"
                 rowKey="id"
-                onRow={(record) => ({
-                  onClick: () => goToMonitoring(record),
-                })}
+                rowSelection={{
+                  selectedRowKeys: selectedRowKeys,
+                  onSelect: onSelectTableRow,
+                  onSelectAll: onSelectAllTableRow,
+                }}
               />
             </ConfigProvider>
           </div>

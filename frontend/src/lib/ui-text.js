@@ -20,6 +20,7 @@ const uiText = {
     menuPendingSubmissions: "Submissions",
     menuApprovals: "Approvals",
     menuDownloads: "Downloads",
+    menuManageDraft: "Manage Drafts",
 
     // Login
     loginLoadingTex: (
@@ -336,6 +337,14 @@ const uiText = {
         <br />
         Once you have sumitted a webform, please do not forget to add it as part
         of a batch and send it for approval.
+      </p>
+    ),
+    // Draft Webform
+    draftFormDescription: (
+      <p>
+        Please fill up the webform below with relevant responses. You can save
+        your responses and continue later or if you have completed the form then
+        you can submit it.
       </p>
     ),
     formSuccessTitle: "Thank you for the submission",
@@ -898,6 +907,17 @@ const uiText = {
     uploadAttachmentsRequired: "Please upload at least one attachment file",
     approveNoteRequired:
       "Please provide notes or feedback to decline or approved the submission",
+    manageDraftTitle: "Manage Drafts",
+    manageDraftText: (
+      <Fragment>
+        This is where you can manage your drafts. You can:
+        <ul>
+          <li>View your saved drafts</li>
+          <li>Edit existing drafts</li>
+          <li>Delete existing drafts</li>
+        </ul>
+      </Fragment>
+    ),
   },
 
   de: {},

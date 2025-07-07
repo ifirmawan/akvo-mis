@@ -229,6 +229,9 @@ Object {
     "download": "Download",
     "downloadHere": "download here",
     "downloadTitle": "Downloads",
+    "draftFormDescription": <p>
+      Please fill up the webform below with relevant responses. You can save your responses and continue later or if you have completed the form then you can submit it.
+    </p>,
     "dropFile": "Drop your file here",
     "editAdmDesc": <React.Fragment>
       This page allows you to edit administration to the
@@ -490,6 +493,21 @@ Object {
     </React.Fragment>,
     "manageDataTitle": "Manage Data",
     "manageDataValidationSetup": "Validation Tree",
+    "manageDraftText": <React.Fragment>
+      This is where you can manage your drafts. You can:
+      <ul>
+        <li>
+          View your saved drafts
+        </li>
+        <li>
+          Edit existing drafts
+        </li>
+        <li>
+          Delete existing drafts
+        </li>
+      </ul>
+    </React.Fragment>,
+    "manageDraftTitle": "Manage Drafts",
     "manageEntities": "Manage Entities",
     "manageEntitiesText": <React.Fragment>
       This is where you manage entitys based on their fields. You can :
@@ -580,6 +598,7 @@ Object {
     "menuEntities": "Entities",
     "menuEntityTypes": "Entity Types",
     "menuManageData": "Manage Data",
+    "menuManageDraft": "Manage Drafts",
     "menuManageMobileUsers": "Manage Mobile Users",
     "menuManagePlatformUsers": "Manage Platform Users",
     "menuManageRoles": "Manage Roles",

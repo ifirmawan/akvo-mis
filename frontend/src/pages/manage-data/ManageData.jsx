@@ -61,6 +61,11 @@ const ManageData = () => {
 
   const columns = [
     {
+      title: "Last Updated",
+      dataIndex: "updated",
+      render: (cell, row) => cell || row.created,
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
@@ -68,11 +73,6 @@ const ManageData = () => {
       filteredValue: query.trim() === "" ? [] : [query],
       onFilter: (value, filters) =>
         filters.name.toLowerCase().includes(value.toLowerCase()),
-    },
-    {
-      title: "Last Updated",
-      dataIndex: "updated",
-      render: (cell, row) => cell || row.created,
     },
     {
       title: "User",

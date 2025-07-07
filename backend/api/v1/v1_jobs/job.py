@@ -34,7 +34,7 @@ from utils.export_form import (
 )
 from utils.functions import update_date_time_format
 from utils.storage import upload
-from utils.custom_generator import generate_sqlite
+from utils.custom_generator import generate_sqlite, generate_datapoint_report
 
 logger = logging.getLogger(__name__)
 
@@ -192,6 +192,95 @@ def job_generate_data_download(job_id, **kwargs):
     worksheet.merge_range("A1:B1", "Context", merge_format)
     writer.save()
     url = upload(file=file_path, folder="download")
+    return url
+
+
+def job_generate_data_report(task, **kwargs):
+    job = Jobs.objects.get(task_id=task.id)
+    form_id = kwargs.get("form_id")
+    selection_ids = kwargs.get("selection_ids", [])  # noqa: F841
+
+    # Generate the report
+    form = Forms.objects.get(pk=form_id)
+    output_filename = "{0}_{1}_Report.docx".format(
+        job.created.strftime("%Y%m%d%H%M%S"),
+        form.name.replace(" ", "_").lower()
+    )
+
+    # Clean up any existing file
+    temp_file_path = f"./tmp/{output_filename}"
+    if os.path.exists(temp_file_path):
+        os.remove(temp_file_path)
+
+    # For now, using dummy data for Nasautoka village
+    # TODO: In the future, replace this with actual data retrieval
+    # based on form_id and selection_ids
+    nasautoka_data = {
+        "Display Name": "Nasautoka",
+        "Identifier": "2vau-qfq5-gfdq",
+        "Device identifier": "Enumerator 08",
+        "Instance": 961161025,
+        "Submission Date": "26-11-2024 23:57:40 UTC",
+        "Submitter": "Pateresio Nunu",
+        "Duration": "01:58:03",
+        "Form version": 17,
+        "Village Name": "Nasautoka",  # Added for the subtitle
+        "Group 1": {
+            "Which Division-Province-Tikina are you in?": (
+                "Central|Tailevu|Nasautoka"
+            ),
+            "Name of the Tikina": "Nsautoka",
+            "Village Name": "Nasautoka",
+            "Do you have Water Committee": "Yes",
+            "Is the Water Committee active?": "Yes",
+            "Date of Inspection": "2024-11-25",
+            "Latitude": -17.72627881,
+            "Longitude": 178.37874368,
+            "Elevation": "101.31195068359375",
+            "Weather Condition": "Cloudy",
+            "Type of Water Source": "Creek",
+            "Project Implementation date": "2018-04-11"
+        },
+        "Group 2": {
+            "Name of the village headman/TNK/village nurse?": (
+                "Ulaiasi Turaga"
+            ),
+            "Phone contact of the Village Headman/TNK or village nurse?": (
+                "8485564"
+            )
+        },
+        "Group 3": {
+            "Comment on Photo taken": (
+                "Gate and fencing damaged and need urgent maintenance"
+            )
+        },
+        "Group 4": {
+            "Method of Water Testing Used?": "Caddisfly Test",
+            "Description of Sampling Point": "storage tank",
+            "Health Risk Category (Based on MPN and Confidence Interval)": (
+                "Low Risk / Safe"
+            ),
+            "MPN(MPN/100ml)": 0,
+            "Upper 95% Confidence Interval": 2.87
+        },
+        "General Remarks": (
+            "Fence and gate damaged, outlet tap need to be replaced, "
+            "Accessibility to EPS tap which is located at the storage tank "
+            "is a challenge for the community, recommend to install more "
+            "EPS tap. Recommend to install galvanized 3 inch pipe to hold "
+            "chain-link fence to replace pine post as it gets rotten when "
+            "exposed to sun and rain"
+        ),
+        "The current status of this system?": "Operational",
+        "Signature of Officer": "Noa"
+    }
+
+    # Generate the report file
+    file_path = generate_datapoint_report(
+        nasautoka_data, file_path=temp_file_path
+    )
+
+    url = upload(file=file_path, folder="download_datapoint_report")
     return url
 
 

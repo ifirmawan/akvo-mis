@@ -182,7 +182,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
 
         # Call the function
         result_url = job_generate_data_report(
-            task,
+            job_id=job.id,
             form_id=self.form.id,
             selection_ids=self.selection_ids
         )
@@ -241,7 +241,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
 
         # Call the function
         result_url = job_generate_data_report(
-            task,
+            job_id=job.id,
             form_id=self.form.id,
             selection_ids=None
         )
@@ -351,7 +351,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         with patch('api.v1.v1_jobs.job.upload') as mock_upload:
             mock_upload.return_value = "https://storage.example.com/test.docx"
             job_generate_data_report(
-                task,
+                job_id=job.id,
                 form_id=self.form.id,
                 selection_ids=[]
             )

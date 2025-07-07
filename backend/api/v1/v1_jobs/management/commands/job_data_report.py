@@ -38,6 +38,7 @@ class Command(BaseCommand):
         )
         task_id = async_task(
             "api.v1.v1_jobs.job.job_generate_data_report",
+            job.id,
             **info,
             task_name="datapoint_report_generation",
             hook="api.v1.v1_jobs.job.job_generate_data_download_result"

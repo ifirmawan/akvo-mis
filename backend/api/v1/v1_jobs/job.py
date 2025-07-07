@@ -195,20 +195,13 @@ def job_generate_data_download(job_id, **kwargs):
     return url
 
 
-def job_generate_data_report(task, **kwargs):
-    job = Jobs.objects.get(task_id=task.id)
-    form_id = kwargs.get("form_id")
-    selection_ids = kwargs.get("selection_ids", [])  # noqa: F841
-
-    # Generate the report
-    form = Forms.objects.get(pk=form_id)
-    output_filename = "{0}_{1}_Report.docx".format(
-        job.created.strftime("%Y%m%d%H%M%S"),
-        form.name.replace(" ", "_").lower()
-    )
+def job_generate_data_report(job_id: int, **kwargs):
+    job = Jobs.objects.get(pk=job_id)
+    # form_id = kwargs.get("form_id")
+    # selection_ids = kwargs.get("selection_ids", [])  # noqa: F841
 
     # Clean up any existing file
-    temp_file_path = f"./tmp/{output_filename}"
+    temp_file_path = f"./tmp/{job.result}"
     if os.path.exists(temp_file_path):
         os.remove(temp_file_path)
 

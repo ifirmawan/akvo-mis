@@ -898,6 +898,14 @@ const uiText = {
     uploadAttachmentsRequired: "Please upload at least one attachment file",
     approveNoteRequired:
       "Please provide notes or feedback to decline or approved the submission",
+    downloadReport: "Download Report",
+    downloadReportSuccess: "Report downloaded successfully",
+    downloadReportError: "Unable to download report",
+    bulkUpload: "Bulk Upload",
+    selectChildForms: "Select Monitoring Forms",
+    allData: "All Data",
+    latestData: "Latest Data",
+    addNew: "Add New",
   },
 
   de: {},

@@ -4,6 +4,9 @@ import pandas as pd
 import logging
 from django.conf import settings
 from mis.settings import MASTER_DATA, STORAGE_PATH, COUNTRY_NAME
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from api.v1.v1_profile.models import Administration
 
 logger = logging.getLogger(__name__)
@@ -188,3 +191,160 @@ def administration_csv_delete(id: int):
             }
         )  # pragma: no cover
     return None
+
+
+def generate_datapoint_report(
+    report_data, file_path="./tmp/inspection_report.docx"
+):
+    """
+    Generates a .docx report for a single inspection record.
+
+    Args:
+        report_data (dict):
+        A dictionary containing all the data for one report.
+        file_path (str): The full path where the document should be saved.
+    """
+
+    # --- Document Initialization ---
+    document = Document()
+
+    # Set default font for the document (optional)
+    style = document.styles["Normal"]
+    font = style.font
+    font.name = "Calibri"
+    font.size = Pt(11)
+
+    # --- Helper Function to add key-value pairs ---
+    def add_info(key, value):
+        """Adds a formatted key-value pair to the document."""
+        p = document.add_paragraph()
+        p.add_run(f"{key}: ").bold = True
+        p.add_run(str(value))
+
+    # --- Header ---
+    title = document.add_heading(
+        "EPS Inspection and Water Quality Monitoring", level=1
+    )
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # Add a subtitle for the specific village
+    subtitle = document.add_heading(
+        f"Report for: {report_data.get('Village Name', 'N/A')}",
+        level=2,
+    )
+    subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    document.add_paragraph()  # Add some space
+
+    # --- General Information ---
+    document.add_heading("General Information", level=3)
+    add_info("Display Name", report_data.get("Display Name"))
+    add_info("Identifier", report_data.get("Identifier"))
+    add_info("Device Identifier", report_data.get("Device identifier"))
+    add_info("Submission Date", report_data.get("Submission Date"))
+    add_info("Submitter", report_data.get("Submitter"))
+    add_info("Form Version", report_data.get("Form version"))
+    document.add_paragraph()
+
+    # --- Group 1: Location ---
+    document.add_heading("Group 1 - Location of the Village", level=3)
+    location_data = report_data.get("Group 1", {})
+    add_info(
+        "Division-Province-Tikina",
+        location_data.get("Which Division-Province-Tikina are you in?"),
+    )
+    add_info("Village Name", location_data.get("Village Name"))
+    add_info("Date of Inspection", location_data.get("Date of Inspection"))
+    add_info("Weather Condition", location_data.get("Weather Condition"))
+    add_info("Water Source Type", location_data.get("Type of Water Source"))
+    add_info(
+        "Project Implementation Date",
+        location_data.get("Project Implementation date"),
+    )
+    add_info(
+        "Coordinates (Lat, Lon)",
+        f"{location_data.get('Latitude', 'N/A')}, "
+        f"{location_data.get('Longitude', 'N/A')}",
+    )
+    add_info("Elevation", location_data.get("Elevation"))
+    document.add_paragraph()
+
+    # --- Group 2: Contacts ---
+    document.add_heading("Group 2 - Contact Details", level=3)
+    contact_data = report_data.get("Group 2", {})
+    add_info(
+        "Village Headman/TNK/Nurse Name",
+        contact_data.get(
+            "Name of the village headman/TNK/village nurse?"
+        ),
+    )
+    add_info(
+        "Phone Contact",
+        contact_data.get(
+            "Phone contact of the Village Headman/TNK or village nurse?"
+        ),
+    )
+    document.add_paragraph()
+
+    # --- Group 3: Photos ---
+    document.add_heading("Group 3 - EPS Photos", level=3)
+    photo_data = report_data.get("Group 3", {})
+    add_info("Comments on Photo", photo_data.get("Comment on Photo taken"))
+
+    # Placeholder for adding an image.
+    # To add a real image,
+    # uncomment the following lines and provide a valid path.
+    # try:
+    #     document.add_picture('path/to/your/image.jpg', width=Inches(4.0))
+    # except FileNotFoundError:
+    #     document.add_paragraph(
+    #   "Image file not found. Please provide a valid path."
+    # )
+    document.add_paragraph()
+
+    # --- Group 4: Water Quality ---
+    document.add_heading("Group 4 - Water Quality Testing", level=3)
+    quality_data = report_data.get("Group 4", {})
+    add_info(
+        "Method of Water Testing",
+        quality_data.get("Method of Water Testing Used?"),
+    )
+    add_info(
+        "Description of Sampling Point",
+        quality_data.get("Description of Sampling Point"),
+    )
+    add_info(
+        "Health Risk Category",
+        quality_data.get(
+            "Health Risk Category (Based on MPN and Confidence Interval)"
+        ),
+    )
+    add_info("MPN (MPN/100ml)", quality_data.get("MPN(MPN/100ml)"))
+    add_info(
+        "Upper 95% Confidence Interval",
+        quality_data.get("Upper 95% Confidence Interval"),
+    )
+    document.add_paragraph()
+
+    # --- Final Remarks ---
+    document.add_heading("Concluding Remarks", level=3)
+    add_info("General Remarks", report_data.get("General Remarks"))
+    add_info(
+        "Current System Status",
+        report_data.get("The current status of this system?"),
+    )
+    add_info("Signature of Officer", report_data.get("Signature of Officer"))
+
+    # --- Save the document ---
+    try:
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        document.save(file_path)
+        return file_path
+    except Exception as e:
+        logger.error(
+            {
+                "context": "generate_datapoint_report",
+                "message": e,
+            }
+        )  # pragma: no cover
+        raise

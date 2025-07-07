@@ -54,6 +54,8 @@ import {
   DownloadEntitiesData,
   Roles,
   AddRole,
+  ManageDraft,
+  ManageDraftForm,
 } from "./pages";
 import { useCookies } from "react-cookie";
 import { store, api, config } from "./lib";
@@ -246,6 +248,14 @@ const RouteList = () => {
         <Route
           path="data/submissions"
           element={<Private element={Submissions} alias="data" />}
+        />
+        <Route
+          path="data/draft"
+          element={<Private element={ManageDraft} alias="data" />}
+        />
+        <Route
+          path="data/draft/:formId"
+          element={<Private element={ManageDraftForm} alias="data" />}
         />
         <Route
           path="approvals"

@@ -163,8 +163,8 @@ const Submission = ({ navigation, route }) => {
         <Icon name="document-outline" size={64} color="#C5CAE9" />
       </View>
       <View style={styles.emptyStateTextContainer}>
-        <Text style={styles.emptyStateTitle}>{trans.emptySubmissionMessage1}</Text>
-        <Text style={styles.emptyStateDescription}>{trans.emptySubmissionMessage2}</Text>
+        <Text style={styles.emptyStateTitle}>{trans.emptySubmissionMessageInfo}</Text>
+        <Text style={styles.emptyStateDescription}>{trans.emptySubmissionMessageAction}</Text>
       </View>
     </View>
   );

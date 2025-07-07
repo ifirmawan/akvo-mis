@@ -263,7 +263,11 @@ def validate_serializers_message(errors):
         elif isinstance(error_obj, str):
             replacement = key_map.get(key, key) if key else key
             if replacement:
-                msgs.append(error_obj.replace("field_title", replacement))
+                # Ensure replacement is a string to avoid TypeError
+                replacement_str = (
+                    str(replacement) if replacement is not None else ""
+                )
+                msgs.append(error_obj.replace("field_title", replacement_str))
             else:
                 msgs.append(error_obj)
         return msgs

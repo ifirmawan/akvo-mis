@@ -276,6 +276,12 @@ class DraftFormDataSerializer(serializers.ModelSerializer):
         queryset=Administration.objects.all(),
         source="administration_id"
     )
+    datapoint_name = CustomCharField(source="name")
+    geolocation = CustomListField(
+        source="geo",
+        required=False,
+        allow_null=True
+    )
     submittedAt = CustomDateTimeField(
         source="created",
         read_only=True,
@@ -296,10 +302,7 @@ class DraftFormDataSerializer(serializers.ModelSerializer):
         for answer in obj.data_answer.order_by(
             "question__question_group_id", "question__order"
         ).all():
-            question_id = answer.question.id
-            if question_id not in answers:
-                answers[question_id] = []
-            answers[question_id].append(answer.value)
+            answers.update(answer.to_key)
         return answers
 
     def get_repeats(self, obj):
@@ -317,10 +320,11 @@ class DraftFormDataSerializer(serializers.ModelSerializer):
         model = FormData
         fields = [
             "id",
+            "uuid",
             "form",
             "administration",
-            "name",
-            "geo",
+            "datapoint_name",
+            "geolocation",
             "submittedAt",
             "duration",
             "json",

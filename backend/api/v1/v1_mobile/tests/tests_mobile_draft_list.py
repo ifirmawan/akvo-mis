@@ -119,10 +119,11 @@ class MobileAssignmentApiDraftListTest(
             list(res_json["data"][0]),
             [
                 "id",
+                "uuid",
                 "form",
                 "administration",
-                "name",
-                "geo",
+                "datapoint_name",
+                "geolocation",
                 "submittedAt",
                 "duration",
                 "json",

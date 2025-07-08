@@ -48,9 +48,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         }
 
         response = self.client.get(
-            self.url,
-            params,
-            HTTP_AUTHORIZATION=f"Bearer {self.token}"
+            self.url, params, HTTP_AUTHORIZATION=f"Bearer {self.token}"
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -66,6 +64,55 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         self.assertEqual(job.info["form_id"], self.form.id)
         self.assertEqual(job.info["selection_ids"], self.selection_ids)
 
+    def test_generate_datapoint_report_with_child_forms(self):
+        """Test generating datapoint report with child forms"""
+        child_form_ids = [child.id for child in self.form.children.all()]
+        params = {
+            "form_id": self.form.id,
+            "selection_ids": self.selection_ids,
+            "child_form_ids": child_form_ids,
+        }
+
+        response = self.client.get(
+            self.url, params, HTTP_AUTHORIZATION=f"Bearer {self.token}"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("task_id", response.data)
+        self.assertIn("file_url", response.data)
+
+        # Verify job was created with child forms
+        job = Jobs.objects.get(task_id=response.data["task_id"])
+        self.assertEqual(job.info["form_id"], self.form.id)
+        self.assertEqual(job.info["child_form_ids"], child_form_ids)
+
+    def test_generate_datapoint_report_with_array_url(self):
+        """Test generating datapoint report with array URL"""
+        response = self.client.get(
+            (
+                f"{self.url}?form_id={self.form.id}"
+                f"&selection_ids={self.selection_ids[0]}"
+                f"&selection_ids={self.selection_ids[1]}"
+                f"&child_form_ids={self.form.children.first().id}"
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("task_id", response.data)
+        self.assertIn("file_url", response.data)
+
+        # Verify job was created with array URL
+        job = Jobs.objects.get(task_id=response.data["task_id"])
+        self.assertEqual(job.info["form_id"], self.form.id)
+        self.assertEqual(
+            job.info["selection_ids"],
+            [self.selection_ids[0], self.selection_ids[1]],
+        )
+        self.assertEqual(
+            job.info["child_form_ids"], [self.form.children.first().id]
+        )
+
     def test_generate_datapoint_report_without_selection_ids(self):
         """Test generating datapoint report without selection IDs"""
         params = {
@@ -73,9 +120,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         }
 
         response = self.client.get(
-            self.url,
-            params,
-            HTTP_AUTHORIZATION=f"Bearer {self.token}"
+            self.url, params, HTTP_AUTHORIZATION=f"Bearer {self.token}"
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -94,9 +139,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         }
 
         response = self.client.get(
-            self.url,
-            params,
-            HTTP_AUTHORIZATION=f"Bearer {self.token}"
+            self.url, params, HTTP_AUTHORIZATION=f"Bearer {self.token}"
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -110,9 +153,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         }
 
         response = self.client.get(
-            self.url,
-            params,
-            HTTP_AUTHORIZATION=f"Bearer {self.token}"
+            self.url, params, HTTP_AUTHORIZATION=f"Bearer {self.token}"
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -125,9 +166,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         }
 
         response = self.client.get(
-            self.url,
-            params,
-            HTTP_AUTHORIZATION=f"Bearer {self.token}"
+            self.url, params, HTTP_AUTHORIZATION=f"Bearer {self.token}"
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -140,10 +179,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
             "form_id": self.form.id,
         }
 
-        response = client.get(
-            self.url,
-            params
-        )
+        response = client.get(self.url, params)
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -198,7 +234,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
                 self.submitter.id,
             )
 
-    @patch('api.v1.v1_jobs.job.generate_datapoint_report')
+    @patch("api.v1.v1_jobs.job.generate_datapoint_report")
     def test_report_file_creation_and_cleanup(self, mock_generate_report):
         """Test that report files are created and cleaned up properly"""
         # Setup mock to create a temporary file
@@ -234,12 +270,10 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         job.save()
 
         # The file should be cleaned up when job_generate_data_report runs
-        with patch('api.v1.v1_jobs.job.upload') as mock_upload:
+        with patch("api.v1.v1_jobs.job.upload") as mock_upload:
             mock_upload.return_value = "https://storage.example.com/test.docx"
             job_generate_data_report(
-                job_id=job.id,
-                form_id=self.form.id,
-                selection_ids=[]
+                job_id=job.id, form_id=self.form.id, selection_ids=[]
             )
 
         # Clean up test file
@@ -254,9 +288,7 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         }
 
         response = self.client.get(
-            self.url,
-            params,
-            HTTP_AUTHORIZATION=f"Bearer {self.token}"
+            self.url, params, HTTP_AUTHORIZATION=f"Bearer {self.token}"
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -265,6 +297,4 @@ class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
         # Verify the URL contains the correct type parameter
         self.assertIn("type=download_datapoint_report", file_url)
         self.assertTrue(file_url.startswith("/download/file/"))
-        self.assertTrue(
-            file_url.endswith("?type=download_datapoint_report")
-        )
+        self.assertTrue(file_url.endswith("?type=download_datapoint_report"))

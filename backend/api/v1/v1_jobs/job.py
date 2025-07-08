@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime
+from dateutil import parser
 from django_q.models import Task
 
 import pandas as pd
@@ -328,12 +328,20 @@ def transform_form_data_for_report(
                         ) if options else ""
                     elif question.type == QuestionTypes.date:
                         value = ""
-                        if isinstance(answer.name, str) and answer.name:
-                            # Parse the date string 07/01/2025
-                            date_obj = datetime.strptime(
-                                answer.name, "%m/%d/%Y"
-                            )
-                            value = date_obj.strftime("%B %d, %Y")
+                        if (
+                            isinstance(answer.name, str)
+                            and answer.name
+                        ):
+                            try:
+                                date_obj = parser.parse(answer.name)
+                                value = date_obj.strftime("%B %d, %Y")
+                            except (
+                                ImportError,
+                                ValueError,
+                                TypeError,
+                            ):
+                                # If all parsing fails, return original
+                                value = str(answer.name)
                     elif question.type in [
                         QuestionTypes.text,
                         QuestionTypes.photo,

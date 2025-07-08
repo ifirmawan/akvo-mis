@@ -14,11 +14,14 @@ from utils.upload_entities import (
     validate_entity_file,
     validate_entity_data,
 )
-from api.v1.v1_forms.models import Forms, QuestionOptions
+from api.v1.v1_forms.models import (
+    Forms,
+    QuestionOptions,
+)
 from api.v1.v1_forms.constants import QuestionTypes
+from api.v1.v1_data.models import FormData
 from api.v1.v1_jobs.constants import JobStatus, JobTypes
 
-# from api.v1.v1_jobs.functions import HText
 from api.v1.v1_jobs.models import Jobs
 from api.v1.v1_jobs.seed_data import seed_excel_data
 from api.v1.v1_jobs.validate_upload import validate
@@ -34,7 +37,8 @@ from utils.export_form import (
 )
 from utils.functions import update_date_time_format
 from utils.storage import upload
-from utils.custom_generator import generate_sqlite, generate_datapoint_report
+from utils.custom_generator import generate_sqlite
+from utils.report_generator import generate_datapoint_report
 
 logger = logging.getLogger(__name__)
 
@@ -158,9 +162,11 @@ def job_generate_data_download(job_id, **kwargs):
         },
         {
             "context": "Administration",
-            "value": ",".join(administration_name)
-            if isinstance(administration_name, list)
-            else administration_name,
+            "value": (
+                ",".join(administration_name)
+                if isinstance(administration_name, list)
+                else administration_name
+            ),
         },
     ]
 
@@ -195,86 +201,209 @@ def job_generate_data_download(job_id, **kwargs):
     return url
 
 
+def transform_form_data_for_report(
+    form: Forms,
+    selection_ids: list = None,
+    child_form_ids: list = []
+):
+    """
+    Transform form data from database into the format expected by the
+    report generator.
+
+    Args:
+        form_id (int): The form ID to fetch data for
+        selection_ids (list): Optional list of FormData IDs to filter by
+
+    Returns:
+        list: Data grouped by question groups with questions and answers
+    """
+    try:
+        # Build list of forms: parent form first, then children
+        forms = [form]  # Start with the main form
+        child_forms = list(form.children.all())
+        if child_form_ids and len(child_form_ids):
+            # Filter child forms by provided IDs
+            child_forms = [
+                f for f in child_forms if f.id in child_form_ids
+            ]
+        forms.extend(child_forms)
+
+        # Get FormData instances from the main form first
+        # Then get their children FormData to fill up answers from children
+
+        # Start with FormData from the main form
+        main_form_data_queryset = FormData.objects.filter(
+            form=form, is_pending=False
+        )
+
+        # Filter by selection_ids if provided
+        if selection_ids and len(selection_ids):
+            main_form_data_queryset = main_form_data_queryset.filter(
+                id__in=selection_ids
+            )
+
+        main_form_data = main_form_data_queryset.order_by("id").all()
+
+        # Now collect only main FormData (parents) for the column structure
+        # Child answers will be merged into parent columns
+        form_data_instances = list(main_form_data)
+
+        # Get all question groups from the form and its children, flattened
+        # and ordered properly
+        question_groups = []
+        for f in forms:
+            # Get question groups for this form, ordered by their order
+            form_question_groups = f.form_question_group.order_by(
+                "order"
+            ).all()
+            question_groups.extend(form_question_groups)
+
+        result = []
+
+        for question_group in question_groups:
+            # Get questions for this group, ordered by their order
+            questions = question_group.question_group_question.order_by(
+                "order"
+            ).all()
+
+            group_data = {
+                "name": question_group.label or question_group.name,
+                "questions": [],
+            }
+
+            for question in questions:
+                # Initialize answer values list with empty strings for each
+                # main form data instance (parents only)
+                answer_values = [""] * len(form_data_instances)
+
+                # Get all answers for this question from both parents and
+                # children
+                all_form_data_ids = []
+                for main_fd in main_form_data:
+                    all_form_data_ids.append(main_fd.id)
+                    # Add child FormData IDs
+                    for child_form in child_forms:
+                        child_fd = main_fd.children.filter(
+                            form=child_form, is_pending=False
+                        ).last()
+                        if child_fd:
+                            all_form_data_ids.append(child_fd.id)
+
+                answers = question.question_answer.filter(
+                    data__id__in=all_form_data_ids
+                ).select_related("data")
+
+                # Create a mapping of parent FormData ID to its index
+                parent_id_to_index = {
+                    fd.id: idx for idx, fd in enumerate(form_data_instances)
+                }
+
+                for answer in answers:
+                    # Determine which parent column this answer belongs to
+                    if answer.data.parent:
+                        # This is a child answer, put it in parent's column
+                        parent_id = answer.data.parent.id
+                    else:
+                        # This is a parent answer
+                        parent_id = answer.data.id
+                    form_data_index = parent_id_to_index.get(parent_id)
+                    if form_data_index is None:
+                        continue
+
+                    # Format the answer based on question type
+                    if question.type in [
+                        QuestionTypes.geo,
+                        QuestionTypes.option,
+                        QuestionTypes.multiple_option,
+                    ]:
+                        # TODO: Get the label for options
+                        if answer.options:
+                            value = "|".join(map(str, answer.options))
+                        else:
+                            value = ""
+                    elif question.type in [
+                        QuestionTypes.text,
+                        QuestionTypes.photo,
+                        QuestionTypes.date,
+                        QuestionTypes.autofield,
+                        QuestionTypes.cascade,
+                        QuestionTypes.attachment,
+                        QuestionTypes.signature,
+                    ]:
+                        # TODO: Format the date: Month Day, Year
+                        value = answer.name or ""
+                    elif question.type == QuestionTypes.administration:
+                        if answer.value:
+                            admin = Administration.objects.filter(
+                                pk=answer.value
+                            ).first()
+                            value = admin.name if admin else str(answer.value)
+                        else:
+                            value = ""
+                    else:
+                        value = (
+                            answer.value if answer.value is not None else ""
+                        )
+
+                    # Place the answer at the correct index for this form data
+                    answer_values[form_data_index] = str(value)
+
+                # Only add question if it has at least one non-empty answer
+                if any(value.strip() for value in answer_values if value):
+                    question_data = {
+                        "question": question.label,
+                        "answers": answer_values,
+                    }
+                    group_data["questions"].append(question_data)
+
+            # Only add groups that have questions with data
+            if group_data["questions"]:
+                result.append(group_data)
+
+        return result
+    except Exception as e:
+        logger.error(f"Error transforming form data: {str(e)}")
+        return []
+
+
 def job_generate_data_report(job_id: int, **kwargs):
-    job = Jobs.objects.get(pk=job_id)
-    # form_id = kwargs.get("form_id")
-    # selection_ids = kwargs.get("selection_ids", [])  # noqa: F841
+    try:
+        job = Jobs.objects.get(pk=job_id)
+        form_id = kwargs.get("form_id")
+        selection_ids = kwargs.get("selection_ids", [])  # noqa: F841
+        child_form_ids = kwargs.get("child_form_ids", [])
 
-    # Clean up any existing file
-    temp_file_path = f"./tmp/{job.result}"
-    if os.path.exists(temp_file_path):
-        os.remove(temp_file_path)
+        # Get the form
+        form = Forms.objects.get(pk=form_id)
 
-    # For now, using dummy data for Nasautoka village
-    # TODO: In the future, replace this with actual data retrieval
-    # based on form_id and selection_ids
-    nasautoka_data = {
-        "Display Name": "Nasautoka",
-        "Identifier": "2vau-qfq5-gfdq",
-        "Device identifier": "Enumerator 08",
-        "Instance": 961161025,
-        "Submission Date": "26-11-2024 23:57:40 UTC",
-        "Submitter": "Pateresio Nunu",
-        "Duration": "01:58:03",
-        "Form version": 17,
-        "Village Name": "Nasautoka",  # Added for the subtitle
-        "Group 1": {
-            "Which Division-Province-Tikina are you in?": (
-                "Central|Tailevu|Nasautoka"
-            ),
-            "Name of the Tikina": "Nsautoka",
-            "Village Name": "Nasautoka",
-            "Do you have Water Committee": "Yes",
-            "Is the Water Committee active?": "Yes",
-            "Date of Inspection": "2024-11-25",
-            "Latitude": -17.72627881,
-            "Longitude": 178.37874368,
-            "Elevation": "101.31195068359375",
-            "Weather Condition": "Cloudy",
-            "Type of Water Source": "Creek",
-            "Project Implementation date": "2018-04-11"
-        },
-        "Group 2": {
-            "Name of the village headman/TNK/village nurse?": (
-                "Ulaiasi Turaga"
-            ),
-            "Phone contact of the Village Headman/TNK or village nurse?": (
-                "8485564"
-            )
-        },
-        "Group 3": {
-            "Comment on Photo taken": (
-                "Gate and fencing damaged and need urgent maintenance"
-            )
-        },
-        "Group 4": {
-            "Method of Water Testing Used?": "Caddisfly Test",
-            "Description of Sampling Point": "storage tank",
-            "Health Risk Category (Based on MPN and Confidence Interval)": (
-                "Low Risk / Safe"
-            ),
-            "MPN(MPN/100ml)": 0,
-            "Upper 95% Confidence Interval": 2.87
-        },
-        "General Remarks": (
-            "Fence and gate damaged, outlet tap need to be replaced, "
-            "Accessibility to EPS tap which is located at the storage tank "
-            "is a challenge for the community, recommend to install more "
-            "EPS tap. Recommend to install galvanized 3 inch pipe to hold "
-            "chain-link fence to replace pine post as it gets rotten when "
-            "exposed to sun and rain"
-        ),
-        "The current status of this system?": "Operational",
-        "Signature of Officer": "Noa"
-    }
+        # Clean up any existing file
+        temp_file_path = f"./tmp/{job.result}"
+        if os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
 
-    # Generate the report file
-    file_path = generate_datapoint_report(
-        nasautoka_data, file_path=temp_file_path
-    )
+        # Generate dynamic data from database
+        form_data = transform_form_data_for_report(
+            form=form,
+            selection_ids=selection_ids,
+            child_form_ids=child_form_ids,
+        )
 
-    url = upload(file=file_path, folder="download_datapoint_report")
-    return url
+        # Fallback to empty list if no data found
+        if not form_data:
+            logger.warning(f"No data found for form_id {form_id}")
+            form_data = []
+
+        # Generate the report file
+        file_path = generate_datapoint_report(
+            form_data,
+            file_path=temp_file_path,
+            form_name=form.name,
+        )
+        url = upload(file=file_path, folder="download_datapoint_report")
+        return url
+    except Forms.DoesNotExist:
+        logger.error(f"Form with ID {form_id} not found")
+        return []
 
 
 def job_generate_data_download_result(task):

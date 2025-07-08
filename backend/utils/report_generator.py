@@ -1,4 +1,6 @@
 import os
+import base64
+import tempfile
 import logging
 from mis.settings import STORAGE_PATH
 from docx import Document
@@ -397,6 +399,84 @@ def get_full_image_path(relative_path):
     return full_path
 
 
+def is_base64_image(image_data):
+    """Check if the image data is a base64 encoded image."""
+    if not isinstance(image_data, str):
+        return False
+
+    # Check for data URL format (data:image/...;base64,...)
+    if image_data.startswith('data:image/'):
+        return True
+
+    # Check for plain base64 string (basic validation)
+    try:
+        # Try to decode as base64
+        base64.b64decode(image_data, validate=True)
+        return True
+    except Exception:
+        return False
+
+
+def create_temp_image_from_base64(base64_data, filename_prefix="temp_image"):
+    """
+    Create a temporary image file from base64 data.
+
+    Args:
+        base64_data (str): Base64 encoded image data
+        filename_prefix (str): Prefix for the temporary filename
+
+    Returns:
+        str: Path to the temporary image file, or None if failed
+    """
+    try:
+        # Handle data URL format
+        if base64_data.startswith('data:image/'):
+            # Extract the image format and base64 data
+            header, base64_string = base64_data.split(',', 1)
+            # Extract image format from header (e.g., "data:image/png;base64")
+            image_format = header.split('/')[1].split(';')[0]
+        else:
+            # Assume it's a plain base64 string (default to PNG)
+            base64_string = base64_data
+            image_format = 'png'
+
+        # Decode base64 data
+        image_bytes = base64.b64decode(base64_string)
+
+        # Create temporary file
+        with tempfile.NamedTemporaryFile(
+            delete=False,
+            suffix=f'.{image_format}',
+            prefix=f'{filename_prefix}_'
+        ) as temp_file:
+            temp_file.write(image_bytes)
+            return temp_file.name
+
+    except Exception as e:
+        logger.warning(f"Failed to create temporary image from base64: {e}")
+        return None
+
+
+def get_image_path_or_create_temp(image_data):
+    """
+    Get the image path, creating a temporary file if it's base64 data.
+
+    Args:
+        image_data (str): Either a file path or base64 encoded image
+
+    Returns:
+        tuple: (image_path, is_temp_file) where is_temp_file indicates
+               if the path points to a temporary file that should be cleaned up
+    """
+    if is_base64_image(image_data):
+        temp_path = create_temp_image_from_base64(image_data)
+        return temp_path, True
+    else:
+        # It's a file path, get the full path
+        full_path = get_full_image_path(image_data)
+        return full_path, False
+
+
 def add_image_to_table(table, key, image_paths, max_image_width=Inches(2.5)):
     """Add images to a table row with proper formatting."""
     row = table.add_row()
@@ -407,113 +487,94 @@ def add_image_to_table(table, key, image_paths, max_image_width=Inches(2.5)):
     for paragraph in key_cell.paragraphs:
         for run in paragraph.runs:
             run.bold = True
-    # Clear the value cell and add images
-    value_cell.text = ""
-    for i, image_path in enumerate(image_paths):
-        full_path = get_full_image_path(image_path)
-        try:
-            if os.path.exists(full_path):
-                # Add image to the cell
-                if i == 0:
-                    paragraph = value_cell.paragraphs[0]
-                else:
-                    paragraph = value_cell.add_paragraph()
-                if paragraph.runs:
-                    run = paragraph.runs[0]
-                else:
-                    run = paragraph.add_run()
-                run.add_picture(full_path, width=max_image_width)
-                # Add image caption/filename
-                caption_paragraph = value_cell.add_paragraph()
-                filename = os.path.basename(image_path)
-                caption_text = f"Image {i + 1}: {filename}"
-                caption_run = caption_paragraph.add_run(caption_text)
-                caption_run.font.size = Pt(9)
-                caption_run.italic = True
-                # Add spacing between images
-                if i < len(image_paths) - 1:
-                    value_cell.add_paragraph()
-            else:
-                # Image file not found
-                if i == 0:
-                    paragraph = value_cell.paragraphs[0]
-                else:
-                    paragraph = value_cell.add_paragraph()
-                if paragraph.runs:
-                    run = paragraph.runs[0]
-                else:
-                    run = paragraph.add_run()
-                filename = os.path.basename(image_path)
-                run.text = f"Image not found: {filename}"
-                # Red color would be ideal but keeping simple
-        except Exception as e:
-            # Error loading image
-            if i == 0:
-                paragraph = value_cell.paragraphs[0]
-            else:
-                paragraph = value_cell.add_paragraph()
-            run = paragraph.add_run()
-            filename = os.path.basename(image_path)
-            run.text = f"Error loading image: {filename}"
-            logger.warning(f"Failed to add image {image_path}: {e}")
+
+    # Use the enhanced add_images_to_cell function
+    add_images_to_cell(value_cell, image_paths, max_image_width)
 
 
 def add_images_to_cell(cell, image_paths, max_image_width=Inches(2.5)):
     """Add images to a single table cell with proper formatting."""
     # Clear the cell and add images
     cell.text = ""
+    temp_files_to_cleanup = []
 
-    for i, image_path in enumerate(image_paths):
-        full_path = get_full_image_path(image_path)
+    try:
+        for i, image_path in enumerate(image_paths):
+            # Get the actual image path (could be file path or base64)
+            actual_path, is_temp = get_image_path_or_create_temp(image_path)
 
-        try:
-            if os.path.exists(full_path):
-                # Add image to the cell
+            if is_temp and actual_path:
+                temp_files_to_cleanup.append(actual_path)
+
+            try:
+                if actual_path and os.path.exists(actual_path):
+                    # Add image to the cell
+                    if i == 0:
+                        paragraph = cell.paragraphs[0]
+                    else:
+                        paragraph = cell.add_paragraph()
+
+                    if paragraph.runs:
+                        run = paragraph.runs[0]
+                    else:
+                        run = paragraph.add_run()
+
+                    run.add_picture(actual_path, width=max_image_width)
+
+                    # Add image caption/filename
+                    caption_paragraph = cell.add_paragraph()
+                    if is_base64_image(image_path):
+                        caption_text = f"Image {i + 1}: base64 image"
+                    else:
+                        filename = os.path.basename(image_path)
+                        caption_text = f"Image {i + 1}: {filename}"
+                    caption_run = caption_paragraph.add_run(caption_text)
+                    caption_run.font.size = Pt(9)
+                    caption_run.italic = True
+
+                    # Add spacing between images
+                    if i < len(image_paths) - 1:
+                        cell.add_paragraph()
+                else:
+                    # Image file not found or couldn't create from base64
+                    if i == 0:
+                        paragraph = cell.paragraphs[0]
+                    else:
+                        paragraph = cell.add_paragraph()
+
+                    if paragraph.runs:
+                        run = paragraph.runs[0]
+                    else:
+                        run = paragraph.add_run()
+
+                    if is_base64_image(image_path):
+                        run.text = f"Error processing base64 image {i + 1}"
+                    else:
+                        filename = os.path.basename(image_path)
+                        run.text = f"Image not found: {filename}"
+
+            except Exception as e:
+                # Error loading image
                 if i == 0:
                     paragraph = cell.paragraphs[0]
                 else:
                     paragraph = cell.add_paragraph()
+                run = paragraph.add_run()
 
-                if paragraph.runs:
-                    run = paragraph.runs[0]
+                if is_base64_image(image_path):
+                    run.text = f"Error loading base64 image {i + 1}"
+                    logger.warning(f"Failed to add base64 image: {e}")
                 else:
-                    run = paragraph.add_run()
+                    filename = os.path.basename(image_path)
+                    run.text = f"Error loading image: {filename}"
+                    logger.warning(f"Failed to add image {image_path}: {e}")
 
-                run.add_picture(full_path, width=max_image_width)
-
-                # Add image caption/filename
-                caption_paragraph = cell.add_paragraph()
-                filename = os.path.basename(image_path)
-                caption_text = f"Image {i + 1}: {filename}"
-                caption_run = caption_paragraph.add_run(caption_text)
-                caption_run.font.size = Pt(9)
-                caption_run.italic = True
-
-                # Add spacing between images
-                if i < len(image_paths) - 1:
-                    cell.add_paragraph()
-            else:
-                # Image file not found
-                if i == 0:
-                    paragraph = cell.paragraphs[0]
-                else:
-                    paragraph = cell.add_paragraph()
-
-                if paragraph.runs:
-                    run = paragraph.runs[0]
-                else:
-                    run = paragraph.add_run()
-
-                filename = os.path.basename(image_path)
-                run.text = f"Image not found: {filename}"
-
-        except Exception as e:
-            # Error loading image
-            if i == 0:
-                paragraph = cell.paragraphs[0]
-            else:
-                paragraph = cell.add_paragraph()
-            run = paragraph.add_run()
-            filename = os.path.basename(image_path)
-            run.text = f"Error loading image: {filename}"
-            logger.warning(f"Failed to add image {image_path}: {e}")
+    finally:
+        # Clean up temporary files
+        for temp_file in temp_files_to_cleanup:
+            try:
+                os.unlink(temp_file)
+            except Exception as e:
+                logger.warning(
+                    f"Failed to cleanup temporary file {temp_file}: {e}"
+                )

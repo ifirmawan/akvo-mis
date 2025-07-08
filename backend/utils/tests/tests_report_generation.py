@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from docx import Document
 from docx.shared import Inches
+import base64
 
 from utils.report_generator import (
     generate_datapoint_report,
@@ -11,7 +12,10 @@ from utils.report_generator import (
     is_image_path,
     is_photo_question,
     get_full_image_path,
-    add_images_to_cell
+    add_images_to_cell,
+    is_base64_image,
+    create_temp_image_from_base64,
+    get_image_path_or_create_temp
 )
 
 
@@ -72,7 +76,7 @@ class TestReportGeneration(unittest.TestCase):
         self.assertGreater(len(table.rows), 3)  # Header + 3 questions
 
     def test_multi_column_answers(self):
-        """Test handling multiple answers across columns"""
+        """Test handling of multiple answers across columns"""
         report_data = [
             {
                 "name": "Water Quality Tests",
@@ -556,12 +560,12 @@ class TestUtilityFunctions(unittest.TestCase):
         self.assertEqual(result, "/test/storage/test.jpg")
 
     @patch('utils.report_generator.os.path.exists')
-    @patch('utils.report_generator.get_full_image_path')
-    def test_add_images_to_cell(self, mock_get_path, mock_exists):
+    @patch('docx.text.run.Run.add_picture')
+    def test_add_images_to_cell(self, mock_add_picture, mock_exists):
         """Test add_images_to_cell function"""
         # Mock file existence and path
         mock_exists.return_value = True
-        mock_get_path.return_value = "/test/storage/test.jpg"
+        mock_add_picture.return_value = MagicMock()
 
         # Create mock cell
         mock_cell = MagicMock()
@@ -582,5 +586,581 @@ class TestUtilityFunctions(unittest.TestCase):
         self.assertEqual(mock_run.add_picture.call_count, 2)
 
 
+class TestBase64ImageSupport(unittest.TestCase):
+    """Test suite for base64 image support in report generation"""
+
+    def setUp(self):
+        """Set up test fixtures with base64 image data"""
+        # Use actual fake signature base64 data (complete and properly padded)
+        self.valid_base64_png = (
+            "iVBORw0KGgoAAAANSUhEUgAAANIAAAB+CAYAAABRR0/XAAATAUlEQVR4Xu3dC9g"
+            "1VVUH8A8LL1RqmtE9pJAMySy7oBEfmhQFQU/1qGQGmqZhdhEppRSyvOYN6KIFfBZd"
+            "HgS8IKRm9RJg4S0lSykfeosulhoWqV3V9YPZfPOd773MnDMz75w5az3Pes55z7tn"
+            "z8x/9n/2RKAhAohktzcbU5EkUUPgslgiUEcAkc4OPSt0T6g0wimJQCLQEoEyR7Je"
+            "lObtluBl8USgIPBp4iQJylyBsyMAAAAASUVORK5CYII="
+        )
+
+        # Data URL format
+        self.valid_data_url = f"data:image/png;base64,{self.valid_base64_png}"
+
+        # Invalid base64 string
+        self.invalid_base64 = "invalid_base64_string"
+
+    def test_is_base64_image_detection(self):
+        """Test detection of base64 image data"""
+        # Test valid base64 string
+        self.assertTrue(is_base64_image(self.valid_base64_png))
+
+        # Test valid data URL
+        self.assertTrue(is_base64_image(self.valid_data_url))
+
+        # Test invalid base64
+        self.assertFalse(is_base64_image(self.invalid_base64))
+
+        # Test regular file path
+        self.assertFalse(is_base64_image("/path/to/image.jpg"))
+
+        # Test non-string input
+        self.assertFalse(is_base64_image(123))
+        self.assertFalse(is_base64_image(None))
+
+    def test_create_temp_image_from_base64_data_url(self):
+        """Test creating temporary image file from data URL"""
+        temp_path = create_temp_image_from_base64(self.valid_data_url)
+
+        try:
+            # Should create a temporary file
+            self.assertIsNotNone(temp_path)
+            self.assertTrue(os.path.exists(temp_path))
+
+            # Should have PNG extension
+            self.assertTrue(temp_path.endswith('.png'))
+
+            # File should contain image data
+            with open(temp_path, 'rb') as f:
+                content = f.read()
+                # PNG files start with these bytes
+                self.assertTrue(content.startswith(b'\x89PNG'))
+
+        finally:
+            # Clean up
+            if temp_path and os.path.exists(temp_path):
+                os.unlink(temp_path)
+
+    def test_create_temp_image_from_base64_plain(self):
+        """Test creating temporary image file from plain base64"""
+        temp_path = create_temp_image_from_base64(self.valid_base64_png)
+
+        try:
+            # Should create a temporary file
+            self.assertIsNotNone(temp_path)
+            self.assertTrue(os.path.exists(temp_path))
+
+            # Should have PNG extension (default)
+            self.assertTrue(temp_path.endswith('.png'))
+
+        finally:
+            # Clean up
+            if temp_path and os.path.exists(temp_path):
+                os.unlink(temp_path)
+
+    def test_create_temp_image_from_invalid_base64(self):
+        """Test handling of invalid base64 data"""
+        temp_path = create_temp_image_from_base64(self.invalid_base64)
+
+        # Should return None for invalid data
+        self.assertIsNone(temp_path)
+
+    def test_get_image_path_or_create_temp_base64(self):
+        """Test path resolution for base64 images"""
+        path, is_temp = get_image_path_or_create_temp(self.valid_data_url)
+
+        try:
+            # Should create temporary file and mark as temp
+            self.assertIsNotNone(path)
+            self.assertTrue(is_temp)
+            self.assertTrue(os.path.exists(path))
+
+        finally:
+            # Clean up
+            if path and os.path.exists(path):
+                os.unlink(path)
+
+    def test_get_image_path_or_create_temp_file_path(self):
+        """Test path resolution for regular file paths"""
+        file_path = "/path/to/image.jpg"
+        path, is_temp = get_image_path_or_create_temp(file_path)
+
+        # Should not create temp file for regular paths
+        self.assertFalse(is_temp)
+        # Should return full path (with STORAGE_PATH prefix)
+        self.assertTrue(path.endswith(file_path))
+
+    @patch('utils.report_generator.os.path.exists')
+    @patch('utils.report_generator.os.unlink')
+    def test_add_images_to_cell_with_base64(self, mock_unlink, mock_exists):
+        """Test adding base64 images to a cell"""
+        # Mock document and cell structure
+        mock_cell = MagicMock()
+        mock_paragraph = MagicMock()
+        mock_run = MagicMock()
+
+        mock_cell.paragraphs = [mock_paragraph]
+        mock_paragraph.runs = [mock_run]
+        mock_cell.add_paragraph.return_value = mock_paragraph
+        mock_paragraph.add_run.return_value = mock_run
+
+        # Mock file existence for temp files
+        mock_exists.return_value = True
+
+        # Test with base64 image
+        image_data = [self.valid_data_url]
+
+        # Call function
+        add_images_to_cell(mock_cell, image_data)
+
+        # Verify cell text was cleared
+        self.assertEqual(mock_cell.text, "")
+
+        # Verify add_picture was called on the run object
+        mock_run.add_picture.assert_called_once()
+
+        # Verify cleanup was called
+        mock_unlink.assert_called()
+
+    def test_base64_image_integration_in_report(self):
+        """Test integration of base64 images in full report generation"""
+        # Create test data with base64 images
+        report_data = [
+            {
+                "name": "Test Group with Images",
+                "questions": [
+                    {
+                        "question": "Photo Documentation",
+                        "answers": [self.valid_data_url, self.valid_base64_png]
+                    },
+                    {
+                        "question": "Regular Question",
+                        "answers": ["Regular answer"]
+                    }
+                ]
+            }
+        ]
+
+        # Create temporary file for report
+        with tempfile.NamedTemporaryFile(
+            suffix='.docx', delete=False
+        ) as temp_file:
+            temp_path = temp_file.name
+
+        try:
+            # Generate report
+            generate_datapoint_report(
+                report_data,
+                file_path=temp_path,
+                form_name="Base64 Image Test Report"
+            )
+
+            # Verify report was created
+            self.assertTrue(os.path.exists(temp_path))
+
+            # Verify document can be opened
+            doc = Document(temp_path)
+            self.assertIsNotNone(doc)
+
+            # Should have at least one table
+            self.assertGreater(len(doc.tables), 0)
+
+        finally:
+            # Clean up
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+
+    def test_mixed_image_types_in_report(self):
+        """Test report generation with mixed image types (files and base64)"""
+        # Test data with mixed image types
+        report_data = [
+            {
+                "name": "Mixed Image Types",
+                "questions": [
+                    {
+                        "question": "Mixed Images",
+                        "answers": [
+                            "/path/to/file.jpg",  # File path
+                            self.valid_data_url,  # Base64 data URL
+                            self.valid_base64_png  # Plain base64
+                        ]
+                    }
+                ]
+            }
+        ]
+
+        # Create temporary file for report
+        with tempfile.NamedTemporaryFile(
+            suffix='.docx', delete=False
+        ) as temp_file:
+            temp_path = temp_file.name
+
+        try:
+            # Should not raise any exceptions
+            generate_datapoint_report(
+                report_data,
+                file_path=temp_path,
+                form_name="Mixed Image Types Test"
+            )
+
+            # Verify report was created
+            self.assertTrue(os.path.exists(temp_path))
+
+        finally:
+            # Clean up
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+
+
 if __name__ == '__main__':
     unittest.main()
+
+
+class TestReportGenerationIntegration(unittest.TestCase):
+    """Integration tests that exercise real code paths for better coverage"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        self.temp_dir = tempfile.mkdtemp()
+        self.test_file_path = os.path.join(self.temp_dir, "test_report.docx")
+
+        # Create a real test image file for integration tests
+        self.test_image_path = os.path.join(self.temp_dir, "test_image.png")
+        # Create a simple 1x1 pixel PNG
+        png_data = base64.b64decode(
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP"
+            "8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
+        )
+        with open(self.test_image_path, 'wb') as f:
+            f.write(png_data)
+
+        # Valid base64 data for tests
+        self.valid_base64_png = (
+            "iVBORw0KGgoAAAANSUhEUgAAANIAAAB+CAYAAABRR0/XAAATAUlEQVR4Xu3dC9g"
+            "1VVUH8A8LL1RqmtE9pJAMySy7oBEfmhQFQU/1qGQGmqZhdhEppRSyvOYN6KIFfBZd"
+            "HgS8IKRm9RJg4S0lSykfeosulhoWqV3V9YPZfPOd773MnDMz75w5az3Pes55z7tn"
+            "z8x/9n/2RKAhAohktzcbU5EkUUPgslgiUEcAkc4OPSt0T6g0wimJQCLQEoEyR7Je"
+            "lObtluBl8USgIPBp4iQJylyBsyMAAAAASUVORK5CYII="
+        )
+
+    def tearDown(self):
+        """Clean up temporary files"""
+        import shutil
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def test_real_image_file_processing(self):
+        """Test processing real image files (exercises image code paths)"""
+        # Use relative path to test get_full_image_path
+        rel_image_path = os.path.relpath(self.test_image_path)
+
+        report_data = [
+            {
+                "name": "Image Processing Test",
+                "questions": [
+                    {
+                        "question": "Photo of Test Site",
+                        "answers": [rel_image_path]
+                    }
+                ]
+            }
+        ]
+
+        # This should exercise the actual image processing code
+        with patch('utils.report_generator.STORAGE_PATH', self.temp_dir):
+            result_path = generate_datapoint_report(
+                report_data,
+                file_path=self.test_file_path,
+                form_name="Real Image Test"
+            )
+
+        self.assertTrue(os.path.exists(result_path))
+        doc = Document(result_path)
+        self.assertGreater(len(doc.tables), 0)
+
+    def test_base64_image_full_integration(self):
+        """Test base64 image processing in full report generation"""
+        data_url = f"data:image/png;base64,{self.valid_base64_png}"
+
+        report_data = [
+            {
+                "name": "Base64 Integration Test",
+                "questions": [
+                    {
+                        "question": "Base64 Image Question",
+                        "answers": [data_url, self.valid_base64_png]
+                    }
+                ]
+            }
+        ]
+
+        # This exercises the base64 image processing code paths
+        result_path = generate_datapoint_report(
+            report_data,
+            file_path=self.test_file_path,
+            form_name="Base64 Integration Test"
+        )
+
+        self.assertTrue(os.path.exists(result_path))
+        doc = Document(result_path)
+        self.assertGreater(len(doc.tables), 0)
+
+    def test_mixed_content_integration(self):
+        """Test mixed content types in a single report"""
+        report_data = [
+            {
+                "name": "Location Data",
+                "questions": [
+                    {
+                        "question": "Site Name",
+                        "answers": ["Site Alpha", "Site Beta", "Site Gamma"]
+                    },
+                    {
+                        "question": "Latitude",
+                        "answers": ["12.3456", "12.7890", "12.1234"]
+                    },
+                    {
+                        "question": "Longitude",
+                        "answers": ["78.9012", "78.5432", "78.6789"]
+                    }
+                ]
+            },
+            {
+                "name": "Image Documentation",
+                "questions": [
+                    {
+                        "question": "Site Photo",
+                        "answers": [
+                            f"data:image/png;base64,{self.valid_base64_png}"
+                        ]
+                    },
+                    {
+                        "question": "Equipment Picture",
+                        # Test missing file
+                        "answers": ["/nonexistent/path.jpg"]
+                    }
+                ]
+            }
+        ]
+
+        result_path = generate_datapoint_report(
+            report_data,
+            file_path=self.test_file_path,
+            form_name="Mixed Content Integration Test"
+        )
+
+        self.assertTrue(os.path.exists(result_path))
+        doc = Document(result_path)
+        self.assertGreater(len(doc.tables), 0)
+
+    def test_utility_functions_integration(self):
+        """Test utility functions with real data"""
+        # Test is_image_path with various inputs
+        test_cases = [
+            ("/path/image.jpg", True),
+            ("photo.PNG", True),
+            ("document.pdf", False),
+            ("", False),
+            (None, False)
+        ]
+
+        for input_val, expected in test_cases:
+            with self.subTest(input=input_val):
+                self.assertEqual(is_image_path(input_val), expected)
+
+        # Test is_photo_question
+        photo_questions = [
+            "Take a photo of the equipment",
+            "Upload image of results",
+            "Site picture",
+            "Equipment snapshot"
+        ]
+
+        non_photo_questions = [
+            "Enter the temperature",
+            "What is the pH value?",
+            "Describe the location"
+        ]
+
+        for question in photo_questions:
+            with self.subTest(question=question):
+                self.assertTrue(is_photo_question(question))
+
+        for question in non_photo_questions:
+            with self.subTest(question=question):
+                self.assertFalse(is_photo_question(question))
+
+        # Test get_full_image_path
+        test_path = "images/test.jpg"
+        with patch('utils.report_generator.STORAGE_PATH', '/test/storage'):
+            full_path = get_full_image_path(test_path)
+            self.assertEqual(full_path, '/test/storage/images/test.jpg')
+
+            # Test with leading slash
+            full_path2 = get_full_image_path('/images/test.jpg')
+            self.assertEqual(full_path2, '/test/storage/images/test.jpg')
+
+    def test_base64_utility_functions_integration(self):
+        """Test base64 utility functions with real data"""
+        # Test is_base64_image
+        data_url = f"data:image/png;base64,{self.valid_base64_png}"
+
+        self.assertTrue(is_base64_image(data_url))
+        self.assertTrue(is_base64_image(self.valid_base64_png))
+        self.assertFalse(is_base64_image("not_base64"))
+        self.assertFalse(is_base64_image("/path/to/file.jpg"))
+        self.assertFalse(is_base64_image(123))
+
+        # Test create_temp_image_from_base64
+        temp_path = create_temp_image_from_base64(data_url)
+        try:
+            self.assertIsNotNone(temp_path)
+            self.assertTrue(os.path.exists(temp_path))
+            self.assertTrue(temp_path.endswith('.png'))
+        finally:
+            if temp_path and os.path.exists(temp_path):
+                os.unlink(temp_path)
+
+        # Test with invalid data
+        invalid_temp = create_temp_image_from_base64("invalid_data")
+        self.assertIsNone(invalid_temp)
+
+        # Test get_image_path_or_create_temp
+        path, is_temp = get_image_path_or_create_temp(data_url)
+        try:
+            self.assertTrue(is_temp)
+            self.assertIsNotNone(path)
+            self.assertTrue(os.path.exists(path))
+        finally:
+            if path and os.path.exists(path):
+                os.unlink(path)
+
+        # Test with regular file path
+        file_path = "/path/to/image.jpg"
+        path2, is_temp2 = get_image_path_or_create_temp(file_path)
+        self.assertFalse(is_temp2)
+        self.assertTrue(path2.endswith(file_path))
+
+    def test_error_handling_integration(self):
+        """Test error handling scenarios"""
+        # Test with invalid file path that will fail during directory creation
+        report_data = [
+            {
+                "name": "Error Test",
+                "questions": [
+                    {
+                        "question": "Test Question",
+                        "answers": ["Test Answer"]
+                    }
+                ]
+            }
+        ]
+
+        # Mock os.makedirs to force an exception during directory creation
+        with patch('utils.report_generator.os.makedirs') as mock_makedirs:
+            mock_makedirs.side_effect = PermissionError("Permission denied")
+            with self.assertRaises(PermissionError):
+                generate_datapoint_report(
+                    report_data,
+                    file_path="/some/path/test.docx",
+                    form_name="Error Test"
+                )
+
+    def test_large_dataset_integration(self):
+        """Test handling of large datasets that require multiple tables"""
+        # Create data with more than 5 answers to trigger table splitting
+        large_answers = [f"Answer_{i}" for i in range(8)]
+
+        report_data = [
+            {
+                "name": "Large Dataset Test",
+                "questions": [
+                    {
+                        "question": "Sample Results",
+                        "answers": large_answers
+                    },
+                    {
+                        "question": "Status",
+                        "answers": ["Pass"] * 8
+                    }
+                ]
+            }
+        ]
+
+        result_path = generate_datapoint_report(
+            report_data,
+            file_path=self.test_file_path,
+            form_name="Large Dataset Test"
+        )
+
+        self.assertTrue(os.path.exists(result_path))
+        doc = Document(result_path)
+
+        # Should create multiple tables due to >5 answers
+        self.assertGreater(len(doc.tables), 1)
+
+    def test_edge_cases_integration(self):
+        """Test edge cases and boundary conditions"""
+        # Test with None and empty values
+        report_data = [
+            {
+                "name": "Edge Cases",
+                "questions": [
+                    {
+                        "question": "Empty Answers",
+                        "answers": []
+                    },
+                    {
+                        "question": "None Values",
+                        "answers": [None, None, None]
+                    },
+                    {
+                        "question": "Mixed Empty",
+                        "answers": ["Valid", "", None, "Another"]
+                    },
+                    {
+                        "question": "Image with None",
+                        "answers": [
+                            None,
+                            f"data:image/png;base64,{self.valid_base64_png}"
+                        ]
+                    }
+                ]
+            }
+        ]
+
+        result_path = generate_datapoint_report(
+            report_data,
+            file_path=self.test_file_path,
+            form_name="Edge Cases Test"
+        )
+
+        self.assertTrue(os.path.exists(result_path))
+        doc = Document(result_path)
+        self.assertGreater(len(doc.tables), 0)
+
+    def test_safe_set_cell_text_integration(self):
+        """Test safe_set_cell_text with real cell objects"""
+        # Create a real document and table for testing
+        doc = Document()
+        table = doc.add_table(rows=1, cols=3)
+        row = table.rows[0]
+
+        # Test valid cell index
+        result = safe_set_cell_text(row, 0, "Test Text")
+        self.assertTrue(result)
+        self.assertEqual(row.cells[0].text, "Test Text")
+
+        # Test None text
+        result = safe_set_cell_text(row, 1, None)
+        self.assertTrue(result)
+        self.assertEqual(row.cells[1].text, "")
+
+        # Test invalid cell index
+        result = safe_set_cell_text(row, 10, "Invalid")
+        self.assertFalse(result)

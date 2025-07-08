@@ -16,12 +16,16 @@ class Command(BaseCommand):
         parser.add_argument(
             "-s", "--selection_ids", nargs="*", default=[], type=int
         )
+        parser.add_argument(
+            "-c", "--child_form_ids", nargs="*", default=[], type=int
+        )
 
     def handle(self, *args, **options):
         selection_ids = options.get("selection_ids", [])
         info = {
             "form_id": options.get("form")[0],
             "selection_ids": selection_ids if selection_ids else None,
+            "child_form_ids": options.get("child_form_ids", []),
         }
         form = Forms.objects.get(pk=options.get("form")[0])
         form_name = form.name.replace(" ", "_").lower()

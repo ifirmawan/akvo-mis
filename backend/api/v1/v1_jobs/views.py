@@ -397,6 +397,12 @@ def upload_bulk_entities(request, version):
             location=OpenApiParameter.QUERY,
         ),
         OpenApiParameter(
+            name="child_form_ids",
+            required=False,
+            type={"type": "array", "items": {"type": "number"}},
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
             name="selection_ids",
             required=False,
             type={"type": "array", "items": {"type": "number"}},
@@ -427,13 +433,18 @@ def download_data_report(request, version):
 
     # Convert datapoints to list of IDs if provided
     selection_ids = [dp.id for dp in datapoints] if datapoints else []
-
+    child_forms = [
+        child.id
+        for child in serializer.validated_data.get("child_form_ids", [])
+    ]
     result = call_command(
         "job_data_report",
         form.id,
         request.user.id,
         "-s",
         *selection_ids,
+        "-c",
+        *child_forms,
     )
     job = Jobs.objects.get(pk=result)
     data = {

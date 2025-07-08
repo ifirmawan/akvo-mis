@@ -135,6 +135,12 @@ class UploadExcelSerializer(serializers.Serializer):
 
 class FormDataReportSerializer(serializers.Serializer):
     form_id = CustomPrimaryKeyRelatedField(queryset=Forms.objects.none())
+    child_form_ids = CustomListField(
+        child=CustomPrimaryKeyRelatedField(
+            queryset=Forms.objects.none()
+        ),
+        required=False,
+    )
     selection_ids = CustomListField(
         child=CustomPrimaryKeyRelatedField(
             queryset=FormData.objects.none()
@@ -147,5 +153,6 @@ class FormDataReportSerializer(serializers.Serializer):
         self.fields.get("form_id").queryset = Forms.objects.filter(
             parent__isnull=True
         ).all()
+        self.fields.get("child_form_ids").child.queryset = Forms.objects.all()
         selection_ids_field = self.fields.get("selection_ids")
         selection_ids_field.child.queryset = FormData.objects.all()

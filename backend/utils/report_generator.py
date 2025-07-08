@@ -126,12 +126,11 @@ def generate_datapoint_report(
             continue
 
         # 1 column for question + answers_in_table columns for answers
-        total_cols = 1 + answers_in_table
         tables.append(
             {
                 "start_idx": start_answer_idx,
                 "end_idx": end_answer_idx,
-                "total_cols": total_cols,
+                "total_cols": 1 + answers_in_table,
             }
         )
 
@@ -187,11 +186,11 @@ def generate_datapoint_report(
                     coord_pairs = []
                     max_len = max(len(answers), len(longitude_answers))
                     for i in range(max_len):
-                        lat = answers[i] if i < len(answers) else "N/A"
+                        lat = answers[i] if i < len(answers) else ""
                         lon = (
                             longitude_answers[i]
                             if i < len(longitude_answers)
-                            else "N/A"
+                            else ""
                         )
                         coord_pairs.append(f"{lat}, {lon}")
 
@@ -231,76 +230,42 @@ def generate_datapoint_report(
                     )
 
                     if has_images:
-                        # Handle photo/image questions for this batch
-                        image_paths = [
-                            str(ans)
-                            for ans in answers
-                            if is_image_path(str(ans))
-                        ]
+                        # Always preserve the index of answers for images
+                        row = table.add_row()
+                        row.cells[0].text = question
+                        # Make question cell bold
+                        for paragraph in row.cells[0].paragraphs:
+                            for run in paragraph.runs:
+                                run.bold = True
 
-                        if image_paths:
-                            row = table.add_row()
-                            row.cells[0].text = question
-                            # Make question cell bold
-                            for paragraph in row.cells[0].paragraphs:
-                                for run in paragraph.runs:
-                                    run.bold = True
-
-                            # Add images for this table's batch
-                            # (start_idx to end_idx)
-                            for i in range(start_idx, end_idx):
-                                col_idx = i - start_idx + 1
-                                if (
-                                    i < len(image_paths)
-                                    and col_idx < total_cols
-                                    and col_idx < len(row.cells)
-                                ):
+                        # Add images or empty for this table's batch
+                        for i in range(start_idx, end_idx):
+                            col_idx = i - start_idx + 1
+                            if (
+                                i < len(answers) and
+                                col_idx < total_cols and
+                                col_idx < len(row.cells)
+                            ):
+                                ans = answers[i]
+                                if ans and is_image_path(str(ans)):
                                     add_images_to_cell(
                                         row.cells[col_idx],
-                                        [image_paths[i]],
+                                        [str(ans)],
                                         table=table,
                                         cell_index=col_idx,
                                     )
+                                else:
+                                    # Not an image or empty, leave cell empty
+                                    safe_set_cell_text(row, col_idx, "")
 
-                            # Fill remaining answer columns with empty content
-                            remaining_start = max(
-                                1,
-                                min(
-                                    len(image_paths) - start_idx,
-                                    end_idx - start_idx,
-                                )
-                                + 1,
-                            )
-                            for col_idx in range(remaining_start, total_cols):
-                                safe_set_cell_text(row, col_idx, "")
-                        else:
-                            # Photo question but no valid image paths
-                            row = table.add_row()
-                            row.cells[0].text = question
-                            # Make question cell bold
-                            for paragraph in row.cells[0].paragraphs:
-                                for run in paragraph.runs:
-                                    run.bold = True
-
-                            # Add answers for this table's batch
-                            for i in range(start_idx, end_idx):
-                                col_idx = i - start_idx + 1
-                                if i < len(answers) and col_idx < total_cols:
-                                    safe_set_cell_text(
-                                        row, col_idx, str(answers[i])
-                                    )
-
-                            # Fill remaining cells
-                            remaining_start = max(
-                                1,
-                                min(
-                                    len(answers) - start_idx,
-                                    end_idx - start_idx,
-                                )
-                                + 1,
-                            )
-                            for col_idx in range(remaining_start, total_cols):
-                                safe_set_cell_text(row, col_idx, "")
+                        # Fill remaining answer columns with empty content
+                        remaining_start = max(
+                            1,
+                            min(len(answers) - start_idx, end_idx - start_idx)
+                            + 1,
+                        )
+                        for col_idx in range(remaining_start, total_cols):
+                            safe_set_cell_text(row, col_idx, "")
                     else:
                         # Regular questions - add answers for this batch
                         row = table.add_row()
@@ -322,11 +287,13 @@ def generate_datapoint_report(
                         for i in range(start_idx, end_idx):
                             col_idx = i - start_idx + 1
                             if i < len(answers) and col_idx < total_cols:
-                                if answers[i] is not None:
-                                    answer_text = str(answers[i])
-                                else:
-                                    answer_text = "N/A"
-                                safe_set_cell_text(row, col_idx, answer_text)
+                                # Always write the value, even if empty string
+                                safe_set_cell_text(
+                                    row,
+                                    col_idx,
+                                    "" if answers[i] is None
+                                    else str(answers[i])
+                                )
 
                         # Fill remaining cells with empty content
                         remaining_start = max(

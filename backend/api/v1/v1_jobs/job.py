@@ -203,57 +203,32 @@ def job_generate_data_download(job_id, **kwargs):
 
 
 def transform_form_data_for_report(
-    form: Forms,
-    selection_ids: list = None,
-    child_form_ids: list = []
+    form: Forms, selection_ids: list = None, child_form_ids: list = []
 ):
     """
     Transform form data from database into the format expected by the
-    report generator.
-
-    Args:
-        form_id (int): The form ID to fetch data for
-        selection_ids (list): Optional list of FormData IDs to filter by
-
-    Returns:
-        list: Data grouped by question groups with questions and answers
+    report generator, supporting repeatable question groups by cloning
+    the group for each repeat instance and mapping answers by index.
     """
     try:
-        # Build list of forms: parent form first, then children
-        forms = [form]  # Start with the main form
+        forms = [form]
         child_forms = list(form.children.all())
         if child_form_ids and len(child_form_ids):
-            # Filter child forms by provided IDs
-            child_forms = [
-                f for f in child_forms if f.id in child_form_ids
-            ]
+            child_forms = [f for f in child_forms if f.id in child_form_ids]
         forms.extend(child_forms)
 
-        # Get FormData instances from the main form first
-        # Then get their children FormData to fill up answers from children
-
-        # Start with FormData from the main form
         main_form_data_queryset = FormData.objects.filter(
             form=form, is_pending=False
         )
-
-        # Filter by selection_ids if provided
         if selection_ids and len(selection_ids):
             main_form_data_queryset = main_form_data_queryset.filter(
                 id__in=selection_ids
             )
-
         main_form_data = main_form_data_queryset.order_by("id").all()
-
-        # Now collect only main FormData (parents) for the column structure
-        # Child answers will be merged into parent columns
         form_data_instances = list(main_form_data)
 
-        # Get all question groups from the form and its children, flattened
-        # and ordered properly
         question_groups = []
         for f in forms:
-            # Get question groups for this form, ordered by their order
             form_question_groups = f.form_question_group.order_by(
                 "order"
             ).all()
@@ -262,123 +237,242 @@ def transform_form_data_for_report(
         result = []
 
         for question_group in question_groups:
-            # Get questions for this group, ordered by their order
             questions = question_group.question_group_question.order_by(
                 "order"
             ).all()
+            is_repeatable = getattr(question_group, "repeatable", False)
 
-            group_data = {
-                "name": question_group.label or question_group.name,
-                "questions": [],
-            }
-
-            for question in questions:
-                # Initialize answer values list with empty strings for each
-                # main form data instance (parents only)
-                answer_values = [""] * len(form_data_instances)
-
-                # Get all answers for this question from both parents and
-                # children
-                all_form_data_ids = []
-                for main_fd in main_form_data:
-                    all_form_data_ids.append(main_fd.id)
-                    # Add child FormData IDs
-                    for child_form in child_forms:
-                        child_fd = main_fd.children.filter(
-                            form=child_form, is_pending=False
-                        ).last()
-                        if child_fd:
-                            all_form_data_ids.append(child_fd.id)
-
-                answers = question.question_answer.filter(
-                    data__id__in=all_form_data_ids
-                ).select_related("data")
-
-                # Create a mapping of parent FormData ID to its index
-                parent_id_to_index = {
-                    fd.id: idx for idx, fd in enumerate(form_data_instances)
-                }
-
-                for answer in answers:
-                    # Determine which parent column this answer belongs to
-                    if answer.data.parent:
-                        # This is a child answer, put it in parent's column
-                        parent_id = answer.data.parent.id
-                    else:
-                        # This is a parent answer
-                        parent_id = answer.data.id
-                    form_data_index = parent_id_to_index.get(parent_id)
-                    if form_data_index is None:
-                        continue
-
-                    # Format the answer based on question type
-                    if question.type == QuestionTypes.geo:
-                        value = ",".join(map(str, answer.options))
-                    elif question.type in [
-                        QuestionTypes.option,
-                        QuestionTypes.multiple_option,
-                    ]:
-                        # Get the label for options by answer.name
-
-                        options = answer.question.options.filter(
-                            value__in=answer.options
-                        ).all()
-                        value = "|".join(
-                            [opt.label for opt in options]
-                        ) if options else ""
-                    elif question.type == QuestionTypes.date:
-                        value = ""
-                        if (
-                            isinstance(answer.name, str)
-                            and answer.name
-                        ):
-                            try:
-                                date_obj = parser.parse(answer.name)
-                                value = date_obj.strftime("%B %d, %Y")
-                            except (
-                                ImportError,
-                                ValueError,
-                                TypeError,
-                            ):
-                                # If all parsing fails, return original
-                                value = str(answer.name)
-                    elif question.type in [
-                        QuestionTypes.text,
-                        QuestionTypes.photo,
-                        QuestionTypes.autofield,
-                        QuestionTypes.cascade,
-                        QuestionTypes.attachment,
-                        QuestionTypes.signature,
-                    ]:
-                        value = answer.name or ""
-                    elif question.type == QuestionTypes.administration:
-                        if answer.value:
-                            admin = Administration.objects.filter(
-                                pk=answer.value
-                            ).first()
-                            value = admin.name if admin else str(answer.value)
-                        else:
-                            value = ""
-                    else:
-                        value = (
-                            answer.value if answer.value is not None else ""
+            if is_repeatable:
+                # For each parent FormData,
+                # find max repeat index for this group
+                max_repeats = 0
+                # Map: parent_form_data_id -> max index for this group
+                parent_max_index = {}
+                for idx, main_fd in enumerate(form_data_instances):
+                    # Get all answers for this group and parent
+                    answers = []
+                    for q in questions:
+                        answers.extend(
+                            q.question_answer.filter(data=main_fd).all()
                         )
-
-                    # Place the answer at the correct index for this form data
-                    answer_values[form_data_index] = str(value)
-
-                # Only add question if it has at least one non-empty answer
-                if any(value.strip() for value in answer_values if value):
-                    question_data = {
-                        "question": question.label,
-                        "answers": answer_values,
+                        # Also check child FormData for this group
+                        for child_form in child_forms:
+                            child_fd = main_fd.children.filter(
+                                form=child_form, is_pending=False
+                            ).last()
+                            if child_fd:
+                                answers.extend(
+                                    q.question_answer.filter(
+                                        data=child_fd
+                                    ).all()
+                                )
+                    # Find max index for this parent
+                    indices = [
+                        a.index
+                        for a in answers
+                        if hasattr(a, "index") and a.index is not None
+                    ]
+                    max_idx = max(indices) if indices else 0
+                    parent_max_index[main_fd.id] = max_idx
+                    if max_idx > max_repeats:
+                        max_repeats = max_idx
+                # For each repeat index, clone the group
+                for repeat_idx in range(max_repeats + 1):
+                    group_data = {
+                        "name": (
+                            f"{question_group.label or question_group.name} "
+                            f"[{repeat_idx + 1}]"
+                        ),
+                        "questions": [],
                     }
-                    group_data["questions"].append(question_data)
-
-            # Only add groups that have questions with data
-            if group_data["questions"]:
-                result.append(group_data)
-
+                    for question in questions:
+                        answer_values = [""] * len(form_data_instances)
+                        # For each parent FormData,
+                        # get answer for this repeat index
+                        for fd_idx, main_fd in enumerate(form_data_instances):
+                            # Check parent and children
+                            answer = question.question_answer.filter(
+                                data=main_fd, index=repeat_idx
+                            ).first()
+                            if not answer:
+                                for child_form in child_forms:
+                                    child_fd = main_fd.children.filter(
+                                        form=child_form, is_pending=False
+                                    ).last()
+                                    if child_fd:
+                                        answer = (
+                                            question.question_answer.filter(
+                                                data=child_fd, index=repeat_idx
+                                            ).first()
+                                        )
+                                        if answer:
+                                            break
+                            if answer:
+                                # Format answer as before
+                                if question.type == QuestionTypes.geo:
+                                    value = ",".join(map(str, answer.options))
+                                elif question.type in [
+                                    QuestionTypes.option,
+                                    QuestionTypes.multiple_option,
+                                ]:
+                                    options = answer.question.options.filter(
+                                        value__in=answer.options
+                                    ).all()
+                                    value = (
+                                        "|".join(
+                                            [opt.label for opt in options]
+                                        )
+                                        if options
+                                        else ""
+                                    )
+                                elif question.type == QuestionTypes.date:
+                                    value = ""
+                                    if (
+                                        isinstance(answer.name, str)
+                                        and answer.name
+                                    ):
+                                        try:
+                                            date_obj = parser.parse(
+                                                answer.name
+                                            )
+                                            value = date_obj.strftime(
+                                                "%B %d, %Y"
+                                            )
+                                        except (
+                                            ImportError,
+                                            ValueError,
+                                            TypeError,
+                                        ):
+                                            value = str(answer.name)
+                                elif question.type in [
+                                    QuestionTypes.text,
+                                    QuestionTypes.photo,
+                                    QuestionTypes.autofield,
+                                    QuestionTypes.cascade,
+                                    QuestionTypes.attachment,
+                                    QuestionTypes.signature,
+                                ]:
+                                    value = answer.name or ""
+                                elif (
+                                    question.type
+                                    == QuestionTypes.administration
+                                ):
+                                    if answer.value:
+                                        admin = Administration.objects.filter(
+                                            pk=answer.value
+                                        ).first()
+                                        value = (
+                                            admin.name
+                                            if admin
+                                            else str(answer.value)
+                                        )
+                                    else:
+                                        value = ""
+                                else:
+                                    value = (
+                                        answer.value
+                                        if answer.value is not None
+                                        else ""
+                                    )
+                                answer_values[fd_idx] = str(value)
+                        if any(
+                            value.strip() for value in answer_values if value
+                        ):
+                            question_data = {
+                                "question": question.label,
+                                "answers": answer_values,
+                            }
+                            group_data["questions"].append(question_data)
+                    if group_data["questions"]:
+                        result.append(group_data)
+            else:
+                # Non-repeatable group: original logic
+                group_data = {
+                    "name": question_group.label or question_group.name,
+                    "questions": [],
+                }
+                for question in questions:
+                    answer_values = [""] * len(form_data_instances)
+                    all_form_data_ids = []
+                    for main_fd in main_form_data:
+                        all_form_data_ids.append(main_fd.id)
+                        for child_form in child_forms:
+                            child_fd = main_fd.children.filter(
+                                form=child_form, is_pending=False
+                            ).last()
+                            if child_fd:
+                                all_form_data_ids.append(child_fd.id)
+                    answers = question.question_answer.filter(
+                        data__id__in=all_form_data_ids
+                    ).select_related("data")
+                    parent_id_to_index = {
+                        fd.id: idx
+                        for idx, fd in enumerate(form_data_instances)
+                    }
+                    for answer in answers:
+                        if answer.data.parent:
+                            parent_id = answer.data.parent.id
+                        else:
+                            parent_id = answer.data.id
+                        form_data_index = parent_id_to_index.get(parent_id)
+                        if form_data_index is None:
+                            continue
+                        if question.type == QuestionTypes.geo:
+                            value = ",".join(map(str, answer.options))
+                        elif question.type in [
+                            QuestionTypes.option,
+                            QuestionTypes.multiple_option,
+                        ]:
+                            options = answer.question.options.filter(
+                                value__in=answer.options
+                            ).all()
+                            value = (
+                                "|".join([opt.label for opt in options])
+                                if options
+                                else ""
+                            )
+                        elif question.type == QuestionTypes.date:
+                            value = ""
+                            if isinstance(answer.name, str) and answer.name:
+                                try:
+                                    date_obj = parser.parse(answer.name)
+                                    value = date_obj.strftime("%B %d, %Y")
+                                except (ImportError, ValueError, TypeError):
+                                    value = str(answer.name)
+                        elif question.type in [
+                            QuestionTypes.text,
+                            QuestionTypes.photo,
+                            QuestionTypes.autofield,
+                            QuestionTypes.cascade,
+                            QuestionTypes.attachment,
+                            QuestionTypes.signature,
+                        ]:
+                            value = answer.name or ""
+                        elif question.type == QuestionTypes.administration:
+                            if answer.value:
+                                admin = Administration.objects.filter(
+                                    pk=answer.value
+                                ).first()
+                                value = (
+                                    admin.name if admin else str(answer.value)
+                                )
+                            else:
+                                value = ""
+                        else:
+                            value = (
+                                answer.value
+                                if answer.value is not None
+                                else ""
+                            )
+                        answer_values[form_data_index] = str(value)
+                    if any(value.strip() for value in answer_values if value):
+                        question_data = {
+                            "question": question.label,
+                            "answers": answer_values,
+                        }
+                        group_data["questions"].append(question_data)
+                if group_data["questions"]:
+                    result.append(group_data)
         return result
     except Exception as e:
         logger.error(f"Error transforming form data: {str(e)}")

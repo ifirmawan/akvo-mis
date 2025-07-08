@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import datetime
 from django_q.models import Task
 
 import pandas as pd
@@ -311,26 +312,36 @@ def transform_form_data_for_report(
                         continue
 
                     # Format the answer based on question type
-                    if question.type in [
-                        QuestionTypes.geo,
+                    if question.type == QuestionTypes.geo:
+                        value = ",".join(map(str, answer.options))
+                    elif question.type in [
                         QuestionTypes.option,
                         QuestionTypes.multiple_option,
                     ]:
-                        # TODO: Get the label for options
-                        if answer.options:
-                            value = "|".join(map(str, answer.options))
-                        else:
-                            value = ""
+                        # Get the label for options by answer.name
+
+                        options = answer.question.options.filter(
+                            value__in=answer.options
+                        ).all()
+                        value = "|".join(
+                            [opt.label for opt in options]
+                        ) if options else ""
+                    elif question.type == QuestionTypes.date:
+                        value = ""
+                        if isinstance(answer.name, str) and answer.name:
+                            # Parse the date string 07/01/2025
+                            date_obj = datetime.strptime(
+                                answer.name, "%m/%d/%Y"
+                            )
+                            value = date_obj.strftime("%B %d, %Y")
                     elif question.type in [
                         QuestionTypes.text,
                         QuestionTypes.photo,
-                        QuestionTypes.date,
                         QuestionTypes.autofield,
                         QuestionTypes.cascade,
                         QuestionTypes.attachment,
                         QuestionTypes.signature,
                     ]:
-                        # TODO: Format the date: Month Day, Year
                         value = answer.name or ""
                     elif question.type == QuestionTypes.administration:
                         if answer.value:

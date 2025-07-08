@@ -63,7 +63,7 @@ def set_answer_data(data, question):
         with open(image_path, 'rb') as image_file:
             image_bytes = image_file.read()
             base64_encoded = base64.b64encode(image_bytes).decode('utf-8')
-            name = base64_encoded
+            name = f"data:image/png;base64,{base64_encoded}"
     elif question.type == QuestionTypes.date:
         name = fake.date_between_dates(
             date_start=timezone.datetime.now().date() - timedelta(days=90),

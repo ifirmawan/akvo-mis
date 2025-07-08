@@ -54,6 +54,7 @@ class Command(BaseCommand):
                 # format Y-m-d H:M:S
                 created = created.strftime("%Y-%m-%d %H:%M:%S")
                 monitoring_data = FormData.objects.create(
+                    parent=d,
                     name=f"{created} - {d.name}",
                     form=f,
                     created=created,

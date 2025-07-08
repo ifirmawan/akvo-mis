@@ -79,10 +79,10 @@ const DataFilters = ({
     try {
       // Create parameters list URL for selection_ids based on selectedRowKeys
       const selectionIds = selectedRowKeys
-        .map((id) => `selection_ids[]=${id}`)
+        .map((id) => `selection_ids=${id}`)
         .join("&");
       const childFormIds = selectedChildForms
-        .map((id) => `child_form_ids[]=${id}`)
+        .map((id) => `child_form_ids=${id}`)
         .join("&");
       // If no child forms are selected, use the selected form
       let apiURL = `/download/datapoint-report?form_id=${selectedForm}&${selectionIds}`;

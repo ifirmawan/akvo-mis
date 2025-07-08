@@ -1,0 +1,519 @@
+import os
+import logging
+from mis.settings import STORAGE_PATH
+from docx import Document
+from docx.shared import Pt, Inches
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.section import WD_ORIENT
+
+logger = logging.getLogger(__name__)
+
+
+def generate_datapoint_report(
+    report_data,
+    file_path="./tmp/inspection_report.docx",
+    form_name="EPS Inspection and Water Quality Monitoring",
+):
+    """
+    Generates a .docx report with multiple answer columns across multiple
+    tables.
+
+    Args:
+        report_data (list):
+        A list of groups, each containing a name and questions array.
+        Each group has the structure:
+        {
+            "name": "Group Name",
+            "questions": [
+                {
+                    "question": "Question text",
+                    "answers": ["Answer value 1", "Answer value 2", ...]
+                }
+            ]
+        }
+
+        All groups will be distributed across multiple tables with group
+        headers. Multiple answers will be displayed in separate columns
+        rather than concatenated with "|" separators. When more than 5
+        answers exist, the data will be split into multiple tables (batches)
+        with page breaks.
+
+        For photo questions, answers can contain image file paths:
+        {
+            "question": "Photo of Water Quality Test",
+            "answers": ["/images/photo1.jpg", "/images/photo2.png"]
+        }
+        Each image will be rendered in its own column across the appropriate
+        tables.
+
+        file_path (str): The full path where the document should be saved.
+    """
+
+    # --- Document Initialization ---
+    document = Document()
+
+    # Set page orientation to landscape and margins
+    section = document.sections[0]
+    section.orientation = WD_ORIENT.LANDSCAPE
+    section.page_width = Inches(11)
+    section.page_height = Inches(8.5)
+    # Set 1-inch margins on all sides
+    section.top_margin = Inches(1)
+    section.bottom_margin = Inches(1)
+    section.left_margin = Inches(1)
+    section.right_margin = Inches(1)
+
+    # Set default font for the document (optional)
+    style = document.styles["Normal"]
+    font = style.font
+    font.name = "Calibri"
+    font.size = Pt(11)
+
+    # --- Header ---
+    title = document.add_heading(
+        form_name,
+        level=1
+    )
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # Extract village name from the first group's questions for subtitle
+    village_name = "N/A"
+    for group in report_data:
+        for question_data in group.get("questions", []):
+            if question_data.get("question", "") == "Village Name":
+                answers = question_data.get("answers", [])
+                if answers:
+                    # Use the first village name if multiple, or join them
+                    if len(answers) == 1:
+                        village_name = str(answers[0])
+                    else:
+                        village_name = " & ".join(str(ans) for ans in answers)
+                break
+        if village_name != "N/A":
+            break
+
+    # --- Calculate overall max answers across all groups ---
+    overall_max_answers = 1  # At least 1 column for answers
+    for group in report_data:
+        questions = group.get("questions", [])
+        for question_data in questions:
+            answers = question_data.get("answers", [])
+            # Skip coordinate questions as they're handled specially
+            question_text = question_data.get("question", "")
+            if question_text not in ["Latitude", "Longitude"]:
+                overall_max_answers = max(overall_max_answers, len(answers))
+
+    # Determine how many tables we need based on max answers
+    max_answers_per_table = 5
+    tables_needed = 1
+    if overall_max_answers > max_answers_per_table:
+        tables_needed = (
+            overall_max_answers + max_answers_per_table - 1
+        ) // max_answers_per_table
+
+    # Create tables as needed
+    tables = []
+    for table_idx in range(tables_needed):
+        start_answer_idx = table_idx * max_answers_per_table
+        end_answer_idx = min(
+            (table_idx + 1) * max_answers_per_table, overall_max_answers
+        )
+        answers_in_table = max(1, end_answer_idx - start_answer_idx)
+
+        # Skip tables that would have no valid range
+        if start_answer_idx >= overall_max_answers:
+            continue
+
+        # 1 column for question + answers_in_table columns for answers
+        total_cols = 1 + answers_in_table
+        tables.append(
+            {
+                "start_idx": start_answer_idx,
+                "end_idx": end_answer_idx,
+                "total_cols": total_cols,
+            }
+        )
+
+    # --- Process Each Table Separately (Batch Processing) ---
+    for table_info in tables:
+        start_idx = table_info["start_idx"]
+        end_idx = table_info["end_idx"]
+        total_cols = table_info["total_cols"]
+
+        table = document.add_table(rows=0, cols=total_cols)
+        table.style = "Table Grid"
+
+        # Process each group for this specific table
+        for group in report_data:
+            group_name = group.get("name", "Unknown Group")
+            questions = group.get("questions", [])
+
+            # Add group header row for this table
+            header_row = table.add_row()
+            if len(header_row.cells) > 0:
+                merged_cell = header_row.cells[0]
+                for i in range(1, min(total_cols, len(header_row.cells))):
+                    merged_cell = merged_cell.merge(header_row.cells[i])
+                merged_cell.text = group_name
+                # Make header text bold and larger
+                for paragraph in merged_cell.paragraphs:
+                    for run in paragraph.runs:
+                        run.bold = True
+                        run.font.size = Pt(14)
+                        run.font.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+            # Add all questions for this group in this table's batch
+            for question_data in questions:
+                question = question_data.get("question", "")
+                answers = question_data.get("answers", [])
+
+                # Handle special formatting for coordinates
+                if question == "Latitude" and "Longitude" in [
+                    q.get("question", "") for q in questions
+                ]:
+                    # Find longitude answers
+                    longitude_data = next(
+                        (
+                            q
+                            for q in questions
+                            if q.get("question", "") == "Longitude"
+                        ),
+                        {},
+                    )
+                    longitude_answers = longitude_data.get("answers", [])
+
+                    # Combine latitude and longitude for each pair
+                    coord_pairs = []
+                    max_len = max(len(answers), len(longitude_answers))
+                    for i in range(max_len):
+                        lat = answers[i] if i < len(answers) else "N/A"
+                        lon = (
+                            longitude_answers[i]
+                            if i < len(longitude_answers)
+                            else "N/A"
+                        )
+                        coord_pairs.append(f"{lat}, {lon}")
+
+                    # Add coordinate row for this table's batch
+                    coord_row = table.add_row()
+                    coord_row.cells[0].text = "Coordinates (Lat, Lon)"
+                    # Make question cell bold
+                    for paragraph in coord_row.cells[0].paragraphs:
+                        for run in paragraph.runs:
+                            run.bold = True
+
+                    # Fill coordinate pairs for this table's range (batch)
+                    for i in range(start_idx, end_idx):
+                        col_idx = i - start_idx + 1
+                        if i < len(coord_pairs) and col_idx < total_cols:
+                            safe_set_cell_text(
+                                coord_row, col_idx, coord_pairs[i]
+                            )
+
+                    # Fill remaining cells with empty content
+                    remaining_start = max(
+                        1,
+                        min(len(coord_pairs) - start_idx, end_idx - start_idx)
+                        + 1,
+                    )
+                    for col_idx in range(remaining_start, total_cols):
+                        safe_set_cell_text(coord_row, col_idx, "")
+
+                    continue
+                elif question == "Longitude":
+                    # Skip this as it's handled with Latitude
+                    continue
+                else:
+                    # Check if this is a photo question
+                    is_photo = is_photo_question(question)
+                    # Also check if answers contain image paths
+                    has_images = any(
+                        is_image_path(str(ans)) for ans in answers
+                    )
+
+                    if is_photo or has_images:
+                        # Handle photo/image questions for this batch
+                        image_paths = [
+                            str(ans)
+                            for ans in answers
+                            if is_image_path(str(ans))
+                        ]
+
+                        if image_paths:
+                            row = table.add_row()
+                            row.cells[0].text = question
+                            # Make question cell bold
+                            for paragraph in row.cells[0].paragraphs:
+                                for run in paragraph.runs:
+                                    run.bold = True
+
+                            # Add images for this table's batch
+                            # (start_idx to end_idx)
+                            for i in range(start_idx, end_idx):
+                                col_idx = i - start_idx + 1
+                                if (
+                                    i < len(image_paths)
+                                    and col_idx < total_cols
+                                    and col_idx < len(row.cells)
+                                ):
+                                    add_images_to_cell(
+                                        row.cells[col_idx], [image_paths[i]]
+                                    )
+
+                            # Fill remaining answer columns with empty content
+                            remaining_start = max(
+                                1,
+                                min(
+                                    len(image_paths) - start_idx,
+                                    end_idx - start_idx,
+                                )
+                                + 1,
+                            )
+                            for col_idx in range(remaining_start, total_cols):
+                                safe_set_cell_text(row, col_idx, "")
+                        else:
+                            # Photo question but no valid image paths
+                            row = table.add_row()
+                            row.cells[0].text = question
+                            # Make question cell bold
+                            for paragraph in row.cells[0].paragraphs:
+                                for run in paragraph.runs:
+                                    run.bold = True
+
+                            # Add answers for this table's batch
+                            for i in range(start_idx, end_idx):
+                                col_idx = i - start_idx + 1
+                                if i < len(answers) and col_idx < total_cols:
+                                    safe_set_cell_text(
+                                        row, col_idx, str(answers[i])
+                                    )
+
+                            # Fill remaining cells
+                            remaining_start = max(
+                                1,
+                                min(
+                                    len(answers) - start_idx,
+                                    end_idx - start_idx,
+                                )
+                                + 1,
+                            )
+                            for col_idx in range(remaining_start, total_cols):
+                                safe_set_cell_text(row, col_idx, "")
+                    else:
+                        # Regular questions - add answers for this batch
+                        row = table.add_row()
+                        if len(row.cells) > 0:
+                            row.cells[0].text = question
+                            # Make question cell bold
+                            for paragraph in row.cells[0].paragraphs:
+                                for run in paragraph.runs:
+                                    run.bold = True
+                        else:
+                            print(
+                                f"ERROR: Row has no cells! "
+                                f"Table cols: {total_cols}"
+                            )
+                            continue
+
+                        # Add answers for this table's batch
+                        # (start_idx to end_idx)
+                        for i in range(start_idx, end_idx):
+                            col_idx = i - start_idx + 1
+                            if i < len(answers) and col_idx < total_cols:
+                                if answers[i] is not None:
+                                    answer_text = str(answers[i])
+                                else:
+                                    answer_text = "N/A"
+                                safe_set_cell_text(row, col_idx, answer_text)
+
+                        # Fill remaining cells with empty content
+                        remaining_start = max(
+                            1,
+                            min(len(answers) - start_idx, end_idx - start_idx)
+                            + 1,
+                        )
+                        for col_idx in range(remaining_start, total_cols):
+                            safe_set_cell_text(row, col_idx, "")
+
+        document.add_page_break()
+    # --- Save the document ---
+    try:
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        document.save(file_path)
+        return file_path
+    except Exception as e:
+        logger.error(
+            {
+                "context": "generate_datapoint_report",
+                "message": e,
+            }
+        )  # pragma: no cover
+        raise
+
+
+def safe_set_cell_text(row, col_idx, text):
+    """Safely set cell text with bounds checking."""
+    try:
+        if col_idx < len(row.cells):
+            row.cells[col_idx].text = str(text) if text is not None else ""
+            return True
+        return False
+    except Exception as e:
+        # Debug output for troubleshooting
+        cell_count = (
+            len(row.cells) if hasattr(row, "cells") else "no cells attr"
+        )
+        print(
+            f"Error in safe_set_cell_text: col_idx={col_idx}, "
+            f"row.cells length={cell_count}, error={e}"
+        )
+        return False
+
+
+def is_image_path(path_str):
+    """Check if a string represents an image file path."""
+    if not isinstance(path_str, str):
+        return False
+    image_extensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"]
+    return any(path_str.lower().endswith(ext) for ext in image_extensions)
+
+
+def is_photo_question(question_text):
+    """Check if a question is asking for photos based on question text."""
+    photo_keywords = ["photo", "image", "picture", "snapshot", "pic"]
+    question_lower = question_text.lower()
+    return any(keyword in question_lower for keyword in photo_keywords)
+
+
+def get_full_image_path(relative_path):
+    """Convert relative image path to full file system path."""
+    # Remove leading slash if present
+    if relative_path.startswith("/"):
+        relative_path = relative_path[1:]
+
+    # Construct full path (assuming images are stored in storage folder)
+    full_path = os.path.join(STORAGE_PATH, relative_path)
+    return full_path
+
+
+def add_image_to_table(table, key, image_paths, max_image_width=Inches(2.5)):
+    """Add images to a table row with proper formatting."""
+    row = table.add_row()
+    key_cell = row.cells[0]
+    value_cell = row.cells[1]
+    key_cell.text = str(key)
+    # Make key cell bold
+    for paragraph in key_cell.paragraphs:
+        for run in paragraph.runs:
+            run.bold = True
+    # Clear the value cell and add images
+    value_cell.text = ""
+    for i, image_path in enumerate(image_paths):
+        full_path = get_full_image_path(image_path)
+        try:
+            if os.path.exists(full_path):
+                # Add image to the cell
+                if i == 0:
+                    paragraph = value_cell.paragraphs[0]
+                else:
+                    paragraph = value_cell.add_paragraph()
+                if paragraph.runs:
+                    run = paragraph.runs[0]
+                else:
+                    run = paragraph.add_run()
+                run.add_picture(full_path, width=max_image_width)
+                # Add image caption/filename
+                caption_paragraph = value_cell.add_paragraph()
+                filename = os.path.basename(image_path)
+                caption_text = f"Image {i + 1}: {filename}"
+                caption_run = caption_paragraph.add_run(caption_text)
+                caption_run.font.size = Pt(9)
+                caption_run.italic = True
+                # Add spacing between images
+                if i < len(image_paths) - 1:
+                    value_cell.add_paragraph()
+            else:
+                # Image file not found
+                if i == 0:
+                    paragraph = value_cell.paragraphs[0]
+                else:
+                    paragraph = value_cell.add_paragraph()
+                if paragraph.runs:
+                    run = paragraph.runs[0]
+                else:
+                    run = paragraph.add_run()
+                filename = os.path.basename(image_path)
+                run.text = f"Image not found: {filename}"
+                # Red color would be ideal but keeping simple
+        except Exception as e:
+            # Error loading image
+            if i == 0:
+                paragraph = value_cell.paragraphs[0]
+            else:
+                paragraph = value_cell.add_paragraph()
+            run = paragraph.add_run()
+            filename = os.path.basename(image_path)
+            run.text = f"Error loading image: {filename}"
+            logger.warning(f"Failed to add image {image_path}: {e}")
+
+
+def add_images_to_cell(cell, image_paths, max_image_width=Inches(2.5)):
+    """Add images to a single table cell with proper formatting."""
+    # Clear the cell and add images
+    cell.text = ""
+
+    for i, image_path in enumerate(image_paths):
+        full_path = get_full_image_path(image_path)
+
+        try:
+            if os.path.exists(full_path):
+                # Add image to the cell
+                if i == 0:
+                    paragraph = cell.paragraphs[0]
+                else:
+                    paragraph = cell.add_paragraph()
+
+                if paragraph.runs:
+                    run = paragraph.runs[0]
+                else:
+                    run = paragraph.add_run()
+
+                run.add_picture(full_path, width=max_image_width)
+
+                # Add image caption/filename
+                caption_paragraph = cell.add_paragraph()
+                filename = os.path.basename(image_path)
+                caption_text = f"Image {i + 1}: {filename}"
+                caption_run = caption_paragraph.add_run(caption_text)
+                caption_run.font.size = Pt(9)
+                caption_run.italic = True
+
+                # Add spacing between images
+                if i < len(image_paths) - 1:
+                    cell.add_paragraph()
+            else:
+                # Image file not found
+                if i == 0:
+                    paragraph = cell.paragraphs[0]
+                else:
+                    paragraph = cell.add_paragraph()
+
+                if paragraph.runs:
+                    run = paragraph.runs[0]
+                else:
+                    run = paragraph.add_run()
+
+                filename = os.path.basename(image_path)
+                run.text = f"Image not found: {filename}"
+
+        except Exception as e:
+            # Error loading image
+            if i == 0:
+                paragraph = cell.paragraphs[0]
+            else:
+                paragraph = cell.add_paragraph()
+            run = paragraph.add_run()
+            filename = os.path.basename(image_path)
+            run.text = f"Error loading image: {filename}"
+            logger.warning(f"Failed to add image {image_path}: {e}")

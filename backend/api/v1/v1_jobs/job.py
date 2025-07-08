@@ -488,6 +488,27 @@ def job_generate_data_report(job_id: int, **kwargs):
 
         # Get the form
         form = Forms.objects.get(pk=form_id)
+        form_data = form.form_form_data.filter(
+            is_pending=False,
+            pk__in=selection_ids
+        ).all()
+
+        display_names = [
+            fd.name for fd in form_data
+        ]
+        device_identifiers = [
+            "Mobile Device" if fd.submitter else "Webform"
+            for fd in form_data
+        ]
+        submission_dates = [
+            update_date_time_format(fd.created) for fd in form_data
+        ]
+        submitters = [
+            fd.submitter if fd.submitter else fd.created_by.get_full_name()
+            for fd in form_data
+        ]
+        # form_version is an array of form.version based on number of form_data
+        form_versions = [form.version] * len(form_data)
 
         # Clean up any existing file
         temp_file_path = f"./tmp/{job.result}"
@@ -505,12 +526,31 @@ def job_generate_data_report(job_id: int, **kwargs):
         if not form_data:
             logger.warning(f"No data found for form_id {form_id}")
             form_data = []
+        # Add Datapoint information
+        datapoint_info = {
+            "name": "Datapoint",
+            "questions": [
+                {"question": "Display Name", "answers": display_names},
+                {
+                    "question": "Device identifier",
+                    "answers": device_identifiers
+                },
+                {
+                    "question": "Submission Date",
+                    "answers": submission_dates,
+                },
+                {"question": "Submitter", "answers": submitters},
+                {"question": "Form version", "answers": form_versions},
+            ],
+        }
+        form_data.insert(0, datapoint_info)
 
         # Generate the report file
         file_path = generate_datapoint_report(
             form_data,
             file_path=temp_file_path,
             form_name=form.name,
+            display_names=display_names,
         )
         url = upload(file=file_path, folder="download_datapoint_report")
         return url

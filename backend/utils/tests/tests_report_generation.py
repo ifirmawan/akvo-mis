@@ -1,7 +1,7 @@
 import os
 import tempfile
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, PropertyMock
 from docx import Document
 from docx.shared import Inches
 import base64
@@ -10,12 +10,10 @@ from utils.report_generator import (
     generate_datapoint_report,
     safe_set_cell_text,
     is_image_path,
-    is_photo_question,
     get_full_image_path,
     add_images_to_cell,
-    is_base64_image,
     create_temp_image_from_base64,
-    get_image_path_or_create_temp
+    get_image_path_or_create_temp,
 )
 
 
@@ -39,26 +37,17 @@ class TestReportGeneration(unittest.TestCase):
             {
                 "name": "Basic Information",
                 "questions": [
-                    {
-                        "question": "Village Name",
-                        "answers": ["Test Village"]
-                    },
-                    {
-                        "question": "Population",
-                        "answers": ["1500"]
-                    },
-                    {
-                        "question": "District",
-                        "answers": ["Test District"]
-                    }
-                ]
+                    {"question": "Village Name", "answers": ["Test Village"]},
+                    {"question": "Population", "answers": ["1500"]},
+                    {"question": "District", "answers": ["Test District"]},
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Basic Test Report"
+            form_name="Basic Test Report",
         )
 
         # Verify file was created
@@ -81,26 +70,23 @@ class TestReportGeneration(unittest.TestCase):
             {
                 "name": "Water Quality Tests",
                 "questions": [
-                    {
-                        "question": "pH Level",
-                        "answers": ["7.2", "7.5", "7.1"]
-                    },
+                    {"question": "pH Level", "answers": ["7.2", "7.5", "7.1"]},
                     {
                         "question": "Chlorine Level",
-                        "answers": ["0.5", "0.6", "0.4"]
+                        "answers": ["0.5", "0.6", "0.4"],
                     },
                     {
                         "question": "Temperature",
-                        "answers": ["22°C", "23°C", "21°C"]
-                    }
-                ]
+                        "answers": ["22°C", "23°C", "21°C"],
+                    },
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Multi-Column Test"
+            form_name="Multi-Column Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -121,25 +107,35 @@ class TestReportGeneration(unittest.TestCase):
                     {
                         "question": "Sample ID",
                         "answers": [
-                            "S001", "S002", "S003", "S004",
-                            "S005", "S006", "S007"
-                        ]
+                            "S001",
+                            "S002",
+                            "S003",
+                            "S004",
+                            "S005",
+                            "S006",
+                            "S007",
+                        ],
                     },
                     {
                         "question": "Result",
                         "answers": [
-                            "Pass", "Pass", "Fail", "Pass",
-                            "Pass", "Pass", "Fail"
-                        ]
-                    }
-                ]
+                            "Pass",
+                            "Pass",
+                            "Fail",
+                            "Pass",
+                            "Pass",
+                            "Pass",
+                            "Fail",
+                        ],
+                    },
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Multi-Table Test"
+            form_name="Multi-Table Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -158,30 +154,24 @@ class TestReportGeneration(unittest.TestCase):
             {
                 "name": "Location Data",
                 "questions": [
-                    {
-                        "question": "Site Name",
-                        "answers": ["Site A", "Site B"]
-                    },
+                    {"question": "Site Name", "answers": ["Site A", "Site B"]},
                     {
                         "question": "Latitude",
-                        "answers": ["12.3456", "12.7890"]
+                        "answers": ["12.3456", "12.7890"],
                     },
                     {
                         "question": "Longitude",
-                        "answers": ["78.9012", "78.5432"]
+                        "answers": ["78.9012", "78.5432"],
                     },
-                    {
-                        "question": "Elevation",
-                        "answers": ["150m", "200m"]
-                    }
-                ]
+                    {"question": "Elevation", "answers": ["150m", "200m"]},
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Coordinate Test"
+            form_name="Coordinate Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -202,8 +192,8 @@ class TestReportGeneration(unittest.TestCase):
 
         self.assertTrue(coord_row_found, "Coordinates row not found in table")
 
-    @patch('utils.report_generator.os.path.exists')
-    @patch('utils.report_generator.get_full_image_path')
+    @patch("utils.report_generator.os.path.exists")
+    @patch("utils.report_generator.get_full_image_path")
     def test_image_handling_with_valid_paths(self, mock_get_path, mock_exists):
         """Test handling of image/photo questions with valid image paths"""
         # Mock image file existence
@@ -216,25 +206,28 @@ class TestReportGeneration(unittest.TestCase):
                 "questions": [
                     {
                         "question": "Photo of Water Source",
-                        "answers": ["/images/water1.jpg", "/images/water2.png"]
+                        "answers": [
+                            "/images/water1.jpg",
+                            "/images/water2.png",
+                        ],
                     },
                     {
                         "question": "Site Image",
-                        "answers": ["/images/site1.jpg"]
+                        "answers": ["/images/site1.jpg"],
                     },
                     {
                         "question": "Description",
-                        "answers": ["Clear water", "Good condition"]
-                    }
-                ]
+                        "answers": ["Clear water", "Good condition"],
+                    },
+                ],
             }
         ]
 
-        with patch('utils.report_generator.add_images_to_cell') as mock_images:
+        with patch("utils.report_generator.add_images_to_cell") as mock_images:
             result_path = generate_datapoint_report(
                 report_data,
                 file_path=self.test_file_path,
-                form_name="Image Test"
+                form_name="Image Test",
             )
 
             self.assertTrue(os.path.exists(result_path))
@@ -251,10 +244,11 @@ class TestReportGeneration(unittest.TestCase):
                     {
                         "question": "Photo of Equipment",
                         "answers": [
-                            "/images/missing1.jpg", "/images/missing2.png"
-                        ]
+                            "/images/missing1.jpg",
+                            "/images/missing2.png",
+                        ],
                     }
-                ]
+                ],
             }
         ]
 
@@ -262,7 +256,7 @@ class TestReportGeneration(unittest.TestCase):
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Missing Image Test"
+            form_name="Missing Image Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -277,26 +271,20 @@ class TestReportGeneration(unittest.TestCase):
             {
                 "name": "Empty Data Group",
                 "questions": [
-                    {
-                        "question": "Empty Question",
-                        "answers": []
-                    },
-                    {
-                        "question": "Null Values",
-                        "answers": [None, "", None]
-                    },
+                    {"question": "Empty Question", "answers": []},
+                    {"question": "Null Values", "answers": [None, "", None]},
                     {
                         "question": "Mixed Values",
-                        "answers": ["Valid", None, "", "Another Valid"]
-                    }
-                ]
+                        "answers": ["Valid", None, "", "Another Valid"],
+                    },
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Empty Data Test"
+            form_name="Empty Data Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -314,11 +302,8 @@ class TestReportGeneration(unittest.TestCase):
             {
                 "name": "Test Group",
                 "questions": [
-                    {
-                        "question": "Test Question",
-                        "answers": ["Test Answer"]
-                    }
-                ]
+                    {"question": "Test Question", "answers": ["Test Answer"]}
+                ],
             }
         ]
 
@@ -329,9 +314,7 @@ class TestReportGeneration(unittest.TestCase):
         # Should raise an exception
         with self.assertRaises((OSError, FileNotFoundError, PermissionError)):
             generate_datapoint_report(
-                report_data,
-                file_path=invalid_path,
-                form_name="Error Test"
+                report_data, file_path=invalid_path, form_name="Error Test"
             )
 
     def test_village_name_extraction(self):
@@ -340,22 +323,16 @@ class TestReportGeneration(unittest.TestCase):
             {
                 "name": "Location Info",
                 "questions": [
-                    {
-                        "question": "Village Name",
-                        "answers": ["Test Village"]
-                    },
-                    {
-                        "question": "Other Info",
-                        "answers": ["Some data"]
-                    }
-                ]
+                    {"question": "Village Name", "answers": ["Test Village"]},
+                    {"question": "Other Info", "answers": ["Some data"]},
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Village Name Test"
+            form_name="Village Name Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -372,20 +349,20 @@ class TestReportGeneration(unittest.TestCase):
                 "questions": [
                     {
                         "question": "Village Name",
-                        "answers": ["Village A", "Village B", "Village C"]
+                        "answers": ["Village A", "Village B", "Village C"],
                     },
                     {
                         "question": "Population",
-                        "answers": ["1000", "1500", "800"]
-                    }
-                ]
+                        "answers": ["1000", "1500", "800"],
+                    },
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Multi-Village Test"
+            form_name="Multi-Village Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -400,48 +377,50 @@ class TestReportGeneration(unittest.TestCase):
                 "questions": [
                     {
                         "question": "Village Name",
-                        "answers": ["Complex Village"]
+                        "answers": ["Complex Village"],
                     },
-                    {
-                        "question": "District",
-                        "answers": ["Test District"]
-                    }
-                ]
+                    {"question": "District", "answers": ["Test District"]},
+                ],
             },
             {
                 "name": "Location Data",
                 "questions": [
                     {
                         "question": "Latitude",
-                        "answers": ["12.3456", "12.7890"]
+                        "answers": ["12.3456", "12.7890"],
                     },
                     {
                         "question": "Longitude",
-                        "answers": ["78.9012", "78.5432"]
-                    }
-                ]
+                        "answers": ["78.9012", "78.5432"],
+                    },
+                ],
             },
             {
                 "name": "Quality Measurements",
                 "questions": [
                     {
                         "question": "pH Level",
-                        "answers": ["7.2", "7.5", "7.1", "7.3", "7.4", "7.0"]
+                        "answers": ["7.2", "7.5", "7.1", "7.3", "7.4", "7.0"],
                     },
                     {
                         "question": "Temperature",
                         "answers": [
-                            "22°C", "23°C", "21°C", "24°C", "22°C", "23°C"
-                        ]
-                    }
-                ]
-            }
+                            "22°C",
+                            "23°C",
+                            "21°C",
+                            "24°C",
+                            "22°C",
+                            "23°C",
+                        ],
+                    },
+                ],
+            },
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Complex Scenario Test"
+            form_name="Complex Scenario Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -458,18 +437,15 @@ class TestReportGeneration(unittest.TestCase):
             {
                 "name": "Formatted Report",
                 "questions": [
-                    {
-                        "question": "Test Question",
-                        "answers": ["Test Answer"]
-                    }
-                ]
+                    {"question": "Test Question", "answers": ["Test Answer"]}
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Formatting Test Report"
+            form_name="Formatting Test Report",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -530,21 +506,7 @@ class TestUtilityFunctions(unittest.TestCase):
         self.assertFalse(is_image_path(None))
         self.assertFalse(is_image_path(123))
 
-    def test_is_photo_question(self):
-        """Test is_photo_question function"""
-        # Photo-related questions
-        self.assertTrue(is_photo_question("Take a photo of the site"))
-        self.assertTrue(is_photo_question("Upload image"))
-        self.assertTrue(is_photo_question("Picture of equipment"))
-        self.assertTrue(is_photo_question("Snapshot of results"))
-        self.assertTrue(is_photo_question("Site pic"))
-
-        # Non-photo questions
-        self.assertFalse(is_photo_question("What is the temperature?"))
-        self.assertFalse(is_photo_question("Enter the pH value"))
-        self.assertFalse(is_photo_question("Description of site"))
-
-    @patch('utils.report_generator.STORAGE_PATH', '/test/storage')
+    @patch("utils.report_generator.STORAGE_PATH", "/test/storage")
     def test_get_full_image_path(self):
         """Test get_full_image_path function"""
         # Test with leading slash
@@ -559,8 +521,8 @@ class TestUtilityFunctions(unittest.TestCase):
         result = get_full_image_path("test.jpg")
         self.assertEqual(result, "/test/storage/test.jpg")
 
-    @patch('utils.report_generator.os.path.exists')
-    @patch('docx.text.run.Run.add_picture')
+    @patch("utils.report_generator.os.path.exists")
+    @patch("docx.text.run.Run.add_picture")
     def test_add_images_to_cell(self, mock_add_picture, mock_exists):
         """Test add_images_to_cell function"""
         # Mock file existence and path
@@ -606,24 +568,6 @@ class TestBase64ImageSupport(unittest.TestCase):
         # Invalid base64 string
         self.invalid_base64 = "invalid_base64_string"
 
-    def test_is_base64_image_detection(self):
-        """Test detection of base64 image data"""
-        # Test valid base64 string
-        self.assertTrue(is_base64_image(self.valid_base64_png))
-
-        # Test valid data URL
-        self.assertTrue(is_base64_image(self.valid_data_url))
-
-        # Test invalid base64
-        self.assertFalse(is_base64_image(self.invalid_base64))
-
-        # Test regular file path
-        self.assertFalse(is_base64_image("/path/to/image.jpg"))
-
-        # Test non-string input
-        self.assertFalse(is_base64_image(123))
-        self.assertFalse(is_base64_image(None))
-
     def test_create_temp_image_from_base64_data_url(self):
         """Test creating temporary image file from data URL"""
         temp_path = create_temp_image_from_base64(self.valid_data_url)
@@ -634,13 +578,13 @@ class TestBase64ImageSupport(unittest.TestCase):
             self.assertTrue(os.path.exists(temp_path))
 
             # Should have PNG extension
-            self.assertTrue(temp_path.endswith('.png'))
+            self.assertTrue(temp_path.endswith(".png"))
 
             # File should contain image data
-            with open(temp_path, 'rb') as f:
+            with open(temp_path, "rb") as f:
                 content = f.read()
                 # PNG files start with these bytes
-                self.assertTrue(content.startswith(b'\x89PNG'))
+                self.assertTrue(content.startswith(b"\x89PNG"))
 
         finally:
             # Clean up
@@ -657,7 +601,7 @@ class TestBase64ImageSupport(unittest.TestCase):
             self.assertTrue(os.path.exists(temp_path))
 
             # Should have PNG extension (default)
-            self.assertTrue(temp_path.endswith('.png'))
+            self.assertTrue(temp_path.endswith(".png"))
 
         finally:
             # Clean up
@@ -696,8 +640,8 @@ class TestBase64ImageSupport(unittest.TestCase):
         # Should return full path (with STORAGE_PATH prefix)
         self.assertTrue(path.endswith(file_path))
 
-    @patch('utils.report_generator.os.path.exists')
-    @patch('utils.report_generator.os.unlink')
+    @patch("utils.report_generator.os.path.exists")
+    @patch("utils.report_generator.os.unlink")
     def test_add_images_to_cell_with_base64(self, mock_unlink, mock_exists):
         """Test adding base64 images to a cell"""
         # Mock document and cell structure
@@ -737,19 +681,22 @@ class TestBase64ImageSupport(unittest.TestCase):
                 "questions": [
                     {
                         "question": "Photo Documentation",
-                        "answers": [self.valid_data_url, self.valid_base64_png]
+                        "answers": [
+                            self.valid_data_url,
+                            self.valid_base64_png,
+                        ],
                     },
                     {
                         "question": "Regular Question",
-                        "answers": ["Regular answer"]
-                    }
-                ]
+                        "answers": ["Regular answer"],
+                    },
+                ],
             }
         ]
 
         # Create temporary file for report
         with tempfile.NamedTemporaryFile(
-            suffix='.docx', delete=False
+            suffix=".docx", delete=False
         ) as temp_file:
             temp_path = temp_file.name
 
@@ -758,7 +705,7 @@ class TestBase64ImageSupport(unittest.TestCase):
             generate_datapoint_report(
                 report_data,
                 file_path=temp_path,
-                form_name="Base64 Image Test Report"
+                form_name="Base64 Image Test Report",
             )
 
             # Verify report was created
@@ -788,16 +735,16 @@ class TestBase64ImageSupport(unittest.TestCase):
                         "answers": [
                             "/path/to/file.jpg",  # File path
                             self.valid_data_url,  # Base64 data URL
-                            self.valid_base64_png  # Plain base64
-                        ]
+                            self.valid_base64_png,  # Plain base64
+                        ],
                     }
-                ]
+                ],
             }
         ]
 
         # Create temporary file for report
         with tempfile.NamedTemporaryFile(
-            suffix='.docx', delete=False
+            suffix=".docx", delete=False
         ) as temp_file:
             temp_path = temp_file.name
 
@@ -806,7 +753,7 @@ class TestBase64ImageSupport(unittest.TestCase):
             generate_datapoint_report(
                 report_data,
                 file_path=temp_path,
-                form_name="Mixed Image Types Test"
+                form_name="Mixed Image Types Test",
             )
 
             # Verify report was created
@@ -818,7 +765,7 @@ class TestBase64ImageSupport(unittest.TestCase):
                 os.unlink(temp_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 
 
@@ -837,7 +784,7 @@ class TestReportGenerationIntegration(unittest.TestCase):
             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP"
             "8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
         )
-        with open(self.test_image_path, 'wb') as f:
+        with open(self.test_image_path, "wb") as f:
             f.write(png_data)
 
         # Valid base64 data for tests
@@ -852,6 +799,7 @@ class TestReportGenerationIntegration(unittest.TestCase):
     def tearDown(self):
         """Clean up temporary files"""
         import shutil
+
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_real_image_file_processing(self):
@@ -865,18 +813,18 @@ class TestReportGenerationIntegration(unittest.TestCase):
                 "questions": [
                     {
                         "question": "Photo of Test Site",
-                        "answers": [rel_image_path]
+                        "answers": [rel_image_path],
                     }
-                ]
+                ],
             }
         ]
 
         # This should exercise the actual image processing code
-        with patch('utils.report_generator.STORAGE_PATH', self.temp_dir):
+        with patch("utils.report_generator.STORAGE_PATH", self.temp_dir):
             result_path = generate_datapoint_report(
                 report_data,
                 file_path=self.test_file_path,
-                form_name="Real Image Test"
+                form_name="Real Image Test",
             )
 
         self.assertTrue(os.path.exists(result_path))
@@ -893,9 +841,9 @@ class TestReportGenerationIntegration(unittest.TestCase):
                 "questions": [
                     {
                         "question": "Base64 Image Question",
-                        "answers": [data_url, self.valid_base64_png]
+                        "answers": [data_url, self.valid_base64_png],
                     }
-                ]
+                ],
             }
         ]
 
@@ -903,7 +851,7 @@ class TestReportGenerationIntegration(unittest.TestCase):
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Base64 Integration Test"
+            form_name="Base64 Integration Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -918,17 +866,17 @@ class TestReportGenerationIntegration(unittest.TestCase):
                 "questions": [
                     {
                         "question": "Site Name",
-                        "answers": ["Site Alpha", "Site Beta", "Site Gamma"]
+                        "answers": ["Site Alpha", "Site Beta", "Site Gamma"],
                     },
                     {
                         "question": "Latitude",
-                        "answers": ["12.3456", "12.7890", "12.1234"]
+                        "answers": ["12.3456", "12.7890", "12.1234"],
                     },
                     {
                         "question": "Longitude",
-                        "answers": ["78.9012", "78.5432", "78.6789"]
-                    }
-                ]
+                        "answers": ["78.9012", "78.5432", "78.6789"],
+                    },
+                ],
             },
             {
                 "name": "Image Documentation",
@@ -937,21 +885,21 @@ class TestReportGenerationIntegration(unittest.TestCase):
                         "question": "Site Photo",
                         "answers": [
                             f"data:image/png;base64,{self.valid_base64_png}"
-                        ]
+                        ],
                     },
                     {
                         "question": "Equipment Picture",
                         # Test missing file
-                        "answers": ["/nonexistent/path.jpg"]
-                    }
-                ]
-            }
+                        "answers": ["/nonexistent/path.jpg"],
+                    },
+                ],
+            },
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Mixed Content Integration Test"
+            form_name="Mixed Content Integration Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -966,85 +914,22 @@ class TestReportGenerationIntegration(unittest.TestCase):
             ("photo.PNG", True),
             ("document.pdf", False),
             ("", False),
-            (None, False)
+            (None, False),
         ]
 
         for input_val, expected in test_cases:
             with self.subTest(input=input_val):
                 self.assertEqual(is_image_path(input_val), expected)
 
-        # Test is_photo_question
-        photo_questions = [
-            "Take a photo of the equipment",
-            "Upload image of results",
-            "Site picture",
-            "Equipment snapshot"
-        ]
-
-        non_photo_questions = [
-            "Enter the temperature",
-            "What is the pH value?",
-            "Describe the location"
-        ]
-
-        for question in photo_questions:
-            with self.subTest(question=question):
-                self.assertTrue(is_photo_question(question))
-
-        for question in non_photo_questions:
-            with self.subTest(question=question):
-                self.assertFalse(is_photo_question(question))
-
         # Test get_full_image_path
         test_path = "images/test.jpg"
-        with patch('utils.report_generator.STORAGE_PATH', '/test/storage'):
+        with patch("utils.report_generator.STORAGE_PATH", "/test/storage"):
             full_path = get_full_image_path(test_path)
-            self.assertEqual(full_path, '/test/storage/images/test.jpg')
+            self.assertEqual(full_path, "/test/storage/images/test.jpg")
 
             # Test with leading slash
-            full_path2 = get_full_image_path('/images/test.jpg')
-            self.assertEqual(full_path2, '/test/storage/images/test.jpg')
-
-    def test_base64_utility_functions_integration(self):
-        """Test base64 utility functions with real data"""
-        # Test is_base64_image
-        data_url = f"data:image/png;base64,{self.valid_base64_png}"
-
-        self.assertTrue(is_base64_image(data_url))
-        self.assertTrue(is_base64_image(self.valid_base64_png))
-        self.assertFalse(is_base64_image("not_base64"))
-        self.assertFalse(is_base64_image("/path/to/file.jpg"))
-        self.assertFalse(is_base64_image(123))
-
-        # Test create_temp_image_from_base64
-        temp_path = create_temp_image_from_base64(data_url)
-        try:
-            self.assertIsNotNone(temp_path)
-            self.assertTrue(os.path.exists(temp_path))
-            self.assertTrue(temp_path.endswith('.png'))
-        finally:
-            if temp_path and os.path.exists(temp_path):
-                os.unlink(temp_path)
-
-        # Test with invalid data
-        invalid_temp = create_temp_image_from_base64("invalid_data")
-        self.assertIsNone(invalid_temp)
-
-        # Test get_image_path_or_create_temp
-        path, is_temp = get_image_path_or_create_temp(data_url)
-        try:
-            self.assertTrue(is_temp)
-            self.assertIsNotNone(path)
-            self.assertTrue(os.path.exists(path))
-        finally:
-            if path and os.path.exists(path):
-                os.unlink(path)
-
-        # Test with regular file path
-        file_path = "/path/to/image.jpg"
-        path2, is_temp2 = get_image_path_or_create_temp(file_path)
-        self.assertFalse(is_temp2)
-        self.assertTrue(path2.endswith(file_path))
+            full_path2 = get_full_image_path("/images/test.jpg")
+            self.assertEqual(full_path2, "/test/storage/images/test.jpg")
 
     def test_error_handling_integration(self):
         """Test error handling scenarios"""
@@ -1053,22 +938,19 @@ class TestReportGenerationIntegration(unittest.TestCase):
             {
                 "name": "Error Test",
                 "questions": [
-                    {
-                        "question": "Test Question",
-                        "answers": ["Test Answer"]
-                    }
-                ]
+                    {"question": "Test Question", "answers": ["Test Answer"]}
+                ],
             }
         ]
 
         # Mock os.makedirs to force an exception during directory creation
-        with patch('utils.report_generator.os.makedirs') as mock_makedirs:
+        with patch("utils.report_generator.os.makedirs") as mock_makedirs:
             mock_makedirs.side_effect = PermissionError("Permission denied")
             with self.assertRaises(PermissionError):
                 generate_datapoint_report(
                     report_data,
                     file_path="/some/path/test.docx",
-                    form_name="Error Test"
+                    form_name="Error Test",
                 )
 
     def test_large_dataset_integration(self):
@@ -1080,22 +962,16 @@ class TestReportGenerationIntegration(unittest.TestCase):
             {
                 "name": "Large Dataset Test",
                 "questions": [
-                    {
-                        "question": "Sample Results",
-                        "answers": large_answers
-                    },
-                    {
-                        "question": "Status",
-                        "answers": ["Pass"] * 8
-                    }
-                ]
+                    {"question": "Sample Results", "answers": large_answers},
+                    {"question": "Status", "answers": ["Pass"] * 8},
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Large Dataset Test"
+            form_name="Large Dataset Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -1111,33 +987,27 @@ class TestReportGenerationIntegration(unittest.TestCase):
             {
                 "name": "Edge Cases",
                 "questions": [
-                    {
-                        "question": "Empty Answers",
-                        "answers": []
-                    },
-                    {
-                        "question": "None Values",
-                        "answers": [None, None, None]
-                    },
+                    {"question": "Empty Answers", "answers": []},
+                    {"question": "None Values", "answers": [None, None, None]},
                     {
                         "question": "Mixed Empty",
-                        "answers": ["Valid", "", None, "Another"]
+                        "answers": ["Valid", "", None, "Another"],
                     },
                     {
                         "question": "Image with None",
                         "answers": [
                             None,
-                            f"data:image/png;base64,{self.valid_base64_png}"
-                        ]
-                    }
-                ]
+                            f"data:image/png;base64,{self.valid_base64_png}",
+                        ],
+                    },
+                ],
             }
         ]
 
         result_path = generate_datapoint_report(
             report_data,
             file_path=self.test_file_path,
-            form_name="Edge Cases Test"
+            form_name="Edge Cases Test",
         )
 
         self.assertTrue(os.path.exists(result_path))
@@ -1164,3 +1034,176 @@ class TestReportGenerationIntegration(unittest.TestCase):
         # Test invalid cell index
         result = safe_set_cell_text(row, 10, "Invalid")
         self.assertFalse(result)
+
+
+class TestImageWidthCalculation(unittest.TestCase):
+    """Test suite for image width calculation functionality"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        self.document = Document()
+        # Mock table with different column counts
+        self.table_2_cols = self.document.add_table(rows=1, cols=2)
+        self.table_3_cols = self.document.add_table(rows=1, cols=3)
+        self.table_5_cols = self.document.add_table(rows=1, cols=5)
+
+    def test_calculate_optimal_image_width_2_columns(self):
+        """Test width calculation for 2-column table"""
+        from utils.report_generator import calculate_optimal_image_width
+
+        width = calculate_optimal_image_width(self.table_2_cols, 1)
+
+        # For 2 columns: (9 - 0.2) / 2 * 0.85 = ~3.74 inches
+        # But capped at max 3 inches
+        self.assertEqual(width, Inches(3))
+
+    def test_calculate_optimal_image_width_3_columns(self):
+        """Test width calculation for 3-column table"""
+        from utils.report_generator import calculate_optimal_image_width
+
+        width = calculate_optimal_image_width(self.table_3_cols, 1)
+
+        # For 3 columns: (9 - 0.2) / 3 * 0.85 = ~2.49 inches
+        expected_width = (9 - 0.2) / 3 * 0.85
+        self.assertAlmostEqual(width.inches, expected_width, places=1)
+
+    def test_calculate_optimal_image_width_5_columns(self):
+        """Test width calculation for 5-column table"""
+        from utils.report_generator import calculate_optimal_image_width
+
+        width = calculate_optimal_image_width(self.table_5_cols, 1)
+
+        # For 5 columns: (9 - 0.2) / 5 * 0.85 = ~1.496 inches
+        expected_width = (9 - 0.2) / 5 * 0.85
+        self.assertAlmostEqual(width.inches, expected_width, places=1)
+
+    def test_calculate_optimal_image_width_minimum_bound(self):
+        """Test minimum width constraint"""
+        from utils.report_generator import calculate_optimal_image_width
+
+        # Create a table with many columns to test minimum
+        large_table = self.document.add_table(rows=1, cols=20)
+        width = calculate_optimal_image_width(large_table, 1)
+
+        # Should be capped at minimum 1 inch
+        self.assertEqual(width, Inches(1))
+
+    def test_calculate_optimal_image_width_error_handling(self):
+        """Test error handling in width calculation"""
+        from utils.report_generator import calculate_optimal_image_width
+
+        # Test with None table
+        width = calculate_optimal_image_width(None, 0)
+        self.assertEqual(width, Inches(1.5))  # Fallback value
+
+    @patch("utils.report_generator.logger")
+    def test_calculate_optimal_image_width_exception_handling(
+        self, mock_logger
+    ):
+        """Test exception handling in width calculation"""
+        from utils.report_generator import calculate_optimal_image_width
+
+        # Create a mock table that will cause an exception
+        mock_table = MagicMock()
+        # Make accessing rows raise an AttributeError
+        type(mock_table).rows = PropertyMock(
+            side_effect=AttributeError("Access error")
+        )
+
+        width = calculate_optimal_image_width(mock_table, 0)
+
+        # Should return fallback width
+        self.assertEqual(width, Inches(1.5))
+
+        # Should log warning
+        mock_logger.warning.assert_called_once()
+
+
+class TestAddImagesToCellWithAutoWidth(unittest.TestCase):
+    """Test suite for add_images_to_cell with automatic width calculation"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        self.document = Document()
+        self.table = self.document.add_table(rows=1, cols=3)
+        self.cell = self.table.cell(0, 1)
+
+        # Create a test image
+        self.test_image_path = self.create_test_image()
+
+    def tearDown(self):
+        """Clean up test fixtures"""
+        if hasattr(self, "test_image_path") and os.path.exists(
+            self.test_image_path
+        ):
+            os.unlink(self.test_image_path)
+
+    def create_test_image(self):
+        """Create a small test image for testing"""
+        # Create a simple test PNG file using base64 data
+        import tempfile
+
+        # Simple 1x1 pixel PNG (base64 encoded)
+        png_data = base64.b64decode(
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP"
+            "8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
+        )
+
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
+        temp_file.write(png_data)
+        temp_file.close()
+        return temp_file.name
+
+    @patch("utils.report_generator.calculate_optimal_image_width")
+    def test_add_images_to_cell_with_auto_width(self, mock_calc_width):
+        """Test adding images with automatic width calculation"""
+        from utils.report_generator import add_images_to_cell
+
+        # Mock the width calculation
+        mock_calc_width.return_value = Inches(2)
+
+        # Add image to cell
+        add_images_to_cell(
+            self.cell, [self.test_image_path], table=self.table, cell_index=1
+        )
+
+        # Verify width calculation was called
+        mock_calc_width.assert_called_once_with(self.table, 1)
+
+    def test_add_images_to_cell_with_fixed_width(self):
+        """Test adding images with fixed width (backwards compatibility)"""
+        from utils.report_generator import add_images_to_cell
+
+        # Add image with fixed width
+        fixed_width = Inches(1.5)
+        add_images_to_cell(
+            self.cell, [self.test_image_path], max_image_width=fixed_width
+        )
+
+    def test_add_images_to_cell_fallback_width(self):
+        """Test fallback width when no table provided"""
+        from utils.report_generator import add_images_to_cell
+
+        # Add image without table (should use fallback)
+        add_images_to_cell(self.cell, [self.test_image_path])
+
+    def test_add_images_to_cell_multiple_images_auto_width(self):
+        """Test adding multiple images with auto width"""
+        from utils.report_generator import add_images_to_cell
+
+        # Create second test image
+        second_image = self.create_test_image()
+
+        try:
+            # Add multiple images
+            add_images_to_cell(
+                self.cell,
+                [self.test_image_path, second_image],
+                table=self.table,
+                cell_index=1,
+            )
+            # Should have multiple paragraphs for images
+            self.assertTrue(len(self.cell.paragraphs) >= 2)
+        finally:
+            if os.path.exists(second_image):
+                os.unlink(second_image)

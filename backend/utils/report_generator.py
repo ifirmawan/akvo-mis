@@ -72,14 +72,11 @@ def generate_datapoint_report(
     font.size = Pt(11)
 
     # --- Header ---
-    title = document.add_heading(
-        form_name,
-        level=1
-    )
+    title = document.add_heading(form_name, level=1)
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     # Extract village name from the first group's questions for subtitle
-    village_name = "N/A"
+    datapoint_name = "N/A"
     for group in report_data:
         for question_data in group.get("questions", []):
             if question_data.get("question", "") == "Village Name":
@@ -87,11 +84,13 @@ def generate_datapoint_report(
                 if answers:
                     # Use the first village name if multiple, or join them
                     if len(answers) == 1:
-                        village_name = str(answers[0])
+                        datapoint_name = str(answers[0])
                     else:
-                        village_name = " & ".join(str(ans) for ans in answers)
+                        datapoint_name = " & ".join(
+                            str(ans) for ans in answers
+                        )
                 break
-        if village_name != "N/A":
+        if datapoint_name != "N/A":
             break
 
     # --- Calculate overall max answers across all groups ---
@@ -159,10 +158,10 @@ def generate_datapoint_report(
                 merged_cell.text = group_name
                 # Make header text bold and larger
                 for paragraph in merged_cell.paragraphs:
+                    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
                     for run in paragraph.runs:
                         run.bold = True
                         run.font.size = Pt(14)
-                        run.font.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
             # Add all questions for this group in this table's batch
             for question_data in questions:
@@ -226,14 +225,12 @@ def generate_datapoint_report(
                     # Skip this as it's handled with Latitude
                     continue
                 else:
-                    # Check if this is a photo question
-                    is_photo = is_photo_question(question)
                     # Also check if answers contain image paths
                     has_images = any(
                         is_image_path(str(ans)) for ans in answers
                     )
 
-                    if is_photo or has_images:
+                    if has_images:
                         # Handle photo/image questions for this batch
                         image_paths = [
                             str(ans)
@@ -259,7 +256,10 @@ def generate_datapoint_report(
                                     and col_idx < len(row.cells)
                                 ):
                                     add_images_to_cell(
-                                        row.cells[col_idx], [image_paths[i]]
+                                        row.cells[col_idx],
+                                        [image_paths[i]],
+                                        table=table,
+                                        cell_index=col_idx,
                                     )
 
                             # Fill remaining answer columns with empty content
@@ -378,14 +378,13 @@ def is_image_path(path_str):
     if not isinstance(path_str, str):
         return False
     image_extensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"]
+    # or start with "data:image/"
+    if path_str.startswith("data:image/"):
+        return True
+    # or start with http(s)://
+    if path_str.startswith("http://") or path_str.startswith("https://"):
+        return True
     return any(path_str.lower().endswith(ext) for ext in image_extensions)
-
-
-def is_photo_question(question_text):
-    """Check if a question is asking for photos based on question text."""
-    photo_keywords = ["photo", "image", "picture", "snapshot", "pic"]
-    question_lower = question_text.lower()
-    return any(keyword in question_lower for keyword in photo_keywords)
 
 
 def get_full_image_path(relative_path):
@@ -397,24 +396,6 @@ def get_full_image_path(relative_path):
     # Construct full path (assuming images are stored in storage folder)
     full_path = os.path.join(STORAGE_PATH, relative_path)
     return full_path
-
-
-def is_base64_image(image_data):
-    """Check if the image data is a base64 encoded image."""
-    if not isinstance(image_data, str):
-        return False
-
-    # Check for data URL format (data:image/...;base64,...)
-    if image_data.startswith('data:image/'):
-        return True
-
-    # Check for plain base64 string (basic validation)
-    try:
-        # Try to decode as base64
-        base64.b64decode(image_data, validate=True)
-        return True
-    except Exception:
-        return False
 
 
 def create_temp_image_from_base64(base64_data, filename_prefix="temp_image"):
@@ -430,15 +411,15 @@ def create_temp_image_from_base64(base64_data, filename_prefix="temp_image"):
     """
     try:
         # Handle data URL format
-        if base64_data.startswith('data:image/'):
+        if base64_data.startswith("data:image/"):
             # Extract the image format and base64 data
-            header, base64_string = base64_data.split(',', 1)
+            header, base64_string = base64_data.split(",", 1)
             # Extract image format from header (e.g., "data:image/png;base64")
-            image_format = header.split('/')[1].split(';')[0]
+            image_format = header.split("/")[1].split(";")[0]
         else:
             # Assume it's a plain base64 string (default to PNG)
             base64_string = base64_data
-            image_format = 'png'
+            image_format = "png"
 
         # Decode base64 data
         image_bytes = base64.b64decode(base64_string)
@@ -446,8 +427,8 @@ def create_temp_image_from_base64(base64_data, filename_prefix="temp_image"):
         # Create temporary file
         with tempfile.NamedTemporaryFile(
             delete=False,
-            suffix=f'.{image_format}',
-            prefix=f'{filename_prefix}_'
+            suffix=f".{image_format}",
+            prefix=f"{filename_prefix}_",
         ) as temp_file:
             temp_file.write(image_bytes)
             return temp_file.name
@@ -468,7 +449,7 @@ def get_image_path_or_create_temp(image_data):
         tuple: (image_path, is_temp_file) where is_temp_file indicates
                if the path points to a temporary file that should be cleaned up
     """
-    if is_base64_image(image_data):
+    if image_data.startswith("data:image/"):
         temp_path = create_temp_image_from_base64(image_data)
         return temp_path, True
     else:
@@ -489,14 +470,79 @@ def add_image_to_table(table, key, image_paths, max_image_width=Inches(2.5)):
             run.bold = True
 
     # Use the enhanced add_images_to_cell function
-    add_images_to_cell(value_cell, image_paths, max_image_width)
+    add_images_to_cell(value_cell, image_paths, max_image_width, table, 1)
 
 
-def add_images_to_cell(cell, image_paths, max_image_width=Inches(2.5)):
-    """Add images to a single table cell with proper formatting."""
+def calculate_optimal_image_width(table, cell_index):
+    """
+    Calculate the optimal image width based on available cell space.
+
+    Args:
+        table: The docx table object
+        cell_index: The index of the cell in the row
+
+    Returns:
+        Optimal width in Inches for images in this cell
+    """
+    try:
+        # Page width (landscape): 11 inches
+        # Margins: 1 inch left + 1 inch right = 2 inches
+        # Available content width: 11 - 2 = 9 inches
+        available_width = Inches(9)
+
+        # Get number of columns in the table
+        if table.rows:
+            num_columns = len(table.rows[0].cells)
+        else:
+            num_columns = 1
+
+        # Calculate approximate cell width
+        # Account for table borders and cell padding
+        # (estimate ~0.2 inches total)
+        border_padding = Inches(0.2)
+        cell_width_emu = (available_width - border_padding) / num_columns
+
+        # Use 85% of cell width to ensure images fit comfortably
+        # with some padding around them
+        # Convert back to inches for the calculation
+        cell_width_inches = cell_width_emu / 914400  # EMU to inches conversion
+        optimal_width = Inches(cell_width_inches * 0.85)
+
+        # Set reasonable bounds: minimum 1 inch, maximum 3 inches
+        min_width = Inches(1)
+        max_width = Inches(3)
+
+        return max(min_width, min(max_width, optimal_width))
+    except Exception as e:
+        logger.warning(f"Failed to calculate optimal image width: {e}")
+        # Fallback to a conservative default
+        return Inches(1.5)
+
+
+def add_images_to_cell(
+    cell, image_paths, max_image_width=None, table=None, cell_index=0
+):
+    """
+    Add images to a single table cell with proper formatting and auto-sizing.
+    Args:
+        cell: The table cell to add images to
+        image_paths: List of image paths (can be file paths or base64 strings)
+        max_image_width: Optional fixed width for images
+                        (if None, will calculate optimal width)
+        table: The table object (used for width calculation
+                        if max_image_width is None)
+        cell_index: The cell index in the row (used for width calculation)
+    """
     # Clear the cell and add images
     cell.text = ""
     temp_files_to_cleanup = []
+
+    # Calculate optimal image width if not provided
+    if max_image_width is None and table is not None:
+        max_image_width = calculate_optimal_image_width(table, cell_index)
+    elif max_image_width is None:
+        # Fallback if no table provided
+        max_image_width = Inches(2)
 
     try:
         for i, image_path in enumerate(image_paths):
@@ -521,17 +567,6 @@ def add_images_to_cell(cell, image_paths, max_image_width=Inches(2.5)):
 
                     run.add_picture(actual_path, width=max_image_width)
 
-                    # Add image caption/filename
-                    caption_paragraph = cell.add_paragraph()
-                    if is_base64_image(image_path):
-                        caption_text = f"Image {i + 1}: base64 image"
-                    else:
-                        filename = os.path.basename(image_path)
-                        caption_text = f"Image {i + 1}: {filename}"
-                    caption_run = caption_paragraph.add_run(caption_text)
-                    caption_run.font.size = Pt(9)
-                    caption_run.italic = True
-
                     # Add spacing between images
                     if i < len(image_paths) - 1:
                         cell.add_paragraph()
@@ -547,7 +582,7 @@ def add_images_to_cell(cell, image_paths, max_image_width=Inches(2.5)):
                     else:
                         run = paragraph.add_run()
 
-                    if is_base64_image(image_path):
+                    if image_path.startswith("data:image/"):
                         run.text = f"Error processing base64 image {i + 1}"
                     else:
                         filename = os.path.basename(image_path)
@@ -561,7 +596,7 @@ def add_images_to_cell(cell, image_paths, max_image_width=Inches(2.5)):
                     paragraph = cell.add_paragraph()
                 run = paragraph.add_run()
 
-                if is_base64_image(image_path):
+                if image_path.startswith("data:image/"):
                     run.text = f"Error loading base64 image {i + 1}"
                     logger.warning(f"Failed to add base64 image: {e}")
                 else:

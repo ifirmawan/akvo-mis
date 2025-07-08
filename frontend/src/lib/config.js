@@ -716,10 +716,6 @@ const config = {
     registration: 1,
     monitoring: 2,
   },
-  submissionTypeColor: {
-    registration: "#2563eb",
-    monitoring: "#0891b2",
-  },
   maxLevelApproval: 3,
   minEntityLevel: 0,
   batchAttachment: {

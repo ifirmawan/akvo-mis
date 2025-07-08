@@ -59,6 +59,8 @@ class DownloadListSerializer(serializers.ModelSerializer):
             return "Administration List"
         if job_type == "download_entities":
             return "Entities"
+        if job_type == "download_datapoint_report":
+            return "Data Report"
         return "Form Data"
 
     @extend_schema_field(

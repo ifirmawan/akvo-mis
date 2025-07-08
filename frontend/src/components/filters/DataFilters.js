@@ -22,7 +22,7 @@ const DataFilters = ({
   loading,
   showAdm = true,
   resetFilter = true,
-  selectedRowKeys,
+  selectedRowKeys = [],
 }) => {
   const {
     user: authUser,
@@ -81,10 +81,14 @@ const DataFilters = ({
       const selectionIds = selectedRowKeys
         .map((id) => `selection_ids[]=${id}`)
         .join("&");
+      const childFormIds = selectedChildForms
+        .map((id) => `child_form_ids[]=${id}`)
+        .join("&");
       // If no child forms are selected, use the selected form
-      const apiURL = selectedChildForms.length
-        ? `/download/datapoint-report?form_id=${selectedChildForms[0]}&${selectionIds}`
-        : `/download/datapoint-report?form_id=${selectedForm}&${selectionIds}`;
+      let apiURL = `/download/datapoint-report?form_id=${selectedForm}&${selectionIds}`;
+      if (selectedChildForms.length) {
+        apiURL += `&${childFormIds}`;
+      }
       await api.get(apiURL);
       setDownloading(false);
       setDropdownOpen(false); // Close dropdown after successful download
@@ -108,6 +112,7 @@ const DataFilters = ({
     selectedForm,
     text.downloadReportError,
     text.downloadReportSuccess,
+    navigate,
   ]);
 
   const goToAddForm = () => {
@@ -191,7 +196,7 @@ const DataFilters = ({
           icon={<FileWordOutlined />}
           loading={downloading}
           onClick={exportDataReport}
-          disabled={!selectedRowKeys.length}
+          disabled={!selectedRowKeys?.length}
           style={{ width: "100%" }}
         >
           {text.downloadReport}
@@ -228,28 +233,30 @@ const DataFilters = ({
                 </Button>
               </Link>
             </Can>
-            <Space>
-              <Dropdown
-                trigger={["click"]}
-                placement="bottomLeft"
-                open={dropdownOpen}
-                onOpenChange={setDropdownOpen}
-                menu={{
-                  items: childFormMenuItems,
-                  style: { minWidth: "200px" },
-                }}
-                disabled={!selectedRowKeys.length}
-              >
-                <Button
-                  shape="round"
-                  icon={<FileWordOutlined />}
-                  loading={downloading}
+            {pathname === "/control-center/data" && (
+              <Space>
+                <Dropdown
+                  trigger={["click"]}
+                  placement="bottomLeft"
+                  open={dropdownOpen}
+                  onOpenChange={setDropdownOpen}
+                  menu={{
+                    items: childFormMenuItems,
+                    style: { minWidth: "200px" },
+                  }}
                   disabled={!selectedRowKeys.length}
                 >
-                  {text.downloadReport} <DownOutlined />
-                </Button>
-              </Dropdown>
-            </Space>
+                  <Button
+                    shape="round"
+                    icon={<FileWordOutlined />}
+                    loading={downloading}
+                    disabled={!selectedRowKeys.length}
+                  >
+                    {text.downloadReport} <DownOutlined />
+                  </Button>
+                </Dropdown>
+              </Space>
+            )}
             {pathname === "/control-center/data" && (
               <Can I="create" a="downloads">
                 <Dropdown

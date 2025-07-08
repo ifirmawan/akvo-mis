@@ -7,14 +7,17 @@ from docx import Document
 from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.section import WD_ORIENT
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 
 logger = logging.getLogger(__name__)
 
 
 def generate_datapoint_report(
-    report_data,
-    file_path="./tmp/inspection_report.docx",
-    form_name="EPS Inspection and Water Quality Monitoring",
+    report_data: list,
+    file_path: str = "./tmp/inspection_report.docx",
+    form_name: str = "EPS Inspection and Water Quality Monitoring",
+    display_names: list = []
 ):
     """
     Generates a .docx report with multiple answer columns across multiple
@@ -60,16 +63,16 @@ def generate_datapoint_report(
     section.page_width = Inches(11)
     section.page_height = Inches(8.5)
     # Set 1-inch margins on all sides
-    section.top_margin = Inches(1)
-    section.bottom_margin = Inches(1)
-    section.left_margin = Inches(1)
-    section.right_margin = Inches(1)
+    section.top_margin = Inches(0.5)
+    section.bottom_margin = Inches(0.5)
+    section.left_margin = Inches(0.5)
+    section.right_margin = Inches(0.5)
 
     # Set default font for the document (optional)
     style = document.styles["Normal"]
     font = style.font
-    font.name = "Calibri"
-    font.size = Pt(11)
+    font.name = "Times New Roman"
+    font.size = Pt(12)
 
     # --- Header ---
     title = document.add_heading(form_name, level=1)
@@ -143,24 +146,50 @@ def generate_datapoint_report(
         table = document.add_table(rows=0, cols=total_cols)
         table.style = "Table Grid"
 
+        header_row = table.add_row()
+        header_row.cells[0].text = "Identifier"
+        for i in range(1, total_cols):
+            # Use display names if provided, otherwise default to "Data #i"
+            header_row.cells[i].text = f"Data #{i}"
+            if display_names[i - 1]:
+                header_row.cells[i].text = display_names[i - 1]
+
+        for cell in header_row.cells:
+            for paragraph in cell.paragraphs:
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                for run in paragraph.runs:
+                    run.bold = True
+                    run.font.size = Pt(12)
+            # Set background color for header row
+            tc = cell._tc
+            tcPr = tc.get_or_add_tcPr()
+            shd = OxmlElement('w:shd')
+            shd.set(qn('w:fill'), 'a8d08d')
+            tcPr.append(shd)
+        # Set header row as repeating header
+        tbl_header = OxmlElement('w:tblHeader')
+        header_row._tr.get_or_add_trPr().append(tbl_header)
+
         # Process each group for this specific table
         for group in report_data:
             group_name = group.get("name", "Unknown Group")
             questions = group.get("questions", [])
 
             # Add group header row for this table
-            header_row = table.add_row()
-            if len(header_row.cells) > 0:
-                merged_cell = header_row.cells[0]
-                for i in range(1, min(total_cols, len(header_row.cells))):
-                    merged_cell = merged_cell.merge(header_row.cells[i])
+            group_header_row = table.add_row()
+            if len(group_header_row.cells) > 0:
+                merged_cell = group_header_row.cells[0]
+                for i in range(
+                    1, min(total_cols, len(group_header_row.cells))
+                ):
+                    merged_cell = merged_cell.merge(group_header_row.cells[i])
                 merged_cell.text = group_name
                 # Make header text bold and larger
                 for paragraph in merged_cell.paragraphs:
                     paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
                     for run in paragraph.runs:
                         run.bold = True
-                        run.font.size = Pt(14)
+                        run.font.size = Pt(12)
 
             # Add all questions for this group in this table's batch
             for question_data in questions:

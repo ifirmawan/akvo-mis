@@ -6,10 +6,23 @@ import {
   DownloadOutlined,
   ExclamationCircleOutlined,
   FileMarkdownFilled,
+  FileWordFilled,
 } from "@ant-design/icons";
-import { api, config, store, uiText } from "../../../lib";
+import { api, store, uiText } from "../../../lib";
 import { useNotification } from "../../../util/hooks";
 import moment from "moment";
+
+const DownloadIcon = ({ type }) => {
+  switch (type) {
+    case "download_datapoint_report":
+      return <FileWordFilled style={{ color: "#4472C4" }} />;
+    case "download_administration":
+    case "download_entities":
+      return <FileMarkdownFilled style={{ color: "blue" }} />;
+    default:
+      return <FileTextFilled style={{ color: "green" }} />;
+  }
+};
 
 const DownloadTable = ({ type = "download" }) => {
   const [dataset, setDataset] = useState([]);
@@ -130,19 +143,10 @@ const DownloadTable = ({ type = "download" }) => {
 
   const columns = [
     {
-      render: (row) =>
-        ["Administration List", "Entities"].includes(row.category) ? (
-          <FileMarkdownFilled style={{ color: "blue" }} />
-        ) : (
-          <FileTextFilled
-            style={{
-              color:
-                config.submissionTypeColor?.[
-                  row?.download_type?.toLowerCase()
-                ] || "green",
-            }}
-          />
-        ),
+      dataIndex: "type",
+      render: (value) => (
+        <DownloadIcon type={value} style={{ fontSize: "20px" }} />
+      ),
       width: 40,
     },
     {
@@ -150,7 +154,7 @@ const DownloadTable = ({ type = "download" }) => {
       render: (row) => (
         <div>
           <div>
-            <strong>{row === "Form Data" ? "Form Data" : "Master Data"}</strong>
+            <strong>{row}</strong>
           </div>
         </div>
       ),

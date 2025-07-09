@@ -1207,3 +1207,116 @@ class TestAddImagesToCellWithAutoWidth(unittest.TestCase):
         finally:
             if os.path.exists(second_image):
                 os.unlink(second_image)
+
+
+class TestDisplayNamesInReport(unittest.TestCase):
+    """Test suite for verifying display names in report generation"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        self.temp_dir = tempfile.mkdtemp()
+        self.test_file_path = os.path.join(self.temp_dir, "test_report.docx")
+
+    def tearDown(self):
+        """Clean up temporary files"""
+        import shutil
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def test_header_display_names_less_than_5(self):
+        report_data = [
+            {
+                "name": "Display Names Parameter Test",
+                "questions": [
+                    {
+                        "question": "Phone Number",
+                        "answers": [
+                            "123-456-7890",
+                            "987-654-3210",
+                            "555-555-5555",
+                        ]
+                    }
+                ],
+            }
+        ]
+
+        result_path = generate_datapoint_report(
+            report_data,
+            file_path=self.test_file_path,
+            form_name="Display Names Parameter Test",
+            display_names=[
+                "John Doe",
+                "Jane Smith",
+                "Bob Johnson",
+            ],
+        )
+
+        self.assertTrue(os.path.exists(result_path))
+
+        # Load document and verify display names
+        doc = Document(result_path)
+        self.assertGreater(len(doc.tables), 0)
+
+        # Check if display names are set correctly
+        table = doc.tables[0]
+        self.assertEqual(table.cell(0, 0).text, "Identifier")
+        self.assertEqual(table.cell(0, 1).text, "John Doe")
+        self.assertEqual(table.cell(0, 2).text, "Jane Smith")
+        self.assertEqual(table.cell(0, 3).text, "Bob Johnson")
+
+    def test_header_display_names_more_than_5(self):
+        report_data = [
+            {
+                "name": "Display Names Parameter Test",
+                "questions": [
+                    {
+                        "question": "Phone Number",
+                        "answers": [
+                            "123-456-7890",
+                            "987-654-3210",
+                            "555-555-5555",
+                            "111-222-3333",
+                            "444-555-6666",
+                            "777-888-9999",
+                        ]
+                    }
+                ],
+            }
+        ]
+
+        result_path = generate_datapoint_report(
+            report_data,
+            file_path=self.test_file_path,
+            form_name="Display Names Parameter Test",
+            display_names=[
+                "John Doe",
+                "Jane Smith",
+                "Bob Johnson",
+                "Alice Brown",
+                "Charlie White",
+                "Diana Black",
+            ],
+        )
+
+        self.assertTrue(os.path.exists(result_path))
+
+        # Load document and verify display names for both tables
+        doc = Document(result_path)
+        self.assertGreaterEqual(len(doc.tables), 2)
+
+        # First table (should have first 5 display names)
+        table1 = doc.tables[0]
+        self.assertEqual(table1.cell(0, 0).text, "Identifier")
+        self.assertEqual(table1.cell(0, 1).text, "John Doe")
+        self.assertEqual(table1.cell(0, 2).text, "Jane Smith")
+        self.assertEqual(table1.cell(0, 3).text, "Bob Johnson")
+        self.assertEqual(table1.cell(0, 4).text, "Alice Brown")
+        self.assertEqual(table1.cell(0, 5).text, "Charlie White")
+
+        # Second table (should have the 6th display name)
+        table2 = doc.tables[1]
+        self.assertEqual(table2.cell(0, 0).text, "Identifier")
+        self.assertEqual(table2.cell(0, 1).text, "Diana Black")
+
+
+if __name__ == "__main__":
+    unittest.main()

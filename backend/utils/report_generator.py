@@ -63,10 +63,10 @@ def generate_datapoint_report(
     section.page_width = Inches(11)
     section.page_height = Inches(8.5)
     # Set 1-inch margins on all sides
-    section.top_margin = Inches(0.5)
-    section.bottom_margin = Inches(0.5)
-    section.left_margin = Inches(0.5)
-    section.right_margin = Inches(0.5)
+    section.top_margin = Inches(1)
+    section.bottom_margin = Inches(1)
+    section.left_margin = Inches(1)
+    section.right_margin = Inches(1)
 
     # Set default font for the document (optional)
     style = document.styles["Normal"]
@@ -148,11 +148,21 @@ def generate_datapoint_report(
 
         header_row = table.add_row()
         header_row.cells[0].text = "Identifier"
-        for i in range(1, total_cols):
-            # Use display names if provided, otherwise default to "Data #i"
-            header_row.cells[i].text = f"Data #{i}"
-            if display_names[i - 1]:
-                header_row.cells[i].text = display_names[i - 1]
+        # If display_names is provided, use the correct batch for this table
+        if display_names and len(display_names) > 0:
+            # Calculate the batch for this table
+            batch_display_names = display_names[start_idx:end_idx]
+            for i in range(1, total_cols):
+                if (
+                    (i - 1) < len(batch_display_names) and
+                    batch_display_names[i - 1]
+                ):
+                    header_row.cells[i].text = batch_display_names[i - 1]
+                else:
+                    header_row.cells[i].text = f"Data #{i}"
+        else:
+            for i in range(1, total_cols):
+                header_row.cells[i].text = f"Data #{i}"
 
         for cell in header_row.cells:
             for paragraph in cell.paragraphs:
@@ -175,7 +185,7 @@ def generate_datapoint_report(
             group_name = group.get("name", None)
             questions = group.get("questions", [])
 
-            # Add group header row for this table
+            # Add group header row for this table's batch
             # only if group_name is not None
             if group_name is not None:
                 group_header_row = table.add_row()

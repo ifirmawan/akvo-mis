@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Table, Button, Space, Spin } from "antd";
-import { LoadingOutlined, HistoryOutlined } from "@ant-design/icons";
+import { Table, Button, Space, Spin, Dropdown } from "antd";
+import {
+  LoadingOutlined,
+  HistoryOutlined,
+  FormOutlined,
+} from "@ant-design/icons";
 import {
   api,
   QUESTION_TYPES,
@@ -8,14 +12,20 @@ import {
   uiText,
   transformDetailData,
 } from "../../lib";
+import { useNavigate } from "react-router-dom";
 import { HistoryTable, ReadOnlyCell } from "../../components";
 import { validateDependency } from "../../util";
 
-const DraftDetail = ({ record }) => {
+const DraftDetail = ({
+  record = {},
+  childrenForms = [],
+  onDelete = () => {},
+}) => {
   const [dataset, setDataset] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
-  const { language, forms: allForms } = store.useState((s) => s);
+  const { language, forms: allForms, selectedForm } = store.useState((s) => s);
   const { active: activeLang } = language;
   const text = useMemo(() => {
     return uiText[activeLang];
@@ -26,6 +36,29 @@ const DraftDetail = ({ record }) => {
     return formList?.find((f) => f.id === record?.form)?.content
       ?.question_group;
   }, [record?.form, allForms]);
+
+  const navigate = useNavigate();
+
+  const goToEdit = (record) => {
+    navigate(`/control-center/data/draft/${record?.form}?id=${record.id}`, {
+      state: { record },
+    });
+  };
+
+  const goToEditAndPublish = (record) => {
+    navigate(
+      `/control-center/data/draft/${record?.form}?id=${record.id}&publish=true`,
+      {
+        state: { record },
+      }
+    );
+  };
+
+  const addDraftMonitoring = (uuid, formId) => {
+    navigate(`/control-center/data/draft/${formId}?uuid=${uuid}`, {
+      state: { formId },
+    });
+  };
 
   const fetchData = useCallback(() => {
     if (!record?.id || dataset.length > 0) {
@@ -110,12 +143,47 @@ const DraftDetail = ({ record }) => {
 
       <div className="data-detail-actions">
         <Space>
-          <Button type="danger" shape="round">
+          <Button
+            type="danger"
+            shape="round"
+            onClick={() => onDelete(record, setDeleting)}
+            loading={deleting}
+          >
             {text.deleteText}
           </Button>
-          <Button type="primary" shape="round">
+          <Button
+            type="primary"
+            shape="round"
+            onClick={() => goToEdit(record)}
+            disabled={deleting}
+            ghost
+          >
             {text.editButton}
           </Button>
+          <Button
+            type="primary"
+            shape="round"
+            onClick={() => goToEditAndPublish(record)}
+            disabled={deleting}
+          >
+            {text.editAndPublishDraft}
+          </Button>
+          {record?.form === selectedForm && childrenForms?.length > 0 && (
+            <Dropdown
+              trigger={["click"]}
+              menu={{
+                items: childrenForms.map((form) => ({
+                  key: form.id,
+                  label: form.name,
+                })),
+                onClick: (e) => addDraftMonitoring(record?.uuid, e.key),
+              }}
+            >
+              <Button shape="round" icon={<FormOutlined />}>
+                {text.createDraftMonitoring}
+              </Button>
+            </Dropdown>
+          )}
         </Space>
       </div>
     </div>

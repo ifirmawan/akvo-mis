@@ -107,6 +107,14 @@ class DownloadListSerializer(serializers.ModelSerializer):
             ).values("id", "name")
             attributes = [a for a in attributes]
             return attributes
+        if instance.type == JobTypes.download_datapoint_report:
+            # Get a list of selected datapoint IDs
+            selection_ids = instance.info.get("selection_ids", [])
+            if selection_ids:
+                fd = FormData.objects.filter(pk__in=selection_ids).values(
+                    "id", "name", "form_id",
+                )
+                return list(fd)
         return instance.info.get("attributes")
 
     @extend_schema_field(OpenApiTypes.STR)

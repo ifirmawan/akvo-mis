@@ -595,6 +595,7 @@ def get_datapoint_download_list(request, version):
     return response
 
 
+@extend_schema(tags=["Mobile Draft Form Data"])
 class DraftFormDataViewSet(ModelViewSet):
     serializer_class = DraftFormDataSerializer
     permission_classes = [IsMobileAssignment]

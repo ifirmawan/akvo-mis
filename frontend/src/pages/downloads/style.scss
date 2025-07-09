@@ -23,6 +23,15 @@
         }
       }
     }
+    a.download-filter {
+      color: #707070;
+      &:hover {
+        color: #1890ff;
+      }
+      &:not(:first-child) {
+        padding-left: 4px;
+      }
+    }
     .ant-layout {
       min-height: calc(100vh - 86px);
       &.site-layout {
@@ -54,4 +63,7 @@
       }
     }
   }
+}
+.ant-popover-inner-content {
+  display: block !important;
 }

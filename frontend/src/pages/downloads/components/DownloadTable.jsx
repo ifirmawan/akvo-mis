@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Table, ConfigProvider, Empty, Button, Space } from "antd";
+import {
+  Table,
+  ConfigProvider,
+  Empty,
+  Button,
+  Space,
+  Popover,
+  List,
+} from "antd";
 import {
   FileTextFilled,
   LoadingOutlined,
@@ -11,6 +19,9 @@ import {
 import { api, store, uiText } from "../../../lib";
 import { useNotification } from "../../../util/hooks";
 import moment from "moment";
+import { Link } from "react-router-dom";
+
+const MAX_ITEMS = 3; // Maximum number of items to show before the "more" link
 
 const DownloadIcon = ({ type }) => {
   switch (type) {
@@ -175,13 +186,62 @@ const DownloadTable = ({ type = "download" }) => {
           ) : null}
           {[...(row.attributes || [])]
             .filter((x) => x)
-            .map((x, i) => (
-              <span key={`tag-${i}`} className="download-filter">
-                {x?.name || x} {i < row.attributes.length - 1 ? ", " : ""}
+            .slice(0, MAX_ITEMS)
+            .map((x, i, arr) =>
+              x?.form_id ? (
+                <Link
+                  key={`tag-${i}`}
+                  to={`/control-center/data/${x?.form_id}/monitoring/${x?.id}`}
+                  className="download-filter"
+                >
+                  {x?.name}
+                  {i < arr.length - 1 ? ", " : ""}
+                </Link>
+              ) : (
+                <span key={`tag-${i}`} className="download-filter">
+                  {x?.name}
+                  {i < arr.length - 1 ? ", " : ""}
+                </span>
+              )
+            )}
+          {row.attributes && row.attributes.length > 5 && (
+            <Popover
+              content={
+                <List
+                  size="small"
+                  dataSource={row.attributes.slice(5)}
+                  renderItem={(x, i) => (
+                    <List.Item key={`popover-tag-${i}`}>
+                      {x?.form_id ? (
+                        <Link
+                          to={`/control-center/data/${x?.form_id}/monitoring/${x?.id}`}
+                        >
+                          {x?.name}
+                        </Link>
+                      ) : (
+                        x?.name
+                      )}
+                    </List.Item>
+                  )}
+                  style={{ margin: 0, padding: 0 }}
+                />
+              }
+              title={text.moreItems}
+              trigger="click"
+            >
+              <span
+                className="download-filter"
+                style={{ cursor: "pointer", color: "#1890ff" }}
+              >
+                {text.moreCount.replace(
+                  "{{count}}",
+                  row.attributes.length - MAX_ITEMS
+                )}
               </span>
-            ))}
+            </Popover>
+          )}
           {row?.category === "Entities" && !row?.attributes?.length ? (
-            <span className="download-filter">All Entities</span>
+            <span className="download-filter">{text.allEntities}</span>
           ) : null}
         </div>
       ),

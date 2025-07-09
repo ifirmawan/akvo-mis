@@ -906,6 +906,9 @@ const uiText = {
     allData: "All Data",
     latestData: "Latest Data",
     addNew: "Add New",
+    moreItems: "More Items",
+    moreCount: "+{{count}} more",
+    allEntities: "All Entities",
   },
 
   de: {},

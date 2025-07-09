@@ -102,6 +102,7 @@ Object {
     "administrationLabel": "Administration",
     "administrationUploadSuccessTitle": "Administration Data has been Successfully Uploaded",
     "allData": "All Data",
+    "allEntities": "All Entities",
     "approvalsTab1": "My Pending",
     "approvalsTab2": "Subordinates Approvals",
     "approvalsTab3": "Approved",
@@ -654,6 +655,8 @@ Object {
       </ul>
     </React.Fragment>,
     "monitoringDataTitle": "Monitoring data",
+    "moreCount": "+{{count}} more",
+    "moreItems": "More Items",
     "myProfile": "My Profile",
     "nameCol": "Name",
     "nameField": "Name",

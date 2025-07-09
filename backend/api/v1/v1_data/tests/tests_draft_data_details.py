@@ -19,7 +19,9 @@ class DraftFormDataDetailsTestCase(TestCase, ProfileTestHelperMixin):
             test=True,
             draft=True,
         )
-        form_data = FormData.objects_draft.order_by("?").first()
+        form_data = FormData.objects_draft.filter(
+            form__pk=1,
+        ).order_by("?").first()
         self.data = form_data
         self.user = form_data.created_by
         self.form = form_data.form
@@ -41,15 +43,32 @@ class DraftFormDataDetailsTestCase(TestCase, ProfileTestHelperMixin):
             [
                 "id",
                 "uuid",
+                "name",
                 "form",
                 "administration",
-                "datapoint_name",
-                "geolocation",
+                "geo",
+                "created_by",
+                "updated_by",
+                "created",
+                "updated",
+                "submitter",
+                "duration",
                 "answers",
             ]
         )
         self.assertEqual(response.json()["id"], self.data.id)
-        self.assertIsInstance(response.json()["answers"], dict)
+        self.assertIsInstance(response.json()["answers"], list)
+        self.assertEqual(
+            list(response.json()["answers"][0]),
+            ["history", "question", "value", "index"],
+        )
+        adm_answer = list(
+            filter(
+                lambda x: x["question"] == 104,
+                response.json()["answers"],
+            )
+        )
+        self.assertIsInstance(adm_answer, list)
 
     def test_draft_form_data_details_not_found(self):
         response = self.client.get(

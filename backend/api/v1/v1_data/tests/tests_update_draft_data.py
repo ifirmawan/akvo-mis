@@ -267,3 +267,72 @@ class UpdateDraftFormDataTestCase(TestCase, ProfileTestHelperMixin):
                 )
             elif answer.question.id == 109:
                 self.assertEqual(answer.value, 12)
+
+    def test_update_draft_monitoring_data_and_use_diff_values(self):
+        # Create a draft submission with monitoring data
+        monitoring_form = self.form.children.filter(
+            pk=10001
+        ).first()
+        url = f"/api/v1/draft-submissions/{monitoring_form.id}/"
+        payload = {
+            "data": {
+                "name": "Monitoring Draft",
+                "administration": self.administration.id,
+                "geo": [6.2088, 106.8456],
+                "uuid": self.reg_uuid,
+            },
+            "answer": [
+                {"question": 10103, "value": "621218989"},
+            ]
+        }
+        response = self.client.post(
+            url,
+            data=payload,
+            content_type="application/json",
+            **{'HTTP_AUTHORIZATION': f'Bearer {self.token}'}
+        )
+        self.assertEqual(response.status_code, 201)
+
+        # Update the draft monitoring data
+        draft_data = self.draft_data.children.first()
+        update_url = f"/api/v1/draft-submission/{draft_data.id}/"
+        change_adm = Administration.objects.filter(
+            level__level=3
+        ).exclude(id=self.administration.id).order_by("?").first()
+        update_payload = {
+            "data": {
+                "name": "Updated Monitoring Draft",
+                "administration": change_adm.id,
+                "geo": [6.1111, -106.2222],
+            },
+            "answer": [
+                {"question": 10103, "value": "621218989"},
+                {"question": 10106, "value": ["children"]},
+                {"question": 10109, "value": 2.999},
+            ],
+        }
+        update_response = self.client.put(
+            update_url,
+            data=update_payload,
+            content_type="application/json",
+            **{'HTTP_AUTHORIZATION': f'Bearer {self.token}'}
+        )
+        self.assertEqual(update_response.status_code, 200)
+        data = update_response.json()
+        self.assertEqual(
+            data,
+            {"message": "Draft updated successfully"}
+        )
+
+        # Verify the draft monitoring data was updated
+        # without affecting geo and administration data
+        updated_draft_data = FormData.objects_draft.get(id=draft_data.id)
+        self.assertEqual(
+            updated_draft_data.name,
+            "Updated Monitoring Draft"
+        )
+        self.assertNotEqual(updated_draft_data.geo, [6.1111, -106.2222])
+        self.assertNotEqual(
+            updated_draft_data.administration.id,
+            change_adm.id
+        )

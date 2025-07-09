@@ -8,7 +8,7 @@ import React, {
 import { Webform } from "akvo-react-form";
 import "akvo-react-form/dist/index.css";
 import "./style.scss";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Row, Col, Space, Progress } from "antd";
 import {
   api,
@@ -31,6 +31,8 @@ const ManageDraftForm = () => {
   const [percentage, setPercentage] = useState(0);
   const [submit, setSubmit] = useState(false);
   const [hiddenQIds, setHiddenQIds] = useState([]);
+  const [fetchingData, setFetchingData] = useState(false);
+  const [editData, setEditData] = useState(null);
 
   const { language, initialValue, user: authUser } = store.useState((s) => s);
   const { active: activeLang } = language;
@@ -39,8 +41,15 @@ const ManageDraftForm = () => {
   }, [activeLang]);
 
   const webformRef = useRef();
-  const { formId, uuid } = useParams();
+  const { formId } = useParams();
   const { notify } = useNotification();
+  const navigate = useNavigate();
+
+  const idURL = new URLSearchParams(window.location.search).get("id");
+  const publish = new URLSearchParams(window.location.search).get("publish");
+  const uuid = new URLSearchParams(window.location.search).get("uuid");
+  const isPublish = ["true", "1"].includes(publish);
+  const id = idURL ? parseInt(idURL, 10) : null;
 
   const submitFormData = async ({ datapoint, ...values }, refreshForm) => {
     // Get non-repeatable questions
@@ -198,21 +207,24 @@ const ManageDraftForm = () => {
       answer: allAnswers.map((x) => pick(x, ["question", "value", "index"])),
     };
 
-    if (uuid) {
-      window?.localStorage?.setItem("submitted", uuid);
-    }
-
     try {
-      await api.post(`draft-submissions/${formId}`, payload);
-      if (uuid) {
-        store.update((s) => {
-          s.initialValue = [];
-        });
+      editData?.id
+        ? await api.put(`draft-submission/${editData.id}`, payload)
+        : await api.post(`draft-submissions/${formId}`, payload);
+      // If the form is being published, send a separate request to publish
+      if (isPublish && editData?.id) {
+        await api.post(`/publish-draft-submission/${editData.id}`, dataPayload);
       }
       if (refreshForm) {
         refreshForm();
       }
       setHiddenQIds([]);
+      navigate(`/control-center/data/draft/?form_id=${formId}`, {
+        state: {
+          message: text.draftFormSuccess,
+          type: "success",
+        },
+      });
     } catch (error) {
       notify({
         type: "error",
@@ -236,13 +248,32 @@ const ManageDraftForm = () => {
     setPercentage(progress.toFixed(0));
   };
 
+  // Fetch initial form data by id
+  const fetchDataById = useCallback(async () => {
+    if (!id) {
+      return;
+    }
+    setFetchingData(true);
+    try {
+      const { data: apiData } = await api.get(`/draft-submission/${id}`);
+      setEditData(apiData);
+      store.update((s) => {
+        s.initialValue = apiData.answers;
+      });
+      setFetchingData(false);
+    } catch (error) {
+      console.error("Error fetching draft submission data:", error);
+      setFetchingData(false);
+    }
+  }, [id]);
+
   const fetchForm = useCallback(async () => {
     try {
       const { data: apiData } = await api.get(`/form/web/${formId}`);
       const questionGroups = apiData.question_group.map((qg) => {
         const questions = qg.question
           .map((q) => {
-            let qVal = { ...q, required: false };
+            let qVal = { ...q, required: isPublish ? q.required : false };
 
             if (q?.extra) {
               delete qVal.extra;
@@ -279,11 +310,15 @@ const ManageDraftForm = () => {
       console.error("Error fetching form:", error);
       setLoading(false);
     }
-  }, [formId]);
+  }, [formId, isPublish]);
 
   useEffect(() => {
     fetchForm();
   }, [fetchForm]);
+
+  useEffect(() => {
+    fetchDataById();
+  }, [fetchDataById]);
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
@@ -325,7 +360,7 @@ const ManageDraftForm = () => {
 
       <div className="table-section">
         <div className="table-wrapper">
-          {loading || isEmpty(forms) ? (
+          {loading || isEmpty(forms || fetchingData) ? (
             <PageLoader message={text.fetchingForm} />
           ) : (
             <Webform

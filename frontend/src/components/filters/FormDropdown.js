@@ -19,16 +19,6 @@ const FormDropdown = ({
   }, [title, forms]);
 
   const handleChange = useCallback((e) => {
-    // if form_id in URL query params is exists the remove it
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has("form_id")) {
-      urlParams.delete("form_id");
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}?${urlParams.toString()}`
-      );
-    }
     if (!e) {
       return;
     }
@@ -46,6 +36,21 @@ const FormDropdown = ({
     });
   }, []);
   useEffect(() => {
+    const findForm = window.forms.find((f) => f.id === selectedForm);
+    const urlParams = new URLSearchParams(window.location.search);
+    if (
+      urlParams.has("form_id") &&
+      (urlParams.get("form_id") !== selectedForm ||
+        findForm?.content?.parent !== selectedForm)
+    ) {
+      // If the form_id is already in the URL and the selected form is different, remove it
+      urlParams.delete("form_id");
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}?${urlParams.toString()}`
+      );
+    }
     if (
       filterForms?.length &&
       (!selectedForm || !filterForms.map((f) => f.id).includes(selectedForm))

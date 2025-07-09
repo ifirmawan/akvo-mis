@@ -60,6 +60,8 @@ def generate_datapoint_report(
     # Set page orientation to landscape and margins
     section = document.sections[0]
     section.orientation = WD_ORIENT.LANDSCAPE
+    if len(display_names) < 3:
+        section.orientation = WD_ORIENT.PORTRAIT
     section.page_width = Inches(11)
     section.page_height = Inches(8.5)
     # Set 1-inch margins on all sides

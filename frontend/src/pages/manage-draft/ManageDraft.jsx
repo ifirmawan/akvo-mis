@@ -10,6 +10,7 @@ import {
   Button,
   Space,
   Select,
+  Modal,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
@@ -27,6 +28,7 @@ import {
 } from "../../components";
 import FormDropdown from "../../components/filters/FormDropdown";
 import DraftDetail from "./DraftDetail";
+import { useNotification } from "../../util/hooks";
 
 const ManageDraft = () => {
   const [loading, setLoading] = useState(false);
@@ -39,14 +41,19 @@ const ManageDraft = () => {
   const [childForm, setChildForm] = useState(null);
 
   const navigate = useNavigate();
+  const { notify } = useNotification();
 
   const formIdFromUrl = new URLSearchParams(window.location.search).get(
     "form_id"
   );
 
-  const { language, administration, selectedForm, user } = store.useState(
-    (s) => s
-  );
+  const {
+    language,
+    administration,
+    selectedForm,
+    user,
+    forms: registrationForms,
+  } = store.useState((s) => s);
   const { active: activeLang } = language;
   const text = useMemo(() => {
     return uiText[activeLang];
@@ -78,9 +85,51 @@ const ManageDraft = () => {
     setCurrentPage(e.current);
   };
 
+  const handleOnDelete = (row, setDeleting) => {
+    Modal.confirm({
+      title: text.deleteDraftTitle,
+      content: text.deleteDraftContent?.replace("{{draftName}}", row?.name),
+      okText: text.deleteText,
+      cancelText: text.cancelButton,
+      onOk: () => {
+        setLoading(true);
+        setDeleting(true);
+        api
+          .delete(`draft-submission/${row.id}`)
+          .then(() => {
+            setDataset(dataset.filter((d) => d.id !== row.id));
+            notify({
+              type: "success",
+              message: text.deleteDraftSuccess,
+            });
+          })
+          .catch((e) => {
+            console.error(e);
+            notify({
+              type: "error",
+              message: text.deleteDraftError,
+            });
+          })
+          .finally(() => {
+            setLoading(false);
+            setDeleting(false);
+          });
+      },
+    });
+  };
+
   const fetchData = useCallback(() => {
-    const formId = formIdFromUrl || selectedForm;
-    if (formIdFromUrl) {
+    const formId = formIdFromUrl || childForm || selectedForm;
+    const isRegForm = registrationForms.some(
+      (f) => f.id === parseInt(formId, 10) && f.content?.parent === null
+    );
+    const isChildForm = childrenForms.some(
+      (f) => f.id === parseInt(formId, 10)
+    );
+    if (isChildForm && !childForm) {
+      setChildForm(parseInt(formId, 10));
+    }
+    if (formIdFromUrl && isRegForm) {
       store.update((s) => {
         s.selectedForm = parseInt(formIdFromUrl, 10);
       });
@@ -115,6 +164,9 @@ const ManageDraft = () => {
     isAdministrationLoaded,
     updateRecord,
     formIdFromUrl,
+    registrationForms,
+    childForm,
+    childrenForms,
   ]);
 
   useEffect(() => {
@@ -140,6 +192,7 @@ const ManageDraft = () => {
     const unsubscribe = store.subscribe(
       (s) => s.selectedForm,
       () => {
+        setChildForm(null);
         setUpdateRecord(true);
       }
     );
@@ -257,7 +310,10 @@ const ManageDraft = () => {
                 ]}
                 expandable={{
                   expandedRowRender: (record) => (
-                    <DraftDetail record={record} />
+                    <DraftDetail
+                      onDelete={handleOnDelete}
+                      {...{ record, childrenForms }}
+                    />
                   ),
                   expandIcon: ({ expanded, onExpand, record }) =>
                     expanded ? (

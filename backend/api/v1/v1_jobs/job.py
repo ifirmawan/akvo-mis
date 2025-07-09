@@ -491,7 +491,7 @@ def job_generate_data_report(job_id: int, **kwargs):
         form_data = form.form_form_data.filter(
             is_pending=False,
             pk__in=selection_ids
-        ).all()
+        ).order_by("id").all()
 
         display_names = [
             fd.name for fd in form_data
@@ -528,7 +528,6 @@ def job_generate_data_report(job_id: int, **kwargs):
             form_data = []
         # Add Datapoint information
         datapoint_info = {
-            "name": "Datapoint",
             "questions": [
                 {"question": "Display Name", "answers": display_names},
                 {

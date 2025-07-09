@@ -172,24 +172,28 @@ def generate_datapoint_report(
 
         # Process each group for this specific table
         for group in report_data:
-            group_name = group.get("name", "Unknown Group")
+            group_name = group.get("name", None)
             questions = group.get("questions", [])
 
             # Add group header row for this table
-            group_header_row = table.add_row()
-            if len(group_header_row.cells) > 0:
-                merged_cell = group_header_row.cells[0]
-                for i in range(
-                    1, min(total_cols, len(group_header_row.cells))
-                ):
-                    merged_cell = merged_cell.merge(group_header_row.cells[i])
-                merged_cell.text = group_name
-                # Make header text bold and larger
-                for paragraph in merged_cell.paragraphs:
-                    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                    for run in paragraph.runs:
-                        run.bold = True
-                        run.font.size = Pt(12)
+            # only if group_name is not None
+            if group_name is not None:
+                group_header_row = table.add_row()
+                if len(group_header_row.cells) > 0:
+                    merged_cell = group_header_row.cells[0]
+                    for i in range(
+                        1, min(total_cols, len(group_header_row.cells))
+                    ):
+                        merged_cell = merged_cell.merge(
+                            group_header_row.cells[i]
+                        )
+                    merged_cell.text = group_name
+                    # Make header text bold and larger
+                    for paragraph in merged_cell.paragraphs:
+                        paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                        for run in paragraph.runs:
+                            run.bold = True
+                            run.font.size = Pt(12)
 
             # Add all questions for this group in this table's batch
             for question_data in questions:

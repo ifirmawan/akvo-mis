@@ -40,7 +40,6 @@ from api.v1.v1_data.serializers import (
     SubmitFormDataAnswerSerializer,
     FormDataSerializer,
     FilterDraftFormDataSerializer,
-    DraftFormDataDetailSerializer,
 )
 from api.v1.v1_forms.constants import (
     QuestionTypes
@@ -779,7 +778,7 @@ class DraftFormDataDetailView(APIView):
     permission_classes = [IsAuthenticated, IsSubmitter]
 
     @extend_schema(
-        responses=DraftFormDataDetailSerializer,
+        responses=FormDataSerializer,
         tags=["Draft Data"],
         summary="Get draft form data by ID",
     )
@@ -793,7 +792,10 @@ class DraftFormDataDetailView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(
-            DraftFormDataDetailSerializer(instance=draft_data).data,
+            FormDataSerializer(
+                instance=draft_data,
+                context={"webform": True}
+            ).data,
             status=status.HTTP_200_OK
         )
 
@@ -876,23 +878,16 @@ class PublishDraftFormDataView(APIView):
         # Check if user is super admin or if form has approval
         user = request.user
         is_super_admin = user.is_superuser
-        direct_to_data = is_super_admin
+        direct_to_data = is_super_admin and not draft_data.has_approval
 
         # Publish the draft data (mark as not draft)
         draft_data.publish()
-
-        # Check if the form requires approval and user is not super admin
-        if not direct_to_data and draft_data.has_approval:
-            # Set as pending for approval
-            draft_data.is_pending = True
-        else:
-            # Direct to published data
-            draft_data.is_pending = False
+        draft_data.is_pending = True if not direct_to_data else False
 
         draft_data.save()
 
         # Save to file if it's published and not pending and not a child form
-        if not draft_data.is_pending and not draft_data.parent:
+        if direct_to_data and not draft_data.parent:
             draft_data.save_to_file
 
         return Response(

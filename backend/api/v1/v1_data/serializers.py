@@ -282,7 +282,8 @@ class ListDataAnswerSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.ANY)
     def get_value(self, instance: Answers):
-        return get_answer_value(instance)
+        webform = self.context.get("webform", False)
+        return get_answer_value(instance, webform=webform)
 
     class Meta:
         model = Answers
@@ -295,7 +296,11 @@ class FormDataSerializer(serializers.ModelSerializer):
     @extend_schema_field(ListDataAnswerSerializer(many=True))
     def get_answers(self, instance):
         return ListDataAnswerSerializer(
-            instance=instance.data_answer.all(), many=True
+            instance=instance.data_answer.all(),
+            many=True,
+            context={
+                "webform": self.context.get("webform", False),
+            }
         ).data
 
     class Meta:
@@ -677,12 +682,12 @@ class SubmitUpdateDraftFormSerializer(SubmitPendingFormSerializer):
 
     def update(self, instance, validated_data):
         data = validated_data.get("data")
-
-        # Update the FormData instance
+        if not instance.parent:
+            # If the instance is a parent form, update its fields
+            admin_id = data.get("administration", instance.administration_id)
+            instance.administration_id = admin_id
+            instance.geo = data.get("geo", instance.geo)
         instance.name = data.get("name", instance.name)
-        admin_id = data.get("administration", instance.administration_id)
-        instance.administration_id = admin_id
-        instance.geo = data.get("geo", instance.geo)
         instance.updated = timezone.now()
         instance.updated_by = self.context.get("user")
         instance.submitter = data.get("submitter", instance.submitter)

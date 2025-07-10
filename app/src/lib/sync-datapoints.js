@@ -18,6 +18,22 @@ export const fetchDatapoints = async (pageNumber = 1) => {
   }
 };
 
+export const fetchDraftDatapoints = async (pageNumber = 1) => {
+  try {
+    const { data: apiData } = await api.get(`/draft-list?page=${pageNumber}`);
+    const { data, total_page: totalPage, current: page } = apiData;
+    DatapointSyncState.update((s) => {
+      s.progress = (page / totalPage) * 100;
+    });
+    if (page < totalPage) {
+      return data.concat(await fetchDraftDatapoints(page + 1));
+    }
+    return data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 export const downloadDatapointsJson = async (
   db,
   { formId, administrationId, url, lastUpdated },

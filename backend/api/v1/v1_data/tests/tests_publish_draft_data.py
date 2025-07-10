@@ -106,7 +106,7 @@ class PublishDraftFormDataTestCase(TestCase, ProfileTestHelperMixin):
 
         # Verify that the data is now in the manage data via api
         response = self.client.get(
-            f"/api/v1/form-data/{self.form.id}/",
+            f"/api/v1/form-data/{self.draft_data.form.id}/",
             content_type="application/json",
             **{'HTTP_AUTHORIZATION': f'Bearer {self.token}'}
         )

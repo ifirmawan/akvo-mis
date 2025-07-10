@@ -18,10 +18,10 @@ import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
 import { BaseLayout } from '../components';
 import { crudDataPoints } from '../database/crud';
 import { UserState, UIState, FormState } from '../store';
-import { generateDataPointName, getDurationInMinutes } from '../form/lib';
+import { generateDataPointName, getDurationInMinutes, transformAnswers } from '../form/lib';
 import { i18n } from '../lib';
-import crudJobs, { jobStatus } from '../database/crud/crud-jobs';
-import { SYNC_FORM_SUBMISSION_TASK_NAME, QUESTION_TYPES } from '../lib/constants';
+import crudJobs from '../database/crud/crud-jobs';
+import { SYNC_FORM_SUBMISSION_TASK_NAME, QUESTION_TYPES, jobStatus } from '../lib/constants';
 
 const FormPage = ({ navigation, route }) => {
   const selectedForm = FormState.useState((s) => s.form);
@@ -83,7 +83,16 @@ const FormPage = ({ navigation, route }) => {
   };
 
   const handleOnSaveAndExit = async () => {
-    const { dpName } = generateDataPointName(formJSON, currentValues, cascades);
+    const activeJob = await crudJobs.getActiveJob(db, SYNC_FORM_SUBMISSION_TASK_NAME);
+    if (!activeJob) {
+      await crudJobs.addJob(db, {
+        user: userId,
+        type: SYNC_FORM_SUBMISSION_TASK_NAME,
+        status: jobStatus.PENDING,
+      });
+    }
+    const { dpName, dpGeo } = generateDataPointName(formJSON, currentValues, cascades);
+    const jsonAnswers = transformAnswers(currentValues, formJSON);
     try {
       const saveData = {
         form: currentFormId,
@@ -91,8 +100,9 @@ const FormPage = ({ navigation, route }) => {
         name: dpName || trans.untitled,
         submitted: 0,
         duration: surveyDuration,
-        json: currentValues || {},
+        json: jsonAnswers,
         uuid: route.params?.uuid || Crypto.randomUUID(),
+        geo: dpGeo,
       };
 
       const duration = getDurationInMinutes(surveyStart) + surveyDuration;
@@ -134,24 +144,7 @@ const FormPage = ({ navigation, route }) => {
 
   const handleOnSubmitForm = async (values) => {
     try {
-      const answers = {};
-      if (values.answers && typeof values.answers === 'object') {
-        Object.entries(values.answers).forEach(([key, val]) => {
-          if (val === undefined || val === null) return;
-          const [questionId] = key.split('-');
-          const question = formJSON.question_group
-            .flatMap((group) => group.question)
-            .find((q) => `${q.id}` === questionId);
-          answers[key] = val;
-          if (question?.type === 'cascade' && Array.isArray(val) && val.length) {
-            const [lastValue] = val.slice(-1);
-            answers[key] = lastValue;
-          }
-          if (question?.type === 'number') {
-            answers[key] = parseFloat(val);
-          }
-        });
-      }
+      const answers = transformAnswers(values.answers, formJSON);
 
       const datapoitName = values?.name || trans.untitled;
       const submitData = {

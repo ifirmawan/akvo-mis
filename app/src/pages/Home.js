@@ -18,8 +18,8 @@ import {
 } from '../store';
 import { crudForms, crudUsers } from '../database/crud';
 import { api, cascades, i18n } from '../lib';
-import crudJobs, { SYNC_DATAPOINT_JOB_NAME, jobStatus } from '../database/crud/crud-jobs';
-import { SYNC_STATUS } from '../lib/constants';
+import crudJobs from '../database/crud/crud-jobs';
+import { SYNC_STATUS, SYNC_DATAPOINT_JOB_NAME, jobStatus } from '../lib/constants';
 
 const Home = ({ navigation, route }) => {
   const params = route?.params || null;
@@ -27,19 +27,18 @@ const Home = ({ navigation, route }) => {
   const [data, setData] = useState([]);
   const [appLang, setAppLang] = useState('en');
   const [loading, setloading] = useState(true);
-  const [preload, setPreload] = useState(true);
   const [syncLoading, setSyncLoading] = useState(false);
   const [syncDisabled, setSyncDisabled] = useState(false);
 
   const locationIsGranted = UserState.useState((s) => s.locationIsGranted);
   const gpsAccuracyLevel = BuildParamsState.useState((s) => s.gpsAccuracyLevel);
   const gpsInterval = BuildParamsState.useState((s) => s.gpsInterval);
-  const isManualSynced = UIState.useState((s) => s.isManualSynced);
   const userId = UserState.useState((s) => s.id);
   const passcode = AuthState.useState((s) => s.authenticationCode);
   const isOnline = UIState.useState((s) => s.online);
   const syncWifiOnly = UserState.useState((s) => s.syncWifiOnly);
   const statusBar = UIState.useState((s) => s.statusBar);
+  const refreshPage = UIState.useState((s) => s.refreshPage);
 
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
@@ -97,13 +96,6 @@ const Home = ({ navigation, route }) => {
           latest: 1,
         });
       });
-
-      UIState.update((s) => {
-        /**
-         * Refresh homepage to apply latest data
-         */
-        s.isManualSynced = true;
-      });
     } catch (error) {
       Sentry.captureMessage('[Home] Unable sync all forms');
       Sentry.captureException(error);
@@ -144,6 +136,7 @@ const Home = ({ navigation, route }) => {
   const handleOnSync = async () => {
     setSyncLoading(true);
     try {
+      await runSyncSubmisionManually();
       await syncUserForms();
       await crudUsers.updateLastSynced(db, userId);
       await crudJobs.addJob(db, {
@@ -155,7 +148,6 @@ const Home = ({ navigation, route }) => {
         s.inProgress = true;
         s.added = true;
       });
-      await runSyncSubmisionManually();
     } catch (error) {
       ToastAndroid.show(`[ERROR SYNC DATAPOINT]: ${error}`, ToastAndroid.LONG);
       Sentry.captureMessage('[Home] Unable to sync data-points');
@@ -165,10 +157,6 @@ const Home = ({ navigation, route }) => {
   };
 
   const getUserForms = useCallback(async () => {
-    if (preload) {
-      setPreload(false);
-      return;
-    }
     /**
      * The Form List will be refreshed when:
      * - parameter change
@@ -176,9 +164,15 @@ const Home = ({ navigation, route }) => {
      * - active language change
      * - manual synced change as True
      */
-    if (params || currentUserId || activeLang !== appLang || isManualSynced) {
+    if (params || currentUserId || activeLang !== appLang || refreshPage) {
       if (activeLang !== appLang) {
         setAppLang(activeLang);
+      }
+
+      if (refreshPage) {
+        UIState.update((s) => {
+          s.refreshPage = false;
+        });
       }
 
       try {
@@ -197,6 +191,7 @@ const Home = ({ navigation, route }) => {
         setData(forms);
         setloading(false);
       } catch (error) {
+        setloading(false);
         Sentry.captureMessage("[Home] Unable to refresh user's forms");
         Sentry.captureException(error);
         if (Platform.OS === 'android') {
@@ -206,16 +201,15 @@ const Home = ({ navigation, route }) => {
     }
   }, [
     db,
-    preload,
     params,
     currentUserId,
     activeLang,
     appLang,
-    isManualSynced,
     trans.versionLabel,
     trans.submittedLabel,
     trans.draftLabel,
     trans.syncLabel,
+    refreshPage,
   ]);
 
   useEffect(() => {

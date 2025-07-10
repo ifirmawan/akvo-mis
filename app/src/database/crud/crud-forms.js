@@ -17,11 +17,11 @@ const formsQuery = () => ({
           ) AS submitted,
           COUNT(
             DISTINCT CASE WHEN dp.submitted = 0
-            AND dp.syncedAt IS NULL THEN dp.id END
+            THEN dp.id END
           ) AS draft,
           COUNT(
-            DISTINCT CASE WHEN dp.submitted = 1
-            AND dp.syncedAt IS NOT NULL THEN dp.id END
+            DISTINCT CASE WHEN dp.syncedAt IS NOT NULL
+            THEN dp.id END
           ) AS synced
         FROM forms f
         LEFT JOIN datapoints dp ON f.id = dp.form AND dp.user = ?

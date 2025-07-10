@@ -598,7 +598,7 @@ const ApprovalDetail = ({
       <TextArea
         rows={4}
         onChange={(e) => setComment(e.target.value)}
-        disabled={!approve}
+        disabled={!allowApprove}
       />
       <Row justify="space-between">
         {approvalTab !== "approved" && (
@@ -627,7 +627,7 @@ const ApprovalDetail = ({
               shape="round"
               loading={approving === APPROVAL_STATUS_REJECTED}
             >
-              Reject
+              {text.rejectText}
             </Button>
             <Button
               type="primary"

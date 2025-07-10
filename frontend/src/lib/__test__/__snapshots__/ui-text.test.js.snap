@@ -753,6 +753,7 @@ Object {
     "questionnaireText": "Questionnaire",
     "questionnairesLabel": "Questionnaires",
     "questionnairesRequired": "Please select at least one questionnaire access level: Read-only, Editor, or Approver.",
+    "rejectText": "Reject",
     "reports": "Reports",
     "requiredError": "{{field}} is required",
     "resetHint": <React.Fragment>

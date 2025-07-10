@@ -925,6 +925,7 @@ const uiText = {
     editAndPublishDraft: "Edit and Publish Draft",
     editDraft: "Edit Draft",
     createDraftMonitoring: "Create Draft Monitoring Data",
+    rejectText: "Reject",
   },
 
   de: {},

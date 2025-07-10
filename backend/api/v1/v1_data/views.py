@@ -138,7 +138,8 @@ class FormDataAddListView(APIView):
             # Only get the children data
             queryset = form.form_form_data.filter(
                 uuid=parent,
-                is_pending=False
+                is_pending=False,
+                is_draft=False,
             )
             queryset = queryset.order_by("-created")
             instance = paginator.paginate_queryset(queryset, request)
@@ -159,6 +160,7 @@ class FormDataAddListView(APIView):
 
         filter_data = {
             "is_pending": False,
+            "is_draft": False,
         }
 
         if serializer.validated_data.get("administration"):
@@ -878,7 +880,7 @@ class PublishDraftFormDataView(APIView):
         # Check if user is super admin or if form has approval
         user = request.user
         is_super_admin = user.is_superuser
-        direct_to_data = is_super_admin and not draft_data.has_approval
+        direct_to_data = is_super_admin or not draft_data.has_approval
 
         # Publish the draft data (mark as not draft)
         draft_data.publish()

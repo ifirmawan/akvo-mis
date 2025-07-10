@@ -2,17 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Switch } from '@rneui/themed';
 import * as Crypto from 'expo-crypto';
-import * as Sentry from '@sentry/react-native';
 import { useSQLiteContext } from 'expo-sqlite';
-import * as TaskManager from 'expo-task-manager';
 import { BaseLayout } from '../../components';
 import { config } from './config';
 import { BuildParamsState, UIState, AuthState, UserState } from '../../store';
 import DialogForm from './DialogForm';
-import { backgroundTask, i18n } from '../../lib';
+import { i18n } from '../../lib';
 import { accuracyLevels } from '../../lib/loc';
 import { crudConfig } from '../../database/crud';
-import { SYNC_FORM_SUBMISSION_TASK_NAME } from '../../lib/constants';
 
 const SettingsForm = ({ route }) => {
   const [edit, setEdit] = useState(null);
@@ -96,22 +93,6 @@ const SettingsForm = ({ route }) => {
     }
   };
 
-  const handleOnRestarTask = async (v) => {
-    const isRegistered = await TaskManager.isTaskRegisteredAsync(SYNC_FORM_SUBMISSION_TASK_NAME);
-    if (!isRegistered) {
-      // No need to restart if task is not registered
-      Promise.resolve();
-    }
-    try {
-      await backgroundTask.unregisterBackgroundTask(SYNC_FORM_SUBMISSION_TASK_NAME);
-      await backgroundTask.registerBackgroundTask(SYNC_FORM_SUBMISSION_TASK_NAME, parseInt(v, 10));
-    } catch (error) {
-      Sentry.captureMessage('[SettingsForm] handleOnRestarTask failed');
-      Sentry.captureException(error);
-      Promise.reject(error);
-    }
-  };
-
   const handleOKPress = async (inputValue) => {
     setShowDialog(false);
     if (edit && inputValue) {
@@ -125,7 +106,6 @@ const SettingsForm = ({ route }) => {
       });
       if (stateKey === 'dataSyncInterval') {
         await handleUpdateOnDB('syncInterval', inputValue);
-        await handleOnRestarTask(inputValue);
       } else {
         await handleUpdateOnDB(stateKey, inputValue);
       }

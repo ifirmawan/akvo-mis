@@ -132,6 +132,8 @@ const uiText = {
     appVersionLabel: 'App Version',
     emptySubmissionMessageInfo: 'No data collected yet',
     emptySubmissionMessageAction: 'Click New Submission to begin',
+    emptyDraftMessageInfo: 'No draft data available',
+    emptyDraftMessageAction: 'Saved forms will appear here',
   },
   fr: {
     latitude: 'Latitude',
@@ -260,6 +262,8 @@ const uiText = {
     emptySubmissionMessageInfo: 'Aucune donnée collectée pour le moment',
     emptySubmissionMessageAction:
       'Cliquez sur Nouvelle soumission pour commencer',
+    emptyDraftMessageInfo: 'Aucune donnée de brouillon disponible',
+    emptyDraftMessageAction: 'Les formulaires enregistrés apparaîtront ici',
   },
 };
 

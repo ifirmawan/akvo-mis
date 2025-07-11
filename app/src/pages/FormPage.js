@@ -111,6 +111,7 @@ const FormPage = ({ navigation, route }) => {
         ...saveData,
         duration: duration === 0 ? 1 : duration,
         repeats: Object.keys(repeats).length ? JSON.stringify(repeats) : null,
+        syncedAt: null,
       };
       if (isNewSubmission) {
         await crudDataPoints.saveDataPoint(db, payload);
@@ -162,6 +163,7 @@ const FormPage = ({ navigation, route }) => {
         ...currentDataPoint,
         ...submitData,
         duration: duration === 0 ? 1 : duration,
+        syncedAt: null,
       };
       if (isNewSubmission) {
         await crudDataPoints.saveDataPoint(db, payload);

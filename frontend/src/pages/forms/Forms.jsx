@@ -9,18 +9,18 @@ import { Webform } from "akvo-react-form";
 import "akvo-react-form/dist/index.css";
 import "./style.scss";
 import { useParams, useNavigate } from "react-router-dom";
+import { Row, Col, Space, Progress, Result, Button, Modal } from "antd";
 import {
-  Row,
-  Col,
-  Space,
-  Progress,
-  Result,
-  Button,
-  notification,
-  Modal,
-} from "antd";
-import axios from "axios";
-import { api, QUESTION_TYPES, store, uiText } from "../../lib";
+  api,
+  QUESTION_TYPES,
+  store,
+  uiText,
+  getCascadeAnswerAPI,
+  processFileUploads,
+  processEntityCascades,
+  processRepeatableQuestions,
+  transformValue,
+} from "../../lib";
 import { pick, isEmpty } from "lodash";
 import { PageLoader, Breadcrumbs, DescriptionPanel } from "../../components";
 import { useNotification } from "../../util/hooks";
@@ -71,197 +71,6 @@ const Forms = () => {
         : `/control-center/data?form_id=${formId}`,
     [parentData, formId]
   );
-
-  const getEntityByName = async ({ id, value, apiURL }) => {
-    try {
-      const { data: apiData } = await axios.get(apiURL);
-      const findData = apiData?.find((d) => d?.name === value);
-      return { id, value: findData?.id };
-    } catch {
-      return null;
-    }
-  };
-
-  const processFileUploads = async (questions = [], values) => {
-    const files = Object.entries(values)
-      .filter(([key, val]) => {
-        // Parse the key to handle both standard and repeatable question formats
-        // For repeatable questions, key format is "questionID-repeatIndex"
-        const [baseKey] = key.split("-");
-        const questionId = parseInt(baseKey, 10);
-
-        if (isNaN(questionId)) {
-          return false;
-        }
-        const question = questions.find((q) => q.id === questionId);
-        return (
-          question?.type === QUESTION_TYPES.attachment && val instanceof File
-        );
-      })
-      .map(([key, val]) => {
-        // Keep the original key format to maintain the repeatable structure
-        const [baseKey] = key.split("-");
-        const questionId = parseInt(baseKey, 10);
-        return {
-          question_id: questionId,
-          file: val,
-          original_key: key, // Preserve the original key for mapping back
-        };
-      });
-
-    if (!files.length) {
-      return values;
-    }
-
-    const uploadPromises = files.map(({ question_id, file }) => {
-      const formData = new FormData();
-      formData.append("file", file);
-      return api.post(
-        `upload/attachments?question_id=${question_id}`,
-        formData
-      );
-    });
-
-    const results = await Promise.allSettled(uploadPromises);
-
-    if (results.some((result) => result.status === "rejected")) {
-      notification.error({
-        message: text.errorSomething,
-        description: text.errorFileUpload,
-      });
-      setSubmit(false);
-      return;
-    }
-
-    // Create a new values object with the uploaded files
-    const updatedValues = { ...values };
-
-    // Process each successfully uploaded file
-    results.forEach((result, index) => {
-      if (result.status === "fulfilled") {
-        const data = result.value.data;
-        const originalKey = files[index].original_key;
-        updatedValues[originalKey] = data.file;
-      }
-    });
-
-    return updatedValues;
-  };
-
-  const processEntityCascades = async (questions, values) => {
-    // Find entity cascade questions
-    const entityQuestions = questions.filter(
-      (q) =>
-        q.type === QUESTION_TYPES.cascade &&
-        q.extra?.type === QUESTION_TYPES.entity &&
-        typeof values[q.id] === "string"
-    );
-
-    if (!entityQuestions.length) {
-      return values;
-    }
-
-    const entityPromises = entityQuestions.map((q) => {
-      const parent = questions.find((subq) => subq.id === q.extra.parentId);
-      const parentVal = values[parent?.id];
-      const pid = Array.isArray(parentVal) ? parentVal.slice(-1)[0] : parentVal;
-      return getEntityByName({
-        id: q.id,
-        value: values[q.id],
-        apiURL: `${q.api.endpoint}${pid}`,
-      });
-    });
-
-    const settledEntities = await Promise.allSettled(entityPromises);
-
-    // Process successfully resolved entities
-    const updatedValues = { ...values };
-    settledEntities.forEach(({ status, value: entity }) => {
-      if (status === "fulfilled" && entity?.value && values[entity.id]) {
-        updatedValues[entity.id] = entity.value;
-      }
-    });
-
-    return updatedValues;
-  };
-
-  const processRepeatableQuestions = (values, repeatableQuestions) => {
-    // Group repeatable question values (e.g., "12345", "12345-1", "12345-2")
-    const repeatableAnswers = [];
-    const processedQuestionIds = new Set();
-
-    // Extract base IDs and their variants
-    const repeatableMap = {};
-
-    // Get all valid repeatable question IDs for validation
-    const validQuestionIds = new Set(repeatableQuestions.map((q) => q.id));
-
-    // Extract and group repeatable questions by base ID
-    Object.entries(values).forEach(([key, value]) => {
-      // Skip non-numeric keys that don't match our pattern
-      if (!/^\d+(-\d+)?$/.test(key)) {
-        return;
-      }
-
-      // Skip empty values, null values, or undefined values
-      if (
-        value === null ||
-        typeof value === "undefined" ||
-        (typeof value === "string" && value.trim() === "")
-      ) {
-        return;
-      }
-
-      // Parse the key to get question ID and repetition index
-      const [baseId, repetitionIndex] = key.includes("-")
-        ? key.split("-")
-        : [key, "0"];
-
-      const baseIdNum = parseInt(baseId, 10);
-
-      // Skip if this is not a valid repeatable question ID
-      if (!validQuestionIds.has(baseIdNum)) {
-        return;
-      }
-
-      // Initialize array for this question if it doesn't exist
-      if (!repeatableMap[baseId]) {
-        repeatableMap[baseId] = [];
-      }
-
-      // Store the value with its repetition index for sorting later
-      repeatableMap[baseId].push({
-        index: parseInt(repetitionIndex || "0", 10),
-        value,
-      });
-
-      // Mark this question ID as processed
-      processedQuestionIds.add(baseId);
-    });
-
-    // Process each question ID and format its answers
-    processedQuestionIds.forEach((baseId) => {
-      const questionId = parseInt(baseId, 10);
-      const question = repeatableQuestions.find((q) => q.id === questionId);
-
-      // Skip if question not found in repeatable questions
-      if (!question) {
-        return;
-      }
-
-      // Sort by repetition index to maintain order
-      repeatableMap[baseId]
-        .sort((a, b) => a.index - b.index)
-        .forEach((item) => {
-          // Use our enhanced transformValue function with forApi=true
-          repeatableAnswers.push(
-            transformValue(question, item.value, true, item.index)
-          );
-        });
-    });
-
-    return repeatableAnswers;
-  };
 
   const submitFormData = async ({ datapoint, ...values }, refreshForm) => {
     // Get non-repeatable questions
@@ -436,7 +245,10 @@ const Forms = () => {
       setHiddenQIds([]);
       setTimeout(() => setShowSuccess(true), 3000);
     } catch (error) {
-      notification.error({ message: text.errorSomething });
+      notify({
+        type: "error",
+        message: text.errorSomething,
+      });
     } finally {
       setTimeout(() => setSubmit(false), 2000);
     }
@@ -453,125 +265,6 @@ const Forms = () => {
 
   const onChange = ({ progress }) => {
     setPercentage(progress.toFixed(0));
-  };
-
-  const getCascadeAnswerId = useCallback(
-    async (id, questonAPI, value) => {
-      const { initial, endpoint, query_params } = questonAPI;
-      if (endpoint.includes("organisation")) {
-        const res = await fetch(
-          `${window.location.origin}${endpoint}${query_params}`
-        );
-        const apiData = await res.json();
-        const findOrg = apiData?.children?.find((c) => c?.name === value);
-        return { [id]: [findOrg?.id] };
-      }
-      if (initial) {
-        const cascadeID = value || initial;
-        const res = await fetch(
-          `${window.location.origin}${endpoint}/${cascadeID}`
-        );
-        const apiData = await res.json();
-        if (endpoint.includes("administration")) {
-          const parents = apiData?.path
-            ?.split(".")
-            ?.filter((a) => a !== "")
-            .slice(1);
-          const userLevel = authUser?.administration?.level;
-          const startLevel = userLevel ? userLevel - 1 : 0;
-          const admValues = [...parents, apiData?.id]
-            .map((a) => parseInt(a, 10))
-            .slice(startLevel);
-          return {
-            [id]: admValues,
-          };
-        }
-        return { [id]: [apiData?.id] };
-      }
-      const res = await fetch(window.location.origin + endpoint);
-      const apiData = await res.json();
-      const findCascade = apiData?.find((d) => d?.name === value);
-      return {
-        [id]: [findCascade?.id],
-      };
-    },
-    [authUser?.administration?.level]
-  );
-
-  const transformValue = (question, value, forApi = false, index = 0) => {
-    // Type can be either a string or an object with type property
-    const type = typeof question === "string" ? question : question?.type;
-    let transformedValue = value;
-
-    // Handle option type values
-    if (type === QUESTION_TYPES.option) {
-      if (forApi) {
-        // For API submission - always return as array
-        transformedValue = Array.isArray(value) ? value : [value];
-      } else {
-        // For UI display - extract first value from array if it exists
-        transformedValue =
-          Array.isArray(value) && value.length ? value[0] : value;
-      }
-    }
-
-    // Handle geo type values
-    if (type === QUESTION_TYPES.geo) {
-      if (forApi && typeof value === "object") {
-        // For API submission - convert {lat, lng} to array
-        transformedValue = [value.lat, value.lng];
-      }
-      if (!forApi && Array.isArray(value) && value.length === 2) {
-        // For UI display - convert array to {lat, lng} object
-        const [lat, lng] = value;
-        transformedValue = { lat, lng };
-      }
-    }
-
-    // Handle cascade type values
-    if (
-      type === QUESTION_TYPES.cascade &&
-      !forApi &&
-      typeof question === "object" &&
-      !question.extra &&
-      Array.isArray(value)
-    ) {
-      // For UI display - take last cascaded value
-      transformedValue = value.slice(-1)[0];
-    }
-
-    if (type === QUESTION_TYPES.cascade && forApi && Array.isArray(value)) {
-      // For API submission - take last value from array
-      transformedValue = value.slice(-1)[0];
-    }
-
-    // Handle date type values
-    if (type === QUESTION_TYPES.date && typeof value === "string" && !forApi) {
-      // For UI display - convert string to moment object
-      transformedValue = moment(value);
-    }
-
-    // Default case - handle undefined values
-    if (typeof transformedValue === "undefined" && !forApi) {
-      transformedValue = "";
-    }
-
-    // For API submission, return an object with metadata
-    if (forApi && typeof question === "object") {
-      return {
-        question: question.id,
-        type:
-          question?.source?.file === "administrator.sqlite"
-            ? QUESTION_TYPES.administration
-            : question.type,
-        value: transformedValue,
-        meta: question.meta,
-        index: index, // Include index for repeatable questions
-      };
-    }
-
-    // For UI display or when question is just a type string, return only the transformed value
-    return transformedValue;
   };
 
   const fetchInitialMonitoringData = useCallback(
@@ -619,7 +312,12 @@ const Forms = () => {
         );
 
         const cascadePromises = cascadeQuestions.map((q) =>
-          getCascadeAnswerId(q.id, q.api, answers?.[q.id])
+          getCascadeAnswerAPI(
+            authUser?.administration?.level,
+            q.id,
+            q.api,
+            answers?.[q.id]
+          )
         );
         const cascadeResponses = await Promise.allSettled(cascadePromises);
         const cascadeValues = cascadeResponses
@@ -669,7 +367,7 @@ const Forms = () => {
         });
       }
     },
-    [getCascadeAnswerId, uuid, text.updateDataError, allForms]
+    [uuid, text.updateDataError, allForms, authUser?.administration?.level]
   );
 
   useEffect(() => {

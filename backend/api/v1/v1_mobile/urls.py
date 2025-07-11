@@ -11,6 +11,7 @@ from .views import (
     MobileAssignmentViewSet,
     check_apk_version,
     UploadAttachmentsView,
+    DraftFormDataViewSet,
 )
 
 urlpatterns = [
@@ -52,5 +53,9 @@ urlpatterns = [
     re_path(
         r"^(?P<version>(v1))/device/attachments",
         UploadAttachmentsView.as_view(),
+    ),
+    re_path(
+        r"^(?P<version>(v1))/device/draft-list",
+        DraftFormDataViewSet.as_view({"get": "list"}),
     ),
 ]

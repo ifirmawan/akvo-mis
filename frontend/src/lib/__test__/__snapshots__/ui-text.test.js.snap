@@ -153,6 +153,7 @@ Object {
     "confirmDeleteEntityData": "Are you sure you want to delete this data?",
     "contactAdmin": "Please contact the administrator",
     "controlCenter": "Control Center",
+    "createDraftMonitoring": "Create Draft Monitoring Data",
     "createNewBatch": "Create a new batch",
     "dashboards": "Dashboards",
     "dataAdministrationDownloadText": <React.Fragment>
@@ -219,6 +220,10 @@ Object {
     "deleteAttachmentError": "Unable to delete attachment",
     "deleteAttachmentSuccess": "Attachment deleted successfully",
     "deleteAttachmentTitle": "Delete Attachment",
+    "deleteDraftContent": "Are you sure you want to delete {{draftName}}?",
+    "deleteDraftError": "Unable to delete draft",
+    "deleteDraftSuccess": "Draft deleted successfully",
+    "deleteDraftTitle": "Delete Draft",
     "deleteOrganisationDesc": [Function],
     "deleteOrganisationTitle": "You are about to delete the organization",
     "deleteText": "Delete",
@@ -236,6 +241,9 @@ Object {
     "downloadReportError": "Unable to download report",
     "downloadReportSuccess": "Report downloaded successfully",
     "downloadTitle": "Downloads",
+    "draftFormDescription": <p>
+      Please fill up the webform below with relevant responses. You can save your responses and continue later or if you have completed the form then you can submit it.
+    </p>,
     "dropFile": "Drop your file here",
     "editAdmDesc": <React.Fragment>
       This page allows you to edit administration to the
@@ -244,6 +252,7 @@ Object {
        platform.
     </React.Fragment>,
     "editAdministration": "Edit Administration",
+    "editAndPublishDraft": "Edit and Publish Draft",
     "editAttachment": "Edit Attachment",
     "editAttachmentDesc": "Replace the existing attachment with a new one",
     "editAttributeDesc": <React.Fragment>
@@ -254,6 +263,7 @@ Object {
     </React.Fragment>,
     "editAttributes": "Edit Attribute",
     "editButton": "Edit",
+    "editDraft": "Edit Draft",
     "editEntity": "Edit Entity",
     "editEntityData": "Edit data",
     "editEntityDesc": <React.Fragment>
@@ -498,6 +508,21 @@ Object {
     </React.Fragment>,
     "manageDataTitle": "Manage Data",
     "manageDataValidationSetup": "Validation Tree",
+    "manageDraftText": <React.Fragment>
+      This is where you can manage your drafts. You can:
+      <ul>
+        <li>
+          View your saved drafts
+        </li>
+        <li>
+          Edit existing drafts
+        </li>
+        <li>
+          Delete existing drafts
+        </li>
+      </ul>
+    </React.Fragment>,
+    "manageDraftTitle": "Manage Drafts",
     "manageEntities": "Manage Entities",
     "manageEntitiesText": <React.Fragment>
       This is where you manage entitys based on their fields. You can :
@@ -588,6 +613,7 @@ Object {
     "menuEntities": "Entities",
     "menuEntityTypes": "Entity Types",
     "menuManageData": "Manage Data",
+    "menuManageDraft": "Manage Drafts",
     "menuManageMobileUsers": "Manage Mobile Users",
     "menuManagePlatformUsers": "Manage Platform Users",
     "menuManageRoles": "Manage Roles",
@@ -737,6 +763,7 @@ Object {
     "questionnaireText": "Questionnaire",
     "questionnairesLabel": "Questionnaires",
     "questionnairesRequired": "Please select at least one questionnaire access level: Read-only, Editor, or Approver.",
+    "rejectText": "Reject",
     "reports": "Reports",
     "requiredError": "{{field}} is required",
     "resetHint": <React.Fragment>

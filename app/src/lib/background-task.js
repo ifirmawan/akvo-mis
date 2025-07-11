@@ -186,7 +186,7 @@ const syncFormSubmission = async (activeJob = {}) => {
         return;
       }
       try {
-        const geo = d.geo ? d.geo.split('|')?.map((x) => parseFloat(x)) : [];
+        const geoVal = d.geo ? { geo: d.geo.split('|')?.map((x) => parseFloat(x)) } : {};
         const answerValues = JSON.parse(d.json.replace(/''/g, "'"));
 
         // Add photos and attachments to answers
@@ -202,8 +202,8 @@ const syncFormSubmission = async (activeJob = {}) => {
           duration: Math.round(d.duration),
           submittedAt: d.submittedAt,
           submitter: session.name,
-          geo,
           answers: answerValues,
+          ...geoVal,
         };
 
         // Handle UUID
@@ -216,7 +216,14 @@ const syncFormSubmission = async (activeJob = {}) => {
         }
 
         // sync data point
-        const res = await api.post('/sync', syncData);
+        let syncURL = '/sync';
+        if (d?.submitted && d?.draftId) {
+          syncURL = `/sync?id=${d.draftId}&is_published=true`;
+        }
+        if (!d?.submitted) {
+          syncURL = d?.draftId ? `/sync?id=${d.draftId}&is_draft=true` : '/sync?is_draft=true';
+        }
+        const res = await api.post(syncURL, syncData);
         if (res.status === 200) {
           // update data point
           await crudDataPoints.updateDataPoint(db, {
@@ -232,15 +239,15 @@ const syncFormSubmission = async (activeJob = {}) => {
         await crudDataPoints.saveToDraft(db, d.id);
       }
 
-      if (activeJob?.id) {
-        // Delete job after processing
+      if (activeJob?.id && failed === 0) {
+        // Delete job if all data points are successfully synced
         await crudJobs.deleteJob(db, activeJob.id);
       }
 
       if (success === totalData) {
         UIState.update((s) => {
-          s.refreshPage = true;
           s.isManualSynced = false;
+          s.refreshPage = true;
           s.statusBar = {
             type: SYNC_STATUS.success,
             bgColor: '#16a34a',
@@ -252,6 +259,7 @@ const syncFormSubmission = async (activeJob = {}) => {
 
       if (failed) {
         UIState.update((s) => {
+          s.isManualSynced = false;
           s.statusBar = {
             type: SYNC_STATUS.failed,
             bgColor: '#ec003f',

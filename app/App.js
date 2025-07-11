@@ -16,15 +16,18 @@ import { crudUsers, crudConfig, crudDataPoints } from './src/database/crud';
 import { api } from './src/lib';
 import { NetworkStatusBar, SyncService } from './src/components';
 import backgroundTask, { defineSyncFormVersionTask } from './src/lib/background-task';
-import crudJobs, { jobStatus, MAX_ATTEMPT } from './src/database/crud/crud-jobs';
+import crudJobs from './src/database/crud/crud-jobs';
 import {
   SYNC_FORM_SUBMISSION_TASK_NAME,
   SYNC_FORM_VERSION_TASK_NAME,
   DATABASE_NAME,
   DATABASE_VERSION,
+  MAX_ATTEMPT,
+  jobStatus,
 } from './src/lib/constants';
 import { tables } from './src/database';
 import sql from './src/database/sql';
+import { m03 } from './src/database/migrations';
 
 export const setNotificationHandler = () =>
   Notifications.setNotificationHandler({
@@ -213,6 +216,10 @@ const App = () => {
      *  currentDbVersion = 3;
      * }
      */
+    if (currentDbVersion === 2) {
+      await m03.up(db);
+      currentDbVersion = 3;
+    }
     // eslint-disable-next-line no-console
     console.info(`Migrating database from version ${currentDbVersion} to ${DATABASE_VERSION}`);
     await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);

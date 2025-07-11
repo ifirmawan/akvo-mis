@@ -1,5 +1,6 @@
 import requests
 from django.db.models import Q
+from django.utils import timezone
 
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field, inline_serializer
@@ -69,6 +70,47 @@ class SubmitFormDataAnswerSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, attrs):
+        # Skip validation if this is a draft
+        is_draft = self.context.get("is_draft", False)
+        if is_draft:
+            # If the form is a draft, skip validation for value
+            # but ensure that the question is provided and
+            # value is correct type
+            if not attrs.get("question"):
+                raise ValidationError(
+                    "Question is required for Answer"
+                )
+            if attrs.get("value") is None:
+                attrs["value"] = ""
+            question = attrs.get("question")
+            if question.type in [
+                QuestionTypes.geo,
+                QuestionTypes.option,
+                QuestionTypes.multiple_option,
+            ] and not isinstance(attrs.get("value"), list):
+                raise ValidationError(
+                    "Valid list value is required for Question:{0}".format(
+                        question.id
+                    )
+                )
+            if isinstance(attrs.get("value"), list) and question.type in [
+                QuestionTypes.text,
+                QuestionTypes.photo,
+                QuestionTypes.date,
+                QuestionTypes.attachment,
+                QuestionTypes.signature,
+                QuestionTypes.autofield,
+                QuestionTypes.number,
+                QuestionTypes.administration,
+                QuestionTypes.cascade,
+            ]:
+                raise ValidationError(
+                    "Valid string value is required for Question:{0}".format(
+                        question.id
+                    )
+                )
+            return attrs
+
         if attrs.get("value") == "":
             raise ValidationError(
                 "Value is required for Question:{0}".format(
@@ -240,7 +282,8 @@ class ListDataAnswerSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.ANY)
     def get_value(self, instance: Answers):
-        return get_answer_value(instance)
+        webform = self.context.get("webform", False)
+        return get_answer_value(instance, webform=webform)
 
     class Meta:
         model = Answers
@@ -253,7 +296,11 @@ class FormDataSerializer(serializers.ModelSerializer):
     @extend_schema_field(ListDataAnswerSerializer(many=True))
     def get_answers(self, instance):
         return ListDataAnswerSerializer(
-            instance=instance.data_answer.all(), many=True
+            instance=instance.data_answer.all(),
+            many=True,
+            context={
+                "webform": self.context.get("webform", False),
+            }
         ).data
 
     class Meta:
@@ -495,6 +542,7 @@ class SubmitPendingFormSerializer(serializers.Serializer):
         data = validated_data.get("data")
         data["form"] = self.context.get("form")
         data["created_by"] = self.context.get("user")
+        is_draft = self.context.get("is_draft", False)
 
         # check user role and form type
         user = self.context.get("user")
@@ -522,6 +570,11 @@ class SubmitPendingFormSerializer(serializers.Serializer):
             # If the form has approval
             obj_data.is_pending = True
             obj_data.save()
+
+        if is_draft:
+            # Mark as draft
+            obj_data.mark_as_draft()
+            direct_to_data = False
 
         answers = []
 
@@ -594,3 +647,176 @@ class SubmitPendingFormSerializer(serializers.Serializer):
             obj_data.save_to_file
 
         return obj_data
+
+    def represent(self, instance, validated_data):
+        """
+        Represent the instance in a way that can be used in the response.
+        This method is called after the create method.
+        """
+        data = {
+            "id": instance.id,
+            "uuid": instance.uuid,
+            "name": instance.name,
+            "form": instance.form.id,
+            "administration": instance.administration.id,
+            "geo": instance.geo,
+            "is_pending": instance.is_pending,
+            "is_draft": instance.is_draft,
+        }
+        if instance.parent:
+            data["parent"] = {
+                "id": instance.parent.id,
+                "name": instance.parent.name,
+                "form": instance.parent.form.id,
+            }
+        return data
+
+    class Meta:
+        fields = ["data", "answer"]
+
+
+class SubmitUpdateDraftFormSerializer(SubmitPendingFormSerializer):
+    """
+    Serializer for updating existing draft form data.
+    """
+
+    def update(self, instance, validated_data):
+        data = validated_data.get("data")
+        if not instance.parent:
+            # If the instance is a parent form, update its fields
+            admin_id = data.get("administration", instance.administration_id)
+            instance.administration_id = admin_id
+            instance.geo = data.get("geo", instance.geo)
+        instance.name = data.get("name", instance.name)
+        instance.updated = timezone.now()
+        instance.updated_by = self.context.get("user")
+        instance.submitter = data.get("submitter", instance.submitter)
+        instance.duration = data.get("duration", instance.duration)
+        instance.save()
+
+        # Clear existing answers and create new ones
+        instance.data_answer.all().delete()
+
+        answers = []
+        for answer in validated_data.get("answer"):
+            question = answer.get("question")
+            name = None
+            value = None
+            option = None
+
+            if question.type in [
+                QuestionTypes.geo,
+                QuestionTypes.option,
+                QuestionTypes.multiple_option,
+            ]:
+                option = answer.get("value")
+            elif question.type in [
+                QuestionTypes.text,
+                QuestionTypes.photo,
+                QuestionTypes.date,
+                QuestionTypes.autofield,
+                QuestionTypes.attachment,
+                QuestionTypes.signature,
+            ]:
+                name = answer.get("value")
+            elif question.type == QuestionTypes.cascade:
+                id = answer.get("value")
+                val = None
+                if question.api:
+                    ep = question.api.get("endpoint")
+                    if "organisation" in ep:
+                        name = Organisation.objects.filter(pk=id).values_list(
+                            'name', flat=True).first()
+                        val = name
+                    if "entity-data" in ep:
+                        name = EntityData.objects.filter(pk=id).values_list(
+                            'name', flat=True).first()
+                        val = name
+                    if "entity-data" not in ep and "organisation" not in ep:
+                        ep = ep.split("?")[0]
+                        ep = f"{ep}?id={id}"
+                        val = requests.get(ep).json()
+                        val = val[0].get("name")
+
+                if question.extra:
+                    cs_type = question.extra.get("type")
+                    if cs_type == "entity":
+                        name = EntityData.objects.filter(pk=id).values_list(
+                            'name', flat=True).first()
+                        val = name
+                name = val
+            else:
+                # for administration,number question type
+                value = answer.get("value")
+
+            answers.append(Answers(
+                data=instance,
+                question=question,
+                name=name,
+                value=value,
+                options=option,
+                created_by=self.context.get("user"),
+                index=answer.get("index", 0)
+            ))
+
+        Answers.objects.bulk_create(answers)
+        return instance
+
+
+class FilterDraftFormDataSerializer(serializers.Serializer):
+    administration = CustomPrimaryKeyRelatedField(
+        queryset=Administration.objects.none(), required=False
+    )
+    page = CustomIntegerField(
+        required=False,
+        allow_null=True,
+        default=1,
+        min_value=1,
+        help_text="Page number for pagination",
+    )
+    search = CustomCharField(
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+        max_length=225,
+        help_text="Search by name",
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.fields.get(
+            "administration"
+        ).queryset = Administration.objects.all()
+
+    class Meta:
+        fields = ["administration", "page", "search"]
+
+
+class DraftFormDataDetailSerializer(serializers.ModelSerializer):
+    answers = serializers.SerializerMethodField()
+    datapoint_name = CustomCharField(source="name")
+    geolocation = CustomListField(
+        source="geo",
+        required=False,
+        allow_null=True
+    )
+
+    @extend_schema_field(OpenApiTypes.ANY)
+    def get_answers(self, instance):
+        data_answers = instance.data_answer.all()
+        answers = {}
+        for a in data_answers:
+            answers.update(a.to_key)
+        return answers
+
+    class Meta:
+        model = FormData
+        fields = [
+            "id",
+            "uuid",
+            "form",
+            "administration",
+            "datapoint_name",
+            "geolocation",
+            "answers",
+        ]

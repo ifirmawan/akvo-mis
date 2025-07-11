@@ -46,3 +46,5 @@ export { default as DownloadEntitiesData } from "./upload-administration-data/Do
 export { default as Roles } from "./roles/Roles";
 export { default as AddRole } from "./add-role/AddRole";
 export { default as EditProfile } from "./profile/EditProfile";
+export { default as ManageDraft } from "./manage-draft/ManageDraft";
+export { default as ManageDraftForm } from "./manage-draft/ManageDraftForm";

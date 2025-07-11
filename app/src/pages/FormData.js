@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Button, Dialog, Text } from '@rneui/themed';
-import { View, ActivityIndicator, StyleSheet, ToastAndroid } from 'react-native';
+import { FlatList, TouchableOpacity, View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-import * as Network from 'expo-network';
-import * as Sentry from '@sentry/react-native';
 import { useSQLiteContext } from 'expo-sqlite';
-import { UserState, UIState, FormState, BuildParamsState } from '../store';
+import { UserState, UIState, FormState } from '../store';
 import { BaseLayout } from '../components';
 import { crudDataPoints } from '../database/crud';
-import { i18n, backgroundTask, api } from '../lib';
+import { i18n } from '../lib';
 import { getCurrentTimestamp } from '../form/lib';
-import crudJobs, { jobStatus } from '../database/crud/crud-jobs';
 
 const convertMinutesToHHMM = (minutes) => {
   const hours = Math.floor(minutes / 60);
@@ -23,36 +19,23 @@ const convertMinutesToHHMM = (minutes) => {
   return `${formattedHours}h ${formattedMinutes}m`;
 };
 
-const SyncButton = ({ onPress, disabled = false }) => (
-  <Button type="clear" disabled={disabled} onPress={onPress} testID="button-to-trigger-sync">
-    <Icon
-      name={disabled ? 'checkmark-done' : 'sync'}
-      color={disabled ? 'dodgerblue' : 'black'}
-      size={18}
-      testID="icon-sync"
-    />
-  </Button>
-);
-
 const FormDataPage = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
-  const { lang: activeLang, networkType } = UIState.useState((s) => s);
+  const uuid = route?.params?.uuid || null;
+  const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
-  const { id: activeUserId, syncWifiOnly } = UserState.useState((s) => s);
+  const { id: activeUserId } = UserState.useState((s) => s);
   const [search, setSearch] = useState(null);
   const [data, setData] = useState([]);
-  const [showConfirmationSyncDialog, setShowConfirmationSyncDialog] = useState(false);
-  const [syncing, setSyncing] = useState(false);
-  const serverURL = BuildParamsState.useState((s) => s.serverURL);
   const db = useSQLiteContext();
 
   const fetchData = useCallback(async () => {
-    const submitted = showSubmitted ? 1 : 0;
     let results = await crudDataPoints.selectDataPointsByFormAndSubmitted(db, {
       form: formId,
-      submitted,
+      submitted: 0,
       user: activeUserId,
+      uuid,
     });
     results = results.map((res) => {
       const createdAt = moment(res.createdAt).format('DD/MM/YYYY hh:mm A');
@@ -75,6 +58,7 @@ const FormDataPage = ({ navigation, route }) => {
     showSubmitted,
     activeUserId,
     formId,
+    uuid,
     trans.createdLabel,
     trans.surveyDurationLabel,
     trans.syncLabel,
@@ -91,19 +75,6 @@ const FormDataPage = ({ navigation, route }) => {
       ),
     [data, search],
   );
-
-  const loadNetworkType = useCallback(async () => {
-    const { type: networkTypeService } = await Network.getNetworkStateAsync();
-    if (networkType !== networkTypeService) {
-      UIState.update((s) => {
-        s.networkType = networkTypeService;
-      });
-    }
-  }, [networkType]);
-
-  useEffect(() => {
-    loadNetworkType();
-  }, [loadNetworkType]);
 
   const goToDetails = (id) => {
     const findData = filteredData.find((d) => d.id === id);
@@ -131,52 +102,89 @@ const FormDataPage = ({ navigation, route }) => {
     });
   };
 
-  const enableSyncButton = useMemo(() => data.filter((d) => !d.syncedAt).length > 0, [data]);
-
-  const handleSyncButtonOnPress = () => {
-    setShowConfirmationSyncDialog(true);
-  };
-
-  const runSyncSubmision = async () => {
-    await backgroundTask.syncFormSubmission();
-    await fetchData();
-    UIState.update((s) => {
-      s.isManualSynced = true;
-    });
-    setSyncing(false);
-  };
-
-  const handleOnSync = async () => {
-    try {
-      api.setServerURL(serverURL);
-      setShowConfirmationSyncDialog(false);
-      setData([]);
-      setSyncing(true);
-      const activeJob = await crudJobs.getActiveJob(db);
-      if (activeJob) {
-        /**
-         * Delete the active job while it is still in pending status to prevent duplicate submissions.
-         */
-        if (activeJob.status === jobStatus.PENDING) {
-          await crudJobs.deleteJob(db, activeJob.id);
-          await runSyncSubmision();
-        } else {
-          ToastAndroid.show(trans.autoSyncInProgress, ToastAndroid.LONG);
-          setSyncing(false);
-        }
-      } else {
-        await runSyncSubmision();
-      }
-    } catch (error) {
-      Sentry.captureMessage('[FormData] unable to sync submission manually');
-      Sentry.captureException(error);
-      setData(data);
-      setSyncing(false);
-      ToastAndroid.show(`${error?.errorCode}: ${error?.message}`, ToastAndroid.LONG);
-    }
-  };
-
   const handleOnAction = showSubmitted ? goToDetails : goToEditForm;
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      key={item.id}
+      onPress={() => handleOnAction(item.id)}
+      testID={`data-point-item-${item.id}`}
+      style={{
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        backgroundColor: 'white',
+        marginBottom: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 2,
+      }}
+      activeOpacity={0.6}
+    >
+      <View
+        style={{
+          width: 40,
+          height: 40,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 20,
+          backgroundColor: '#f5f5f5',
+          marginRight: 12,
+        }}
+      >
+        <Icon
+          name={item.syncedAt && item.syncedAt !== '-' ? 'checkmark' : 'time'}
+          size={24}
+          color={item.syncedAt && item.syncedAt !== '-' ? '#4CAF50' : '#FFA000'}
+        />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#212121', marginBottom: 4 }}>
+          {item.name}
+        </Text>
+        {item.subtitles?.map((subtitle) => (
+          <Text key={subtitle} style={{ fontSize: 12, color: '#9e9e9e' }}>
+            {subtitle}
+          </Text>
+        ))}
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderEmptyState = () => (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 40,
+        paddingVertical: 60,
+      }}
+    >
+      <View style={{ marginBottom: 20 }}>
+        <Icon name="folder-outline" size={64} color="#C5CAE9" />
+      </View>
+      <View style={{ alignItems: 'center' }}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: '#424242',
+            textAlign: 'center',
+            marginBottom: 8,
+          }}
+        >
+          {trans.emptyDraftMessageInfo || 'No data found'}
+        </Text>
+        <Text style={{ fontSize: 14, color: '#757575', textAlign: 'center', lineHeight: 20 }}>
+          {trans.emptyDraftMessageAction || ''}
+        </Text>
+      </View>
+    </View>
+  );
 
   return (
     <BaseLayout
@@ -188,50 +196,21 @@ const FormDataPage = ({ navigation, route }) => {
         value: search,
         action: setSearch,
       }}
-      rightComponent={
-        !showSubmitted ||
-        (!filteredData.length && !search) ||
-        (syncWifiOnly && networkType !== Network.NetworkStateType.WIFI) ? (
-          false
-        ) : (
-          <SyncButton disabled={!enableSyncButton} onPress={handleSyncButtonOnPress} />
-        )
-      }
     >
-      {syncing ? (
-        <View style={styles.loadingContainer} testID="sync-loading">
-          <ActivityIndicator />
+      <BaseLayout.Content>
+        <View style={{ flex: 1, width: '100%' }}>
+          <FlatList
+            data={filteredData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            testID="data-point-list"
+            contentContainerStyle={[{ padding: 8 }, filteredData.length === 0 && { flexGrow: 1 }]}
+            ListEmptyComponent={renderEmptyState}
+          />
         </View>
-      ) : (
-        <BaseLayout.Content data={filteredData} action={handleOnAction} testID="data-point-list" />
-      )}
-
-      {/* confirmation dialog to sync */}
-      <Dialog visible={showConfirmationSyncDialog} testID="sync-confirmation-dialog">
-        <Text testID="sync-confirmation-text">{trans.confirmSync}</Text>
-        <Dialog.Actions>
-          <Dialog.Button
-            title={trans.buttonOk}
-            onPress={handleOnSync}
-            testID="sync-confirmation-ok"
-          />
-          <Dialog.Button
-            title={trans.buttonCancel}
-            onPress={() => setShowConfirmationSyncDialog(false)}
-            testID="sync-confirmation-cancel"
-          />
-        </Dialog.Actions>
-      </Dialog>
+      </BaseLayout.Content>
     </BaseLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-});
 
 export default FormDataPage;

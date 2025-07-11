@@ -7,6 +7,9 @@ from api.v1.v1_data.views import (
     PendingFormDataView,
     PendingDataDetailDeleteView,
     DataDetailDeleteView,
+    DraftFormDataListView,
+    DraftFormDataDetailView,
+    PublishDraftFormDataView,
 )
 from api.v1.v1_users.views import health_check, get_config_file, email_template
 
@@ -22,6 +25,18 @@ urlpatterns = [
     re_path(
         r"^(?P<version>(v1))/form-pending-data/(?P<form_id>[0-9]+)",
         PendingFormDataView.as_view(),
+    ),
+    re_path(
+        r"^(?P<version>(v1))/draft-submissions/(?P<form_id>[0-9]+)",
+        DraftFormDataListView.as_view(),
+    ),
+    re_path(
+        r"^(?P<version>(v1))/draft-submission/(?P<data_id>[0-9]+)",
+        DraftFormDataDetailView.as_view(),
+    ),
+    re_path(
+        r"^(?P<version>(v1))/publish-draft-submission/(?P<data_id>[0-9]+)",
+        PublishDraftFormDataView.as_view(),
     ),
     re_path(
         r"^(?P<version>(v1))/data-details/(?P<data_id>[0-9]+)",

@@ -671,3 +671,25 @@ export const strToFunction = (fnString, values, questions = []) => {
     return null;
   }
 };
+
+export const transformAnswers = (answersObj, formJSON) => {
+  const answers = {};
+  if (answersObj && typeof answersObj === 'object') {
+    Object.entries(answersObj).forEach(([key, val]) => {
+      if (val === undefined || val === null) return;
+      const [questionId] = key.split('-');
+      const question = formJSON.question_group
+        .flatMap((group) => group.question)
+        .find((q) => `${q.id}` === questionId);
+      answers[key] = val;
+      if (question?.type === 'cascade' && Array.isArray(val) && val.length) {
+        const [lastValue] = val.slice(-1);
+        answers[key] = lastValue;
+      }
+      if (question?.type === 'number') {
+        answers[key] = parseFloat(val);
+      }
+    });
+  }
+  return answers;
+};

@@ -18,6 +18,22 @@ export const fetchDatapoints = async (pageNumber = 1) => {
   }
 };
 
+export const fetchDraftDatapoints = async (pageNumber = 1) => {
+  try {
+    const { data: apiData } = await api.get(`/draft-list?page=${pageNumber}`);
+    const { data, total_page: totalPage, current: page } = apiData;
+    DatapointSyncState.update((s) => {
+      s.progress = (page / totalPage) * 100;
+    });
+    if (page < totalPage) {
+      return data.concat(await fetchDraftDatapoints(page + 1));
+    }
+    return data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 export const downloadDatapointsJson = async (
   db,
   { formId, administrationId, url, lastUpdated },
@@ -27,7 +43,7 @@ export const downloadDatapointsJson = async (
     const response = await api.get(url);
     if (response.status === 200) {
       const jsonData = response.data;
-      const { uuid, datapoint_name: name, geolocation: geo, answers } = jsonData || {};
+      const { uuid, datapoint_name: name, geolocation: geo, answers, id: dpID } = jsonData || {};
       const form = await crudForms.getByFormId(db, { formId });
       const repeats = {};
       let repeatIndex = 0;
@@ -61,6 +77,7 @@ export const downloadDatapointsJson = async (
           repeats: JSON.stringify(repeats),
         });
       } else {
+        await crudDataPoints.deleteById(db, { id: dpID });
         await crudDataPoints.saveDataPoint(db, {
           uuid,
           user,
@@ -74,6 +91,7 @@ export const downloadDatapointsJson = async (
           json: answers,
           syncedAt: lastUpdated,
           repeats: JSON.stringify(repeats),
+          id: dpID || null,
         });
       }
     }

@@ -13,6 +13,7 @@ export { default as AdvancedFilters } from "./filters/AdvancedFilters";
 export { default as Breadcrumbs } from "./ui/Breadcrumbs.jsx";
 export { default as PageLoader } from "./ui/PageLoader.jsx";
 export { default as EditableCell } from "./EditableCell.jsx";
+export { default as ReadOnlyCell } from "./ReadOnlyCell.jsx";
 export { default as HistoryTable } from "./HistoryTable.jsx";
 export { default as DataTable } from "./visualisation/DataTable.jsx";
 export { default as JMP } from "./visualisation/JMP.jsx";

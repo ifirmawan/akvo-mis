@@ -25,7 +25,7 @@
     &.ant-btn-link {
       color: $blue;
     }
-    &.ant-btn-primary {
+    &.ant-btn-primary:not(.ant-btn-background-ghost) {
       background-color: $blue;
       border-color: $blue;
 

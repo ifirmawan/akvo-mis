@@ -1,17 +1,6 @@
 import sql from '../sql';
 import crudUsers from './crud-users';
 
-export const jobStatus = {
-  PENDING: 1,
-  ON_PROGRESS: 2,
-  SUCCESS: 3,
-  FAILED: 4,
-};
-
-export const MAX_ATTEMPT = 3;
-
-export const SYNC_DATAPOINT_JOB_NAME = 'sync-form-datapoints';
-
 const tableName = 'jobs';
 const jobsQuery = () => ({
   getActiveJob: async (db, type) => {

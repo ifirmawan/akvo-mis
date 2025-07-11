@@ -22,28 +22,40 @@ const dataPointsQuery = () => ({
     const uuidVal = uuid ? { uuid } : {};
     const userVal = user ? { user } : {};
     const columns = { form, submitted, ...userVal, ...uuidVal };
-    const rows = sql.getFilteredRows(db, 'datapoints', { ...columns }, 'syncedAt', 'DESC', true);
+    const rows = sql.getFilteredRows(db, 'datapoints', { ...columns }, 'id', 'DESC', true);
     return rows;
   },
   selectSubmissionToSync: async (db) => {
-    const submitted = 1;
     const rows = await sql.executeQuery(
       db,
-      `
-        SELECT
+      `SELECT
           datapoints.*,
           forms.formId,
           forms.json AS json_form
         FROM datapoints
         JOIN forms ON datapoints.form = forms.id
-        WHERE datapoints.submitted = ${submitted} AND datapoints.syncedAt IS NULL
+        WHERE datapoints.syncedAt IS NULL
         ORDER BY datapoints.createdAt ASC`,
     );
     return rows;
   },
   saveDataPoint: async (
     db,
-    { uuid, form, user, name, geo, submitted, duration, json, repeats, syncedAt, administrationId },
+    {
+      uuid,
+      form,
+      user,
+      name,
+      geo,
+      submitted,
+      duration,
+      json,
+      repeats,
+      syncedAt,
+      administrationId,
+      draftId,
+      id,
+    },
   ) => {
     const repeatsVal = repeats ? { repeats } : {};
     const submittedAt = submitted ? { submittedAt: new Date().toISOString() } : {};
@@ -51,6 +63,8 @@ const dataPointsQuery = () => ({
     const uuidVal = uuid ? { uuid } : {};
     const syncedAtVal = syncedAt ? { syncedAt } : {};
     const admVal = administrationId ? { administrationId } : {};
+    const draftVal = draftId ? { draftId } : {};
+    const idVal = id ? { id } : {};
     const res = await sql.insertRow(db, 'datapoints', {
       form,
       user,
@@ -65,6 +79,8 @@ const dataPointsQuery = () => ({
       ...uuidVal,
       ...syncedAtVal,
       ...admVal,
+      ...draftVal,
+      ...idVal,
     });
     return res;
   },
@@ -100,6 +116,36 @@ const dataPointsQuery = () => ({
         submitted: 0,
       },
     );
+    return res;
+  },
+  getDraftPendingSync: async (db) => {
+    const rows = await sql.executeQuery(
+      db,
+      `SELECT * FROM datapoints WHERE submitted = ? AND draftId IS NULL OR syncedAt IS NOT NULL`,
+      [0],
+    );
+    return rows;
+  },
+  getByDraftId: async (db, { draftId }) => {
+    const res = await sql.getFirstRow(db, 'datapoints', { draftId });
+    if (!res) {
+      return false;
+    }
+    return {
+      ...res,
+      json: JSON.parse(res.json.replace(/''/g, "'")),
+    };
+  },
+  deleteDraftIdIsNull: async (db) => {
+    const res = await sql.executeQuery(
+      db,
+      'DELETE FROM datapoints WHERE submitted = ? AND draftId IS NULL',
+      [0],
+    );
+    return res;
+  },
+  deleteById: async (db, { id }) => {
+    const res = await sql.deleteRow(db, 'datapoints', { id });
     return res;
   },
   getByUUID: async (db, { uuid }) => {

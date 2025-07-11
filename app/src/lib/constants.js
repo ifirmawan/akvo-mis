@@ -18,7 +18,7 @@ export const SUBMISSION_TYPES = {
 
 export const DATABASE_NAME = 'app.db';
 
-export const DATABASE_VERSION = 2;
+export const DATABASE_VERSION = 3;
 
 export const QUESTION_TYPES = {
   text: 'text',
@@ -33,3 +33,14 @@ export const QUESTION_TYPES = {
   attachment: 'attachment',
   signature: 'signature',
 };
+
+export const jobStatus = {
+  PENDING: 1,
+  ON_PROGRESS: 2,
+  SUCCESS: 3,
+  FAILED: 4,
+};
+
+export const MAX_ATTEMPT = 3;
+
+export const SYNC_DATAPOINT_JOB_NAME = 'sync-form-datapoints';

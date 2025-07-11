@@ -1,6 +1,7 @@
 from django.utils import timezone
 from api.v1.v1_data.models import Answers, AnswerHistory
 from api.v1.v1_forms.constants import QuestionTypes
+from api.v1.v1_profile.models import Administration
 
 
 def update_date_time_format(date):
@@ -12,7 +13,7 @@ def update_date_time_format(date):
     return None
 
 
-def get_answer_value(answer: Answers):
+def get_answer_value(answer: Answers, webform: bool = False):
     if answer.question.type in [
         QuestionTypes.geo,
         QuestionTypes.option,
@@ -22,6 +23,14 @@ def get_answer_value(answer: Answers):
     elif answer.question.type == QuestionTypes.number:
         return answer.value
     elif answer.question.type == QuestionTypes.administration:
+        if webform:
+            adm = Administration.objects.filter(id=answer.value).first()
+            if adm:
+                return [
+                    a.id
+                    for a in adm.ancestors.exclude(parent__isnull=True).all()
+                ] + [adm.id]
+            return answer.value
         return int(float(answer.value)) if answer.value else None
     else:
         return answer.name

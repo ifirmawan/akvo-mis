@@ -43,6 +43,7 @@ const Sidebar = () => {
       data: "manage-data",
       submissions: "manage-data",
       approvals: "manage-data",
+      draft: "manage-data",
       // Master data submenu children
       administration: "manage-master-data",
       attributes: "manage-master-data",
@@ -195,6 +196,12 @@ const Sidebar = () => {
           <Menu.Item key="menu-data" data-url="/control-center/data">
             {text.menuManageData}
           </Menu.Item>
+
+          {ability.can("manage", "draft") && (
+            <Menu.Item key="menu-draft" data-url="/control-center/data/draft">
+              {text.menuManageDraft}
+            </Menu.Item>
+          )}
 
           {ability.can("manage", "submissions") && (
             <Menu.Item

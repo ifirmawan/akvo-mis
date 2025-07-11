@@ -11,10 +11,11 @@ from api.v1.v1_profile.models import (
 )
 from api.v1.v1_users.models import SystemUser
 from utils.soft_deletes_model import SoftDeletes
+from utils.draft_model import Draft, DraftSoftDeletesManager
 from utils import storage
 
 
-class FormData(SoftDeletes):
+class FormData(SoftDeletes, Draft):
     parent = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
@@ -50,6 +51,11 @@ class FormData(SoftDeletes):
     duration = models.IntegerField(default=0)
     submitter = models.CharField(max_length=255, default=None, null=True)
     is_pending = models.BooleanField(default=False)
+
+    # Custom managers
+    objects = DraftSoftDeletesManager()
+    objects_deleted = DraftSoftDeletesManager(only_deleted=True)
+    objects_draft = DraftSoftDeletesManager(only_draft=True)
 
     def __str__(self):
         return self.name

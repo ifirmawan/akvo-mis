@@ -1,16 +1,22 @@
 import { useCallback, useEffect } from 'react';
 import * as Network from 'expo-network';
 import { useSQLiteContext } from 'expo-sqlite';
-import { BuildParamsState, DatapointSyncState, UIState } from '../store';
+import { BuildParamsState, DatapointSyncState, UIState, UserState } from '../store';
 import { backgroundTask } from '../lib';
-import crudJobs, {
+import crudJobs from '../database/crud/crud-jobs';
+import { crudConfig, crudDataPoints, crudForms } from '../database/crud';
+import {
+  downloadDatapointsJson,
+  fetchDatapoints,
+  fetchDraftDatapoints,
+} from '../lib/sync-datapoints';
+import {
   jobStatus,
   MAX_ATTEMPT,
   SYNC_DATAPOINT_JOB_NAME,
-} from '../database/crud/crud-jobs';
-import { crudConfig, crudDataPoints } from '../database/crud';
-import { downloadDatapointsJson, fetchDatapoints } from '../lib/sync-datapoints';
-import { SYNC_FORM_SUBMISSION_TASK_NAME, SYNC_STATUS } from '../lib/constants';
+  SYNC_FORM_SUBMISSION_TASK_NAME,
+  SYNC_STATUS,
+} from '../lib/constants';
 /**
  * This sync only works in the foreground service
  */
@@ -19,6 +25,7 @@ const SyncService = () => {
   const isManualSynced = UIState.useState((s) => s.isManualSynced);
   const syncInterval = BuildParamsState.useState((s) => s.dataSyncInterval);
   const syncInSecond = parseInt(syncInterval, 10) * 1000;
+  const userId = UserState.useState((s) => s.id);
   const db = useSQLiteContext();
 
   const onSync = useCallback(async () => {
@@ -67,6 +74,7 @@ const SyncService = () => {
               bgColor: '#16a34a',
               icon: 'checkmark-done',
             };
+            s.refreshPage = true;
           });
           await crudJobs.deleteJob(db, activeJob.id);
         }
@@ -93,11 +101,6 @@ const SyncService = () => {
 
   useEffect(() => {
     if (!syncInSecond || !isOnline) {
-      return;
-    }
-    if (isManualSynced) {
-      // If manual sync is triggered, run the sync immediately
-      onSync();
       return;
     }
     const syncTimer = setInterval(() => {
@@ -146,6 +149,10 @@ const SyncService = () => {
         DatapointSyncState.update((s) => {
           s.inProgress = false;
         });
+
+        UIState.update((s) => {
+          s.refreshPage = true;
+        });
       } catch (error) {
         DatapointSyncState.update((s) => {
           s.added = true;
@@ -166,12 +173,78 @@ const SyncService = () => {
     }
   }, [db]);
 
+  const onSyncDraftDatapoint = useCallback(async () => {
+    const allDraftSynced = await crudDataPoints.getDraftPendingSync(db);
+    if (allDraftSynced?.length || (allDraftSynced?.length === 0 && isManualSynced)) {
+      try {
+        const draftRes = await fetchDraftDatapoints();
+        draftRes.forEach(
+          async ({
+            administration: administrationId,
+            datapoint_name: name,
+            geolocation: geo,
+            form: formId,
+            repeats,
+            ...d
+          }) => {
+            const isExists = await crudDataPoints.getByDraftId(db, { draftId: d.id });
+            if (isExists) {
+              // If the draft already exists, update it
+              await crudDataPoints.updateDataPoint(db, {
+                ...d,
+                name,
+                geo,
+                repeats: JSON.stringify(repeats),
+                submitted: 0,
+                syncedAt: null,
+              });
+            } else {
+              const form = await crudForms.getByFormId(db, { formId });
+              await crudDataPoints.saveDataPoint(db, {
+                ...d,
+                administrationId,
+                name,
+                geo,
+                repeats: JSON.stringify(repeats),
+                form: form.id,
+                submitted: 0,
+                user: userId,
+                draftId: d.id,
+                createdAt: new Date().toISOString(),
+              });
+            }
+          },
+        );
+
+        await crudDataPoints.deleteDraftIdIsNull(db);
+
+        DatapointSyncState.update((s) => {
+          s.inProgress = false;
+        });
+
+        UIState.update((s) => {
+          s.refreshPage = true;
+        });
+      } catch (error) {
+        UIState.update((s) => {
+          s.statusBar = {
+            type: SYNC_STATUS.failed,
+            bgColor: '#ec003f',
+            icon: 'alert',
+            error: String(error),
+          };
+        });
+      }
+    }
+  }, [db, userId, isManualSynced]);
+
   useEffect(() => {
     const unsubsDataSync = DatapointSyncState.subscribe(
       (s) => s.added,
       (added) => {
         if (added) {
           onSyncDataPoint();
+          onSyncDraftDatapoint();
         }
       },
     );
@@ -179,7 +252,14 @@ const SyncService = () => {
     return () => {
       unsubsDataSync();
     };
-  }, [onSyncDataPoint]);
+  }, [onSyncDataPoint, onSyncDraftDatapoint]);
+
+  useEffect(() => {
+    if (isManualSynced) {
+      // If manual sync is triggered, run the sync immediately
+      onSync();
+    }
+  }, [isManualSynced, onSync]);
 
   return null; // This is a service component, no rendering is needed
 };

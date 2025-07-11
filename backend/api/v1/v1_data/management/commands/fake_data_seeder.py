@@ -33,11 +33,20 @@ class Command(BaseCommand):
             default=False,
             type=bool,
         )
+        parser.add_argument(
+            "-d",
+            "--draft",
+            nargs="?",
+            const=False,
+            default=False,
+            type=bool,
+        )
 
     def handle(self, *args, **options):
         test = options.get("test")
         repeat = options.get("repeat")
         approved = options.get("approved")
+        draft = options.get("draft")
         if test:
             # Clear existing data
             FormData.objects.all().delete(hard=True)
@@ -95,8 +104,10 @@ class Command(BaseCommand):
                     data.is_pending = True
                     data.save()
                     pending.append(data)
-                else:
+                if not draft and not data.has_approval:
                     data.save_to_file
+                if draft:
+                    data.mark_as_draft()
             # Create batches for pending data using unified function
             if pending and approved:
                 create_batch_with_approvals(

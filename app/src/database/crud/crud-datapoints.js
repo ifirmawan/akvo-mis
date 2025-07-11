@@ -22,7 +22,7 @@ const dataPointsQuery = () => ({
     const uuidVal = uuid ? { uuid } : {};
     const userVal = user ? { user } : {};
     const columns = { form, submitted, ...userVal, ...uuidVal };
-    const rows = sql.getFilteredRows(db, 'datapoints', { ...columns }, 'createdAt', 'DESC', true);
+    const rows = sql.getFilteredRows(db, 'datapoints', { ...columns }, 'id', 'DESC', true);
     return rows;
   },
   selectSubmissionToSync: async (db) => {
@@ -54,6 +54,7 @@ const dataPointsQuery = () => ({
       syncedAt,
       administrationId,
       draftId,
+      id,
     },
   ) => {
     const repeatsVal = repeats ? { repeats } : {};
@@ -63,6 +64,7 @@ const dataPointsQuery = () => ({
     const syncedAtVal = syncedAt ? { syncedAt } : {};
     const admVal = administrationId ? { administrationId } : {};
     const draftVal = draftId ? { draftId } : {};
+    const idVal = id ? { id } : {};
     const res = await sql.insertRow(db, 'datapoints', {
       form,
       user,
@@ -78,6 +80,7 @@ const dataPointsQuery = () => ({
       ...syncedAtVal,
       ...admVal,
       ...draftVal,
+      ...idVal,
     });
     return res;
   },
@@ -139,6 +142,10 @@ const dataPointsQuery = () => ({
       'DELETE FROM datapoints WHERE submitted = ? AND draftId IS NULL',
       [0],
     );
+    return res;
+  },
+  deleteById: async (db, { id }) => {
+    const res = await sql.deleteRow(db, 'datapoints', { id });
     return res;
   },
   getByUUID: async (db, { uuid }) => {

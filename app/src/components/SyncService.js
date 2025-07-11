@@ -184,6 +184,7 @@ const SyncService = () => {
             datapoint_name: name,
             geolocation: geo,
             form: formId,
+            repeats,
             ...d
           }) => {
             const isExists = await crudDataPoints.getByDraftId(db, { draftId: d.id });
@@ -193,6 +194,7 @@ const SyncService = () => {
                 ...d,
                 name,
                 geo,
+                repeats: JSON.stringify(repeats),
                 submitted: 0,
                 syncedAt: null,
               });
@@ -203,6 +205,7 @@ const SyncService = () => {
                 administrationId,
                 name,
                 geo,
+                repeats: JSON.stringify(repeats),
                 form: form.id,
                 submitted: 0,
                 user: userId,

@@ -43,7 +43,7 @@ export const downloadDatapointsJson = async (
     const response = await api.get(url);
     if (response.status === 200) {
       const jsonData = response.data;
-      const { uuid, datapoint_name: name, geolocation: geo, answers } = jsonData || {};
+      const { uuid, datapoint_name: name, geolocation: geo, answers, id: dpID } = jsonData || {};
       const form = await crudForms.getByFormId(db, { formId });
       const repeats = {};
       let repeatIndex = 0;
@@ -77,6 +77,7 @@ export const downloadDatapointsJson = async (
           repeats: JSON.stringify(repeats),
         });
       } else {
+        await crudDataPoints.deleteById(db, { id: dpID });
         await crudDataPoints.saveDataPoint(db, {
           uuid,
           user,
@@ -90,6 +91,7 @@ export const downloadDatapointsJson = async (
           json: answers,
           syncedAt: lastUpdated,
           repeats: JSON.stringify(repeats),
+          id: dpID || null,
         });
       }
     }

@@ -404,6 +404,13 @@ def get_full_image_path(relative_path):
     # Remove leading slash if present
     if relative_path.startswith("/"):
         relative_path = relative_path[1:]
+    # Remove base URL if present
+    if (
+        relative_path.startswith("http://") or
+        relative_path.startswith("https://")
+    ):
+        # Extract the path after the domain
+        relative_path = relative_path.split("/", 3)[-1]
 
     # Construct full path (assuming images are stored in storage folder)
     full_path = os.path.join(STORAGE_PATH, relative_path)

@@ -148,6 +148,13 @@ const dataPointsQuery = () => ({
     const res = await sql.deleteRow(db, 'datapoints', { id });
     return res;
   },
+  deleteDraftSynced: async (db) => {
+    const res = await sql.executeQuery(
+      db,
+      'DELETE FROM datapoints WHERE draftId IS NOT NULL AND syncedAt IS NOT NULL',
+    );
+    return res;
+  },
   getByUUID: async (db, { uuid }) => {
     const res = await sql.getFirstRow(db, 'datapoints', { uuid });
     return res;

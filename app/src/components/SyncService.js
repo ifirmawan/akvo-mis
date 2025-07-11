@@ -177,6 +177,7 @@ const SyncService = () => {
     const allDraftSynced = await crudDataPoints.getDraftPendingSync(db);
     if (allDraftSynced?.length || (allDraftSynced?.length === 0 && isManualSynced)) {
       try {
+        await crudDataPoints.deleteDraftSynced(db);
         const draftRes = await fetchDraftDatapoints();
         draftRes.forEach(
           async ({
@@ -196,7 +197,7 @@ const SyncService = () => {
                 geo,
                 repeats: JSON.stringify(repeats),
                 submitted: 0,
-                syncedAt: null,
+                syncedAt: new Date().toISOString(),
               });
             } else {
               const form = await crudForms.getByFormId(db, { formId });
@@ -211,6 +212,7 @@ const SyncService = () => {
                 user: userId,
                 draftId: d.id,
                 createdAt: new Date().toISOString(),
+                syncedAt: new Date().toISOString(),
               });
             }
           },

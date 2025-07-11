@@ -123,11 +123,13 @@ const ManageDraft = () => {
     const isRegForm = registrationForms.some(
       (f) => f.id === parseInt(formId, 10) && f.content?.parent === null
     );
-    const isChildForm = childrenForms.some(
-      (f) => f.id === parseInt(formId, 10)
-    );
-    if (isChildForm && !childForm) {
-      setChildForm(parseInt(formId, 10));
+    if (formIdFromUrl !== null) {
+      const isChildForm = childrenForms.some(
+        (f) => f.id === parseInt(formId, 10) && f.content?.parent
+      );
+      if (isChildForm) {
+        setChildForm(parseInt(formId, 10));
+      }
     }
     if (formIdFromUrl && isRegForm) {
       store.update((s) => {

@@ -244,6 +244,12 @@ Object {
     "draftFormDescription": <p>
       Please fill up the webform below with relevant responses. You can save your responses and continue later or if you have completed the form then you can submit it.
     </p>,
+    "draftFormPublishConfirmContent": "Are you sure you want to publish this draft ? This action cannot be undone.",
+    "draftFormPublishConfirmTitle": "Publish Draft",
+    "draftFormPublishError": "Unable to publish draft",
+    "draftFormPublishSuccess": "Draft published successfully",
+    "draftFormSaveError": "Unable to save draft",
+    "draftFormSaveSuccess": "Draft saved successfully",
     "dropFile": "Drop your file here",
     "editAdmDesc": <React.Fragment>
       This page allows you to edit administration to the

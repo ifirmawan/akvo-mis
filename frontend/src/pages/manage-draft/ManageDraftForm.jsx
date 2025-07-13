@@ -9,7 +9,7 @@ import { Webform } from "akvo-react-form";
 import "akvo-react-form/dist/index.css";
 import "./style.scss";
 import { useParams, useNavigate } from "react-router-dom";
-import { Row, Col, Space, Progress } from "antd";
+import { Row, Col, Space, Progress, Modal } from "antd";
 import {
   api,
   QUESTION_TYPES,
@@ -19,6 +19,7 @@ import {
   processEntityCascades,
   processRepeatableQuestions,
   transformValue,
+  getCascadeAnswerAPI,
 } from "../../lib";
 import { pick, isEmpty } from "lodash";
 import { PageLoader, Breadcrumbs, DescriptionPanel } from "../../components";
@@ -51,7 +52,34 @@ const ManageDraftForm = () => {
   const isPublish = ["true", "1"].includes(publish);
   const id = idURL ? parseInt(idURL, 10) : null;
 
-  const submitFormData = async ({ datapoint, ...values }, refreshForm) => {
+  const onFinish = ({ datapoint, ...values }, refreshForm) => {
+    // Show modal confirm if isPublish true
+    if (isPublish) {
+      Modal.confirm({
+        title: text.draftFormPublishConfirmTitle,
+        content: text.draftFormPublishConfirmContent,
+        onOk: () =>
+          submitFormData(
+            { datapoint, ...values, published: true },
+            refreshForm
+          ),
+        onCancel: () =>
+          submitFormData(
+            { datapoint, ...values, published: false },
+            refreshForm
+          ),
+        okText: text.yesText,
+        cancelText: text.noText,
+      });
+      return;
+    }
+    submitFormData({ datapoint, ...values }, refreshForm);
+  };
+
+  const submitFormData = async (
+    { datapoint, published, ...values },
+    refreshForm
+  ) => {
     // Get non-repeatable questions
     const nonRepeatableQuestions = forms.question_group
       .filter((group) => !group?.repeatable)
@@ -208,11 +236,11 @@ const ManageDraftForm = () => {
     };
 
     try {
-      editData?.id
-        ? await api.put(`draft-submission/${editData.id}`, payload)
+      id
+        ? await api.put(`draft-submission/${id}`, payload)
         : await api.post(`draft-submissions/${formId}`, payload);
       // If the form is being published, send a separate request to publish
-      if (isPublish && editData?.id) {
+      if (published && editData?.id) {
         await api.post(`/publish-draft-submission/${editData.id}`, dataPayload);
       }
       if (refreshForm) {
@@ -221,14 +249,18 @@ const ManageDraftForm = () => {
       setHiddenQIds([]);
       navigate(`/control-center/data/draft/?form_id=${formId}`, {
         state: {
-          message: text.draftFormSuccess,
+          message: published
+            ? text.draftFormPublishSuccess
+            : text.draftFormSaveSuccess,
           type: "success",
         },
       });
     } catch (error) {
       notify({
         type: "error",
-        message: text.errorSomething,
+        message: published
+          ? text.draftFormPublishError
+          : text.draftFormSaveError,
       });
     } finally {
       setTimeout(() => setSubmit(false), 2000);
@@ -250,22 +282,51 @@ const ManageDraftForm = () => {
 
   // Fetch initial form data by id
   const fetchDataById = useCallback(async () => {
-    if (!id) {
+    if (!id || !Object.keys(forms).length) {
       return;
     }
     setFetchingData(true);
     try {
+      /**
+       * Transform cascade answers
+       */
+      const questions = forms.question_group.flatMap((g) => g.question);
       const { data: apiData } = await api.get(`/draft-submission/${id}`);
+      const apiAnswers = await Promise.all(
+        apiData?.answers?.map(async (a) => {
+          const question = questions.find((q) => q.id === a.question);
+          if (
+            question?.type === QUESTION_TYPES.cascade &&
+            question?.api?.endpoint &&
+            question?.extra?.type !== QUESTION_TYPES.entity
+          ) {
+            const cascadeAnswer = await getCascadeAnswerAPI(
+              authUser?.administration?.level,
+              question.id,
+              question.api,
+              a.value
+            );
+            return {
+              ...a,
+              value: cascadeAnswer?.[question.id] || a.value,
+            };
+          }
+          return {
+            ...a,
+            value: transformValue(question, a.value, false, a.index),
+          };
+        })
+      );
       setEditData(apiData);
       store.update((s) => {
-        s.initialValue = apiData.answers;
+        s.initialValue = apiAnswers;
       });
       setFetchingData(false);
     } catch (error) {
       console.error("Error fetching draft submission data:", error);
       setFetchingData(false);
     }
-  }, [id]);
+  }, [id, forms, authUser?.administration?.level]);
 
   const fetchForm = useCallback(async () => {
     try {
@@ -360,13 +421,16 @@ const ManageDraftForm = () => {
 
       <div className="table-section">
         <div className="table-wrapper">
-          {loading || isEmpty(forms || fetchingData) ? (
+          {loading ||
+          isEmpty(forms) ||
+          fetchingData ||
+          (id && !editData?.id) ? (
             <PageLoader message={text.fetchingForm} />
           ) : (
             <Webform
               formRef={webformRef}
               forms={forms}
-              onFinish={submitFormData}
+              onFinish={onFinish}
               onCompleteFailed={onFinishFailed}
               onChange={onChange}
               submitButtonSetting={{ loading: submit }}

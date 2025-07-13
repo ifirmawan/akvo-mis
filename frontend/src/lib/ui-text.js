@@ -937,6 +937,13 @@ const uiText = {
     editDraft: "Edit Draft",
     createDraftMonitoring: "Create Draft Monitoring Data",
     rejectText: "Reject",
+    draftFormPublishConfirmTitle: "Publish Draft",
+    draftFormPublishConfirmContent:
+      "Are you sure you want to publish this draft ? This action cannot be undone.",
+    draftFormPublishSuccess: "Draft published successfully",
+    draftFormPublishError: "Unable to publish draft",
+    draftFormSaveSuccess: "Draft saved successfully",
+    draftFormSaveError: "Unable to save draft",
   },
 
   de: {},

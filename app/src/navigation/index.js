@@ -7,7 +7,6 @@ import * as Sentry from '@sentry/react-native';
 
 import {
   HomePage,
-  FormDataPage,
   GetStartedPage,
   AuthFormPage,
   AuthByPassFormPage,
@@ -77,7 +76,6 @@ const RootNavigator = () => {
       ) : (
         <>
           <Stack.Screen name="Home" component={HomePage} />
-          <Stack.Screen name="FormData" component={FormDataPage} />
           <Stack.Screen name="Settings" component={SettingsPage} />
           <Stack.Screen name="About" component={AboutPage} />
           <Stack.Screen name="SettingsForm" component={SettingsFormPage} />

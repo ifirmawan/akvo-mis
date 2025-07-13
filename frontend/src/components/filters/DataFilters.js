@@ -1,6 +1,15 @@
 import React, { useState, useMemo, useCallback } from "react";
 import "./style.scss";
-import { Row, Col, Space, Button, Dropdown, Checkbox } from "antd";
+import {
+  Row,
+  Col,
+  Space,
+  Button,
+  Dropdown,
+  Checkbox,
+  Badge,
+  Tooltip,
+} from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import AdministrationDropdown from "./AdministrationDropdown";
 import FormDropdown from "./FormDropdown.js";
@@ -240,26 +249,40 @@ const DataFilters = ({
             </Can>
             {pathname === "/control-center/data" && (
               <Space>
-                <Dropdown
-                  trigger={["click"]}
-                  placement="bottomLeft"
-                  open={dropdownOpen}
-                  onOpenChange={setDropdownOpen}
-                  menu={{
-                    items: childFormMenuItems,
-                    style: { minWidth: "200px" },
-                  }}
-                  disabled={!selectedRowKeys.length}
-                >
-                  <Button
-                    shape="round"
-                    icon={<FileWordOutlined />}
-                    loading={downloading}
+                {selectedRowKeys.length === 0 ? (
+                  <Tooltip
+                    title={text.selectRowsToDownload}
+                    trigger="hover"
+                    placement="top"
+                  >
+                    <Button shape="round" icon={<FileWordOutlined />} disabled>
+                      {text.downloadReport}
+                    </Button>
+                  </Tooltip>
+                ) : (
+                  <Dropdown
+                    trigger={["click"]}
+                    placement="bottomLeft"
+                    open={dropdownOpen}
+                    onOpenChange={setDropdownOpen}
+                    menu={{
+                      items: childFormMenuItems,
+                      style: { minWidth: "200px" },
+                    }}
                     disabled={!selectedRowKeys.length}
                   >
-                    {text.downloadReport} <DownOutlined />
-                  </Button>
-                </Dropdown>
+                    <Badge count={selectedRowKeys.length}>
+                      <Button
+                        shape="round"
+                        icon={<FileWordOutlined />}
+                        loading={downloading}
+                        disabled={!selectedRowKeys.length}
+                      >
+                        {text.downloadReport} <DownOutlined />
+                      </Button>
+                    </Badge>
+                  </Dropdown>
+                )}
               </Space>
             )}
             {pathname === "/control-center/data" && (

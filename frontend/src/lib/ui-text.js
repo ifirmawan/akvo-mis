@@ -944,6 +944,7 @@ const uiText = {
     draftFormPublishError: "Unable to publish draft",
     draftFormSaveSuccess: "Draft saved successfully",
     draftFormSaveError: "Unable to save draft",
+    selectRowsToDownload: "Please select rows to download",
   },
 
   de: {},

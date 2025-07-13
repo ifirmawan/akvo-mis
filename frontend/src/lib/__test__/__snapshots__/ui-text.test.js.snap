@@ -814,6 +814,7 @@ Object {
     "selectLevel": "Select level...",
     "selectOne": "Select one...",
     "selectRole": "Select role...",
+    "selectRowsToDownload": "Please select rows to download",
     "selectText": "Select...",
     "selectType": "Select type...",
     "sendInstructions": "Send Instructions",

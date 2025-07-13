@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as SQLite from 'expo-sqlite';
 import moment from 'moment';
@@ -12,6 +19,7 @@ import { crudDataPoints } from '../database/crud';
 const Submission = ({ navigation, route }) => {
   const [search, setSearch] = useState('');
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const previousForm = FormState.useState((s) => s.previousForm);
   const activeForm = FormState.useState((s) => s.form);
@@ -104,6 +112,13 @@ const Submission = ({ navigation, route }) => {
       };
     });
     setData(rows);
+    if (rows.length === 0) {
+      setLoading(false);
+      return;
+    }
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, [activeForm.id, activeUserId, db, route?.params?.uuid]);
 
   useEffect(() => {
@@ -157,17 +172,27 @@ const Submission = ({ navigation, route }) => {
     </TouchableOpacity>
   );
 
-  const renderEmptyState = () => (
-    <View style={styles.emptyStateContainer}>
-      <View style={styles.emptyIconContainer}>
-        <Icon name="document-outline" size={64} color="#C5CAE9" />
+  const renderEmptyState = () =>
+    loading ? (
+      <View style={styles.emptyStateContainer}>
+        <View style={styles.emptyIconContainer}>
+          <ActivityIndicator size="large" />
+        </View>
+        <View style={styles.emptyStateTextContainer}>
+          <Text style={styles.emptyStateTitle}>{trans.fetchingData}</Text>
+        </View>
       </View>
-      <View style={styles.emptyStateTextContainer}>
-        <Text style={styles.emptyStateTitle}>{trans.emptySubmissionMessageInfo}</Text>
-        <Text style={styles.emptyStateDescription}>{trans.emptySubmissionMessageAction}</Text>
+    ) : (
+      <View style={styles.emptyStateContainer}>
+        <View style={styles.emptyIconContainer}>
+          <Icon name="document-outline" size={64} color="#C5CAE9" />
+        </View>
+        <View style={styles.emptyStateTextContainer}>
+          <Text style={styles.emptyStateTitle}>{trans.emptySubmissionMessageInfo}</Text>
+          <Text style={styles.emptyStateDescription}>{trans.emptySubmissionMessageAction}</Text>
+        </View>
       </View>
-    </View>
-  );
+    );
 
   return (
     <BaseLayout

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, Text } from 'react-native';
+import { FlatList, TouchableOpacity, View, Text, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import { useSQLiteContext } from 'expo-sqlite';
@@ -28,6 +28,7 @@ const FormDataPage = ({ navigation, route }) => {
   const { id: activeUserId } = UserState.useState((s) => s);
   const [search, setSearch] = useState(null);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const db = useSQLiteContext();
 
   const fetchData = useCallback(async () => {
@@ -53,6 +54,13 @@ const FormDataPage = ({ navigation, route }) => {
       };
     });
     setData(results);
+    if (results.length === 0) {
+      setLoading(false);
+      return;
+    }
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, [
     db,
     showSubmitted,
@@ -154,37 +162,57 @@ const FormDataPage = ({ navigation, route }) => {
     </TouchableOpacity>
   );
 
-  const renderEmptyState = () => (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 40,
-        paddingVertical: 60,
-      }}
-    >
-      <View style={{ marginBottom: 20 }}>
-        <Icon name="folder-outline" size={64} color="#C5CAE9" />
+  const renderEmptyState = () =>
+    loading ? (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: 40,
+          paddingVertical: 60,
+        }}
+      >
+        <View style={{ marginBottom: 20 }}>
+          <ActivityIndicator size="large" color="#6200EE" />
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 14, color: '#757575', textAlign: 'center', lineHeight: 20 }}>
+            {trans.fetchingData}
+          </Text>
+        </View>
       </View>
-      <View style={{ alignItems: 'center' }}>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: 'bold',
-            color: '#424242',
-            textAlign: 'center',
-            marginBottom: 8,
-          }}
-        >
-          {trans.emptyDraftMessageInfo || 'No data found'}
-        </Text>
-        <Text style={{ fontSize: 14, color: '#757575', textAlign: 'center', lineHeight: 20 }}>
-          {trans.emptyDraftMessageAction || ''}
-        </Text>
+    ) : (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: 40,
+          paddingVertical: 60,
+        }}
+      >
+        <View style={{ marginBottom: 20 }}>
+          <Icon name="folder-outline" size={64} color="#C5CAE9" />
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: '#424242',
+              textAlign: 'center',
+              marginBottom: 8,
+            }}
+          >
+            {trans.emptyDraftMessageInfo}
+          </Text>
+          <Text style={{ fontSize: 14, color: '#757575', textAlign: 'center', lineHeight: 20 }}>
+            {trans.emptyDraftMessageAction}
+          </Text>
+        </View>
       </View>
-    </View>
-  );
+    );
 
   return (
     <BaseLayout

@@ -282,8 +282,7 @@ class ListDataAnswerSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.ANY)
     def get_value(self, instance: Answers):
-        webform = self.context.get("webform", False)
-        return get_answer_value(instance, webform=webform)
+        return get_answer_value(instance)
 
     class Meta:
         model = Answers
@@ -298,9 +297,6 @@ class FormDataSerializer(serializers.ModelSerializer):
         return ListDataAnswerSerializer(
             instance=instance.data_answer.all(),
             many=True,
-            context={
-                "webform": self.context.get("webform", False),
-            }
         ).data
 
     class Meta:

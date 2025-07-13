@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as SQLite from 'expo-sqlite';
 import { AuthState, UserState, FormState, UIState } from '../store';
 import { api, cascades, i18n } from '../lib';
+import { DATABASE_NAME } from '../lib/constants';
 import sql from '../database/sql';
 
 const LogoutButton = () => {
@@ -13,13 +14,15 @@ const LogoutButton = () => {
   const navigation = useNavigation();
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
-  const db = SQLite.useSQLiteContext();
 
   const handleNoPress = () => {
     setVisible(false);
   };
 
   const handleYesPress = async () => {
+    const db = await SQLite.openDatabaseAsync(DATABASE_NAME, {
+      useNewConnection: true,
+    });
     const tables = ['sessions', 'users', 'forms', 'config', 'datapoints', 'jobs'];
     await Promise.all(
       tables.map(async (table) => {

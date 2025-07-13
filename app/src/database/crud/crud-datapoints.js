@@ -176,6 +176,14 @@ const dataPointsQuery = () => ({
     );
     return res;
   },
+  totalSavedData: async (db) => {
+    const res = await sql.executeQuery(
+      db,
+      'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ?',
+      [0],
+    );
+    return res[0]?.total || 0;
+  }
 });
 
 const crudDataPoints = dataPointsQuery();

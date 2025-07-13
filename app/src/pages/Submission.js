@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import LucideIcon from '@react-native-vector-icons/lucide';
 import * as SQLite from 'expo-sqlite';
 import moment from 'moment';
 import { FormState, UIState, UserState } from '../store';
@@ -20,6 +21,8 @@ const Submission = ({ navigation, route }) => {
   const [search, setSearch] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(1);
+  const [totalSavedData, setTotalSavedData] = useState(0);
 
   const previousForm = FormState.useState((s) => s.previousForm);
   const activeForm = FormState.useState((s) => s.form);
@@ -78,14 +81,42 @@ const Submission = ({ navigation, route }) => {
     });
   };
 
-  const goToSavedData = () => {
-    navigation.push('FormData', { ...route?.params, showSubmitted: false });
+  const toggleIsSubmitted = () => {
+    setIsSubmitted((prev) => (prev === 1 ? 0 : 1));
+    setSearch('');
+    setLoading(true);
+    UIState.update((s) => {
+      s.refreshPage = true;
+    });
+  };
+
+  const onClickItem = (selectedData) => {
+    if (selectedData?.submitted === 0) {
+      FormState.update((s) => {
+        s.surveyStart = getCurrentTimestamp();
+        s.surveyDuration = selectedData?.duration;
+        s.repeats = selectedData?.repeats ? JSON.parse(selectedData?.repeats) : {};
+      });
+      navigation.navigate('FormPage', {
+        ...route?.params,
+        dataPointId: selectedData.id,
+        newSubmission: false,
+      });
+      return;
+    }
+    if (activeForm?.parentId) {
+      goToDetails(selectedData);
+    } else {
+      goToFormOptions(selectedData);
+    }
   };
 
   const fetchData = useCallback(async () => {
     if (!activeForm.id) {
       return;
     }
+    const draftCount = await crudDataPoints.totalSavedData(db);
+    setTotalSavedData(draftCount);
     /**
      * Fetch data points from the database based on the active form ID and user ID.
      * The data points are filtered by the submitted status (1 for submitted).
@@ -97,7 +128,7 @@ const Submission = ({ navigation, route }) => {
      */
     let rows = await crudDataPoints.selectDataPointsByFormAndSubmitted(db, {
       form: activeForm.id,
-      submitted: 1,
+      submitted: isSubmitted,
       user: activeUserId,
       uuid: route?.params?.uuid || null,
     });
@@ -119,7 +150,7 @@ const Submission = ({ navigation, route }) => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  }, [activeForm.id, activeUserId, db, route?.params?.uuid]);
+  }, [activeForm.id, activeUserId, db, isSubmitted, route?.params?.uuid]);
 
   useEffect(() => {
     fetchData();
@@ -151,9 +182,9 @@ const Submission = ({ navigation, route }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       key={item.id}
-      onPress={() => (activeForm?.parentId ? goToDetails(item) : goToFormOptions(item))}
+      onPress={() => onClickItem(item)}
       testID={`submission-item-${item.id}`}
-      style={styles.itemContainer}
+      style={[styles.itemContainer, item.submitted === 0 && styles.itemDraftBorder]}
       activeOpacity={0.6}
     >
       <View style={styles.iconContainer}>
@@ -165,9 +196,16 @@ const Submission = ({ navigation, route }) => {
       </View>
       <View style={styles.itemContent}>
         <Text style={styles.itemTitle}>{item.name}</Text>
-        <Text style={styles.itemDate}>
-          {trans.createdLabel} {item.createdAt}
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          {item.submitted === 0 && (
+            <View style={styles.draftBadge}>
+              <Text style={styles.draftText}>{trans.draftText}</Text>
+            </View>
+          )}
+          <Text style={styles.itemDate}>
+            {trans.createdLabel} {item.createdAt}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -205,13 +243,17 @@ const Submission = ({ navigation, route }) => {
       }}
       rightComponent={
         <TouchableOpacity
-          onPress={goToSavedData}
+          onPress={toggleIsSubmitted}
           testID="draft-submission-button"
           style={{ padding: 8 }}
           activeOpacity={0.6}
         >
-          <View style={route?.params?.draft ? styles.redDot : styles.redDotHide} />
-          <Icon name="folder-open-outline" size={24} color="#677483" />
+          <View style={totalSavedData && isSubmitted === 1 ? styles.redDot : styles.redDotHide} />
+          {isSubmitted ? (
+            <LucideIcon name="file-clock" size={24} color="#677483" />
+          ) : (
+            <Icon name="close-outline" size={24} color="#677483" />
+          )}
         </TouchableOpacity>
       }
     >
@@ -263,6 +305,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 2,
+    borderLeftWidth: 4,
+    borderLeftColor: 'transparent',
+  },
+  itemDraftBorder: {
+    borderLeftColor: '#FFEB3B',
   },
   iconContainer: {
     width: 40,
@@ -324,6 +371,18 @@ const styles = StyleSheet.create({
     color: '#757575',
     textAlign: 'center',
     lineHeight: 20,
+  },
+  draftBadge: {
+    backgroundColor: '#FFEB3B',
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
+  },
+  draftText: {
+    fontSize: 12,
+    color: '#212121',
+    fontWeight: 'bold',
   },
 });
 

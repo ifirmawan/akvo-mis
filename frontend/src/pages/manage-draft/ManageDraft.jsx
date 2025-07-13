@@ -29,6 +29,7 @@ import {
 import FormDropdown from "../../components/filters/FormDropdown";
 import DraftDetail from "./DraftDetail";
 import { useNotification } from "../../util/hooks";
+import { Can } from "../../components/can";
 
 const ManageDraft = () => {
   const [loading, setLoading] = useState(false);
@@ -255,14 +256,16 @@ const ManageDraft = () => {
                 </Space>
               </Col>
               <Col>
-                <Button
-                  shape="round"
-                  icon={<PlusOutlined />}
-                  type="primary"
-                  onClick={goToAddForm}
-                >
-                  {text.addNewButton}
-                </Button>
+                <Can I="manage" a="draft">
+                  <Button
+                    shape="round"
+                    icon={<PlusOutlined />}
+                    type="primary"
+                    onClick={goToAddForm}
+                  >
+                    {text.addNewButton}
+                  </Button>
+                </Can>
               </Col>
             </Row>
             <Row>

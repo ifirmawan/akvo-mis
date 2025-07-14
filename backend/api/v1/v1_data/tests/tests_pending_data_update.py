@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from api.v1.v1_data.models import FormData, AnswerHistory
 from api.v1.v1_forms.models import Forms
-from api.v1.v1_profile.constants import DataAccessTypes
+from api.v1.v1_profile.models import Administration
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 from api.v1.v1_data.functions import add_fake_answers
 
@@ -15,30 +15,47 @@ class PendingDataUpdateTestCase(TestCase, ProfileTestHelperMixin):
         call_command("administration_seeder", "--test")
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test")
-        call_command(
-            "fake_data_monitoring_seeder",
-            repeat=10,
-            test=True,
-            approved=False,
-        )
+
         self.parent_form = Forms.objects.get(pk=1)
         self.form = self.parent_form.children.first()
-        data = FormData.objects.filter(
-            form__pk=self.form.id,
-            is_pending=True,
-        ).order_by("?").all()
+        self.administration = Administration.objects.filter(
+            level__level=3
+        ).order_by("id").first()
 
-        self.data = data.last()
-
-        self.submitter = self.data.created_by
+        self.submitter = self.create_user(
+            email="submitter@test.com",
+            role_level=self.IS_ADMIN,
+            password="test",
+            administration=self.administration,
+            form=self.form,
+        )
         self.submitter.set_password("test")
         self.submitter.save()
 
-        self.administration = self.submitter.user_user_role.filter(
-            role__role_role_access__data_access=DataAccessTypes.submit
-        ).first().administration
-
         self.token = self.get_auth_token(self.submitter.email, "test")
+
+        registration_data = FormData.objects.create(
+            name="New Registration Data",
+            form=self.parent_form,
+            created_by=self.submitter,
+            administration=self.administration,
+            geo=[7.2088, 126.8456],
+            is_pending=True,
+        )
+        add_fake_answers(registration_data)
+
+        data = FormData.objects.create(
+            name="Test Pending Monitoring Data",
+            parent=registration_data,
+            form=self.form,
+            created_by=self.submitter,
+            administration=self.administration,
+            geo=[7.2088, 126.8456],
+            is_pending=True,
+        )
+        add_fake_answers(data)
+
+        self.data = data
 
     def test_update_pending_monitoring_data(self):
         payload = [

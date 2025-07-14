@@ -85,7 +85,7 @@ TaskManager.defineTask(SYNC_FORM_SUBMISSION_TASK_NAME, async () => {
       await crudJobs.updateJob(db, activeJob.id, {
         status: jobStatus.ON_PROGRESS,
       });
-      await backgroundTask.syncFormSubmission(activeJob);
+      await backgroundTask.syncFormSubmission(db, activeJob);
     }
     await db.closeAsync();
     return BackgroundFetch.BackgroundFetchResult.NewData;

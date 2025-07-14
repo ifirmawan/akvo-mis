@@ -17,13 +17,10 @@ import {
 } from './constants';
 import MIME_TYPES from './mime_types';
 
-const syncFormVersion = async ({
-  showNotificationOnly = true,
-  sendPushNotification = () => {},
-}) => {
-  const db = await SQLite.openDatabaseAsync(DATABASE_NAME, {
-    useNewConnection: true,
-  });
+const syncFormVersion = async (
+  db,
+  { showNotificationOnly = true, sendPushNotification = () => {} },
+) => {
   const { isConnected } = await Network.getNetworkStateAsync();
   if (!isConnected) {
     return;
@@ -156,10 +153,7 @@ const handleOnUploadFiles = async (
   return responses.map((res, i) => ({ ...allFiles[i], ...res.data }));
 };
 
-const syncFormSubmission = async (activeJob = {}) => {
-  const db = await SQLite.openDatabaseAsync(DATABASE_NAME, {
-    useNewConnection: true,
-  });
+const syncFormSubmission = async (db, activeJob = {}) => {
   const { isConnected } = await Network.getNetworkStateAsync();
   if (!isConnected) {
     return BackgroundFetch.BackgroundFetchResult.NoData;

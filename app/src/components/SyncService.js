@@ -95,7 +95,7 @@ const SyncService = () => {
       await crudJobs.updateJob(db, activeJob.id, {
         status: jobStatus.ON_PROGRESS,
       });
-      await backgroundTask.syncFormSubmission(activeJob);
+      await backgroundTask.syncFormSubmission(db, activeJob);
     }
   }, [db]);
 
@@ -197,7 +197,6 @@ const SyncService = () => {
                 geo,
                 repeats: JSON.stringify(repeats),
                 submitted: 0,
-                syncedAt: new Date().toISOString(),
               });
             } else {
               const form = await crudForms.getByFormId(db, { formId });

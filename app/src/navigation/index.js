@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BackHandler } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Sentry from '@sentry/react-native';
+import { useSQLiteContext } from 'expo-sqlite';
 
 import {
   HomePage,
@@ -33,6 +34,7 @@ const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
   const currentPage = UIState.useState((s) => s.currentPage);
   const token = AuthState.useState((s) => s.token); // user already has session
+  const db = useSQLiteContext();
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -52,13 +54,13 @@ const RootNavigator = () => {
       const notificationBody = res?.notification?.request;
       const notificationType = notificationBody?.content?.data?.notificationType;
       if (notificationType === 'sync-form-version') {
-        backgroundTask.syncFormVersion({ showNotificationOnly: false });
+        backgroundTask.syncFormVersion(db, { showNotificationOnly: false });
       }
     });
     return () => {
       responseListener.remove();
     };
-  }, []);
+  }, [db]);
 
   useEffect(() => {
     backgroundTask.backgroundTaskStatus(SYNC_FORM_VERSION_TASK_NAME);

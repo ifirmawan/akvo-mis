@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { HistoryOutlined } from "@ant-design/icons";
 import { Table } from "antd";
 import { isEqual } from "lodash";
+import { Sparklines, SparklinesLine, SparklinesSpots } from "react-sparklines";
 import HistoryTable from "./HistoryTable";
 import EditableCell from "./EditableCell";
 import { store, uiText } from "../lib";
@@ -62,6 +63,24 @@ const RawDataTable = ({
             />
           ),
           width: "25%",
+        },
+        {
+          title: "Overview",
+          dataIndex: "overview",
+          key: "overview",
+          render: (overview) =>
+            overview && Array.isArray(overview) ? (
+              <Sparklines
+                data={overview}
+                limit={4}
+                width={160}
+                height={50}
+                margin={4}
+              >
+                <SparklinesLine color="blue" />
+                <SparklinesSpots />
+              </Sparklines>
+            ) : null,
         },
       ]
     : defaultCols;

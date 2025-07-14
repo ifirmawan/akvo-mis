@@ -115,7 +115,11 @@ const Submission = ({ navigation, route }) => {
     if (!activeForm.id) {
       return;
     }
-    const draftCount = await crudDataPoints.totalSavedData(db);
+    const draftCount = await crudDataPoints.totalSavedData(
+      db,
+      activeForm.id,
+      route?.params?.uuid || null,
+    );
     setTotalSavedData(draftCount);
     /**
      * Fetch data points from the database based on the active form ID and user ID.

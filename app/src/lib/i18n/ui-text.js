@@ -261,8 +261,7 @@ const uiText = {
       "La plateforme Fiji Department of Water & Sewerage (DWS) DataPro est conçue pour améliorer la gestion des services d'eau et d'assainissement aux Fidji.",
     appVersionLabel: 'Version de l’application',
     emptySubmissionMessageInfo: 'Aucune donnée collectée pour le moment',
-    emptySubmissionMessageAction:
-      'Cliquez sur Nouvelle soumission pour commencer',
+    emptySubmissionMessageAction: 'Cliquez sur Nouvelle soumission pour commencer',
     emptyDraftMessageInfo: 'Aucune donnée de brouillon disponible',
     emptyDraftMessageAction: 'Les formulaires enregistrés apparaîtront ici',
     draftText: 'Brouillon',

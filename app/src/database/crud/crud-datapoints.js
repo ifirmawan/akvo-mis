@@ -176,14 +176,23 @@ const dataPointsQuery = () => ({
     );
     return res;
   },
-  totalSavedData: async (db) => {
-    const res = await sql.executeQuery(
-      db,
-      'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ?',
-      [0],
+  totalSavedData: async (db, formDBId, uuid = null) => {
+    if (uuid) {
+      const res = await db.getFirstAsync(
+        'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ? AND form = ? AND uuid = ?',
+        0,
+        formDBId,
+        uuid,
+      );
+      return res?.total || 0;
+    }
+    const res = await db.getFirstAsync(
+      'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ? AND form = ?',
+      0,
+      formDBId,
     );
-    return res[0]?.total || 0;
-  }
+    return res?.total || 0;
+  },
 });
 
 const crudDataPoints = dataPointsQuery();

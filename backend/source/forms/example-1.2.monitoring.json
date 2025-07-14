@@ -1,0 +1,41 @@
+{
+  "id": 10002,
+  "form": "Test Form Monitoring 2",
+  "version": 1,
+  "parent_id": 1,
+  "type": 2,
+  "description": "Test Form Monitoring 2",
+  "question_groups": [
+    {
+      "id": 10022,
+      "order": 1,
+      "name": "question_group_01",
+      "label": "Question Group 01",
+      "questions": [
+        {
+          "id": 10121,
+          "order": 1,
+          "name": "monitoring_date",
+          "label": "Monitoring Date",
+          "short_label": null,
+          "meta": false,
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": 10122,
+          "order": 2,
+          "name": "decimal",
+          "label": "Allow decimal and 0",
+          "short_label": "Decimal and 0",
+          "meta": false,
+          "type": "number",
+          "required": false,
+          "rule": {
+            "allowDecimal": true
+          }
+        }
+      ]
+    }
+  ]
+}

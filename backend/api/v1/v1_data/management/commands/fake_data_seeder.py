@@ -104,7 +104,7 @@ class Command(BaseCommand):
                     data.is_pending = True
                     data.save()
                     pending.append(data)
-                if not draft and not data.has_approval:
+                if not draft and not data.has_approval and not test:
                     data.save_to_file
                 if draft:
                     data.mark_as_draft()

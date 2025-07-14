@@ -68,7 +68,7 @@ export const downloadDatapointsJson = async (
           repeatIndex += 1;
         }
       });
-      const isExists = await crudDataPoints.getByUUID(db, { uuid });
+      const isExists = await crudDataPoints.getByUUID(db, { uuid, form: form?.id });
       if (isExists) {
         await crudDataPoints.updateByUUID(db, {
           uuid,
@@ -76,7 +76,9 @@ export const downloadDatapointsJson = async (
           syncedAt: lastUpdated,
           repeats: JSON.stringify(repeats),
         });
-      } else {
+      }
+
+      if (!isExists && dpID && name?.trim()?.length) {
         await crudDataPoints.deleteById(db, { id: dpID });
         await crudDataPoints.saveDataPoint(db, {
           uuid,

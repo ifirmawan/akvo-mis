@@ -198,7 +198,9 @@ const SyncService = () => {
                 repeats: JSON.stringify(repeats),
                 submitted: 0,
               });
-            } else {
+            }
+            if (!isExists && d?.id && name?.trim()?.length) {
+              // If the draft does not exist, create a new one
               const form = await crudForms.getByFormId(db, { formId });
               await crudDataPoints.saveDataPoint(db, {
                 ...d,

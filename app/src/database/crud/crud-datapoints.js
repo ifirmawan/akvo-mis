@@ -139,7 +139,7 @@ const dataPointsQuery = () => ({
   deleteDraftIdIsNull: async (db) => {
     const res = await sql.executeQuery(
       db,
-      'DELETE FROM datapoints WHERE submitted = ? AND draftId IS NULL',
+      'DELETE FROM datapoints WHERE submitted = ? AND draftId IS NULL AND syncedAt IS NOT NULL',
       [0],
     );
     return res;
@@ -155,8 +155,9 @@ const dataPointsQuery = () => ({
     );
     return res;
   },
-  getByUUID: async (db, { uuid }) => {
-    const res = await sql.getFirstRow(db, 'datapoints', { uuid });
+  getByUUID: async (db, { uuid, form }) => {
+    const formVal = form ? { form } : {};
+    const res = await sql.getFirstRow(db, 'datapoints', { uuid, ...formVal });
     return res;
   },
   updateByUUID: async (db, { uuid, json, syncedAt, repeats }) => {

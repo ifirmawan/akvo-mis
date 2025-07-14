@@ -535,7 +535,8 @@ class PendingFormDataView(APIView):
             form_id__in=form_ids,
             created_by=request.user,
             data_batch_list__isnull=True,
-            is_pending=True
+            is_pending=True,
+            is_draft=False,
         ).order_by("-created")
 
         paginator = PageNumberPagination()

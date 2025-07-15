@@ -416,7 +416,6 @@ class ListPendingDataAnswerSerializer(serializers.ModelSerializer):
     history = serializers.SerializerMethodField()
     value = serializers.SerializerMethodField()
     last_value = serializers.SerializerMethodField()
-    overview = serializers.SerializerMethodField()
 
     @extend_schema_field(AnswerHistorySerializer(many=True))
     def get_history(self, instance):
@@ -465,24 +464,6 @@ class ListPendingDataAnswerSerializer(serializers.ModelSerializer):
                 return get_answer_value(answer=answer)
         return None
 
-    @extend_schema_field(OpenApiTypes.ANY)
-    def get_overview(self, instance: Answers):
-        parent_data = instance.data.parent
-        if (
-            not parent_data or
-            instance.question.type != QuestionTypes.number
-        ):
-            return None
-        last_approved = parent_data.children.filter(
-            is_pending=False,
-            is_draft=False,
-        ).last().data_answer.filter(
-            question=instance.question,
-            index=instance.index,
-        ).first()
-        return [last_approved.value, instance.value] \
-            if last_approved else None
-
     class Meta:
         model = Answers
         fields = [
@@ -491,7 +472,6 @@ class ListPendingDataAnswerSerializer(serializers.ModelSerializer):
             "value",
             "last_value",
             "index",
-            "overview",
         ]
 
 

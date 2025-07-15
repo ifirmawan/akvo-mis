@@ -9,7 +9,7 @@ from api.v1.v1_data.functions import add_fake_answers
 
 
 @override_settings(USE_TZ=False)
-class PendingDataNumberOverviewTestCase(TestCase, ProfileTestHelperMixin):
+class PendingDataDetailsTestCase(TestCase, ProfileTestHelperMixin):
 
     def setUp(self):
         call_command("administration_seeder", "--test")
@@ -130,7 +130,6 @@ class PendingDataNumberOverviewTestCase(TestCase, ProfileTestHelperMixin):
                 "value",
                 "last_value",
                 "index",
-                "overview",
             ],
         )
         # find question 10121 in the response
@@ -140,19 +139,12 @@ class PendingDataNumberOverviewTestCase(TestCase, ProfileTestHelperMixin):
         self.assertIsNotNone(question_10121)
         self.assertEqual(question_10121["value"], "2025-07-14")
 
-        # Verify question 10121 does not have an overview value
-        self.assertIsNone(question_10121.get("overview"))
-
         # find question 10122 in the response
         question_10122 = next(
             (item for item in data if item["question"] == 10122), None
         )
         self.assertIsNotNone(question_10122)
         self.assertEqual(question_10122["value"], 99.2)
-
-        # Verify question 10122 has an overview value
-        self.assertIsNotNone(question_10122["overview"])
-        self.assertIn(99.2, question_10122["overview"])
 
     def test_get_pending_data_with_invalid_id(self):
         # Attempt to get pending data with an invalid ID

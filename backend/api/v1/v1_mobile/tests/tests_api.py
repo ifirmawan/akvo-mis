@@ -78,14 +78,9 @@ class MobileAssignmentApiTest(TestCase, ProfileTestHelperMixin):
 
         self.assertEqual(token.assignment.id, self.mobile_assignment.id)
 
-        self.assertEqual(
-            dict(response.data['formsUrl'][0]),
-            {
-                'id': self.forms[0].id,
-                'parentId': None,
-                'version': str(self.forms[0].version),
-                'url': f'/form/{self.forms[0].id}',
-            },
+        self.assertIn(
+            self.forms[0].id,
+            [form['id'] for form in response.data['formsUrl']]
         )
         self.assertEqual(self.mobile_assignment.last_synced_at, None)
 

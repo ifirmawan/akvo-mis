@@ -113,8 +113,8 @@ class MobileAssignmentApiDraftListTest(
                 "data",
             ]
         )
-        # 3 parent forms + 3 child forms
-        self.assertEqual(res_json["total"], 6)
+        # 3 parent forms + 3 x 2 child forms = 9 total forms
+        self.assertEqual(res_json["total"], 9)
         self.assertEqual(
             list(res_json["data"][0]),
             [

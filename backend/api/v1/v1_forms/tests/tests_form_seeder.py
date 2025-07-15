@@ -237,5 +237,5 @@ class FormSeederTestCase(TestCase):
 
         self.assertEqual(form_1.name, "Test Form")
         self.assertEqual(form_2.name, "Test Form 2")
-        self.assertEqual(form_1.children.count(), 1)
+        self.assertEqual(form_1.children.count(), 2)
         self.assertEqual(form_2.children.count(), 0)

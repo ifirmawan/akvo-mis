@@ -97,12 +97,13 @@ class FormData(SoftDeletes, Draft):
         # If the data is a child of another form, do not save to file
         if self.form.parent:
             return None
+        admin_id = self.administration_id
+        if isinstance(admin_id, Administration):
+            admin_id = admin_id.id
         data = {
             "id": self.id,
             "datapoint_name": self.name,
-            "administration": (
-                self.administration.id if self.administration else None
-            ),
+            "administration": admin_id,
             "uuid": str(self.uuid),
             "geolocation": self.geo,
         }
@@ -129,10 +130,18 @@ class FormData(SoftDeletes, Draft):
 
     @property
     def has_approval(self):
-        administrations = [self.administration]
-        if self.administration.parent:
-            ancestors = self.administration.ancestors.all()
-            administrations = list(ancestors) + [self.administration]
+        # Use administration_id to avoid lazy loading issues with draft manager
+        # Get the actual ID value, not the related object
+        admin_id = self.administration_id
+        if isinstance(admin_id, Administration):
+            admin_id = admin_id.id
+        administration = Administration.objects.select_related('parent').get(
+            id=admin_id
+        )
+        administrations = [administration]
+        if administration.parent:
+            ancestors = administration.ancestors.all()
+            administrations = list(ancestors) + [administration]
         # Check if there are any user roles with approve access
         # for this form and administration
         forms = [self.form]

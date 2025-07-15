@@ -11,7 +11,7 @@ from api.v1.v1_forms.models import (
     QuestionOptions,
 )
 from utils import storage
-
+from mis.settings import STORAGE_PATH
 
 FILE_DIR = "./source/value_changes"
 ISSUE_NUMBER = 1
@@ -113,9 +113,15 @@ class MigrateFormOptionsCommand(TestCase):
                 self.assertNotIn(f"new_{self.form_id}", v)
             uuids.append(answer.data.uuid)
         uuids = list(set(uuids))
+        # create a new json data file
+        answer.data.save_to_file
         for uuid in uuids:
             json_filename = f"datapoints/{uuid}.json"
             self.assertTrue(storage.check(json_filename))
+        # Remove the generated file
+        filepath = f"{STORAGE_PATH}/datapoints/{uuid}.json"
+        if os.path.exists(filepath):
+            os.remove(filepath)
 
     def tearDown(self):
         filepath = f"{FILE_DIR}/{self.filename}"

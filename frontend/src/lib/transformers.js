@@ -20,14 +20,15 @@ export const transformRawData = (questionGroups = [], answers = []) => {
             const findOldValue = answers.find(
               (d) => d.question === q.id && d.index === i
             )?.last_value;
+            const historyValue =
+              answers.find((d) => d.question === q.id && d.index === i)
+                ?.history || false;
             return {
               ...q,
               value: findValue || findValue === 0 ? findValue : null,
               lastValue:
                 findOldValue || findOldValue === 0 ? findOldValue : null,
-              history:
-                answers.find((d) => d.question === q.id && d.index === i)
-                  ?.history || false,
+              history: historyValue,
             };
           }),
         }));
@@ -40,13 +41,14 @@ export const transformRawData = (questionGroups = [], answers = []) => {
             const findOldValue = answers.find(
               (d) => d.question === q.id
             )?.last_value;
+            const historyValue =
+              answers.find((d) => d.question === q.id)?.history || false;
             return {
               ...q,
               value: findValue || findValue === 0 ? findValue : null,
               lastValue:
                 findOldValue || findOldValue === 0 ? findOldValue : null,
-              history:
-                answers.find((d) => d.question === q.id)?.history || false,
+              history: historyValue,
             };
           }),
         },

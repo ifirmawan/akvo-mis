@@ -1,3 +1,4 @@
+import os
 from django.test import TestCase
 from api.v1.v1_mobile.tests.mixins import AssignmentTokenTestHelperMixin
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
@@ -11,6 +12,7 @@ from api.v1.v1_forms.models import Forms
 from api.v1.v1_data.models import FormData
 from api.v1.v1_data.functions import add_fake_answers
 from rest_framework import status
+from mis.settings import STORAGE_PATH
 
 
 class MobileAssignmentApiSyncNewDraftTest(
@@ -276,6 +278,92 @@ class MobileAssignmentApiSyncNewDraftTest(
             uuid=self.uuid,
         ).first()
         self.assertIsNotNone(published)
+        direct_to_data = (
+            self.user.is_superuser or
+            not published.has_approval
+        )
+        self.assertFalse(
+            direct_to_data,
+            "Published draft should not be direct to data"
+        )
+
+    def test_sync_publish_draft_with_generated_json(self):
+        # Create a new superuser
+        superuser = self.create_user(
+            email="super@akvo.org",
+            role_level=self.IS_SUPER_ADMIN,
+        )
+
+        passcode = "super1234"
+        mobile_assignment = MobileAssignment.objects.create_assignment(
+            user=superuser,
+            name="super.mobile",
+            passcode=passcode
+        )
+        mobile_assignment.administrations.add(
+            self.administration
+        )
+        mobile_assignment.forms.add(self.form)
+        super_token = self.get_assignmen_token(passcode)
+
+        # Create an initial draft submission
+        draft = FormData.objects.create(
+            form=self.form,
+            name="Initial Draft",
+            duration=1000,
+            geo=self.geo,
+            uuid=self.uuid,
+            created_by=superuser,
+            administration=self.administration,
+        )
+        draft.mark_as_draft()
+
+        add_fake_answers(draft)
+
+        draft.refresh_from_db()
+
+        payload = {
+            "formId": self.form.id,
+            "name": "Update Draft #1",
+            "duration": 3500,
+            "submittedAt": "2025-07-03T00:00:00.000Z",
+            "geo": self.geo,
+            "uuid": self.uuid,
+            "answers": {
+                101: "Jane Update",
+                102: ["female"],
+                103: 616161,
+                104: self.administration.id,
+                105: self.geo,
+                106: ["children"],
+                107: "http://example.com/image.jpg",
+                108: "2025-07-15T00:00:00.000Z",
+                114: ["no"],
+            },
+        }
+
+        response = self.client.post(
+            f"/api/v1/device/sync?id={draft.id}&is_published=true",
+            payload,
+            content_type="application/json",
+            **{"HTTP_AUTHORIZATION": f"Bearer {super_token}"},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        published = FormData.objects.filter(
+            form=self.form,
+            uuid=self.uuid,
+        ).first()
+        self.assertIsNotNone(published)
+
+        self.assertTrue(
+            os.path.exists(
+                f"{STORAGE_PATH}/datapoints/{published.uuid}.json"
+            ),
+            "File not exists"
+        )
+        os.remove(f"{STORAGE_PATH}/datapoints/{published.uuid}.json")
 
     def test_sync_new_draft_with_invalid_data(self):
         """

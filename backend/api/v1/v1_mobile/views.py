@@ -263,6 +263,10 @@ def sync_pending_form_data(request, version):
     is_published = True if is_published in ["true", "True", "1"] else False
     if is_published and draft_exists:
         draft_exists.publish()
+        direct_to_data = user.is_superuser or not draft_exists.has_approval
+        if direct_to_data and not draft_exists.parent:
+            draft_exists.save_to_file
+
     return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 

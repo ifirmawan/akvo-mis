@@ -466,7 +466,13 @@ class ListPendingDataAnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answers
-        fields = ["history", "question", "value", "last_value", "index"]
+        fields = [
+            "history",
+            "question",
+            "value",
+            "last_value",
+            "index",
+        ]
 
 
 class ParentFormDataSerializer(serializers.ModelSerializer):

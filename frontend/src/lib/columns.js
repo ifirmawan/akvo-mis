@@ -1,5 +1,4 @@
-import { Row, Col, Tag, Popover } from "antd";
-import { Link } from "react-router-dom";
+import { Row, Col, Tag, Popover, Button } from "antd";
 import {
   FileTextFilled,
   InfoCircleOutlined,
@@ -7,6 +6,7 @@ import {
   CloseCircleOutlined,
   ClockCircleOutlined,
   ExclamationCircleOutlined,
+  CheckCircleFilled,
 } from "@ant-design/icons";
 
 export const columnsBatch = [
@@ -128,28 +128,25 @@ export const columnsPending = [
     title: "Name",
     dataIndex: "name",
     key: "name",
-    render: (name, row) => (
-      <div>
-        <div style={{ marginBottom: 8 }}>{name}</div>
-        {row?.parent?.id && (
-          <div>
-            {row.parent.is_pending ? (
-              <Tag color="purple" className="label">
-                {row?.parent?.name}
-              </Tag>
-            ) : (
-              <Link
-                to={`/control-center/data/${row.parent.form}/monitoring/${row.parent.id}`}
-              >
-                <Tag color="purple" className="label">
-                  {row?.parent?.name}
-                </Tag>
-              </Link>
-            )}
-          </div>
-        )}
-      </div>
-    ),
+    render: (name, row) =>
+      row?.parent ? (
+        row.parent.is_pending ? (
+          <div>{row.parent.name}</div>
+        ) : (
+          <Button
+            type="link"
+            href={`/control-center/data/${row.parent.form}/monitoring/${row.parent.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            icon={<CheckCircleFilled />}
+            style={{ padding: 0, marginLeft: 8, color: "#52c41a" }}
+          >
+            {row?.parent?.name}
+          </Button>
+        )
+      ) : (
+        <div>{name}</div>
+      ),
   },
   {
     title: "Administration",
@@ -200,28 +197,25 @@ export const columnsRawData = [
     title: "Name",
     dataIndex: "name",
     key: "name",
-    render: (name, row) => (
-      <div>
-        <div style={{ marginBottom: 8 }}>{name}</div>
-        {row?.parent?.id && (
-          <div>
-            {row.parent.is_pending ? (
-              <Tag color="purple" className="label">
-                {row?.parent?.name}
-              </Tag>
-            ) : (
-              <Link
-                to={`/control-center/data/${row.parent.form}/monitoring/${row.parent.id}`}
-              >
-                <Tag color="purple" className="label">
-                  {row?.parent?.name}
-                </Tag>
-              </Link>
-            )}
-          </div>
-        )}
-      </div>
-    ),
+    render: (name, row) =>
+      row?.parent ? (
+        row.parent.is_pending ? (
+          <div>{row.parent.name}</div>
+        ) : (
+          <Button
+            type="link"
+            href={`/control-center/data/${row.parent.form}/monitoring/${row.parent.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            icon={<CheckCircleFilled />}
+            style={{ padding: 0, marginLeft: 8, color: "#52c41a" }}
+          >
+            {row?.parent?.name}
+          </Button>
+        )
+      ) : (
+        <div>{name}</div>
+      ),
   },
   {
     title: "Administration",

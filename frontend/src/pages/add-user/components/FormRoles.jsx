@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Space, Select, Button, Row, Col } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { AdministrationDropdown } from "../../../components";
+import AdministrationInput from "./AdministrationInput";
 
 const FormRoles = ({ form, text, roles = [], disabled = false }) => {
   return (
@@ -76,17 +76,9 @@ const FormRoles = ({ form, text, roles = [], disabled = false }) => {
                       )}
                     </Form.Item>
                     <Form.Item {...field} name={[field.name, "administration"]}>
-                      <AdministrationDropdown
-                        withLabel={false}
-                        persist={true}
-                        size="large"
+                      <AdministrationInput
                         width="100%"
                         maxLevel={maxLevel}
-                        selectedAdministrations={form.getFieldValue([
-                          "roles",
-                          field.name,
-                          "administration",
-                        ])}
                         disabled={disabled}
                       />
                     </Form.Item>
@@ -103,7 +95,21 @@ const FormRoles = ({ form, text, roles = [], disabled = false }) => {
           <Form.Item>
             <Button
               type="dashed"
-              onClick={() => add()}
+              onClick={() => {
+                // Get the administration from the last item if it exists
+                const lastIndex = fields.length - 1;
+                const lastItemAdministration =
+                  lastIndex >= 0
+                    ? form.getFieldValue(["roles", lastIndex, "administration"])
+                    : null;
+                if (lastItemAdministration) {
+                  // Add new item with default administration from previous item
+                  add({ administration: lastItemAdministration });
+                } else {
+                  // If no previous item, just add a new empty item
+                  add();
+                }
+              }}
               icon={<PlusOutlined />}
               disabled={disabled}
               block

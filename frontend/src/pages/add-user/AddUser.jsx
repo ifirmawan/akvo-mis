@@ -85,7 +85,9 @@ const AddUser = () => {
       ...values,
       roles: (values.roles || []).map((r) => ({
         role: r.role,
-        administration: takeRight(r.administration, 1)?.[0] || nationalAdm?.id,
+        administration: Array.isArray(r.administration)
+          ? takeRight(r.administration, 1)?.[0] || nationalAdm?.id
+          : r.administration || nationalAdm?.id,
       })),
     };
     api[id ? "put" : "post"](id ? `user/${id}` : "user", payload)
@@ -198,7 +200,13 @@ const AddUser = () => {
       </div>
       <div className="table-section">
         <div className="table-wrapper">
-          <Spin tip={text.loadingText} spinning={loading}>
+          {loading ? (
+            <Row justify="center" align="middle" style={{ minHeight: 400 }}>
+              <Col>
+                <Spin tip={text.loadingText} spinning />
+              </Col>
+            </Row>
+          ) : (
             <Form
               name="adm-form"
               form={form}
@@ -402,7 +410,7 @@ const AddUser = () => {
                 </>
               )}
             </Form>
-          </Spin>
+          )}
         </div>
       </div>
 

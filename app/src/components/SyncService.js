@@ -189,7 +189,7 @@ const SyncService = () => {
             ...d
           }) => {
             const isExists = await crudDataPoints.getByDraftId(db, { draftId: d.id });
-            if (isExists) {
+            if (isExists && isExists?.syncedAt) {
               // If the draft already exists, update it
               await crudDataPoints.updateDataPoint(db, {
                 ...d,
@@ -197,6 +197,7 @@ const SyncService = () => {
                 geo,
                 repeats: JSON.stringify(repeats),
                 submitted: 0,
+                syncedAt: new Date().toISOString(),
               });
             }
             if (!isExists && d?.id && name?.trim()?.length) {

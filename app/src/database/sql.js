@@ -29,14 +29,18 @@ const createTable = async (db, table, fields) => {
  * @returns {Promise<void>} A promise that resolves when the row has been updated.
  */
 const updateRow = async (db, table, conditions = { id: 1 }, values = {}) => {
-  const setClause = Object.keys(values)
-    .map((key) => `${key} = ?`)
-    .join(', ');
-  const whereClause = Object.keys(conditions)
-    .map((key) => `${key} = ?`)
-    .join(' AND ');
-  const params = [...Object.values(values), ...Object.values(conditions)];
-  await db.runAsync(`UPDATE ${table} SET ${setClause} WHERE ${whereClause}`, ...params);
+  try {
+    const setClause = Object.keys(values)
+      .map((key) => `${key} = ?`)
+      .join(', ');
+    const whereClause = Object.keys(conditions)
+      .map((key) => `${key} = ?`)
+      .join(' AND ');
+    const params = [...Object.values(values), ...Object.values(conditions)];
+    await db.runAsync(`UPDATE ${table} SET ${setClause} WHERE ${whereClause}`, ...params);
+  } catch (error) {
+    throw new Error(`Error updating row in table ${table}: ${error.message}`);
+  }
 };
 
 /**
@@ -48,7 +52,11 @@ const updateRow = async (db, table, conditions = { id: 1 }, values = {}) => {
  * @returns {Promise<void>} A promise that resolves when the row has been deleted.
  */
 const deleteRow = async (db, table, id) => {
-  await db.runAsync(`DELETE FROM ${table} WHERE id = ?`, id);
+  try {
+    await db.runAsync(`DELETE FROM ${table} WHERE id = ?`, id);
+  } catch (error) {
+    throw new Error(`Error deleting row from table ${table}: ${error.message}`);
+  }
 };
 
 /**
@@ -60,19 +68,24 @@ const deleteRow = async (db, table, id) => {
  * @returns {Promise<Object>} A promise that resolves to the first row in the table.
  */
 const getFirstRow = async (db, table, conditions = {}) => {
-  const whereClause = Object.keys(conditions).length
-    ? Object.keys(conditions)
-        .map((key) => (conditions[key] === null ? `${key} IS NULL` : `${key} = ?`))
-        .join(' AND ')
-    : false;
-  const params = Object.values(conditions);
-  const query = `
-    SELECT * FROM ${table}
-    ${whereClause ? `WHERE ${whereClause}` : ''}
-    LIMIT 1;
-  `;
-  const firstRow = await db.getFirstAsync(query, ...params);
-  return firstRow;
+  try {
+    const whereClause = Object.keys(conditions).length
+      ? Object.keys(conditions)
+          .map((key) => (conditions[key] === null ? `${key} IS NULL` : `${key} = ?`))
+          .join(' AND ')
+      : false;
+    // Filter out null values from params since they're handled with IS NULL
+    const params = Object.values(conditions).filter(val => val !== null);
+    const query = `
+      SELECT * FROM ${table}
+      ${whereClause ? `WHERE ${whereClause}` : ''}
+      LIMIT 1;
+    `;
+    const firstRow = await db.getFirstAsync(query, ...params);
+    return firstRow;
+  } catch (error) {
+    throw new Error(`Error in getFirstRow for table ${table}: ${error.message}`);
+  }
 };
 
 /**
@@ -84,16 +97,20 @@ const getFirstRow = async (db, table, conditions = {}) => {
  * @returns {Promise<void>} A promise that resolves when the row has been inserted.
  */
 const insertRow = async (db, table, values) => {
-  const columns = Object.keys(values).join(', ');
-  const placeholders = Object.keys(values)
-    .map(() => '?')
-    .join(', ');
-  const params = Object.values(values);
-  const res = await db.runAsync(
-    `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`,
-    ...params,
-  );
-  return res?.lastInsertRowId;
+  try {
+    const columns = Object.keys(values).join(', ');
+    const placeholders = Object.keys(values)
+      .map(() => '?')
+      .join(', ');
+    const params = Object.values(values);
+    const res = await db.runAsync(
+      `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`,
+      ...params,
+    );
+    return res?.lastInsertRowId;
+  } catch (error) {
+    throw new Error(`Error inserting row into table ${table}: ${error.message}`);
+  }
 };
 
 /**
@@ -127,19 +144,32 @@ const getFilteredRows = async (
   order = 'ASC',
   collateNoCase = false,
 ) => {
-  const whereClause = Object.keys(conditions)
-    .map((key) => (conditions[key] === null ? `${key} IS NULL` : `${key} = ?`))
-    .join(' AND ');
-  const params = Object.values(conditions);
-  const orderClause = orderBy ? `ORDER BY ${orderBy} ${order}` : '';
-  const collateClause = collateNoCase ? 'COLLATE NOCASE' : '';
-  const query = `
-    SELECT * FROM ${table}
-    WHERE ${whereClause} ${collateClause}
-    ${orderClause};
-  `;
-  const rows = await db.getAllAsync(query, ...params);
-  return rows;
+  try {
+    if (!conditions || Object.keys(conditions).length === 0) {
+      throw new Error('Conditions cannot be empty');
+    }
+    
+    const whereClause = Object.keys(conditions)
+      .map((key) => (conditions[key] === null ? `${key} IS NULL` : `${key} = ?`))
+      .join(' AND ');
+    
+    // Filter out null values from params since they're handled with IS NULL
+    const params = Object.values(conditions).filter(val => val !== null);
+    
+    // Properly format the ORDER BY clause with COLLATE NOCASE if needed
+    let orderClause = '';
+    if (orderBy) {
+      const collateClause = collateNoCase ? ' COLLATE NOCASE' : '';
+      orderClause = `ORDER BY ${orderBy}${collateClause} ${order}`;
+    }
+    
+    const query = `SELECT * FROM ${table} WHERE ${whereClause} ${orderClause}`.trim();
+    
+    const rows = await db.getAllAsync(query, ...params);
+    return rows;
+  } catch (error) {
+    throw new Error(`Error in getFilteredRows for table ${table}: ${error.message}`);
+  }
 };
 
 /**
@@ -151,8 +181,12 @@ const getFilteredRows = async (
  * @returns {Promise<Array>} A promise that resolves to the result of the query.
  */
 const executeQuery = async (db, query, params = []) => {
-  const result = await db.getAllAsync(query, ...params);
-  return result;
+  try {
+    const result = await db.getAllAsync(query, ...params);
+    return result;
+  } catch (error) {
+    throw new Error(`Error executing query: ${error.message}`);
+  }
 };
 
 /**
@@ -248,21 +282,161 @@ const dropColumn = async (db, table, columnName) => {
   }
 
   if (existingColumn) {
-    // SQLite does not support dropping columns directly, so we need to create a new table without the column
-    // and copy the data over
-    const tempTable = `${table}_temp`;
-    await db.execAsync(`CREATE TABLE ${tempTable} AS SELECT * FROM ${table} WHERE 1=0;`);
-    const columns = await db.getAllAsync(`PRAGMA table_info(${table})`);
-    const columnNames = columns
-      .filter((col) => col.name !== columnName)
-      .map((col) => col.name)
-      .join(', ');
-    await db.execAsync(
-      `INSERT INTO ${tempTable} (${columnNames}) SELECT ${columnNames} FROM ${table};`,
-    );
-    await db.execAsync(`DROP TABLE ${table};`);
-    await db.execAsync(`ALTER TABLE ${tempTable} RENAME TO ${table};`);
+    try {
+      // SQLite does not support dropping columns directly, so we need to create a new table without the column
+      // and copy the data over
+      const tempTable = `${table}_temp`;
+      await db.execAsync(`CREATE TABLE ${tempTable} AS SELECT * FROM ${table} WHERE 1=0;`);
+      const columns = await db.getAllAsync(`PRAGMA table_info(${table})`);
+      const columnNames = columns
+        .filter((col) => col.name !== columnName)
+        .map((col) => col.name)
+        .join(', ');
+      await db.execAsync(
+        `INSERT INTO ${tempTable} (${columnNames}) SELECT ${columnNames} FROM ${table};`,
+      );
+      await db.execAsync(`DROP TABLE ${table};`);
+      await db.execAsync(`ALTER TABLE ${tempTable} RENAME TO ${table};`);
+    } catch (error) {
+      throw new Error(`Error dropping column ${columnName} from table ${table}: ${error.message}`);
+    }
   }
+};
+
+/**
+ * Execute a function within a database transaction
+ * @param {Object} db - The database connection object.
+ * @param {Function} fn - The function to execute within the transaction.
+ * @returns {Promise<any>} The result of the function execution.
+ */
+const withTransaction = async (db, fn) => {
+  try {
+    await db.execAsync('BEGIN TRANSACTION');
+    const result = await fn(db);
+    await db.execAsync('COMMIT');
+    return result;
+  } catch (error) {
+    await db.execAsync('ROLLBACK');
+    throw new Error(`Transaction failed: ${error.message}`);
+  }
+};
+
+/**
+ * Safely execute a query with proper error handling and parameter validation
+ * @param {Object} db - The database connection object.
+ * @param {string} query - The SQL query to execute.
+ * @param {Array} params - The parameters for the query.
+ * @param {string} operation - Description of the operation for error messages.
+ * @returns {Promise<any>} The result of the query execution.
+ */
+const safeExecuteQuery = async (db, query, params = [], operation = 'query') => {
+  try {
+    // Validate that we have the right number of parameters
+    const paramCount = (query.match(/\?/g) || []).length;
+    if (params.length !== paramCount) {
+      throw new Error(`Parameter count mismatch: expected ${paramCount}, got ${params.length}`);
+    }
+    
+    const result = await db.getAllAsync(query, ...params);
+    return result;
+  } catch (error) {
+    throw new Error(`Error executing ${operation}: ${error.message}`);
+  }
+};
+
+/**
+ * Safely get first row with proper error handling
+ * @param {Object} db - The database connection object.
+ * @param {string} query - The SQL query to execute.
+ * @param {Array} params - The parameters for the query.
+ * @param {string} operation - Description of the operation for error messages.
+ * @returns {Promise<any>} The first row result.
+ */
+const safeGetFirstRow = async (db, query, params = [], operation = 'query') => {
+  try {
+    const paramCount = (query.match(/\?/g) || []).length;
+    if (params.length !== paramCount) {
+      throw new Error(`Parameter count mismatch: expected ${paramCount}, got ${params.length}`);
+    }
+    
+    const result = await db.getFirstAsync(query, ...params);
+    return result;
+  } catch (error) {
+    throw new Error(`Error executing ${operation}: ${error.message}`);
+  }
+};
+
+/**
+ * Execute multiple queries in a single transaction for better performance and consistency
+ * @param {Object} db - The database connection object.
+ * @param {Array} queries - Array of query objects with {query, params} structure.
+ * @param {string} operation - Description of the batch operation.
+ * @returns {Promise<Array>} Array of results from each query.
+ */
+const executeBatch = async (db, queries, operation = 'batch operation') => 
+  withTransaction(db, async (transactionDb) => {
+    const executeQueryInBatch = async (queryObj) => {
+      const { query, params = [] } = queryObj;
+      try {
+        return await safeExecuteQuery(transactionDb, query, params, operation);
+      } catch (error) {
+        throw new Error(`Error in ${operation} - Query: ${query.substring(0, 50)}...: ${error.message}`);
+      }
+    };
+    
+    return Promise.all(queries.map(executeQueryInBatch));
+  });
+
+/**
+ * Safely execute multiple inserts with proper error handling
+ * @param {Object} db - The database connection object.
+ * @param {string} table - The table name.
+ * @param {Array} records - Array of record objects to insert.
+ * @returns {Promise<Array>} Array of inserted row IDs.
+ */
+const bulkInsert = async (db, table, records) => {
+  if (!records || records.length === 0) {
+    return [];
+  }
+
+  return withTransaction(db, async (transactionDb) => {
+    const insertRecord = async (record) => {
+      try {
+        return await insertRow(transactionDb, table, record);
+      } catch (error) {
+        throw new Error(`Error in bulkInsert for table ${table}: ${error.message}`);
+      }
+    };
+    
+    return Promise.all(records.map(insertRecord));
+  });
+};
+
+/**
+ * Test query generation for debugging purposes
+ * @param {string} table - The table name
+ * @param {Object} conditions - The conditions object
+ * @param {string} orderBy - The column to order by
+ * @param {string} order - The order direction
+ * @param {boolean} collateNoCase - Whether to use COLLATE NOCASE
+ * @returns {Object} The generated query and parameters
+ */
+const testQueryGeneration = (table, conditions, orderBy = null, order = 'ASC', collateNoCase = false) => {
+  const whereClause = Object.keys(conditions)
+    .map((key) => (conditions[key] === null ? `${key} IS NULL` : `${key} = ?`))
+    .join(' AND ');
+  
+  const params = Object.values(conditions).filter(val => val !== null);
+  
+  let orderClause = '';
+  if (orderBy) {
+    const collateClause = collateNoCase ? ' COLLATE NOCASE' : '';
+    orderClause = `ORDER BY ${orderBy}${collateClause} ${order}`;
+  }
+  
+  const query = `SELECT * FROM ${table} WHERE ${whereClause} ${orderClause}`.trim();
+  
+  return { query, params };
 };
 
 const sql = {
@@ -278,6 +452,12 @@ const sql = {
   truncateTable,
   addNewColumn,
   dropColumn,
+  withTransaction,
+  safeExecuteQuery,
+  safeGetFirstRow,
+  executeBatch,
+  bulkInsert,
+  testQueryGeneration,
 };
 
 export default sql;

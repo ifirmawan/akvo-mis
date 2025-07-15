@@ -22,7 +22,7 @@ const dataPointsQuery = () => ({
     const uuidVal = uuid ? { uuid } : {};
     const userVal = user ? { user } : {};
     const columns = { form, submitted, ...userVal, ...uuidVal };
-    const rows = sql.getFilteredRows(db, 'datapoints', { ...columns }, 'id', 'DESC', true);
+    const rows = await sql.getFilteredRows(db, 'datapoints', { ...columns }, 'id', 'DESC', true);
     return rows;
   },
   selectSubmissionToSync: async (db) => {
@@ -90,6 +90,7 @@ const dataPointsQuery = () => ({
   ) => {
     const repeatsVal = repeats ? { repeats } : {};
     const submittedVal = submitted !== undefined ? { submitted } : {};
+    const syncedAtVal = syncedAt ? { syncedAt } : {};
     const res = await sql.updateRow(
       db,
       'datapoints',
@@ -103,6 +104,7 @@ const dataPointsQuery = () => ({
         json: json ? JSON.stringify(json).replace(/'/g, "''") : null,
         ...submittedVal,
         ...repeatsVal,
+        ...syncedAtVal,
       },
     );
     return res;
@@ -119,10 +121,11 @@ const dataPointsQuery = () => ({
     return res;
   },
   getDraftPendingSync: async (db) => {
-    const rows = await sql.executeQuery(
+    const rows = await sql.safeExecuteQuery(
       db,
-      `SELECT * FROM datapoints WHERE submitted = ? AND draftId IS NULL OR syncedAt IS NOT NULL`,
+      `SELECT * FROM datapoints WHERE (submitted = ? AND draftId IS NULL) OR syncedAt IS NOT NULL`,
       [0],
+      'getDraftPendingSync',
     );
     return rows;
   },
@@ -137,21 +140,24 @@ const dataPointsQuery = () => ({
     };
   },
   deleteDraftIdIsNull: async (db) => {
-    const res = await sql.executeQuery(
+    const res = await sql.safeExecuteQuery(
       db,
       'DELETE FROM datapoints WHERE submitted = ? AND draftId IS NULL AND syncedAt IS NOT NULL',
       [0],
+      'deleteDraftIdIsNull',
     );
     return res;
   },
   deleteById: async (db, { id }) => {
-    const res = await sql.deleteRow(db, 'datapoints', { id });
+    const res = await sql.deleteRow(db, 'datapoints', id);
     return res;
   },
   deleteDraftSynced: async (db) => {
-    const res = await sql.executeQuery(
+    const res = await sql.safeExecuteQuery(
       db,
       'DELETE FROM datapoints WHERE draftId IS NOT NULL AND syncedAt IS NOT NULL',
+      [],
+      'deleteDraftSynced',
     );
     return res;
   },
@@ -178,21 +184,118 @@ const dataPointsQuery = () => ({
     return res;
   },
   totalSavedData: async (db, formDBId, uuid = null) => {
-    if (uuid) {
-      const res = await db.getFirstAsync(
-        'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ? AND form = ? AND uuid = ?',
-        0,
-        formDBId,
-        uuid,
+    try {
+      if (uuid) {
+        const res = await sql.safeGetFirstRow(
+          db,
+          'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ? AND form = ? AND uuid = ?',
+          [0, formDBId, uuid],
+          'totalSavedData with uuid',
+        );
+        return res?.total || 0;
+      }
+      const res = await sql.safeGetFirstRow(
+        db,
+        'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ? AND form = ?',
+        [0, formDBId],
+        'totalSavedData without uuid',
       );
       return res?.total || 0;
+    } catch (error) {
+      throw new Error(`Error in totalSavedData: ${error.message}`);
     }
-    const res = await db.getFirstAsync(
-      'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ? AND form = ?',
-      0,
-      formDBId,
-    );
-    return res?.total || 0;
+  },
+  /**
+   * Upsert a datapoint - update if exists, insert if not
+   * @param {Object} db - Database instance
+   * @param {Object} data - Datapoint data
+   * @returns {Promise<number>} - The ID of the inserted/updated datapoint
+   */
+  upsertDataPoint: async (db, data) => {
+    try {
+      const { id, ...dataWithoutId } = data;
+
+      if (id) {
+        // Check if datapoint with this ID exists
+        const existing = await crudDataPoints.selectDataPointById(db, { id });
+
+        if (existing) {
+          // Update existing datapoint
+          await crudDataPoints.updateDataPoint(db, { id, ...dataWithoutId });
+          return id;
+        }
+
+        // Insert with specific ID
+        try {
+          return await sql.insertRow(db, 'datapoints', data);
+        } catch (error) {
+          if (error.message.includes('UNIQUE constraint failed')) {
+            // If ID conflict, insert without ID (auto-generate)
+            return sql.insertRow(db, 'datapoints', dataWithoutId);
+          }
+          throw error;
+        }
+      }
+
+      // No ID specified, just insert
+      return sql.insertRow(db, 'datapoints', dataWithoutId);
+    } catch (error) {
+      throw new Error(`Error in upsertDataPoint: ${error.message}`);
+    }
+  },
+  /**
+   * Check for and resolve datapoint ID conflicts
+   * @param {Object} db - Database instance
+   * @returns {Promise<number>} - Number of conflicts resolved
+   */
+  resolveDatapointIdConflicts: async (db) => {
+    try {
+      // Find duplicate IDs that might cause conflicts
+      const duplicates = await sql.executeQuery(
+        db,
+        `SELECT id, COUNT(*) as count FROM datapoints 
+         GROUP BY id 
+         HAVING COUNT(*) > 1`,
+        [],
+      );
+
+      if (duplicates.length === 0) {
+        return 0;
+      }
+
+      const resolveConflict = async (duplicate) => {
+        // Get all datapoints with this ID
+        const conflictingRows = await sql.executeQuery(
+          db,
+          `SELECT * FROM datapoints WHERE id = ? ORDER BY createdAt DESC`,
+          [duplicate.id],
+        );
+
+        if (conflictingRows.length > 1) {
+          // Keep the most recent one, update others to have new IDs
+          const [, ...updateRows] = conflictingRows;
+
+          const resolveRow = async (row) => {
+            // Create new record without ID (auto-generate)
+            const { id: _, ...dataWithoutId } = row;
+            await sql.insertRow(db, 'datapoints', dataWithoutId);
+
+            // Delete the old conflicting record
+            await sql.deleteRow(db, 'datapoints', row.id);
+            return 1;
+          };
+
+          const results = await Promise.all(updateRows.map(resolveRow));
+          return results.reduce((sum, count) => sum + count, 0);
+        }
+        return 0;
+      };
+
+      const results = await Promise.all(duplicates.map(resolveConflict));
+      return results.reduce((sum, count) => sum + count, 0);
+    } catch (error) {
+      throw new Error(`Error resolving datapoint ID conflicts: ${error.message}`);
+    }
   },
 });
 

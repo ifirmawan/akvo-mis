@@ -1,4 +1,5 @@
 import { crudDataPoints, crudForms } from '../database/crud';
+import sql from '../database/sql';
 import { DatapointSyncState } from '../store';
 import api from './api';
 
@@ -79,25 +80,43 @@ export const downloadDatapointsJson = async (
       }
 
       if (!isExists && dpID && name?.trim()?.length) {
-        await crudDataPoints.deleteById(db, { id: dpID });
-        await crudDataPoints.saveDataPoint(db, {
-          uuid,
-          user,
-          geo,
-          name,
-          administrationId,
-          form: form?.id,
-          submitted: 1,
-          duration: 0,
-          createdAt: new Date().toISOString(),
-          json: answers,
-          syncedAt: lastUpdated,
-          repeats: JSON.stringify(repeats),
-          id: dpID || null,
+        // Use transaction to ensure atomicity
+        await sql.withTransaction(db, async (transactionDb) => {
+          // Use upsert to handle potential ID conflicts
+          const datapointData = {
+            uuid,
+            user,
+            geo,
+            name,
+            administrationId,
+            form: form?.id,
+            submitted: 1,
+            duration: 0,
+            createdAt: new Date().toISOString(),
+            json: answers,
+            syncedAt: lastUpdated,
+            repeats: JSON.stringify(repeats),
+            id: dpID || null,
+          };
+          
+          try {
+            await crudDataPoints.upsertDataPoint(transactionDb, datapointData);
+          } catch (error) {
+            // If upsert fails, try a simpler approach: delete and insert without ID
+            try {
+              await crudDataPoints.deleteById(transactionDb, { id: dpID });
+              // Insert without ID to avoid conflicts
+              const { id: _, ...dataWithoutId } = datapointData;
+              await crudDataPoints.saveDataPoint(transactionDb, dataWithoutId);
+            } catch (fallbackError) {
+              // If all else fails, just throw the original error
+              throw error;
+            }
+          }
         });
       }
     }
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(`Error downloading datapoint JSON: ${error.message}`);
   }
 };

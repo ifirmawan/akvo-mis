@@ -96,7 +96,7 @@ export const downloadDatapointsJson = async (
             json: answers,
             syncedAt: lastUpdated,
             repeats: JSON.stringify(repeats),
-            id: dpID || null,
+            id: dpID,
           };
           
           try {
@@ -105,9 +105,7 @@ export const downloadDatapointsJson = async (
             // If upsert fails, try a simpler approach: delete and insert without ID
             try {
               await crudDataPoints.deleteById(transactionDb, { id: dpID });
-              // Insert without ID to avoid conflicts
-              const { id: _, ...dataWithoutId } = datapointData;
-              await crudDataPoints.saveDataPoint(transactionDb, dataWithoutId);
+              await crudDataPoints.saveDataPoint(transactionDb, datapointData);
             } catch (fallbackError) {
               // If all else fails, just throw the original error
               throw error;

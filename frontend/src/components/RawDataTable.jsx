@@ -73,8 +73,8 @@ const RawDataTable = ({
               <Sparklines
                 data={overview}
                 limit={4}
-                width={160}
-                height={50}
+                width={45}
+                height={30}
                 margin={4}
               >
                 <SparklinesLine color="blue" />

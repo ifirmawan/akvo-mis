@@ -23,16 +23,12 @@ export const transformRawData = (questionGroups = [], answers = []) => {
             const historyValue =
               answers.find((d) => d.question === q.id && d.index === i)
                 ?.history || false;
-            const overviewValue =
-              answers.find((d) => d.question === q.id && d.index === i)
-                ?.overview || null;
             return {
               ...q,
               value: findValue || findValue === 0 ? findValue : null,
               lastValue:
                 findOldValue || findOldValue === 0 ? findOldValue : null,
               history: historyValue,
-              overview: overviewValue,
             };
           }),
         }));
@@ -47,15 +43,12 @@ export const transformRawData = (questionGroups = [], answers = []) => {
             )?.last_value;
             const historyValue =
               answers.find((d) => d.question === q.id)?.history || false;
-            const overviewValue =
-              answers.find((d) => d.question === q.id)?.overview || null;
             return {
               ...q,
               value: findValue || findValue === 0 ? findValue : null,
               lastValue:
                 findOldValue || findOldValue === 0 ? findOldValue : null,
               history: historyValue,
-              overview: overviewValue,
             };
           }),
         },

@@ -1,11 +1,14 @@
 import React, { useMemo } from "react";
-import { HistoryOutlined } from "@ant-design/icons";
-import { Table } from "antd";
+import {
+  CaretDownOutlined,
+  CaretUpOutlined,
+  HistoryOutlined,
+} from "@ant-design/icons";
+import { Space, Table } from "antd";
 import { isEqual } from "lodash";
-import { Sparklines, SparklinesLine, SparklinesSpots } from "react-sparklines";
 import HistoryTable from "./HistoryTable";
 import EditableCell from "./EditableCell";
-import { store, uiText } from "../lib";
+import { QUESTION_TYPES, store, uiText } from "../lib";
 
 const RawDataTable = ({
   updateCell,
@@ -31,17 +34,38 @@ const RawDataTable = ({
     },
     {
       title: text?.responseCol,
-      render: (row) => (
-        <EditableCell
-          record={row}
-          parentId={expanded.id}
-          updateCell={updateCell}
-          resetCell={resetCell}
-          disabled={!!dataLoading}
-          readonly={!isEditable}
-          resetButton={resetButton}
-        />
-      ),
+      render: (row) => {
+        if (!isEditable && row?.type === QUESTION_TYPES.number) {
+          const diffValue = row?.value - row.lastValue || 0;
+          return (
+            <Space>
+              {diffValue !== 0 && (
+                <span style={{ color: diffValue > 0 ? "green" : "red" }}>
+                  {diffValue > 0 ? <CaretUpOutlined /> : <CaretDownOutlined />}
+                </span>
+              )}
+              <span>{row?.value}</span>
+              {diffValue !== 0 && (
+                <span style={{ color: diffValue > 0 ? "green" : "red" }}>
+                  ({diffValue > 0 ? "+" : ""}
+                  {diffValue})
+                </span>
+              )}
+            </Space>
+          );
+        }
+        return (
+          <EditableCell
+            record={row}
+            parentId={expanded.id}
+            updateCell={updateCell}
+            resetCell={resetCell}
+            disabled={!!dataLoading}
+            readonly={!isEditable}
+            resetButton={resetButton}
+          />
+        );
+      },
       width: "25%",
     },
   ];
@@ -63,24 +87,6 @@ const RawDataTable = ({
             />
           ),
           width: "25%",
-        },
-        {
-          title: "Overview",
-          dataIndex: "overview",
-          key: "overview",
-          render: (overview) =>
-            overview && Array.isArray(overview) ? (
-              <Sparklines
-                data={overview}
-                limit={4}
-                width={45}
-                height={30}
-                margin={4}
-              >
-                <SparklinesLine color="blue" />
-                <SparklinesSpots />
-              </Sparklines>
-            ) : null,
         },
       ]
     : defaultCols;

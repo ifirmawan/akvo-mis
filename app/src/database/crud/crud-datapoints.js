@@ -90,6 +90,7 @@ const dataPointsQuery = () => ({
   ) => {
     const repeatsVal = repeats ? { repeats } : {};
     const submittedVal = submitted !== undefined ? { submitted } : {};
+    const syncedAtVal = syncedAt ? { syncedAt } : {};
     const res = await sql.updateRow(
       db,
       'datapoints',
@@ -103,6 +104,7 @@ const dataPointsQuery = () => ({
         json: json ? JSON.stringify(json).replace(/'/g, "''") : null,
         ...submittedVal,
         ...repeatsVal,
+        ...syncedAtVal,
       },
     );
     return res;
@@ -123,7 +125,7 @@ const dataPointsQuery = () => ({
       db,
       `SELECT * FROM datapoints WHERE (submitted = ? AND draftId IS NULL) OR syncedAt IS NOT NULL`,
       [0],
-      'getDraftPendingSync'
+      'getDraftPendingSync',
     );
     return rows;
   },
@@ -142,7 +144,7 @@ const dataPointsQuery = () => ({
       db,
       'DELETE FROM datapoints WHERE submitted = ? AND draftId IS NULL AND syncedAt IS NOT NULL',
       [0],
-      'deleteDraftIdIsNull'
+      'deleteDraftIdIsNull',
     );
     return res;
   },
@@ -155,7 +157,7 @@ const dataPointsQuery = () => ({
       db,
       'DELETE FROM datapoints WHERE draftId IS NOT NULL AND syncedAt IS NOT NULL',
       [],
-      'deleteDraftSynced'
+      'deleteDraftSynced',
     );
     return res;
   },
@@ -188,7 +190,7 @@ const dataPointsQuery = () => ({
           db,
           'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ? AND form = ? AND uuid = ?',
           [0, formDBId, uuid],
-          'totalSavedData with uuid'
+          'totalSavedData with uuid',
         );
         return res?.total || 0;
       }
@@ -196,7 +198,7 @@ const dataPointsQuery = () => ({
         db,
         'SELECT COUNT(*) AS total FROM datapoints WHERE submitted = ? AND form = ?',
         [0, formDBId],
-        'totalSavedData without uuid'
+        'totalSavedData without uuid',
       );
       return res?.total || 0;
     } catch (error) {
@@ -212,17 +214,17 @@ const dataPointsQuery = () => ({
   upsertDataPoint: async (db, data) => {
     try {
       const { id, ...dataWithoutId } = data;
-      
+
       if (id) {
         // Check if datapoint with this ID exists
         const existing = await crudDataPoints.selectDataPointById(db, { id });
-        
+
         if (existing) {
           // Update existing datapoint
           await crudDataPoints.updateDataPoint(db, { id, ...dataWithoutId });
           return id;
         }
-        
+
         // Insert with specific ID
         try {
           return await sql.insertRow(db, 'datapoints', data);
@@ -234,7 +236,7 @@ const dataPointsQuery = () => ({
           throw error;
         }
       }
-      
+
       // No ID specified, just insert
       return sql.insertRow(db, 'datapoints', dataWithoutId);
     } catch (error) {
@@ -254,41 +256,41 @@ const dataPointsQuery = () => ({
         `SELECT id, COUNT(*) as count FROM datapoints 
          GROUP BY id 
          HAVING COUNT(*) > 1`,
-        []
+        [],
       );
-      
+
       if (duplicates.length === 0) {
         return 0;
       }
-      
+
       const resolveConflict = async (duplicate) => {
         // Get all datapoints with this ID
         const conflictingRows = await sql.executeQuery(
           db,
           `SELECT * FROM datapoints WHERE id = ? ORDER BY createdAt DESC`,
-          [duplicate.id]
+          [duplicate.id],
         );
-        
+
         if (conflictingRows.length > 1) {
           // Keep the most recent one, update others to have new IDs
           const [, ...updateRows] = conflictingRows;
-          
+
           const resolveRow = async (row) => {
             // Create new record without ID (auto-generate)
             const { id: _, ...dataWithoutId } = row;
             await sql.insertRow(db, 'datapoints', dataWithoutId);
-            
+
             // Delete the old conflicting record
             await sql.deleteRow(db, 'datapoints', row.id);
             return 1;
           };
-          
+
           const results = await Promise.all(updateRows.map(resolveRow));
           return results.reduce((sum, count) => sum + count, 0);
         }
         return 0;
       };
-      
+
       const results = await Promise.all(duplicates.map(resolveConflict));
       return results.reduce((sum, count) => sum + count, 0);
     } catch (error) {

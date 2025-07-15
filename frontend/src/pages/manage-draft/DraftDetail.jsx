@@ -20,6 +20,7 @@ const DraftDetail = ({
   record = {},
   childrenForms = [],
   onDelete = () => {},
+  hideCreateDraftMonitoring = true,
 }) => {
   const [dataset, setDataset] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -168,22 +169,24 @@ const DraftDetail = ({
           >
             {text.editAndPublishDraft}
           </Button>
-          {record?.form === selectedForm && childrenForms?.length > 0 && (
-            <Dropdown
-              trigger={["click"]}
-              menu={{
-                items: childrenForms.map((form) => ({
-                  key: form.id,
-                  label: form.name,
-                })),
-                onClick: (e) => addDraftMonitoring(record?.uuid, e.key),
-              }}
-            >
-              <Button shape="round" icon={<FormOutlined />}>
-                {text.createDraftMonitoring}
-              </Button>
-            </Dropdown>
-          )}
+          {record?.form === selectedForm &&
+            childrenForms?.length > 0 &&
+            !hideCreateDraftMonitoring && (
+              <Dropdown
+                trigger={["click"]}
+                menu={{
+                  items: childrenForms.map((form) => ({
+                    key: form.id,
+                    label: form.name,
+                  })),
+                  onClick: (e) => addDraftMonitoring(record?.uuid, e.key),
+                }}
+              >
+                <Button shape="round" icon={<FormOutlined />}>
+                  {text.createDraftMonitoring}
+                </Button>
+              </Dropdown>
+            )}
         </Space>
       </div>
     </div>

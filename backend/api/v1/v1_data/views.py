@@ -40,6 +40,7 @@ from api.v1.v1_data.serializers import (
     SubmitFormDataAnswerSerializer,
     FormDataSerializer,
     FilterDraftFormDataSerializer,
+    GeoLocationListSerializer,
 )
 from api.v1.v1_forms.constants import (
     QuestionTypes
@@ -895,5 +896,29 @@ class PublishDraftFormDataView(APIView):
 
         return Response(
             {"message": "Draft published successfully"},
+            status=status.HTTP_200_OK
+        )
+
+
+class GeolocationListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        responses=GeoLocationListSerializer,
+        tags=["Maps"],
+        summary="To get list of geolocations for a form",
+    )
+    def get(self, request, form_id, version):
+        form = get_object_or_404(Forms, pk=form_id)
+        queryset = form.form_form_data.filter(
+            is_pending=False,
+            is_draft=False,
+            geo__isnull=False
+        ).values(
+            "id", "name", "geo", "administration_id"
+        )
+        serializer = GeoLocationListSerializer(queryset, many=True)
+        return Response(
+            serializer.data,
             status=status.HTTP_200_OK
         )

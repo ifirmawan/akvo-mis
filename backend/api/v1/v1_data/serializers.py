@@ -822,3 +822,12 @@ class DraftFormDataDetailSerializer(serializers.ModelSerializer):
             "geolocation",
             "answers",
         ]
+
+
+class GeoLocationListSerializer(serializers.ModelSerializer):
+    label = CustomCharField(source="name")
+    point = CustomListField(source="geo", read_only=True)
+
+    class Meta:
+        model = FormData
+        fields = ["id", "label", "point", "administration_id"]

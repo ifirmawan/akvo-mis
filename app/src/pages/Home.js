@@ -278,9 +278,12 @@ const Home = ({ navigation, route }) => {
 
   useEffect(() => {
     const unsubsDataSync = DatapointSyncState.subscribe(
-      (s) => s.inProgress,
-      (inProgress) => {
-        if (syncLoading && !inProgress) {
+      ({ inProgress, draftInProgress }) => ({ inProgress, draftInProgress }),
+      ({ inProgress, draftInProgress }) => {
+        if (!syncLoading && (inProgress || draftInProgress)) {
+          setSyncLoading(true);
+        }
+        if (!inProgress && !draftInProgress) {
           setSyncLoading(false);
         }
       },

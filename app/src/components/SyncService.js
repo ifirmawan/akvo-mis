@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import * as Network from 'expo-network';
 import { useSQLiteContext } from 'expo-sqlite';
+import * as Sentry from '@sentry/react-native';
 import { BuildParamsState, DatapointSyncState, UIState, UserState } from '../store';
 import { backgroundTask } from '../lib';
 import crudJobs from '../database/crud/crud-jobs';
@@ -143,7 +144,28 @@ const SyncService = () => {
           }),
         );
 
-        await Promise.all(apiURLs.map((u) => downloadDatapointsJson(db, u, activeJob.user)));
+        // Process all datapoints sequentially without transaction wrapper
+        // Individual datapoint operations will handle their own transactions
+        const processDatapointSequentially = async (urls) => {
+          // Process URLs sequentially using reduce to avoid for...of loop
+          await urls.reduce(async (previousPromise, urlData, index) => {
+            await previousPromise;
+            try {
+              await downloadDatapointsJson(db, urlData, activeJob.user);
+              // Update progress
+              DatapointSyncState.update((s) => {
+                s.progress = ((index + 1) / urls.length) * 100;
+              });
+            } catch (error) {
+              // Continue processing other datapoints even if one fails
+              Sentry.captureMessage(`Error downloading datapoint JSON for URL ${urlData.url}`);
+              Sentry.captureException(error);
+            }
+          }, Promise.resolve());
+        };
+
+        await processDatapointSequentially(apiURLs);
+
         await crudJobs.deleteJob(db, activeJob.id);
 
         DatapointSyncState.update((s) => {
@@ -178,52 +200,74 @@ const SyncService = () => {
     if (allDraftSynced?.length || (allDraftSynced?.length === 0 && isManualSynced)) {
       try {
         await crudDataPoints.deleteDraftSynced(db);
+        DatapointSyncState.update((s) => {
+          s.draftInProgress = true;
+        });
+
         const draftRes = await fetchDraftDatapoints();
-        draftRes.forEach(
-          async ({
+        // Process draft datapoints sequentially without transaction wrapper
+        // Individual operations will handle their own database safety
+        await draftRes.reduce(async (previousPromise, draftData) => {
+          await previousPromise;
+          // Add a small delay to prevent overwhelming the database connection
+          await new Promise((resolve) => {
+            setTimeout(resolve, 1000);
+          });
+
+          const {
             administration: administrationId,
             datapoint_name: name,
             geolocation: geo,
             form: formId,
+            id: draftId,
             repeats,
             ...d
-          }) => {
-            const isExists = await crudDataPoints.getByDraftId(db, { draftId: d.id });
-            if (isExists && isExists?.syncedAt) {
-              // If the draft already exists, update it
-              await crudDataPoints.updateDataPoint(db, {
-                ...d,
-                name,
-                geo,
-                repeats: JSON.stringify(repeats),
-                submitted: 0,
-                syncedAt: new Date().toISOString(),
-              });
-            }
-            if (!isExists && d?.id && name?.trim()?.length) {
-              // If the draft does not exist, create a new one
-              const form = await crudForms.getByFormId(db, { formId });
-              await crudDataPoints.saveDataPoint(db, {
-                ...d,
-                administrationId,
-                name,
-                geo,
-                repeats: JSON.stringify(repeats),
-                form: form.id,
-                submitted: 0,
-                user: userId,
-                draftId: d.id,
-                createdAt: new Date().toISOString(),
-                syncedAt: new Date().toISOString(),
-              });
-            }
-          },
-        );
+          } = draftData;
 
+          // Check if draft already exists by draftId
+          const existingDraft = await crudDataPoints.getByDraftId(db, { draftId });
+
+          if (existingDraft && existingDraft?.syncedAt) {
+            // If the draft already exists, update it
+            await crudDataPoints.updateDataPoint(db, {
+              ...d,
+              id: existingDraft.id,
+              name,
+              geo,
+              repeats: JSON.stringify(repeats),
+              submitted: 0,
+              syncedAt: new Date().toISOString(),
+            });
+          } else {
+            // Get the form for this draft
+            const form = await crudForms.getByFormId(db, { formId });
+            if (!form) {
+              return; // Skip if form not found
+            }
+
+            // Create new draft datapoint without specifying id to avoid conflicts
+            const draftDatapoint = {
+              ...d,
+              administrationId,
+              name,
+              geo,
+              draftId,
+              repeats: JSON.stringify(repeats),
+              form: form.id,
+              submitted: 0,
+              user: userId,
+              createdAt: new Date().toISOString(),
+              syncedAt: new Date().toISOString(),
+            };
+            await crudDataPoints.saveDataPoint(db, draftDatapoint);
+          }
+        }, Promise.resolve());
+
+        // Delete all records with draftId = NULL and syncedAt NOT NULL to prevent duplication
         await crudDataPoints.deleteDraftIdIsNull(db);
 
         DatapointSyncState.update((s) => {
-          s.inProgress = false;
+          s.draftInProgress = false;
         });
 
         UIState.update((s) => {

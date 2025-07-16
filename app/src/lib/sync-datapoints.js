@@ -1,6 +1,6 @@
 import { crudDataPoints, crudForms } from '../database/crud';
-import sql from '../database/sql';
 import { DatapointSyncState } from '../store';
+import sql from '../database/sql';
 import api from './api';
 
 export const fetchDatapoints = async (pageNumber = 1) => {
@@ -39,13 +39,14 @@ export const downloadDatapointsJson = async (
   db,
   { formId, administrationId, url, lastUpdated },
   user,
-) => {
-  try {
+) =>
+  // Wrap the entire operation in a transaction
+  sql.withTransaction(db, async (transactionDb) => {
     const response = await api.get(url);
     if (response.status === 200) {
       const jsonData = response.data;
       const { uuid, datapoint_name: name, geolocation: geo, answers, id: dpID } = jsonData || {};
-      const form = await crudForms.getByFormId(db, { formId });
+      const form = await crudForms.getByFormId(transactionDb, { formId });
       const repeats = {};
       let repeatIndex = 0;
       JSON.parse(form?.json || '{}')?.question_group?.forEach((group) => {
@@ -69,52 +70,35 @@ export const downloadDatapointsJson = async (
           repeatIndex += 1;
         }
       });
-      const isExists = await crudDataPoints.getByUUID(db, { uuid, form: form?.id });
+      const isExists = await crudDataPoints.getByUUID(transactionDb, { uuid, form: form?.id });
       if (isExists) {
-        await crudDataPoints.updateByUUID(db, {
+        await crudDataPoints.updateByUUID(transactionDb, {
           uuid,
           json: answers,
           syncedAt: lastUpdated,
           repeats: JSON.stringify(repeats),
         });
+        return;
       }
 
-      if (!isExists && dpID && name?.trim()?.length) {
-        // Use transaction to ensure atomicity
-        await sql.withTransaction(db, async (transactionDb) => {
-          // Use upsert to handle potential ID conflicts
-          const datapointData = {
-            uuid,
-            user,
-            geo,
-            name,
-            administrationId,
-            form: form?.id,
-            submitted: 1,
-            duration: 0,
-            createdAt: new Date().toISOString(),
-            json: answers,
-            syncedAt: lastUpdated,
-            repeats: JSON.stringify(repeats),
-            id: dpID,
-          };
-          
-          try {
-            await crudDataPoints.upsertDataPoint(transactionDb, datapointData);
-          } catch (error) {
-            // If upsert fails, try a simpler approach: delete and insert without ID
-            try {
-              await crudDataPoints.deleteById(transactionDb, { id: dpID });
-              await crudDataPoints.saveDataPoint(transactionDb, datapointData);
-            } catch (fallbackError) {
-              // If all else fails, just throw the original error
-              throw error;
-            }
-          }
-        });
-      }
+      // Insert new datapoint only if it doesn't exist
+      const datapointData = {
+        uuid,
+        user,
+        geo,
+        name,
+        administrationId,
+        form: form?.id,
+        submitted: 1,
+        duration: 0,
+        createdAt: new Date().toISOString(),
+        json: answers,
+        syncedAt: lastUpdated,
+        repeats: JSON.stringify(repeats),
+        id: dpID,
+      };
+
+      await crudDataPoints.deleteById(transactionDb, { id: dpID });
+      await crudDataPoints.saveDataPoint(transactionDb, datapointData);
     }
-  } catch (error) {
-    throw new Error(`Error downloading datapoint JSON: ${error.message}`);
-  }
-};
+  });

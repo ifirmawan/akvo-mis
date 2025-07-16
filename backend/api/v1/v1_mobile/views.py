@@ -576,7 +576,10 @@ def get_datapoint_download_list(request, version):
             | Q(updated__gte=assignment.last_synced_at)
         )
 
-    queryset = queryset.filter(is_pending=False)
+    queryset = queryset.filter(
+        is_pending=False,
+        is_draft=False,
+    )
     queryset = queryset.values(
         "uuid",
         "id",

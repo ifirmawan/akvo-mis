@@ -33,6 +33,14 @@ const SyncService = () => {
     const pendingToSync = await crudDataPoints.selectSubmissionToSync(db);
     const activeJob = await crudJobs.getActiveJob(db, SYNC_FORM_SUBMISSION_TASK_NAME);
     const settings = await crudConfig.getConfig(db);
+    if (pendingToSync?.length === 0 && activeJob?.id) {
+      /**
+       * If there are no pending items to sync and the job is still active,
+       * delete the job.
+       */
+      await crudJobs.deleteJob(db, activeJob.id);
+      return;
+    }
 
     const { type: networkType } = await Network.getNetworkStateAsync();
     if (settings?.syncWifiOnly && networkType !== Network.NetworkStateType.WIFI) {

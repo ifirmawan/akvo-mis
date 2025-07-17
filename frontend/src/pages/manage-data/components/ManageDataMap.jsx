@@ -16,6 +16,7 @@ const ManageDataMap = () => {
   const [dataset, setDataset] = useState([]);
   const [position, setPosition] = useState(null);
   const selectedForm = store.useState((s) => s.selectedForm);
+  const selectedAdm = store.useState((s) => s.administration);
   const [prevForm, setPrevForm] = useState(selectedForm);
   const { active: activeLang } = store.useState((s) => s.language);
   const text = useMemo(() => {
@@ -23,6 +24,20 @@ const ManageDataMap = () => {
   }, [activeLang]);
 
   const mapInstance = useRef(null);
+
+  const mapStyle = (feature) => {
+    const activeAdm = takeRight(selectedAdm, 1)[0];
+    return {
+      fillColor:
+        feature.properties?.[activeAdm?.level_name] === activeAdm?.name
+          ? "#01137C"
+          : "#D2EDFF",
+      color: "#01137C",
+      weight: 2,
+      opacity: 0.6,
+      fillOpacity: 0.7,
+    };
+  };
 
   const disableScrollWheelZoom = useCallback(() => {
     const map = mapInstance.current?.getMap();
@@ -121,7 +136,7 @@ const ManageDataMap = () => {
                 icon={{
                   className: "custom-marker",
                   iconSize: [32, 32],
-                  html: `<span style="background-color:#febc11; border:2px solid #fff;"/>`,
+                  html: `<span style="background-color:#64A73B; border:2px solid #fff;"/>`,
                 }}
               >
                 <Button
@@ -143,6 +158,7 @@ const ManageDataMap = () => {
               onClick={({ target }) => {
                 mapInstance.current?.getMap()?.fitBounds(target._bounds);
               }}
+              style={mapStyle}
             />
           ))}
         </Map.Container>

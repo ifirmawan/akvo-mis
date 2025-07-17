@@ -41,6 +41,7 @@ from api.v1.v1_data.serializers import (
     FormDataSerializer,
     FilterDraftFormDataSerializer,
     GeoLocationListSerializer,
+    GeoLocationFilterSerializer,
 )
 from api.v1.v1_forms.constants import (
     QuestionTypes
@@ -905,16 +906,43 @@ class GeolocationListView(APIView):
 
     @extend_schema(
         responses=GeoLocationListSerializer,
+        parameters=[
+            OpenApiParameter(
+                name="administration",
+                required=False,
+                type=OpenApiTypes.NUMBER,
+                location=OpenApiParameter.QUERY,
+            ),
+        ],
         tags=["Maps"],
         summary="To get list of geolocations for a form",
     )
     def get(self, request, form_id, version):
+        serializer = GeoLocationFilterSerializer(
+            data=request.GET, context={"form_id": form_id}
+        )
+        if not serializer.is_valid():
+            # Return empty list if serializer is not valid
+            return Response(
+                data=[],
+                status=status.HTTP_200_OK,
+            )
         form = get_object_or_404(Forms, pk=form_id)
         queryset = form.form_form_data.filter(
             is_pending=False,
             is_draft=False,
             geo__isnull=False
-        ).values(
+        )
+        if serializer.validated_data.get("administration"):
+            adm = serializer.validated_data.get("administration")
+            adm_path = f"{adm.id}."
+            if adm.path:
+                adm_path = f"{adm.path}{adm.id}."
+            queryset = queryset.filter(
+                Q(administration=adm) |
+                Q(administration__path__startswith=adm_path)
+            )
+        queryset = queryset.values(
             "id", "name", "geo", "administration_id"
         )
         serializer = GeoLocationListSerializer(queryset, many=True)

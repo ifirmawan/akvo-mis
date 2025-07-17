@@ -831,3 +831,18 @@ class GeoLocationListSerializer(serializers.ModelSerializer):
     class Meta:
         model = FormData
         fields = ["id", "label", "point", "administration_id"]
+
+
+class GeoLocationFilterSerializer(serializers.Serializer):
+    administration = CustomPrimaryKeyRelatedField(
+        queryset=Administration.objects.none(), required=False
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.fields.get(
+            "administration"
+        ).queryset = Administration.objects.all()
+
+    class Meta:
+        fields = ["administration"]

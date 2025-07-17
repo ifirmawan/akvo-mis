@@ -84,6 +84,36 @@ class GeolocationListTestCases(TestCase, ProfileTestHelperMixin):
         # Ensure the geolocation is correctly formatted
         self.assertIsInstance(data[0]["point"], list)
 
+    def test_get_geolocation_list_with_administration_filter(self):
+        """
+            Test that the geolocation list can be filtered by administration.
+        """
+        admin = self.data.administration
+        response = self.client.get(
+            (
+                f"/api/v1/maps/geolocation/{self.form.id}"
+                f"?administration={admin.id}"
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreater(len(data), 0)
+        for item in data:
+            self.assertEqual(item["administration_id"], admin.id)
+
+    def test_get_geolocation_list_with_invalid_administration_filter(self):
+        """
+            Test that an invalid administration filter returns an empty list.
+        """
+        response = self.client.get(
+            f"/api/v1/maps/geolocation/{self.form.id}?administration=9999",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data, [])
+
     def test_get_geolocation_list_with_invalid_form_id(self):
         """
             Test that an invalid form ID returns a 404 error.

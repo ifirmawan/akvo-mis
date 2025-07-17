@@ -1,46 +1,71 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Map } from "akvo-charts";
-import * as topojson from "topojson-client";
-import { api, store, uiText } from "../../../lib";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Button, Col, Row, Spin } from "antd";
-
-const getGeoJSONList = (d) => {
-  if (!d) {
-    return [];
-  }
-  if (d?.type === "Topology") {
-    /**
-     * Convert TopoJSON to GeoJSON
-     */
-    return Object.keys(d.objects).map((kd) =>
-      topojson.feature(d, d.objects[kd])
-    );
-  }
-  return [d];
-};
+import { Map } from "akvo-charts";
+import takeRight from "lodash/takeRight";
+import { api, store, uiText } from "../../../lib";
+import { getBounds } from "../../../util";
 
 const ManageDataMap = () => {
   const [loading, setLoading] = useState(true);
   const [dataset, setDataset] = useState([]);
+  const [position, setPosition] = useState(null);
   const selectedForm = store.useState((s) => s.selectedForm);
+  const [prevForm, setPrevForm] = useState(selectedForm);
   const { active: activeLang } = store.useState((s) => s.language);
   const text = useMemo(() => {
     return uiText[activeLang];
   }, [activeLang]);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const { data: apiData } = await api.get(
-        `/maps/geolocation/${selectedForm}`
-      );
-      setDataset(apiData);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching geolocation data:", error);
-      setDataset([]);
-      setLoading(false);
+  const mapInstance = useRef(null);
+
+  const disableScrollWheelZoom = useCallback(() => {
+    const map = mapInstance.current?.getMap();
+    if (map) {
+      map.scrollWheelZoom.disable();
     }
-  }, [selectedForm]);
+  }, []);
+
+  const fitToBounds = useCallback(() => {
+    if (mapInstance.current && position?.bbox && !loading) {
+      const map = mapInstance.current.getMap();
+      if (map) {
+        map.fitBounds(position.bbox);
+      }
+    }
+  }, [position, loading]);
+
+  useEffect(() => {
+    fitToBounds();
+  }, [fitToBounds]);
+
+  const fetchData = useCallback(
+    async (selectedAdm = []) => {
+      try {
+        const adm = takeRight(selectedAdm, 1)[0];
+        const apiURL = adm?.id
+          ? `/maps/geolocation/${selectedForm}?administration=${adm.id}`
+          : `/maps/geolocation/${selectedForm}`;
+        const { data: apiData } = await api.get(apiURL);
+        setDataset(apiData);
+        const selected = [{ prop: adm?.level_name, value: adm?.name }];
+        const pos = getBounds(selected);
+        setPosition(pos);
+        setLoading(false);
+        disableScrollWheelZoom();
+      } catch (error) {
+        console.error("Error fetching geolocation data:", error);
+        setDataset([]);
+        setLoading(false);
+      }
+    },
+    [selectedForm, disableScrollWheelZoom]
+  );
 
   useEffect(() => {
     fetchData();
@@ -49,16 +74,18 @@ const ManageDataMap = () => {
   // listen selectForm changes to refetch data
   useEffect(() => {
     const unsubscribe = store.subscribe(
-      (state) => state.selectedForm,
-      (newForm) => {
-        if (newForm) {
+      ({ selectedForm, administration }) => ({ selectedForm, administration }),
+      ({ selectedForm, administration }) => {
+        // Only trigger loading if selectedForm actually changed
+        if ((selectedForm && selectedForm !== prevForm) || administration) {
+          setPrevForm(selectedForm);
           setLoading(true);
-          fetchData();
+          fetchData(administration);
         }
       }
     );
     return () => unsubscribe();
-  }, [fetchData]);
+  }, [fetchData, prevForm, selectedForm]);
 
   return (
     <div className="manage-data-map">
@@ -76,10 +103,13 @@ const ManageDataMap = () => {
             attribution: "© OpenStreetMap",
           }}
           config={{
-            center: [-17.713371, 178.065033],
+            center: [-17.713371, 179.065033],
             zoom: 8,
             height: "100vh",
             width: "100%",
+          }}
+          ref={(el) => {
+            mapInstance.current = el;
           }}
         >
           {dataset
@@ -105,8 +135,15 @@ const ManageDataMap = () => {
                 </Button>
               </Map.Marker>
             ))}
-          {getGeoJSONList(window?.topojson).map((sd, sx) => (
-            <Map.GeoJson key={sx} data={sd} mapData={dataset} />
+          {Map.getGeoJSONList(window?.topojson).map((sd, sx) => (
+            <Map.GeoJson
+              key={sx}
+              data={sd}
+              mapData={dataset}
+              onClick={({ target }) => {
+                mapInstance.current?.getMap()?.fitBounds(target._bounds);
+              }}
+            />
           ))}
         </Map.Container>
       )}

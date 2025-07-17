@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Row, Col, Divider, Tabs } from "antd";
+import { Row, Col, Divider, Tabs, Space } from "antd";
 
 import { store, uiText } from "../../lib";
 import { DataFilters, Breadcrumbs, DescriptionPanel } from "../../components";
@@ -8,9 +8,11 @@ import { ManageDataMap, ManageDataTable } from "./components";
 const { TabPane } = Tabs;
 
 import "./style.scss";
+import { CompassOutlined, TableOutlined } from "@ant-design/icons";
 
 const ManageData = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [activeTab, setActiveTab] = useState("data-list");
 
   const { language } = store.useState((s) => s);
   const { active: activeLang } = language;
@@ -38,10 +40,12 @@ const ManageData = () => {
                 },
               ]}
             />
-            <DescriptionPanel
-              description={text.manageDataText}
-              title={text.manageDataTitle}
-            />
+            {activeTab === "data-list" && (
+              <DescriptionPanel
+                description={text.manageDataText}
+                title={text.manageDataTitle}
+              />
+            )}
           </Col>
         </Row>
       </div>
@@ -54,8 +58,22 @@ const ManageData = () => {
             style={{ padding: 0, minHeight: "40vh" }}
             bodystyle={{ padding: 0 }}
           >
-            <Tabs className="manage-data-tab">
-              <TabPane tab={text.manageDataTabList} key="data-list">
+            <Tabs
+              className="manage-data-tab"
+              activeKey={activeTab}
+              onChange={setActiveTab}
+            >
+              <TabPane
+                tab={
+                  <Space size="small">
+                    <span>
+                      <TableOutlined style={{ marginRight: 0 }} />
+                    </span>
+                    <span>{text.manageDataTabList}</span>
+                  </Space>
+                }
+                key="data-list"
+              >
                 <ManageDataTable
                   {...{
                     formIdFromUrl,
@@ -64,7 +82,17 @@ const ManageData = () => {
                   }}
                 />
               </TabPane>
-              <TabPane tab={text.manageDataTabMap} key="data-map">
+              <TabPane
+                tab={
+                  <Space size="small" align="start">
+                    <span>
+                      <CompassOutlined style={{ marginRight: 0 }} />
+                    </span>
+                    <span>{text.manageDataTabMap}</span>
+                  </Space>
+                }
+                key="data-map"
+              >
                 <ManageDataMap />
               </TabPane>
             </Tabs>

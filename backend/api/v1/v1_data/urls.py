@@ -10,7 +10,6 @@ from api.v1.v1_data.views import (
     DraftFormDataListView,
     DraftFormDataDetailView,
     PublishDraftFormDataView,
-    GeolocationListView,
 )
 from api.v1.v1_users.views import health_check, get_config_file, email_template
 
@@ -49,10 +48,6 @@ urlpatterns = [
     ),
     re_path(
         r"^(?P<version>(v1))/export/form/(?P<form_id>[0-9]+)", export_form_data
-    ),
-    re_path(
-        r"^(?P<version>(v1))/maps/geolocation/(?P<form_id>[0-9]+)",
-        GeolocationListView.as_view(),
     ),
     re_path(r"^(?P<version>(v1))/health/check", health_check),
     re_path(r"^(?P<version>(v1))/config.js", get_config_file),

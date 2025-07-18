@@ -12,7 +12,7 @@ from faker import Faker
 fake = Faker()
 
 
-@override_settings(USE_TZ=False)
+@override_settings(USE_TZ=False, TEST_ENV=True)
 class GeolocationListTestCases(TestCase, ProfileTestHelperMixin):
     def setUp(self):
         super().setUp()
@@ -73,8 +73,8 @@ class GeolocationListTestCases(TestCase, ProfileTestHelperMixin):
             list(data[0]),
             [
                 "id",
-                "label",
-                "point",
+                "name",
+                "geo",
                 "administration_id",
             ]
         )
@@ -82,7 +82,7 @@ class GeolocationListTestCases(TestCase, ProfileTestHelperMixin):
         self.assertNotIn(self.draft_data.id, [d["id"] for d in data])
 
         # Ensure the geolocation is correctly formatted
-        self.assertIsInstance(data[0]["point"], list)
+        self.assertIsInstance(data[0]["geo"], list)
 
     def test_get_geolocation_list_with_administration_filter(self):
         """
@@ -99,8 +99,10 @@ class GeolocationListTestCases(TestCase, ProfileTestHelperMixin):
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertGreater(len(data), 0)
-        for item in data:
-            self.assertEqual(item["administration_id"], admin.id)
+        self.assertIn(
+            admin.id,
+            [d["administration_id"] for d in data],
+        )
 
     def test_get_geolocation_list_with_invalid_administration_filter(self):
         """

@@ -1,63 +1,20 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Button, Col, Row, Spin } from "antd";
-import { Map } from "akvo-charts";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Col, Row, Spin } from "antd";
 import takeRight from "lodash/takeRight";
-import { api, store, uiText } from "../../../lib";
-import { getBounds } from "../../../util";
+import { MapView } from "../../../components";
+import { api, store, uiText, geo } from "../../../lib";
+const { getBounds } = geo;
 
 const ManageDataMap = () => {
   const [loading, setLoading] = useState(true);
   const [dataset, setDataset] = useState([]);
   const [position, setPosition] = useState(null);
   const selectedForm = store.useState((s) => s.selectedForm);
-  const selectedAdm = store.useState((s) => s.administration);
   const [prevForm, setPrevForm] = useState(selectedForm);
   const { active: activeLang } = store.useState((s) => s.language);
   const text = useMemo(() => {
     return uiText[activeLang];
   }, [activeLang]);
-
-  const mapInstance = useRef(null);
-
-  const mapStyle = (feature) => {
-    const activeAdm = takeRight(selectedAdm, 1)[0];
-    return {
-      fillColor:
-        feature.properties?.[activeAdm?.level_name] === activeAdm?.name
-          ? "#01137C"
-          : "#D2EDFF",
-      color: "#01137C",
-      weight: 2,
-      opacity: 0.6,
-      fillOpacity: 0.7,
-    };
-  };
-
-  const disableScrollWheelZoom = useCallback(() => {
-    const map = mapInstance.current?.getMap();
-    if (map) {
-      map.scrollWheelZoom.disable();
-    }
-  }, []);
-
-  const fitToBounds = useCallback(() => {
-    if (mapInstance.current && position?.bbox && !loading) {
-      const map = mapInstance.current.getMap();
-      if (map) {
-        map.fitBounds(position.bbox);
-      }
-    }
-  }, [position, loading]);
-
-  useEffect(() => {
-    fitToBounds();
-  }, [fitToBounds]);
 
   const fetchData = useCallback(
     async (selectedAdm = []) => {
@@ -72,14 +29,13 @@ const ManageDataMap = () => {
         const pos = getBounds(selected);
         setPosition(pos);
         setLoading(false);
-        disableScrollWheelZoom();
       } catch (error) {
         console.error("Error fetching geolocation data:", error);
         setDataset([]);
         setLoading(false);
       }
     },
-    [selectedForm, disableScrollWheelZoom]
+    [selectedForm]
   );
 
   useEffect(() => {
@@ -111,57 +67,7 @@ const ManageDataMap = () => {
           </Col>
         </Row>
       ) : (
-        <Map.Container
-          tile={{
-            url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-            maxZoom: 19,
-            attribution: "© OpenStreetMap",
-          }}
-          config={{
-            center: [-17.713371, 179.065033],
-            zoom: 8,
-            height: "100vh",
-            width: "100%",
-          }}
-          ref={(el) => {
-            mapInstance.current = el;
-          }}
-        >
-          {dataset
-            ?.filter((d) => d?.point)
-            ?.map((d, dx) => (
-              <Map.Marker
-                latlng={d?.point}
-                key={dx}
-                icon={{
-                  className: "custom-marker",
-                  iconSize: [32, 32],
-                  html: `<span style="background-color:#64A73B; border:2px solid #fff;"/>`,
-                }}
-              >
-                <Button
-                  type="link"
-                  href={`/control-center/data/${selectedForm}/monitoring/${d.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ padding: 0 }}
-                >
-                  {d.label}
-                </Button>
-              </Map.Marker>
-            ))}
-          {Map.getGeoJSONList(window?.topojson).map((sd, sx) => (
-            <Map.GeoJson
-              key={sx}
-              data={sd}
-              mapData={dataset}
-              onClick={({ target }) => {
-                mapInstance.current?.getMap()?.fitBounds(target._bounds);
-              }}
-              style={mapStyle}
-            />
-          ))}
-        </Map.Container>
+        <MapView dataset={dataset} loading={loading} position={position} />
       )}
     </div>
   );

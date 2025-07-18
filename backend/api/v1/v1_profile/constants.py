@@ -84,3 +84,15 @@ DEFAULT_ADMINISTRATION_LEVELS = [
     {"id": 4, "level": 3, "name": "NAME_3", "alias": "Subdistrict"},
     {"id": 5, "level": 4, "name": "NAME_4", "alias": "Village"},
 ]
+
+TEST_GEO_DATA = [
+    {"name": "Cawang", "X": 106.8456, "Y": -6.2088},
+    {"name": "Cepit Baru", "X": 110.4170, "Y": -7.7326},
+    {"name": "Kramat Jati", "X": 106.8456, "Y": -6.2088},
+    {"name": "Seturan", "X": 110.4170, "Y": -7.7326},
+    {"name": "East Jakarta", "X": 106.8456, "Y": -6.2088},
+    {"name": "Sleman", "X": 110.4170, "Y": -7.7326},
+    {"name": "Jakarta", "X": 106.8456, "Y": -6.2088},
+    {"name": "Yogyakarta", "X": 110.4170, "Y": -7.7326},
+    {"name": "Indonesia", "X": 106.8456, "Y": -6.2088},
+]

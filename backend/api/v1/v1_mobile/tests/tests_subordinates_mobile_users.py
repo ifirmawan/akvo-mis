@@ -33,9 +33,9 @@ class SubordinatesMobileUsersTestCase(TestCase, ProfileTestHelperMixin):
             administration=administration,
             form=form,
         )
-        self.approver = self.create_user(
+        self.parent_user = self.create_user(
             email='approver@akvo.org',
-            role_level=self.IS_APPROVER,
+            role_level=self.IS_ADMIN,
             password='password',
             administration=administration.parent,
             form=form,
@@ -62,7 +62,7 @@ class SubordinatesMobileUsersTestCase(TestCase, ProfileTestHelperMixin):
         self.assertEqual(response.status_code, 201)
 
         # Login as approver
-        t = RefreshToken.for_user(self.approver)
+        t = RefreshToken.for_user(self.parent_user)
 
         response = typing.cast(
                 HttpResponse,
@@ -72,7 +72,7 @@ class SubordinatesMobileUsersTestCase(TestCase, ProfileTestHelperMixin):
                     HTTP_AUTHORIZATION=f'Bearer {t.access_token}'))
         self.assertEqual(response.status_code, 200)
         body = response.json()
-        self.assertEqual(len(body['data']), 1)
+        self.assertEqual(body['total'], 1)
 
     def test_same_level_mobile_users_list(self):
         payload = {
@@ -131,7 +131,7 @@ def test_subordinates_with_diff_forms(self):
     self.assertEqual(response.status_code, 201)
 
     # Login as approver
-    t = RefreshToken.for_user(self.approver)
+    t = RefreshToken.for_user(self.parent_user)
 
     response = typing.cast(
         HttpResponse,

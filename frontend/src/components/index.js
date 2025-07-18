@@ -36,3 +36,4 @@ export { default as ApproverDetailTable } from "./ApproverDetailTable";
 export { default as CreateBatchModal } from "./CreateBatchModal";
 export { default as DocumentUploader } from "./DocumentUploader";
 export { default as RawDataTable } from "./RawDataTable";
+export { default as MapView } from "./map-view/MapView";

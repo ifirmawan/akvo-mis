@@ -7,7 +7,7 @@ from api.v1.v1_data.functions import add_fake_answers
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
 
-@override_settings(USE_TZ=False)
+@override_settings(USE_TZ=False, TEST_ENV=True)
 class FormDataListTestCase(TestCase, ProfileTestHelperMixin):
     def setUp(self):
         super().setUp()

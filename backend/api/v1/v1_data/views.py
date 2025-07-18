@@ -58,6 +58,7 @@ from utils.custom_permissions import (
 from utils.custom_serializer_fields import validate_serializers_message
 from utils.default_serializers import DefaultResponseSerializer
 from utils.export_form import blank_data_template
+from django.conf import settings
 
 period_length = 60 * 15
 
@@ -323,7 +324,8 @@ class FormDataAddListView(APIView):
         data.updated = timezone.now()
         data.updated_by = user
         data.save()
-        data.save_to_file
+        if not settings.TEST_ENV:
+            data.save_to_file
         return Response(
             {"message": "direct update success"}, status=status.HTTP_200_OK
         )
@@ -890,7 +892,11 @@ class PublishDraftFormDataView(APIView):
         draft_data.save()
 
         # Save to file if it's published and not pending and not a child form
-        if direct_to_data and not draft_data.parent:
+        if (
+            direct_to_data and
+            not draft_data.parent and
+            not settings.TEST_ENV
+        ):
             draft_data.save_to_file
 
         return Response(

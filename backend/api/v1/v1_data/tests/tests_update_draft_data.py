@@ -8,7 +8,7 @@ from api.v1.v1_data.models import FormData
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
 
-@override_settings(USE_TZ=False)
+@override_settings(USE_TZ=False, TEST_ENV=True)
 class UpdateDraftFormDataTestCase(TestCase, ProfileTestHelperMixin):
     def setUp(self):
         super().setUp()

@@ -8,7 +8,7 @@ from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 from api.v1.v1_data.functions import add_fake_answers
 
 
-@override_settings(USE_TZ=False)
+@override_settings(USE_TZ=False, TEST_ENV=True)
 class PendingDataListTestCase(TestCase, ProfileTestHelperMixin):
 
     def setUp(self):

@@ -6,7 +6,7 @@ from django.test.utils import override_settings
 from api.v1.v1_data.models import FormData
 
 
-@override_settings(USE_TZ=False)
+@override_settings(USE_TZ=False, TEST_ENV=True)
 class GenerateDataJSONTestCase(TestCase):
     def setUp(self):
         call_command("administration_seeder", "--test")

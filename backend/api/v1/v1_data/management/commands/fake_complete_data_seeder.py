@@ -195,13 +195,7 @@ class Command(BaseCommand):
                             organisation=org,
                         )
                         user.set_password(DEFAULT_PASSWORD)
-                        # Assign all forms to the user
-                        forms = Forms.objects.filter(
-                            parent__isnull=True
-                        ).all()
-                        for form in forms:
-                            user.user_form.create(form=form)
-                        user.save()
+
                         role = Role.objects.filter(
                             role_role_access__data_access=st,
                         ).order_by("?").first()
@@ -209,6 +203,15 @@ class Command(BaseCommand):
                             role=role,
                             administration=parent_adm,
                         )
+
+                    if not user.user_form.exists():
+                        # Assign all forms to the user
+                        forms = Forms.objects.filter(
+                            parent__isnull=True
+                        ).all()
+                        for form in forms:
+                            user.user_form.create(form=form)
+                        user.save()
                     # Submitter
                     p = f"{parent_adm.path}{parent_adm.id}."
                     mobile_user = user.mobile_assignments \
@@ -298,7 +301,11 @@ class Command(BaseCommand):
                             form_draft_counts[f.name] += 1
 
                         # Save the form data
-                        if not is_test and not is_draft and is_approved:
+                        if (
+                            not is_test and
+                            not form_data.is_draft and
+                            not form_data.is_pending
+                        ):
                             form_data.save_to_file
 
                         # Create monitoring data if not draft

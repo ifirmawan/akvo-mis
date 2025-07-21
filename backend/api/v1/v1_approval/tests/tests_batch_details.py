@@ -1,3 +1,4 @@
+from io import StringIO
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.core.management import call_command
@@ -8,12 +9,23 @@ from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
 class DataBatchDetailsTestCase(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         call_command("administration_seeder", "--test", 1)
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test", 1)
-
-        call_command("fake_data_seeder", "-r", 10, "-t", True)
+        self.call_command(repeat=2, approved=False, draft=False)
 
         self.data = FormData.objects.filter(
             is_pending=True,

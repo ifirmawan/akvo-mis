@@ -1,3 +1,4 @@
+from io import StringIO
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.core.management import call_command
@@ -5,27 +6,52 @@ from django.core.management import call_command
 from api.v1.v1_data.models import FormData
 from api.v1.v1_users.models import SystemUser
 from api.v1.v1_profile.constants import DataAccessTypes
+from api.v1.v1_profile.models import Role
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
 class DataBatchListByApproverTestCase(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         call_command("administration_seeder", "--test", 1)
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test", 1)
-
-        call_command("fake_data_seeder", "-r", 10, "-t", True)
+        self.call_command(repeat=2, approved=False, draft=False)
 
         # Create a batch with pending data
         self.data = FormData.objects.filter(
             is_pending=True,
-            administration__level__level=3,
+            administration__level__level=4,
         ).first()
 
         self.submitter = self.data.created_by
         self.submitter.set_password("test")
         self.submitter.save()
+
+        # Update the submitter's role to have data submission access
+        self.submitter.user_user_role.all().delete()
+        # Find a role for the submitter
+        role = Role.objects.filter(
+            role_role_access__data_access=DataAccessTypes.submit,
+            administration_level=self.data.administration.level
+        ).first()
+        # Assign the role to the submitter
+        self.submitter.user_user_role.create(
+            role=role,
+            administration=self.data.administration,
+        )
 
         submitter_token = self.get_auth_token(self.submitter.email, "test")
         payload = {
@@ -133,7 +159,7 @@ class DataBatchListByApproverTestCase(TestCase, ProfileTestHelperMixin):
     def test_get_batch_list_by_all_approvers(self):
         data = FormData.objects.filter(
             is_pending=True,
-            administration__level__level=3,
+            administration__level__level=4,
         ).exclude(
             pk=self.data.pk
         ).first()
@@ -170,6 +196,19 @@ class DataBatchListByApproverTestCase(TestCase, ProfileTestHelperMixin):
         submitter.set_password("test")
         submitter.save()
 
+        # Update the submitter's role to have data submission access
+        submitter.user_user_role.all().delete()
+        # Find a role for the submitter
+        role = Role.objects.filter(
+            role_role_access__data_access=DataAccessTypes.submit,
+            administration_level=self.data.administration.level
+        ).first()
+        # Assign the role to the submitter
+        submitter.user_user_role.create(
+            role=role,
+            administration=data.administration,
+        )
+
         submitter_token = self.get_auth_token(submitter.email, "test")
         payload = {
             "name": "Test Batch 2",
@@ -188,7 +227,7 @@ class DataBatchListByApproverTestCase(TestCase, ProfileTestHelperMixin):
         # Get batch list by first level approver
         a1 = list(
             filter(
-                lambda x: x["level"] == 0,
+                lambda x: x["level"] == 1,
                 approver_list
             )
         )[0]
@@ -217,7 +256,7 @@ class DataBatchListByApproverTestCase(TestCase, ProfileTestHelperMixin):
         # Get batch list by second level approver
         a2 = list(
             filter(
-                lambda x: x["level"] == 1,
+                lambda x: x["level"] == 2,
                 approver_list
             )
         )[0]
@@ -253,7 +292,7 @@ class DataBatchListByApproverTestCase(TestCase, ProfileTestHelperMixin):
         # Get batch list by third level approver
         a3 = list(
             filter(
-                lambda x: x["level"] == 2,
+                lambda x: x["level"] == 3,
                 approver_list
             )
         )[0]

@@ -198,6 +198,7 @@ class Command(BaseCommand):
 
                         role = Role.objects.filter(
                             role_role_access__data_access=st,
+                            administration_level=parent_adm.level,
                         ).order_by("?").first()
                         user.user_user_role.create(
                             role=role,

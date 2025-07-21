@@ -9,6 +9,7 @@ from api.v1.v1_forms.models import Forms
 from api.v1.v1_data.models import FormData
 from api.v1.v1_mobile.models import MobileAssignment
 from api.v1.v1_profile.constants import DataAccessTypes
+from api.v1.v1_users.models import SystemUser
 
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
@@ -176,3 +177,17 @@ class FakeCompleteDataSeederTestCase(TestCase):
         for form_data in form_data_entries:
             self.assertTrue(form_data.is_draft)
             self.assertFalse(form_data.children.exists())
+
+    def test_each_user_has_valid_role_and_administration(self):
+        # Create users with repeat count
+        repeat = 2
+        self.call_command("--repeat=%d" % repeat, approved=False)
+        users = SystemUser.objects.all()
+        for user in users:
+            for user_role in user.user_user_role.all():
+                # Each user role should have a
+                # valid administration level and associated role
+                self.assertEqual(
+                    user_role.role.administration_level,
+                    user_role.administration.level
+                )

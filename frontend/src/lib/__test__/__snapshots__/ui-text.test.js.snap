@@ -498,6 +498,8 @@ Object {
     "manageDataTab1": "Registration Data",
     "manageDataTab2": "Monitoring Data",
     "manageDataTab3": "Monitoring Overview",
+    "manageDataTabList": "Datapoint List",
+    "manageDataTabMap": "Map View",
     "manageDataText": <React.Fragment>
       This is where you :
       <ul>

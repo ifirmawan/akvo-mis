@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import "./style.scss";
 import { Select, Space, Checkbox, Row, Col } from "antd";
 import PropTypes from "prop-types";
-import { store, api } from "../../lib";
-import { useCallback } from "react";
+import uniq from "lodash/uniq";
+import { store, api, uiText } from "../../lib";
 
 const AdministrationDropdown = ({
   loading = false,
@@ -16,24 +16,30 @@ const AdministrationDropdown = ({
   currentId = null,
   onChange,
   limitLevel = false,
-  isSelectAllVillage = false,
+  showSelectAll = false,
   selectedAdministrations = [],
   certify = null,
   excluded = [],
   ...props
 }) => {
-  const { user, administration, levels } = store.useState((state) => state);
+  const { user, administration, levels, language } = store.useState(
+    (state) => state
+  );
   const [checked, setChecked] = useState(false);
   /**
    * Get lowest level administrator from maxLevel.
    * otherwise, sort asc by level and get the last item from levels global state
    */
-  const lowestLevel = maxLevel
-    ? levels.find((l) => l?.id === maxLevel)
-    : levels
-        .slice()
-        .sort((a, b) => a.level - b.level)
-        .slice(-1)?.[0];
+  const currLevel = levels.find((l) => l?.id === maxLevel);
+  const lowestLevel = levels
+    .slice()
+    .sort((a, b) => a.level - b.level)
+    .slice(-1)?.[0];
+
+  const { active: activeLang } = language;
+  const text = useMemo(() => {
+    return uiText[activeLang];
+  }, [activeLang]);
 
   const fetchUserAdmin = useCallback(async () => {
     if (user && !persist) {
@@ -56,12 +62,12 @@ const AdministrationDropdown = ({
 
   useEffect(() => {
     const multiadministration = administration?.find(
-      (admLevel) => admLevel.level === lowestLevel.level - 1
+      (admLevel) => admLevel.level === currLevel.level - 1
     )?.children;
     if (multiadministration?.length === selectedAdministrations?.length) {
       setChecked(true);
     }
-  }, [administration, selectedAdministrations, lowestLevel.level]);
+  }, [administration, selectedAdministrations, currLevel.level]);
 
   const handleChange = async (e, index) => {
     if (!e) {
@@ -70,7 +76,7 @@ const AdministrationDropdown = ({
     let admItems = null;
     if (Array.isArray(e)) {
       const multiadministration = administration
-        ?.find((admLevel) => admLevel.level === lowestLevel.level - 1)
+        ?.find((admLevel) => admLevel.level === currLevel.level - 1)
         ?.children.filter((admItem) => e.includes(admItem.id));
       admItems = multiadministration;
     } else {
@@ -87,12 +93,12 @@ const AdministrationDropdown = ({
     }
   };
 
-  const handleSelectAllVillage = (e) => {
+  const onSelectAll = (e) => {
     if (e.target.checked) {
       setChecked(true);
       let admItems = null;
       const multiadministration = administration?.find(
-        (admLevel) => admLevel.level === lowestLevel.level - 1
+        (admLevel) => admLevel.level === currLevel.level - 1
       )?.children;
       admItems = multiadministration;
       if (selectedAdministrations.length === admItems.length) {
@@ -109,12 +115,12 @@ const AdministrationDropdown = ({
       setChecked(false);
       store.update((s) => {
         s.administration = s.administration.filter(
-          (data) => data.level <= lowestLevel.level - 1
+          (data) => data.level <= currLevel.level - 1
         );
       });
       if (onChange) {
         onChange(
-          administration.filter((data) => data.level <= lowestLevel.level - 1)
+          administration.filter((data) => data.level <= currLevel.level - 1)
         );
       }
     }
@@ -146,14 +152,19 @@ const AdministrationDropdown = ({
                */
               const isLastItem =
                 (maxLevel && maxLevel - 1 === regionIdx + 1) ||
-                region.level === lowestLevel?.level - 1;
+                region.level === currLevel?.level - 1;
               const selectMode =
                 allowMultiple && isLastItem ? "multiple" : null;
               const selectValues =
                 selectMode === "multiple"
-                  ? administration
-                      ?.slice(regionIdx + 1, administration.length)
-                      ?.map((a) => a?.id)
+                  ? uniq(
+                      administration
+                        ?.slice(regionIdx + 1, administration.length)
+                        ?.filter((a) =>
+                          region.children?.some((c) => c?.id === a?.id)
+                        )
+                        ?.map((a) => a?.id)
+                    )
                   : administration[regionIdx + 1]?.id || null;
               return (
                 <div key={regionIdx}>
@@ -203,11 +214,11 @@ const AdministrationDropdown = ({
               );
             }
           })}
-        {isSelectAllVillage && maxLevel === 5 && (
+        {showSelectAll && maxLevel === lowestLevel.id && (
           <Row className="form-row">
             <Col span={24}>
-              <Checkbox onChange={handleSelectAllVillage} checked={checked}>
-                Select all villages
+              <Checkbox onChange={onSelectAll} checked={checked}>
+                {text.checkboxSelectAll.replace("{{name}}", currLevel?.name)}
               </Checkbox>
             </Col>
           </Row>

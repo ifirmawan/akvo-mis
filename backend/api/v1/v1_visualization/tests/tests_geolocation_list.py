@@ -1,4 +1,5 @@
 import time
+from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -14,19 +15,25 @@ fake = Faker()
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
 class GeolocationListTestCases(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         super().setUp()
         self.maxDiff = None
         call_command("administration_seeder", "--test")
         call_command("form_seeder", "--test")
         call_command("default_roles_seeder", "--test", 1)
-        call_command(
-            "fake_data_seeder",
-            repeat=5,
-            test=True,
-            approved=True,
-            draft=False,
-        )
+        self.call_command(repeat=2, test=True, approved=True, draft=False)
         self.form = Forms.objects.get(pk=1)
         self.data = (
             self.form.form_form_data.filter(

@@ -143,17 +143,18 @@ const AddAssignment = () => {
     setAdmLevel(findLevel);
   };
 
-  const onFinish = async (values) => {
+  const onFinish = async ({ name, forms }) => {
     setSubmitting(true);
     setFormFeedback(null);
     setFormErrors([]);
     try {
+      const administrations = selectedAdministrations?.length
+        ? selectedAdministrations?.map((adm) => adm?.id || adm)
+        : [authUser.administration.id];
       const payload = {
-        name: values.name,
-        administrations: selectedAdministrations?.length
-          ? selectedAdministrations
-          : [authUser.administration.id],
-        forms: values.forms,
+        name,
+        forms,
+        administrations,
       };
       if (id) {
         await api.put(`/mobile-assignments/${id}`, payload);
@@ -209,7 +210,7 @@ const AddAssignment = () => {
   const fetchData = useCallback(async () => {
     if (id && preload && editAssignment?.id && selectedAdm) {
       setPreload(false);
-      const selectedAdministration = await Promise.all(
+      const adms = await Promise.all(
         (editAssignment.administrations.map((a) => a?.id) ?? [])
           .filter((p) => p)
           .map(async (pID) => {
@@ -217,13 +218,14 @@ const AddAssignment = () => {
             return apiResponse.data;
           })
       );
-      if (selectedAdministration) {
-        setLevel(selectedAdministration[0].level + 1);
-        form.setFieldsValue({ level_id: selectedAdministration[0].level + 1 });
-        setSelectedAdministrations(selectedAdministration.map((adm) => adm.id));
+      if (adms) {
+        setLevel(adms[0].level + 1);
+        setAdmLevel(levels.find((l) => l?.level === adms[0].level));
+        form.setFieldsValue({ level_id: adms[0].level + 1 });
+        setSelectedAdministrations(adms.map((adm) => adm.id));
       }
       const parentAdm = await Promise.all(
-        (selectedAdministration?.[0]?.path?.split(".") ?? [])
+        (adms?.[0]?.path?.split(".") ?? [])
           .filter((p) => p)
           .map(async (pID) => {
             const apiResponse = await api.get(`administration/${pID}`);
@@ -231,9 +233,9 @@ const AddAssignment = () => {
           })
       );
       store.update((s) => {
-        s.administration = [...parentAdm, ...selectedAdministration]
+        s.administration = [...parentAdm, ...adms]
           ?.slice(
-            [...parentAdm, ...selectedAdministration].findIndex(
+            [...parentAdm, ...adms].findIndex(
               (r) => r.id === authUser.administration.id
             )
           )
@@ -249,11 +251,29 @@ const AddAssignment = () => {
     if (!id && preload) {
       setPreload(false);
     }
-  }, [id, preload, form, editAssignment, levels, selectedAdm, authUser]);
+
+    const admValues = selectedAdm
+      ?.filter((adm) => adm?.level === admLevel?.level)
+      ?.map((adm) => adm?.id);
+    if (admValues?.length && selectedAdministrations?.length === 0) {
+      setSelectedAdministrations(admValues);
+      form.setFieldsValue({ administrations: admValues });
+    }
+  }, [
+    id,
+    preload,
+    form,
+    editAssignment,
+    levels,
+    selectedAdm,
+    authUser,
+    selectedAdministrations,
+    admLevel,
+  ]);
 
   useEffect(() => {
     fetchData();
-  }, [id, fetchData]);
+  }, [fetchData]);
 
   return (
     <div id="add-assignment">
@@ -339,7 +359,7 @@ const AddAssignment = () => {
                       }}
                       persist={id ? true : false}
                       allowMultiple
-                      isSelectAllVillage={true}
+                      showSelectAll={true}
                       selectedAdministrations={selectedAdministrations}
                     />
                   </Form.Item>

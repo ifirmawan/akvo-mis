@@ -7,6 +7,7 @@ Object {
     "type": "FeatureCollection",
   },
   "defaultPos": [Function],
+  "fixCoordinates": [Function],
   "geojson": Object {
     "geometry": null,
     "properties": Object {},
@@ -15,7 +16,9 @@ Object {
   "getBounds": [Function],
   "getColorScale": [Function],
   "getGeometry": [Function],
+  "normalizeLat": [Function],
   "shapeLevels": Array [],
+  "shiftLatPositive": [Function],
   "tile": Object {
     "attribution": "Tiles &copy; Esri &mdash; DeLorme, NAVTEQ, Esri",
     "url": "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png",

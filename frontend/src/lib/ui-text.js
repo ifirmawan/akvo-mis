@@ -945,6 +945,8 @@ const uiText = {
     draftFormSaveSuccess: "Draft saved successfully",
     draftFormSaveError: "Unable to save draft",
     selectRowsToDownload: "Please select rows to download",
+    manageDataTabList: "Datapoint List",
+    manageDataTabMap: "Map View",
   },
 
   de: {},

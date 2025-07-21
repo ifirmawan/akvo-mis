@@ -13,13 +13,7 @@ const tile = {
   attribution: "Tiles &copy; Esri &mdash; DeLorme, NAVTEQ, Esri",
 };
 
-export const getBounds = (administration) => {
-  const selected = administration.map((x, i) => {
-    return {
-      value: x.name,
-      prop: shapeLevels[i],
-    };
-  });
+export const getBounds = (selected = []) => {
   const geoFilter = topojson_object.geometries.filter((x) => {
     const filters = [];
     selected.forEach((s) => {
@@ -120,6 +114,30 @@ const getColorScale = ({ method, colors, colorRange }) => {
   return scaleQuantize().domain(domain).range(colorRange);
 };
 
+/**
+ * Coordinate normalization functions for handling International Date Line
+ */
+const normalizeLat = (lat) => {
+  // Normalize latitude to be within -90 to 90 degrees
+  return ((lat + 180) % 360) - 180;
+};
+
+const shiftLatPositive = (lat) => {
+  // Shift latitude to be within 0 to 180 degrees
+  return lat % 360;
+};
+
+const fixCoordinates = (coords) => {
+  if (!Array.isArray(coords) || coords.length < 2) {
+    return coords;
+  }
+  const [lat, lon] = coords;
+  const normalizedLat = normalizeLat(lat);
+  const fixedLat = shiftLatPositive(normalizedLat);
+
+  return [fixedLat, lon];
+};
+
 const geo = {
   geojson: geojson,
   countiesjson: { type: "FeatureCollection", features: countiesjson },
@@ -129,6 +147,9 @@ const geo = {
   getBounds: getBounds,
   getColorScale: getColorScale,
   defaultPos: defaultPos,
+  normalizeLat: normalizeLat,
+  shiftLatPositive: shiftLatPositive,
+  fixCoordinates: fixCoordinates,
 };
 
 export default geo;

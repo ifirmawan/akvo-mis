@@ -84,6 +84,14 @@
         cursor: pointer;
       }
     }
+    .custom-marker {
+      span {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        display: block;
+      }
+    }
   }
   .ant-btn.ant-btn-link:hover {
     border-color: transparent;

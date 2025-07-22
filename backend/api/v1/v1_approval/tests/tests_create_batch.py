@@ -26,7 +26,7 @@ class CreateDataBatchTestCase(TestCase, ProfileTestHelperMixin):
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test", 1)
 
-        self.call_command(repeat=2, approved=False, draft=False)
+        self.call_command(repeat=4, approved=False, draft=False)
 
         self.data = FormData.objects.filter(
             is_pending=True,
@@ -253,3 +253,27 @@ class CreateDataBatchTestCase(TestCase, ProfileTestHelperMixin):
             HTTP_AUTHORIZATION=f"Bearer {self.token}",
         )
         self.assertEqual(response.status_code, 400)
+
+    def test_create_batch_with_monitorng_data(self):
+        # Create monitoring data
+        monitoring_data = FormData.objects.filter(
+            is_pending=True,
+            parent__isnull=False,
+        ).order_by("?").first()
+        self.assertIsNotNone(monitoring_data, "No monitoring data found")
+
+        payload = {
+            "name": "Test Batch with Monitoring Data",
+            "comment": "This batch contains monitoring data",
+            "data": [
+                monitoring_data.id,
+                monitoring_data.parent.id
+            ],
+        }
+        response = self.client.post(
+            "/api/v1/batch",
+            payload,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 201)

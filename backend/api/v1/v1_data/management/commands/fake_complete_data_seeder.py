@@ -4,7 +4,6 @@ from datetime import datetime, timedelta, time
 from django.core.management import BaseCommand
 from django.utils.timezone import make_aware
 from django.db import transaction
-from django.db.models import Max
 from faker import Faker
 
 from mis.settings import COUNTRY_NAME
@@ -139,8 +138,11 @@ class Command(BaseCommand):
             fake_geo_data = TEST_GEO_DATA
         now_date = datetime.now()
         start_date = now_date - timedelta(days=5 * 365)
-        created = fake.date_between(start_date, now_date)
-        created = datetime.combine(created, time.min)
+        end_date = now_date - timedelta(days=30)  # End at least 30 days ago
+        base_created = fake.date_between(start_date, end_date)
+        base_created = datetime.combine(base_created, time.min)
+        # Make base_created timezone-aware
+        base_created = make_aware(base_created)
         # total number of fake_geo points
         total_points = len(fake_geo_data)
         index = 0
@@ -161,6 +163,9 @@ class Command(BaseCommand):
         form_monitoring_counts = {}
         form_pending_counts = {}
         form_draft_counts = {}
+
+        # Initialize incremental creation date
+        current_created = base_created
 
         try:
             with transaction.atomic():
@@ -277,9 +282,11 @@ class Command(BaseCommand):
                         )
                         data_is_pending = (
                             not is_approved and
-                            not data_is_draft and
                             (form_data_counts[f.name] % 2 == 1)
                         )
+
+                        # Increment the creation date for each form_data entry
+                        current_created += timedelta(days=1)
 
                         form_data = FormData.objects.create(
                             uuid=fake.uuid4(),
@@ -287,11 +294,13 @@ class Command(BaseCommand):
                             form=f,
                             administration=adm,
                             created_by=user,
-                            created=make_aware(created),
                             geo=geo_value,
                             is_pending=data_is_pending,
-                            is_draft=data_is_draft,
+                            is_draft=False,
                         )
+                        form_data.created = current_created
+                        form_data.updated = current_created
+                        form_data.save()
                         add_fake_answers(form_data)
 
                         # Update counters
@@ -300,13 +309,34 @@ class Command(BaseCommand):
                             form_pending_counts[f.name] += 1
                         if data_is_draft:
                             form_draft_counts[f.name] += 1
+                            # Create a new draft entry
+                            draft_data = FormData.objects.create(
+                                uuid=fake.uuid4(),
+                                name=f"{fake.sentence(nb_words=3)} - Draft",
+                                form=f,
+                                administration=adm,
+                                created_by=user,
+                                geo=geo_value,
+                                is_pending=False,
+                                is_draft=True,
+                            )
+                            draft_data.created = current_created
+                            draft_data.updated = current_created
+                            draft_data.save()
+
+                            add_fake_answers(draft_data)
+
+                            if draft_data.has_approval:
+                                draft_data.is_pending = True
+                                draft_data.save()
+
+                            # Remove some answers for draft
+                            draft_data.data_answer.filter(
+                                question__required=True
+                            ).delete()
 
                         # Save the form data
-                        if (
-                            not is_test and
-                            not form_data.is_draft and
-                            not form_data.is_pending
-                        ):
+                        if (not is_test and not form_data.is_pending):
                             form_data.save_to_file
 
                         # Create monitoring data if not draft
@@ -314,13 +344,15 @@ class Command(BaseCommand):
                             submitter = None
                             if mobile_user.name and r % 2 == 0:
                                 submitter = mobile_user.name
+                            # Start from the parent form's created date
+                            last_date = form_data.created
+                            # Ensure last_date is timezone-aware
+                            if last_date.tzinfo is None:
+                                last_date = make_aware(last_date)
                             for child_form in f.children.all():
-                                last_date = form_data.children.aggregate(
-                                    max_created=Max('created')
-                                )['max_created']
-                                if not last_date:
-                                    last_date = form_data.created
                                 for m in range(monitoring):
+                                    # Increment date for each monitoring entry
+                                    last_date += timedelta(days=1)
                                     ld_f1 = last_date.strftime('%Y-%m-%d')
                                     ld_f2 = last_date.strftime(
                                         '%a %b %d %Y %H:%M:%S'
@@ -337,14 +369,15 @@ class Command(BaseCommand):
                                         geo=form_data.geo,
                                         form=child_form,
                                         created_by=user,
-                                        created=last_date,
                                         is_pending=data_is_pending,
                                         is_draft=False,
                                         submitter=s_name,
                                     )
+                                    child_data.created = last_date
+                                    child_data.updated = last_date
+                                    child_data.save()
                                     add_fake_answers(child_data)
                                     form_monitoring_counts[f.name] += 1
-                                    last_date += timedelta(days=1)
                     index += 1
                 # Output success messages
                 for form_name, count in form_data_counts.items():

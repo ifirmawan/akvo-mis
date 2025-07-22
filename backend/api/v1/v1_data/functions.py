@@ -2,6 +2,7 @@ import re
 import base64
 from django.core.cache import cache
 from datetime import datetime
+from datetime import timedelta
 from api.v1.v1_forms.constants import QuestionTypes
 from api.v1.v1_forms.models import Questions
 from api.v1.v1_data.models import Answers, FormData
@@ -31,7 +32,7 @@ def create_cache(name, resp, timeout=None):
 def set_answer_data(
     data: FormData,
     question: Questions,
-    dep_values: dict = None
+    dep_values: dict = None,
 ):
     name = None
     value = None
@@ -88,9 +89,10 @@ def set_answer_data(
             base64_encoded = base64.b64encode(image_bytes).decode('utf-8')
             name = f"data:image/png;base64,{base64_encoded}"
     elif question.type == QuestionTypes.date:
-        # Use the actual creation date of the data entry
-        # This ensures monitoring entries have progressive dates
-        name = data.created.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        days = fake.random_int(min=1, max=30)
+        name = (data.created + timedelta(days=days)).strftime(
+            "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
     elif (
         question.type == QuestionTypes.cascade
         and question.extra
@@ -136,13 +138,14 @@ def add_fake_answers(data):
         if question.dependency:
             for d in question.dependency:
                 dep_values[d.get("id")] = d
-    for question in form.form_questions.all().order_by(
+    questions = form.form_questions.all().order_by(
         "question_group__order", "order"
-    ):
+    )
+    for question in questions:
         name, value, option = set_answer_data(
             data=data,
             question=question,
-            dep_values=dep_values.get(question.id, None)
+            dep_values=dep_values.get(question.id, None),
         )
         if question.meta:
             if name:
@@ -177,5 +180,9 @@ def add_fake_answers(data):
                 options=option,
                 created_by=data.created_by,
             )
-    data.name = " - ".join(meta_name)
+    if len(meta_name) > 0:
+        name = " - ".join(meta_name)
+        # make sure the name is not empty white spaces
+        if len(name.strip()):
+            data.name = name
     data.save()

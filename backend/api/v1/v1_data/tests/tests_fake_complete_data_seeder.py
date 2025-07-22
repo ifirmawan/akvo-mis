@@ -10,10 +10,13 @@ from api.v1.v1_data.models import FormData
 from api.v1.v1_mobile.models import MobileAssignment
 from api.v1.v1_profile.constants import DataAccessTypes
 from api.v1.v1_users.models import SystemUser
+from api.v1.v1_mobile.tests.mixins import AssignmentTokenTestHelperMixin
+from utils.custom_helper import CustomPasscode
+from rest_framework import status
 
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
-class FakeCompleteDataSeederTestCase(TestCase):
+class FakeCompleteDataSeederTestCase(TestCase, AssignmentTokenTestHelperMixin):
     def setUp(self):
         super().setUp()
         call_command("administration_seeder", "--test", 1)
@@ -191,3 +194,45 @@ class FakeCompleteDataSeederTestCase(TestCase):
                     user_role.role.administration_level,
                     user_role.administration.level
                 )
+
+    def test_mobile_user_can_submit_data(self):
+        # Create mobile users with repeat count
+        repeat = 2
+        self.call_command("--repeat=%d" % repeat, approved=False)
+        ds = DataAccessTypes.submit
+        user = SystemUser.objects.filter(
+            user_user_role__role__role_role_access__data_access=ds,
+            mobile_assignments__gt=0
+        ).order_by('id').first()
+        mobile_user = user.mobile_assignments.order_by('id').first()
+        self.assertIsNotNone(mobile_user)
+        passcode = CustomPasscode().decode(mobile_user.passcode)
+        token = self.get_assignmen_token(passcode)
+
+        mobile_adm = mobile_user.administrations.first()
+        payload = {
+            "formId": 1,
+            "name": "submit by mobile user",
+            "duration": 1,
+            "submittedAt": "2025-07-21T02:38:13.807Z",
+            "submitter": mobile_user.name,
+            "geo": [6.2088, 106.8456],
+            "answers": {
+                101: "John Doe",
+                102: ["male"],
+                103: 62723817,
+                104: mobile_adm.id,
+                105: [6.2088, 106.8456],
+                106: ["wife__husband__partner"],
+                107: "photo.jpeg",
+                108: "2024-04-29",
+            },
+        }
+        response = self.client.post(
+            "/api/v1/device/sync",
+            payload,
+            follow=True,
+            content_type="application/json",
+            **{"HTTP_AUTHORIZATION": f"Bearer {token}"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

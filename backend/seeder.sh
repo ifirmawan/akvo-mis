@@ -45,10 +45,10 @@ if [[ "${fake_data}" == 'y' || "${fake_data}" == 'Y' ]]; then
     if [[ "${fake_data_count}" == '' ]]; then
         fake_data_count=5
     fi
-    echo "How many monitoring data do you want to create? (default is 1)"
+    echo "How many monitoring data do you want to create? (default is 2)"
     read -r monitoring_data_count
     if [[ "${monitoring_data_count}" == '' ]]; then
-        monitoring_data_count=1
+        monitoring_data_count=2
     fi
 
     echo "Do you want to include pending form data? [y/n]"

@@ -320,12 +320,14 @@ class Command(BaseCommand):
                                 )['max_created']
                                 if not last_date:
                                     last_date = form_data.created
-                                for _ in range(monitoring):
+                                for m in range(monitoring):
                                     ld_f1 = last_date.strftime('%Y-%m-%d')
                                     ld_f2 = last_date.strftime(
                                         '%a %b %d %Y %H:%M:%S'
                                     )
                                     curr_time = (f"{ld_f1} - {ld_f2} GMT+0700")
+                                    s_name = submitter \
+                                        if m % 2 == 0 and submitter else None
                                     child_data = form_data.children.create(
                                         name=curr_time,
                                         uuid=form_data.uuid,
@@ -338,7 +340,7 @@ class Command(BaseCommand):
                                         created=last_date,
                                         is_pending=False,
                                         is_draft=False,
-                                        submitter=submitter,
+                                        submitter=s_name,
                                     )
                                     add_fake_answers(child_data)
                                     form_monitoring_counts[f.name] += 1

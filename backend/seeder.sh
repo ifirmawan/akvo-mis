@@ -55,13 +55,18 @@ if [[ "${fake_data}" == 'y' || "${fake_data}" == 'Y' ]]; then
     read -r pending_data
     # Invert the value of pending_data for --approved
     if [[ "${pending_data}" == 'y' || "${pending_data}" == 'Y' ]]; then
-        approved="n"
+        approved=false
     else
-        approved="y"
+        approved=true
     fi
 
     echo "Do you want to include draft form data? [y/n]"
-    read -r draft_data
+    read -r draft_data_input
+    if [[ "${draft_data_input}" == 'y' || "${draft_data_input}" == 'Y' ]]; then
+        draft_data=true
+    else
+        draft_data=false
+    fi
         
     python manage.py default_roles_seeder
     python manage.py fake_complete_data_seeder --repeat="${fake_data_count}" --monitoring="${monitoring_data_count}" --approved="${approved}" --draft="${draft_data}"

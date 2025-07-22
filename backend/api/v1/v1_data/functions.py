@@ -2,7 +2,6 @@ import re
 import base64
 from django.core.cache import cache
 from datetime import datetime
-from django.utils import timezone
 from datetime import timedelta
 from api.v1.v1_forms.constants import QuestionTypes
 from api.v1.v1_forms.models import Questions
@@ -77,10 +76,10 @@ def set_answer_data(
             base64_encoded = base64.b64encode(image_bytes).decode('utf-8')
             name = f"data:image/png;base64,{base64_encoded}"
     elif question.type == QuestionTypes.date:
-        name = fake.date_between_dates(
-            date_start=timezone.datetime.now().date() - timedelta(days=90),
-            date_end=timezone.datetime.now().date(),
-        ).strftime("%m/%d/%Y")
+        # Get date from data.created and add 1 day to it
+        name = (data.created + timedelta(days=1)).strftime(
+            "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
     elif (
         question.type == QuestionTypes.cascade
         and question.extra

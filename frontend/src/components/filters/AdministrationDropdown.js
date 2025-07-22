@@ -26,15 +26,15 @@ const AdministrationDropdown = ({
     (state) => state
   );
   const [checked, setChecked] = useState(false);
-  /**
-   * Get lowest level administrator from maxLevel.
-   * otherwise, sort asc by level and get the last item from levels global state
-   */
-  const currLevel = levels.find((l) => l?.id === maxLevel);
   const lowestLevel = levels
     .slice()
     .sort((a, b) => a.level - b.level)
     .slice(-1)?.[0];
+  /**
+   * Get lowest level administrator from maxLevel.
+   * otherwise, sort asc by level and get the last item from levels global state
+   */
+  const currLevel = levels?.find((l) => l?.id === maxLevel) || lowestLevel;
 
   const { active: activeLang } = language;
   const text = useMemo(() => {

@@ -6,7 +6,7 @@ from django.db.models import Q
 from api.v1.v1_data.models import FormData, Answers
 from api.v1.v1_forms.models import Forms
 from api.v1.v1_visualization.serializers import (
-    FormDataStatSerializer,
+    MonitoringStatSerializer,
     GeoLocationListSerializer,
     GeoLocationFilterSerializer,
 )
@@ -20,7 +20,7 @@ from rest_framework.permissions import IsAuthenticated
 @extend_schema(
     description="Get the statistic of on monitoring data",
     tags=["Visualization"],
-    responses=FormDataStatSerializer(many=True),
+    responses=MonitoringStatSerializer(many=True),
     parameters=[
         OpenApiParameter(
             name="parent_id",
@@ -46,7 +46,7 @@ from rest_framework.permissions import IsAuthenticated
     ],
 )
 @api_view(["GET"])
-def formdata_stats(request, version):
+def monitoring_stats(request, version):
     parent_id = request.query_params.get("parent_id")
     question_id = request.query_params.get("question_id")
     question_date_key = request.query_params.get("question_date")
@@ -90,7 +90,7 @@ def formdata_stats(request, version):
                 }
             )
 
-        serializer = FormDataStatSerializer(stats, many=True)
+        serializer = MonitoringStatSerializer(stats, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     except Exception as e:

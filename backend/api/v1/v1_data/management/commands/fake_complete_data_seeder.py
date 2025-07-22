@@ -338,7 +338,7 @@ class Command(BaseCommand):
                                         form=child_form,
                                         created_by=user,
                                         created=last_date,
-                                        is_pending=False,
+                                        is_pending=data_is_pending,
                                         is_draft=False,
                                         submitter=s_name,
                                     )

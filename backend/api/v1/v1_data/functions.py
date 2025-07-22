@@ -32,7 +32,7 @@ def create_cache(name, resp, timeout=None):
 def set_answer_data(
     data: FormData,
     question: Questions,
-    dep_options: list = []
+    dep_values: dict = None
 ):
     name = None
     value = None
@@ -46,11 +46,24 @@ def set_answer_data(
     elif question.type == QuestionTypes.text:
         name = fake.company() if question.meta else fake.sentence(nb_words=3)
     elif question.type == QuestionTypes.number:
-        value = fake.random_int(min=10, max=50)
+        min = 1
+        max = 50
+        if question.rule and question.rule.get("min"):
+            min = question.rule["min"]
+        if question.rule and question.rule.get("max"):
+            max = question.rule["max"]
+        if dep_values and dep_values.get("max"):
+            max = dep_values["max"]
+        if dep_values and dep_values.get("min"):
+            min = dep_values["min"]
+        value = fake.random_int(min=min, max=max)
     elif question.type == QuestionTypes.option:
         option = [question.options.order_by("?").first().value]
-        if dep_options and len(dep_options) > 0:
-            option = fake.random_choices(dep_options, length=1)
+        if dep_values and dep_values.get("options"):
+            option = fake.random_choices(
+                dep_values["options"],
+                length=1
+            )
     elif question.type == QuestionTypes.multiple_option:
         option = list(
             question.options.order_by("?")
@@ -58,9 +71,9 @@ def set_answer_data(
                 0: fake.random_int(min=1, max=3)
             ]
         )
-        if dep_options and len(dep_options) > 0:
+        if dep_values and dep_values.get("options"):
             option = fake.random_choices(
-                dep_options,
+                dep_values["options"],
                 length=fake.random_int(min=1, max=3)
             )
     elif question.type == QuestionTypes.photo:
@@ -120,18 +133,18 @@ def add_fake_answers(data):
     dep_questions = form.form_questions.filter(
         dependency__isnull=False
     ).distinct()
-    dep_options = {}
+    dep_values = {}
     for question in dep_questions:
         if question.dependency:
             for d in question.dependency:
-                dep_options[d.get("id")] = d.get("options")
+                dep_values[d.get("id")] = d
     for question in form.form_questions.all().order_by(
         "question_group__order", "order"
     ):
         name, value, option = set_answer_data(
             data=data,
             question=question,
-            dep_options=dep_options.get(question.id, [])
+            dep_values=dep_values.get(question.id, None)
         )
         if question.meta:
             if name:

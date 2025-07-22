@@ -12,7 +12,7 @@ from django.utils.timezone import make_aware
 
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
-class FormDataStatsAPITest(APITestCase):
+class MonitoringStatsAPITest(APITestCase):
     def setUp(self):
         call_command("administration_seeder", "--test")
         self.user = SystemUser.objects.create_user(
@@ -90,7 +90,7 @@ class FormDataStatsAPITest(APITestCase):
 
     def test_stats_without_question_date(self):
         url = (
-            f"/api/v1/visualization/formdata-stats/"
+            f"/api/v1/visualization/monitoring-stats/"
             f"?parent_id={self.reg_data.id}"
             f"&question_id={self.question.id}"
         )
@@ -104,7 +104,7 @@ class FormDataStatsAPITest(APITestCase):
 
     def test_stats_with_question_date(self):
         url = (
-            f"/api/v1/visualization/formdata-stats/"
+            f"/api/v1/visualization/monitoring-stats/"
             f"?parent_id={self.reg_data.id}"
             f"&question_id={self.question.id}"
             f"&question_date={self.date_question.id}"
@@ -115,6 +115,6 @@ class FormDataStatsAPITest(APITestCase):
         self.assertEqual(response.json(), [{"date": "01-06-2025", "value": 1}])
 
     def test_missing_params(self):
-        url = "/api/v1/visualization/formdata-stats/"
+        url = "/api/v1/visualization/monitoring-stats/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

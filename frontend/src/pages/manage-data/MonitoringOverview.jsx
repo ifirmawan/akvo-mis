@@ -54,7 +54,7 @@ const MonitoringOverview = ({ question, date }) => {
     if (!parentId || !question) {
       return;
     }
-    let url = `/visualization/formdata-stats?parent_id=${parentId}&question_id=${question.id}`;
+    let url = `/visualization/monitoring-stats?parent_id=${parentId}&question_id=${question.id}`;
     if (date?.id) {
       url += `&question_date=${date.id}`;
     }

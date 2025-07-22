@@ -3,13 +3,12 @@ from api.v1.v1_data.models import FormData, Administration
 from utils.custom_serializer_fields import CustomPrimaryKeyRelatedField
 
 
-class FormDataStatSerializer(serializers.Serializer):
+class MonitoringStatSerializer(serializers.Serializer):
     date = serializers.DateField()
     value = serializers.FloatField()
 
 
 class GeoLocationListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FormData
         fields = ["id", "name", "geo", "administration_id"]

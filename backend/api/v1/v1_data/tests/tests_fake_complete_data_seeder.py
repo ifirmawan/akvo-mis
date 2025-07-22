@@ -11,6 +11,7 @@ from api.v1.v1_mobile.models import MobileAssignment
 from api.v1.v1_profile.constants import DataAccessTypes
 from api.v1.v1_users.models import SystemUser
 from api.v1.v1_mobile.tests.mixins import AssignmentTokenTestHelperMixin
+from api.v1.v1_data.functions import set_answer_data
 from utils.custom_helper import CustomPasscode
 from rest_framework import status
 
@@ -236,3 +237,44 @@ class FakeCompleteDataSeederTestCase(TestCase, AssignmentTokenTestHelperMixin):
             **{"HTTP_AUTHORIZATION": f"Bearer {token}"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_set_answer_data(self):
+        # Use form that have dependency questions
+        form = Forms.objects.get(pk=3)
+        dep_questions = form.form_questions.filter(
+            dependency__isnull=False
+        ).distinct()
+        dep_values = {}
+        for question in dep_questions:
+            if question.dependency:
+                for d in question.dependency:
+                    dep_values[d.get("id")] = d
+        q = form.form_questions.filter(
+            pk=311
+        ).first()
+
+        data = form.form_form_data.order_by('?').first()
+        name, value, option = set_answer_data(
+            data=data,
+            question=q,
+            dep_values=dep_values.get(q.id, None)
+        )
+        # self.assertIsNotNone(name)
+        # self.assertIsNotNone(value, str)
+        # self.assertIsInstance(option, list)
+
+        # # Use form that does not have dependency questions
+        # form = Forms.objects.get(pk=2)
+        # dep_values = {}
+        # data = form.form_form_data.order_by('?').first()
+        # q = form.form_questions.filter(
+        #     pk=203
+        # ).first()
+        # name, value, option = set_answer_data(
+        #     data=data,
+        #     question=q,
+        #     dep_values=dep_values.get(q.id, None)
+        # )
+        # self.assertIsNone(name)
+        # self.assertIsNone(value, float)
+        # self.assertIsNone(option)

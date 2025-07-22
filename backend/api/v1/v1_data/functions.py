@@ -5,7 +5,8 @@ from datetime import datetime
 from django.utils import timezone
 from datetime import timedelta
 from api.v1.v1_forms.constants import QuestionTypes
-from api.v1.v1_data.models import Answers
+from api.v1.v1_forms.models import Questions
+from api.v1.v1_data.models import Answers, FormData
 from api.v1.v1_profile.models import Entity, EntityData
 from faker import Faker
 
@@ -29,7 +30,11 @@ def create_cache(name, resp, timeout=None):
     cache.add(cache_name, resp, timeout=timeout)
 
 
-def set_answer_data(data, question):
+def set_answer_data(
+    data: FormData,
+    question: Questions,
+    dep_options: list = []
+):
     name = None
     value = None
     option = None
@@ -45,6 +50,8 @@ def set_answer_data(data, question):
         value = fake.random_int(min=10, max=50)
     elif question.type == QuestionTypes.option:
         option = [question.options.order_by("?").first().value]
+        if dep_options and len(dep_options) > 0:
+            option = fake.random_choices(dep_options, length=1)
     elif question.type == QuestionTypes.multiple_option:
         option = list(
             question.options.order_by("?")
@@ -52,6 +59,11 @@ def set_answer_data(data, question):
                 0: fake.random_int(min=1, max=3)
             ]
         )
+        if dep_options and len(dep_options) > 0:
+            option = fake.random_choices(
+                dep_options,
+                length=fake.random_int(min=1, max=3)
+            )
     elif question.type == QuestionTypes.photo:
         name = fake.image_url()
     elif question.type == QuestionTypes.attachment:
@@ -106,10 +118,22 @@ def set_answer_data(data, question):
 def add_fake_answers(data):
     form = data.form
     meta_name = []
+    dep_questions = form.form_questions.filter(
+        dependency__isnull=False
+    ).distinct()
+    dep_options = {}
+    for question in dep_questions:
+        if question.dependency:
+            for d in question.dependency:
+                dep_options[d.get("id")] = d.get("options")
     for question in form.form_questions.all().order_by(
         "question_group__order", "order"
     ):
-        name, value, option = set_answer_data(data, question)
+        name, value, option = set_answer_data(
+            data=data,
+            question=question,
+            dep_options=dep_options.get(question.id, [])
+        )
         if question.meta:
             if name:
                 meta_name.append(name)

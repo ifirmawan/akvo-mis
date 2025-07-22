@@ -2,7 +2,6 @@ import re
 import base64
 from django.core.cache import cache
 from datetime import datetime
-from datetime import timedelta
 from api.v1.v1_forms.constants import QuestionTypes
 from api.v1.v1_forms.models import Questions
 from api.v1.v1_data.models import Answers, FormData
@@ -89,10 +88,9 @@ def set_answer_data(
             base64_encoded = base64.b64encode(image_bytes).decode('utf-8')
             name = f"data:image/png;base64,{base64_encoded}"
     elif question.type == QuestionTypes.date:
-        # Get date from data.created and add 1 day to it
-        name = (data.created + timedelta(days=1)).strftime(
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        # Use the actual creation date of the data entry
+        # This ensures monitoring entries have progressive dates
+        name = data.created.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     elif (
         question.type == QuestionTypes.cascade
         and question.extra

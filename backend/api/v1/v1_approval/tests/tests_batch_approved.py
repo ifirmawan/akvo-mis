@@ -35,6 +35,7 @@ class DataBatchApprovedTestCase(TestCase, ProfileTestHelperMixin):
         self.data = FormData.objects.filter(
             is_pending=True,
             administration__level__level=4,
+            form__parent__isnull=True,
         ).last()
         parent_adms = self.data.administration.ancestors.all()
 

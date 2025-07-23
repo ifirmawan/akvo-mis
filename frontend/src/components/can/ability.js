@@ -15,6 +15,7 @@ const defineAbilityFor = (user) => {
     const is_approver = roles.filter((r) => r?.is_approver).length > 0;
     const is_submitter = roles.filter((r) => r?.is_submitter).length > 0;
     const is_editor = roles.filter((r) => r?.is_mobile).length > 0;
+    const can_delete = roles.filter((r) => r?.can_delete).length > 0;
 
     if (is_approver) {
       can("manage", "approvals");
@@ -24,11 +25,14 @@ const defineAbilityFor = (user) => {
       can("manage", "submissions");
       can("manage", "mobile");
       can("create", "downloads");
-      can("edit", "data", { created_by: user.email });
+      can("edit", "data");
     }
     if (is_editor) {
       can("edit", "data");
       can("upload", "data");
+    }
+    if (can_delete) {
+      can("delete", "data");
     }
     can("read", "data");
     can("read", "downloads");

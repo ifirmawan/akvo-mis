@@ -46,7 +46,11 @@ const MonitoringDetail = () => {
   const { form, parentId } = useParams();
   const navigate = useNavigate();
 
-  const { language, selectedFormData } = store.useState((s) => s);
+  const {
+    language,
+    selectedFormData,
+    user: authUser,
+  } = store.useState((s) => s);
   const childrenForms = useMemo(() => {
     return window?.forms?.filter((f) => `${f.content?.parent}` === form);
   }, [form]);
@@ -79,7 +83,10 @@ const MonitoringDetail = () => {
   const [selectedOverviewDate, setSelectedOverviewDate] = useState(null);
   const ability = useContext(AbilityContext);
 
-  const editable = ability.can("edit", "data");
+  const editable =
+    (ability.can("edit", "data") &&
+      selectedFormData?.created_by === authUser?.id) ||
+    authUser?.is_superuser;
 
   const { active: activeLang } = language;
   const text = useMemo(() => {
@@ -292,16 +299,18 @@ const MonitoringDetail = () => {
               }}
             >
               <TabPane tab={text.manageDataTab1} key="registration-data">
-                <DataDetail
-                  record={selectedFormData}
-                  updateRecord={updateRecord}
-                  updater={setUpdateRecord}
-                  setDeleteData={setDeleteData}
-                  setEditedRecord={setEditedRecord}
-                  editedRecord={editedRecord}
-                  isPublic={editable}
-                  isFullScreen
-                />
+                <div className="registration-data-wrapper">
+                  <DataDetail
+                    record={selectedFormData}
+                    updateRecord={updateRecord}
+                    updater={setUpdateRecord}
+                    setDeleteData={setDeleteData}
+                    setEditedRecord={setEditedRecord}
+                    editedRecord={editedRecord}
+                    isPublic={!editable}
+                    isFullScreen
+                  />
+                </div>
               </TabPane>
               <TabPane tab={text.manageDataTab2} key="monitoring-data">
                 <Row style={{ marginBottom: "16px" }}>
@@ -345,7 +354,7 @@ const MonitoringDetail = () => {
                           setDeleteData={setDeleteData}
                           setEditedRecord={setEditedRecord}
                           editedRecord={editedRecord}
-                          isPublic={editable}
+                          isPublic={!editable}
                         />
                       ),
                       expandIcon: ({ expanded, onExpand, record }) =>

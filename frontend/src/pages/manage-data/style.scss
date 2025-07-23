@@ -72,6 +72,14 @@
       top: 0px;
       right: 22px;
     }
+    .registration-data-wrapper {
+      .button-save {
+        position: relative;
+        top: 0;
+        right: 0;
+        padding: 0;
+      }
+    }
     .ant-table {
       tr.row-edited td {
         background-color: #fefebe;

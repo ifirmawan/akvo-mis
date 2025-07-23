@@ -437,7 +437,9 @@ def transform_form_data_for_report(
                                 try:
                                     date_obj = parser.parse(answer.name)
                                     value = date_obj.strftime("%B %d, %Y")
-                                except (ImportError, ValueError, TypeError):
+                                except (
+                                    ImportError, ValueError, TypeError
+                                ):  # pragma: no cover
                                     value = str(answer.name)
                         elif question.type in [
                             QuestionTypes.text,

@@ -203,6 +203,19 @@ const Users = () => {
     fetchData,
   ]);
 
+  // subscribe to changes in filters to reset current page
+  useEffect(() => {
+    const unsubscribe = store.subscribe(
+      ({ filters }) => ({ filters }),
+      () => {
+        setCurrentPage(1);
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <div id="users">
       <div className="description-container">

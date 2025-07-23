@@ -40,3 +40,5 @@ class GenerateDataJSONTestCase(TestCase):
             os.path.exists(f"{STORAGE_PATH}/datapoints/{form_data.uuid}.json"),
             "File not exists"
         )
+        # Remove the file after test
+        os.remove(f"{STORAGE_PATH}/datapoints/{form_data.uuid}.json")

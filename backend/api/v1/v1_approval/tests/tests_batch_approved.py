@@ -1,3 +1,4 @@
+import os
 from io import StringIO
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -10,6 +11,7 @@ from api.v1.v1_users.models import SystemUser
 from api.v1.v1_profile.constants import DataAccessTypes
 from api.v1.v1_profile.models import Role
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
+from mis.settings import STORAGE_PATH
 
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
@@ -266,3 +268,24 @@ class DataBatchApprovedTestCase(TestCase, ProfileTestHelperMixin):
         self.assertFalse(
             self.data.is_pending
         )
+
+
+class DataBatchApprovedTestCaseWithFileSaving(DataBatchApprovedTestCase):
+    """
+    This test case is similar to DataBatchApprovedTestCase but it ensures that
+    the data is saved to file after approval.
+    """
+
+    def test_batch_approved_and_saved_to_file(self):
+        # Overriding TEST_ENV to False to allow file saving
+        with override_settings(TEST_ENV=False):
+            # Approve the batch by first level approver
+            self.test_batch_approved_by_first_level_approver()
+            self.data.refresh_from_db()
+        uuid = self.data.uuid
+        self.assertTrue(
+            os.path.exists(f"{STORAGE_PATH}/datapoints/{uuid}.json"),
+            "File not exists"
+        )
+        # Remove the file after test
+        os.remove(f"{STORAGE_PATH}/datapoints/{uuid}.json")

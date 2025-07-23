@@ -1,7 +1,7 @@
 from django.core.management import call_command
 from django.core.management import BaseCommand
 from api.v1.v1_forms.models import Forms
-from api.v1.v1_users.models import SystemUser
+from api.v1.v1_profile.models import SystemUser
 
 
 class Command(BaseCommand):

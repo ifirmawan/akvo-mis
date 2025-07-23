@@ -263,6 +263,21 @@ class FakeCompleteDataSeederTestCase(TestCase, AssignmentTokenTestHelperMixin):
         self.assertIsNone(value)
         self.assertIsInstance(option, list)
 
+        # Check if dep_values has min value
+        dep_values[312] = {
+            "id": 312,
+            "min": 2
+        }
+        data = form.form_form_data.order_by('?').first()
+        name, value, option = set_answer_data(
+            data=data,
+            question=q,
+            dep_values=dep_values[312]
+        )
+        self.assertIsNone(name)
+        self.assertIsNone(value)
+        self.assertIsInstance(option, list)
+
         # Use form that does not have dependency questions
         form = Forms.objects.get(pk=2)
         dep_values = {}

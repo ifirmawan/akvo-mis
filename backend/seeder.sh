@@ -12,6 +12,7 @@ read -r seed_form
 if [[ "${seed_form}" == 'y' || "${seed_form}" == 'Y' ]]; then
     python manage.py form_seeder
     python manage.py generate_config
+    python manage.py clear_cache
 fi
 
 echo "Add New Super Admin? [y/n]"

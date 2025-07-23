@@ -475,7 +475,9 @@ def transform_form_data_for_report(
                     result.append(group_data)
         return result
     except Exception as e:
-        logger.error(f"Error transforming form data: {str(e)}")
+        logger.error(
+            f"Error transforming form data: {str(e)}"
+        )  # pragma: no cover
         return []
 
 

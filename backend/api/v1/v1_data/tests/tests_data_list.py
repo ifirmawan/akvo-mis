@@ -72,3 +72,31 @@ class FormDataListTestCase(TestCase, ProfileTestHelperMixin):
         data = response.json()
         self.assertGreater(data["total"], 0)
         self.assertNotIn(self.draft_data.id, [d["id"] for d in data["data"]])
+
+    def test_form_data_list_filter_by_administration(self):
+        """Test that the form data list can be filtered by administration."""
+        adm = self.data.administration
+        response = self.client.get(
+            f"/api/v1/form-data/{self.form.id}?administration={adm.id}",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreater(data["total"], 0)
+        self.assertIn(
+            " - ".join(adm.full_name.split("-")[1:]),
+            [
+                item["administration"] for item in data["data"]
+            ]
+        )
+
+    def test_form_data_list_filter_by_parent(self):
+        """Test that the form data list can be filtered by parent."""
+        child_form = self.form.children.first()
+        response = self.client.get(
+            f"/api/v1/form-data/{child_form.id}?parent={self.data.uuid}",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreater(data["total"], 0)

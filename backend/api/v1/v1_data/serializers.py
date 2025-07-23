@@ -324,10 +324,6 @@ class ListFormDataRequestSerializer(serializers.Serializer):
     administration = CustomPrimaryKeyRelatedField(
         queryset=Administration.objects.none(), required=False
     )
-    questions = CustomListField(
-        child=CustomPrimaryKeyRelatedField(queryset=Questions.objects.none()),
-        required=False,
-    )
     parent = serializers.CharField(required=False)
 
     def __init__(self, **kwargs):
@@ -335,7 +331,6 @@ class ListFormDataRequestSerializer(serializers.Serializer):
         self.fields.get(
             "administration"
         ).queryset = Administration.objects.all()
-        self.fields.get("questions").child.queryset = Questions.objects.all()
 
 
 class ListFormDataSerializer(serializers.ModelSerializer):

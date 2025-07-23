@@ -100,18 +100,6 @@ class FormDataAddListView(APIView):
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
-                name="questions",
-                required=False,
-                type={"type": "array", "items": {"type": "number"}},
-                location=OpenApiParameter.QUERY,
-            ),
-            OpenApiParameter(
-                name="options",
-                required=False,
-                type={"type": "array", "items": {"type": "string"}},
-                location=OpenApiParameter.QUERY,
-            ),
-            OpenApiParameter(
                 name="parent",
                 required=False,
                 type=OpenApiTypes.STR,
@@ -151,9 +139,6 @@ class FormDataAddListView(APIView):
                 "total_page": ceil(total / page_size),
                 "data": ListFormDataSerializer(
                     instance=instance,
-                    context={
-                        "questions": serializer.validated_data.get("questions")
-                    },
                     many=True,
                 ).data,
             }

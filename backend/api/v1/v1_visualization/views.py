@@ -15,7 +15,6 @@ from drf_spectacular.types import OpenApiTypes
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from dateutil.parser import parse
 
 
 @extend_schema(
@@ -78,13 +77,8 @@ def monitoring_stats(request, version):
                     data=formdata, question_id=question_date_key
                 ).first()
                 if date_answer and date_answer.name:
-                    parsed_date_raw = parse(date_answer.name)
-                    reformatted = parsed_date_raw.strftime(
-                        "%Y-%m-%dT%H:%M:%S.%fZ"
-                    )
                     parsed_date = datetime.strptime(
-                        reformatted,
-                        "%Y-%m-%dT%H:%M:%S.%fZ"
+                        date_answer.name, "%Y-%m-%dT%H:%M:%S.%fZ"
                     )
                     if parsed_date:
                         date = parsed_date

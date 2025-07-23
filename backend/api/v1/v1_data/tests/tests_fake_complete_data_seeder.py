@@ -259,22 +259,22 @@ class FakeCompleteDataSeederTestCase(TestCase, AssignmentTokenTestHelperMixin):
             question=q,
             dep_values=dep_values.get(q.id, None)
         )
-        # self.assertIsNotNone(name)
-        # self.assertIsNotNone(value, str)
-        # self.assertIsInstance(option, list)
+        self.assertIsNone(name)
+        self.assertIsNone(value)
+        self.assertIsInstance(option, list)
 
-        # # Use form that does not have dependency questions
-        # form = Forms.objects.get(pk=2)
-        # dep_values = {}
-        # data = form.form_form_data.order_by('?').first()
-        # q = form.form_questions.filter(
-        #     pk=203
-        # ).first()
-        # name, value, option = set_answer_data(
-        #     data=data,
-        #     question=q,
-        #     dep_values=dep_values.get(q.id, None)
-        # )
-        # self.assertIsNone(name)
-        # self.assertIsNone(value, float)
-        # self.assertIsNone(option)
+        # Use form that does not have dependency questions
+        form = Forms.objects.get(pk=2)
+        dep_values = {}
+        data = form.form_form_data.order_by('?').first()
+        q = form.form_questions.filter(
+            pk=203
+        ).first()
+        name, value, option = set_answer_data(
+            data=data,
+            question=q,
+            dep_values=dep_values.get(q.id, None)
+        )
+        self.assertIsNone(name)
+        self.assertIsInstance(value, int)
+        self.assertIsNone(option)

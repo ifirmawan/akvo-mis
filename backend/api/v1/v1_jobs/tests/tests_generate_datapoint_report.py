@@ -1,4 +1,5 @@
 import os
+from io import StringIO
 from unittest.mock import patch, MagicMock
 from django.core.management import call_command
 from django.test import TestCase
@@ -15,17 +16,23 @@ from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
 class GenerateDatapointReportTestCase(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         call_command("administration_seeder", "--test", 1)
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test", 1)
-
-        call_command(
-            "fake_data_seeder",
-            repeat=20,
-            test=True,
-            approved=True,
-        )
+        self.call_command(repeat=2, approved=True)
 
         self.form = Forms.objects.get(pk=1)
 

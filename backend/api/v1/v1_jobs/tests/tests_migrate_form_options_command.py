@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-
+from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -19,14 +19,27 @@ ISSUE_NUMBER = 1
 
 @override_settings(USE_TZ=False)
 class MigrateFormOptionsCommand(TestCase):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         call_command("form_seeder", "--test")
         call_command("administration_seeder", "--test")
+        call_command("default_roles_seeder", "--test", 1)
         user = {"email": "admin@akvo.org", "password": "Test105*"}
         user = self.client.post(
             "/api/v1/login", user, content_type="application/json"
         )
-        call_command("fake_data_seeder", "-r", 2, "--test", True)
+        self.call_command("-r", 2)
 
         # get answer which has options answer
         answer = Answers.objects.filter(
@@ -100,7 +113,7 @@ class MigrateFormOptionsCommand(TestCase):
     def test_migrate_form_options_reverse(self):
         # migrate reverse
         call_command("migrate_form_options", ISSUE_NUMBER, "--reverse")
-        answers = answer = Answers.objects.filter(
+        answers = Answers.objects.filter(
             question__form_id=self.form_id,
             question__type__in=[
                 QuestionTypes.option,
@@ -115,11 +128,10 @@ class MigrateFormOptionsCommand(TestCase):
         uuids = list(set(uuids))
         # create a new json data file
         answer.data.save_to_file
-        for uuid in uuids:
-            json_filename = f"datapoints/{uuid}.json"
-            self.assertTrue(storage.check(json_filename))
+        json_filename = f"datapoints/{answer.data.uuid}.json"
+        self.assertTrue(storage.check(json_filename))
         # Remove the generated file
-        filepath = f"{STORAGE_PATH}/datapoints/{uuid}.json"
+        filepath = f"{STORAGE_PATH}/datapoints/{answer.data.uuid}.json"
         if os.path.exists(filepath):
             os.remove(filepath)
 

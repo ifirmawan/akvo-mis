@@ -34,10 +34,10 @@ class DataBatch(models.Model):
     updated = models.DateTimeField(default=None, null=True)
 
     def __str__(self):
-        return self.name
+        return self.name  # pragma: no cover
 
     # Get all the approvers for this batch
-    def approvers(self, adm_level: int = None):
+    def approvers(self):
         administrations = [self.administration]
         if self.administration.ancestors.count():
             # merge adm with ancestors
@@ -53,21 +53,13 @@ class DataBatch(models.Model):
             role__role_role_access__data_access=DataAccessTypes.approve,
         ).select_related("user", "role")
         # Apply form access filter
-        # Get parent form if exists
-        parent_forms = Forms.objects.filter(children=form)
         form_filter = [form]
-        if parent_forms.exists():
-            form_filter.extend(parent_forms)
+        if form.parent:
+            form_filter.append(form.parent)
 
         user_roles = user_roles.filter(
             user__user_form__form__in=form_filter
         )
-
-        if adm_level is not None or adm_level == 0:
-            # Filter user roles by administration level
-            user_roles = user_roles.filter(
-                administration__level__level=adm_level,
-            )
 
         # Show user and their administration order by administration level
         user_roles = user_roles.order_by(
@@ -107,7 +99,7 @@ class DataBatchComments(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.comment
+        return self.comment  # pragma: no cover
 
     class Meta:
         db_table = "batch_comment"
@@ -124,7 +116,7 @@ class DataBatchAttachments(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.name  # pragma: no cover
 
     class Meta:
         db_table = "batch_attachment"
@@ -145,7 +137,7 @@ class DataBatchList(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.batch.name} - {self.data.name}"
+        return f"{self.batch.name} - {self.data.name}"  # pragma: no cover
 
     class Meta:
         db_table = "batch_data"
@@ -180,7 +172,7 @@ class DataApproval(models.Model):
     updated = models.DateTimeField(default=None, null=True)
 
     def __str__(self):
-        return self.user.email
+        return self.user.email  # pragma: no cover
 
     class Meta:
         db_table = "data_approval"

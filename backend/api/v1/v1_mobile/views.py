@@ -517,9 +517,11 @@ class MobileAssignmentViewSet(ModelViewSet):
             adm_q = Q(
                 administrations__path__startswith=f"{adm.id}."
             )
-        for ur in user.user_user_role.all():
+        for ur in user.user_user_role.filter(
+            role__role_role_access__data_access=DataAccessTypes.submit
+        ).all():
             adm = ur.administration
-            path = adm.path \
+            path = f"{adm.path}{adm.id}." \
                 if adm.path else f"{adm.id}."
             adm_q |= Q(administrations__path__startswith=path)
         if adm_q:

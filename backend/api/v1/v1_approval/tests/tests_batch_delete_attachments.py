@@ -1,4 +1,4 @@
-# import os
+from io import StringIO
 from django.test import TestCase, override_settings
 # from unittest import mock
 from django.core.management import call_command
@@ -11,12 +11,23 @@ from api.v1.v1_approval.models import DataBatch
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
 class BatchDeleteAttachmentTestCase(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         call_command("administration_seeder", "--test", 1)
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test", 1)
-
-        call_command("fake_data_seeder", "-r", 10, "-t", True)
+        self.call_command(repeat=2, approved=False, draft=False)
 
         self.data = FormData.objects.filter(is_pending=True).first()
         self.submitter = self.data.created_by

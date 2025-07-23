@@ -13,7 +13,7 @@ from api.v1.v1_profile.models import (
 from api.v1.v1_users.models import SystemUser
 
 
-@override_settings(USE_TZ=False)
+@override_settings(USE_TZ=False, TEST_ENV=True)
 class FormDataUpdateTestCase(TestCase):
     def setUp(self):
         super().setUp()

@@ -140,6 +140,25 @@ class GeolocationListView(APIView):
                 Q(administration=adm) |
                 Q(administration__path__startswith=adm_path)
             )
+        if (
+            not request.user.is_superuser and
+            not serializer.validated_data.get("administration")
+        ):
+            user_role = request.user.user_user_role.order_by(
+                "administration__level__level"
+            ).first()
+            adm = user_role.administration if user_role else None
+            if not adm:
+                return Response(
+                    data=[],
+                    status=status.HTTP_200_OK,
+                )
+            if adm.path:
+                adm_path = f"{adm.path}{adm.id}."
+            queryset = queryset.filter(
+                Q(administration=adm) |
+                Q(administration__path__startswith=adm_path)
+            )
         queryset = queryset.values(
             "id", "name", "geo", "administration_id"
         )

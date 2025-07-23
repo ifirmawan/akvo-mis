@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.core.management import call_command
-
+from io import StringIO
 from api.v1.v1_data.models import FormData
 from api.v1.v1_profile.models import Administration
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
@@ -9,16 +9,28 @@ from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
 class CreateDataBatchTestCase(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         call_command("administration_seeder", "--test", 1)
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test", 1)
 
-        call_command("fake_data_seeder", "-r", 10, "-t", True)
+        self.call_command(repeat=4, approved=False, draft=False)
 
         self.data = FormData.objects.filter(
             is_pending=True,
-            administration__level__level=3,
+            administration__level__level=4,
         ).first()
         self.submitter = self.data.created_by
         self.submitter.set_password("test")
@@ -241,3 +253,27 @@ class CreateDataBatchTestCase(TestCase, ProfileTestHelperMixin):
             HTTP_AUTHORIZATION=f"Bearer {self.token}",
         )
         self.assertEqual(response.status_code, 400)
+
+    def test_create_batch_with_monitorng_data(self):
+        # Create monitoring data
+        monitoring_data = FormData.objects.filter(
+            is_pending=True,
+            parent__isnull=False,
+        ).order_by("?").first()
+        self.assertIsNotNone(monitoring_data, "No monitoring data found")
+
+        payload = {
+            "name": "Test Batch with Monitoring Data",
+            "comment": "This batch contains monitoring data",
+            "data": [
+                monitoring_data.id,
+                monitoring_data.parent.id
+            ],
+        }
+        response = self.client.post(
+            "/api/v1/batch",
+            payload,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 201)

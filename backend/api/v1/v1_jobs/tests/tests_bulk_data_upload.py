@@ -10,7 +10,7 @@ from api.v1.v1_data.models import FormData
 from api.v1.v1_users.models import SystemUser
 from api.v1.v1_profile.models import Administration
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
-from api.v1.v1_data.management.commands.fake_data_seeder import (
+from api.v1.v1_data.management.commands.fake_complete_data_seeder import (
     add_fake_answers
 )
 from api.v1.v1_profile.functions import get_max_administration_level

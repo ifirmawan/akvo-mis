@@ -37,14 +37,20 @@ const DataDetail = ({
   const [resetButton, setresetButton] = useState({});
   const pendingData = record?.pending_data?.created_by || false;
   const { notify } = useNotification();
-  const { language, forms: allForms } = store.useState((s) => s);
+  const {
+    language,
+    forms: allForms,
+    user: authUser,
+  } = store.useState((s) => s);
   const { active: activeLang } = language;
   const text = useMemo(() => {
     return uiText[activeLang];
   }, [activeLang]);
   const ability = useContext(AbilityContext);
 
-  const isEditor = ability.can("edit", "data");
+  const isEditor =
+    (ability.can("edit", "data") && authUser?.id === record?.created_by) ||
+    authUser?.is_superuser;
 
   const questionGroups = useMemo(() => {
     const formList = window?.forms || allForms || [];
@@ -291,7 +297,7 @@ const DataDetail = ({
             >
               {text.saveEditButton}
             </Button>
-            {ability.can("manage", "data") && (
+            {ability.can("delete", "data") && (
               <Button
                 type="danger"
                 onClick={() => setDeleteData(record)}

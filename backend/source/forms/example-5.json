@@ -19,7 +19,10 @@
           "short_label": null,
           "meta": false,
           "type": "administration",
-          "required": true
+          "required": true,
+          "api": {
+            "endpoint": "/api/v1/administrations/"
+          }
         },
         {
           "id": 502,

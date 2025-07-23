@@ -947,6 +947,7 @@ const uiText = {
     selectRowsToDownload: "Please select rows to download",
     manageDataTabList: "Datapoint List",
     manageDataTabMap: "Map View",
+    checkboxSelectAll: "Select all {{name}}",
   },
 
   de: {},

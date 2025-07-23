@@ -478,12 +478,9 @@ def list_users(request, version):
 
     if serializer.validated_data.get("administration"):
         filter_adm = serializer.validated_data.get("administration")
-        filter_descendants = list(
-                Administration.objects.filter(
-                    parent=filter_adm
-                ).values_list("id", flat=True)
-            )
+
         if serializer.validated_data.get("descendants"):
+            # Include all descendants using path hierarchy
             filter_path = "{0}{1}.".format(
                 filter_adm.path, filter_adm.id
             ) if filter_adm.path else f"{filter_adm.id}."
@@ -493,11 +490,14 @@ def list_users(request, version):
                 ).values_list("id", flat=True)
             )
             filter_descendants.append(filter_adm.id)
+            final_set = set(filter_descendants)
+        else:
+            # Only include the specific administration, no descendants
+            final_set = {filter_adm.id}
 
-        final_set = set(filter_descendants)
-        # If the administration is not national level
-        # then filter by final_set administration IDs
-        if filter_adm.level.level:
+        # Apply filter by administration IDs
+        # Only apply filtering if administration level > 0 (not national level)
+        if filter_adm.level.level > 0:
             filter_data["user_user_role__administration_id__in"] = list(
                 final_set
             )

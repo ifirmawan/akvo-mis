@@ -38,22 +38,39 @@ if [[ "${seed_administration_attribute}" == 'y' || "${seed_administration_attrib
     python manage.py administration_attribute_seeder
 fi
 
-echo "Seed Fake User? [y/n]"
-read -r fake_user
-if [[ "${fake_user}" == 'y' || "${fake_user}" == 'Y' ]]; then
-    echo "How many fake users do you want to create?"
-    read -r fake_user_count
-    if [[ "${fake_user_count}" == '' ]]; then
-        fake_user_count=5
+echo "Seed Fake Data? [y/n]"
+read -r fake_data
+if [[ "${fake_data}" == 'y' || "${fake_data}" == 'Y' ]]; then
+    echo "How many fake data do you want to create? (default is 5)"
+    read -r fake_data_count
+    if [[ "${fake_data_count}" == '' ]]; then
+        fake_data_count=5
     fi
-    python manage.py default_roles_seeder
-    python manage.py fake_user_seeder --repeat "${fake_user_count}"
-fi
+    echo "How many monitoring data do you want to create? (default is 2)"
+    read -r monitoring_data_count
+    if [[ "${monitoring_data_count}" == '' ]]; then
+        monitoring_data_count=2
+    fi
 
-echo "Seed Entities? [y/n]"
-read -r seed_entities
-if [[ "${seed_entities}" == 'y' || "${seed_entities}" == 'Y' ]]; then
-    python manage.py entities_seeder
+    echo "Do you want to include pending form data? [y/n]"
+    read -r pending_data
+    # Invert the value of pending_data for --approved
+    if [[ "${pending_data}" == 'y' || "${pending_data}" == 'Y' ]]; then
+        approved=false
+    else
+        approved=true
+    fi
+
+    echo "Do you want to include draft form data? [y/n]"
+    read -r draft_data_input
+    if [[ "${draft_data_input}" == 'y' || "${draft_data_input}" == 'Y' ]]; then
+        draft_data=true
+    else
+        draft_data=false
+    fi
+        
+    python manage.py default_roles_seeder
+    python manage.py fake_complete_data_seeder --repeat="${fake_data_count}" --monitoring="${monitoring_data_count}" --approved="${approved}" --draft="${draft_data}"
 fi
 
 python manage.py generate_sqlite

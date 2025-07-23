@@ -15,7 +15,6 @@ concurrency = multiprocessing
 [paths]
 source =
     /app/backend
-    /app/backend/utils
     .
 
 [report]

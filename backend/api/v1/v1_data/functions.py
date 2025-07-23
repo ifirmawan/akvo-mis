@@ -2,10 +2,10 @@ import re
 import base64
 from django.core.cache import cache
 from datetime import datetime
-from django.utils import timezone
 from datetime import timedelta
 from api.v1.v1_forms.constants import QuestionTypes
-from api.v1.v1_data.models import Answers
+from api.v1.v1_forms.models import Questions
+from api.v1.v1_data.models import Answers, FormData
 from api.v1.v1_profile.models import Entity, EntityData
 from faker import Faker
 
@@ -29,7 +29,11 @@ def create_cache(name, resp, timeout=None):
     cache.add(cache_name, resp, timeout=timeout)
 
 
-def set_answer_data(data, question):
+def set_answer_data(
+    data: FormData,
+    question: Questions,
+    dep_values: dict = None,
+):
     name = None
     value = None
     option = None
@@ -42,9 +46,24 @@ def set_answer_data(data, question):
     elif question.type == QuestionTypes.text:
         name = fake.company() if question.meta else fake.sentence(nb_words=3)
     elif question.type == QuestionTypes.number:
-        value = fake.random_int(min=10, max=50)
+        min = 1
+        max = 50
+        if question.rule and question.rule.get("min"):
+            min = question.rule["min"]
+        if question.rule and question.rule.get("max"):
+            max = question.rule["max"]
+        if dep_values and dep_values.get("max"):
+            max = dep_values["max"]
+        if dep_values and dep_values.get("min"):
+            min = dep_values["min"]
+        value = fake.random_int(min=min, max=max)
     elif question.type == QuestionTypes.option:
         option = [question.options.order_by("?").first().value]
+        if dep_values and dep_values.get("options"):
+            option = fake.random_choices(
+                dep_values["options"],
+                length=1
+            )
     elif question.type == QuestionTypes.multiple_option:
         option = list(
             question.options.order_by("?")
@@ -52,6 +71,11 @@ def set_answer_data(data, question):
                 0: fake.random_int(min=1, max=3)
             ]
         )
+        if dep_values and dep_values.get("options"):
+            option = fake.random_choices(
+                dep_values["options"],
+                length=fake.random_int(min=1, max=3)
+            )
     elif question.type == QuestionTypes.photo:
         name = fake.image_url()
     elif question.type == QuestionTypes.attachment:
@@ -65,10 +89,10 @@ def set_answer_data(data, question):
             base64_encoded = base64.b64encode(image_bytes).decode('utf-8')
             name = f"data:image/png;base64,{base64_encoded}"
     elif question.type == QuestionTypes.date:
-        name = fake.date_between_dates(
-            date_start=timezone.datetime.now().date() - timedelta(days=90),
-            date_end=timezone.datetime.now().date(),
-        ).strftime("%m/%d/%Y")
+        days = fake.random_int(min=1, max=30)
+        name = (data.created + timedelta(days=days)).strftime(
+            "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
     elif (
         question.type == QuestionTypes.cascade
         and question.extra
@@ -106,10 +130,23 @@ def set_answer_data(data, question):
 def add_fake_answers(data):
     form = data.form
     meta_name = []
-    for question in form.form_questions.all().order_by(
+    dep_questions = form.form_questions.filter(
+        dependency__isnull=False
+    ).distinct()
+    dep_values = {}
+    for question in dep_questions:
+        if question.dependency:
+            for d in question.dependency:
+                dep_values[d.get("id")] = d
+    questions = form.form_questions.all().order_by(
         "question_group__order", "order"
-    ):
-        name, value, option = set_answer_data(data, question)
+    )
+    for question in questions:
+        name, value, option = set_answer_data(
+            data=data,
+            question=question,
+            dep_values=dep_values.get(question.id, None),
+        )
         if question.meta:
             if name:
                 meta_name.append(name)
@@ -143,5 +180,9 @@ def add_fake_answers(data):
                 options=option,
                 created_by=data.created_by,
             )
-    data.name = " - ".join(meta_name)
+    if len(meta_name) > 0:
+        name = " - ".join(meta_name)
+        # make sure the name is not empty white spaces
+        if len(name.strip()):
+            data.name = name
     data.save()

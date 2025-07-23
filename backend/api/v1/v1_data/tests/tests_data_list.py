@@ -1,3 +1,4 @@
+from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -7,21 +8,27 @@ from api.v1.v1_data.functions import add_fake_answers
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
 
-@override_settings(USE_TZ=False)
+@override_settings(USE_TZ=False, TEST_ENV=True)
 class FormDataListTestCase(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         super().setUp()
         self.maxDiff = None
         call_command("administration_seeder", "--test")
         call_command("form_seeder", "--test")
         call_command("default_roles_seeder", "--test", 1)
-        call_command(
-            "fake_data_seeder",
-            repeat=5,
-            test=True,
-            approved=True,
-            draft=False,
-        )
+        self.call_command(repeat=2, approved=True, draft=False)
         self.form = Forms.objects.get(pk=1)
         self.data = (
             self.form.form_form_data.filter(
@@ -65,3 +72,31 @@ class FormDataListTestCase(TestCase, ProfileTestHelperMixin):
         data = response.json()
         self.assertGreater(data["total"], 0)
         self.assertNotIn(self.draft_data.id, [d["id"] for d in data["data"]])
+
+    def test_form_data_list_filter_by_administration(self):
+        """Test that the form data list can be filtered by administration."""
+        adm = self.data.administration
+        response = self.client.get(
+            f"/api/v1/form-data/{self.form.id}?administration={adm.id}",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreater(data["total"], 0)
+        self.assertIn(
+            " - ".join(adm.full_name.split("-")[1:]),
+            [
+                item["administration"] for item in data["data"]
+            ]
+        )
+
+    def test_form_data_list_filter_by_parent(self):
+        """Test that the form data list can be filtered by parent."""
+        child_form = self.form.children.first()
+        response = self.client.get(
+            f"/api/v1/form-data/{child_form.id}?parent={self.data.uuid}",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreater(data["total"], 0)

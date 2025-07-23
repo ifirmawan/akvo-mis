@@ -1,3 +1,5 @@
+import os
+from io import StringIO
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.core.management import call_command
@@ -7,23 +9,36 @@ from api.v1.v1_data.models import FormData
 from api.v1.v1_data.tasks import seed_approved_data
 from api.v1.v1_users.models import SystemUser
 from api.v1.v1_profile.constants import DataAccessTypes
+from api.v1.v1_profile.models import Role
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
+from mis.settings import STORAGE_PATH
 
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
 class DataBatchApprovedTestCase(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         call_command("administration_seeder", "--test", 1)
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test", 1)
-
-        call_command("fake_data_seeder", "-r", 10, "-t", True)
+        self.call_command(repeat=2, approved=False, draft=False)
 
         self.data = FormData.objects.filter(
             is_pending=True,
-            administration__level__level=3,
-        ).first()
-
+            administration__level__level=4,
+            form__parent__isnull=True,
+        ).last()
         parent_adms = self.data.administration.ancestors.all()
 
         approver_list = []
@@ -33,28 +48,28 @@ class DataBatchApprovedTestCase(TestCase, ProfileTestHelperMixin):
                 user_user_role__administration=p,
                 user_user_role__role__role_role_access__data_access=da,
             ).order_by("?").first()
-            if not approver:
-                # create a new approver
-                new_approver = self.create_user(
-                    email="new.approver@test.com",
-                    role_level=self.IS_APPROVER,
-                    administration=p,
-                    form=self.data.form,
-                )
-                approver_list.append({
-                    "level": p.level.level,
-                    "user": new_approver,
-                })
-            else:
-                approver_list.append({
-                    "level": p.level.level,
-                    "user": approver,
-                })
+            approver_list.append({
+                "level": p.level.level,
+                "user": approver,
+            })
 
         # Create a batch with the new data
         submitter = self.data.created_by
         submitter.set_password("test")
         submitter.save()
+
+        # Update the submitter's role to have data submission access
+        submitter.user_user_role.all().delete()
+        # Find a role for the submitter
+        role = Role.objects.filter(
+            role_role_access__data_access=DataAccessTypes.submit,
+            administration_level=self.data.administration.level
+        ).first()
+        # Assign the role to the submitter
+        submitter.user_user_role.create(
+            role=role,
+            administration=self.data.administration,
+        )
 
         submitter_token = self.get_auth_token(submitter.email, "test")
         payload = {
@@ -76,7 +91,7 @@ class DataBatchApprovedTestCase(TestCase, ProfileTestHelperMixin):
         # Get batch list by first level approver
         a1 = list(
             filter(
-                lambda x: x["level"] == 0,
+                lambda x: x["level"] == 1,
                 approver_list
             )
         )[0]
@@ -93,7 +108,7 @@ class DataBatchApprovedTestCase(TestCase, ProfileTestHelperMixin):
         # Get batch list by second level approver
         a2 = list(
             filter(
-                lambda x: x["level"] == 1,
+                lambda x: x["level"] == 2,
                 approver_list
             )
         )[0]
@@ -110,7 +125,7 @@ class DataBatchApprovedTestCase(TestCase, ProfileTestHelperMixin):
         # Get batch list by third level approver
         a3 = list(
             filter(
-                lambda x: x["level"] == 2,
+                lambda x: x["level"] == 3,
                 approver_list
             )
         )[0]
@@ -253,3 +268,24 @@ class DataBatchApprovedTestCase(TestCase, ProfileTestHelperMixin):
         self.assertFalse(
             self.data.is_pending
         )
+
+
+class DataBatchApprovedTestCaseWithFileSaving(DataBatchApprovedTestCase):
+    """
+    This test case is similar to DataBatchApprovedTestCase but it ensures that
+    the data is saved to file after approval.
+    """
+
+    def test_batch_approved_and_saved_to_file(self):
+        # Overriding TEST_ENV to False to allow file saving
+        with override_settings(TEST_ENV=False):
+            # Approve the batch by first level approver
+            self.test_batch_approved_by_first_level_approver()
+            self.data.refresh_from_db()
+        uuid = self.data.uuid
+        self.assertTrue(
+            os.path.exists(f"{STORAGE_PATH}/datapoints/{uuid}.json"),
+            "File not exists"
+        )
+        # Remove the file after test
+        os.remove(f"{STORAGE_PATH}/datapoints/{uuid}.json")

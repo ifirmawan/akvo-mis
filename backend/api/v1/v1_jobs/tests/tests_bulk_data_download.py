@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -11,6 +12,18 @@ from api.v1.v1_profile.management.commands import administration_seeder
 
 @override_settings(USE_TZ=False)
 class BulkUnitTestCase(TestCase):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         call_command("form_seeder", "--test")
         rows = [
@@ -71,7 +84,7 @@ class BulkUnitTestCase(TestCase):
         user = self.client.post('/api/v1/login',
                                 user,
                                 content_type='application/json')
-        call_command("fake_data_seeder", "-r", 2, "--test", True)
+        self.call_command("-r", 2, "--test", True)
 
     def test_data_download_list_of_columns(self):
         form_data = FormData.objects.count()

@@ -145,6 +145,7 @@ Object {
     "cancelButton": "Cancel",
     "ccDescriptionPanel": "Instant access to all the administration pages and overview panels for data approvals.",
     "channelCol": "Channel",
+    "checkboxSelectAll": "Select all {{name}}",
     "chooseTemplate": "Choose a template",
     "codeField": "Code",
     "codeFieldRequired": "Code is required",

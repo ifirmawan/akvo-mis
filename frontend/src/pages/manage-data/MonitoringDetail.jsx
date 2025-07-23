@@ -22,6 +22,7 @@ import {
   Select,
   Tag,
   Tooltip,
+  Spin,
 } from "antd";
 import {
   LeftCircleOutlined,
@@ -29,6 +30,7 @@ import {
   DeleteOutlined,
   ArrowLeftOutlined,
   FormOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
 import { api, store, uiText } from "../../lib";
@@ -46,7 +48,11 @@ const MonitoringDetail = () => {
   const { form, parentId } = useParams();
   const navigate = useNavigate();
 
-  const { language, selectedFormData } = store.useState((s) => s);
+  const {
+    language,
+    selectedFormData,
+    user: authUser,
+  } = store.useState((s) => s);
   const childrenForms = useMemo(() => {
     return window?.forms?.filter((f) => `${f.content?.parent}` === form);
   }, [form]);
@@ -79,7 +85,10 @@ const MonitoringDetail = () => {
   const [selectedOverviewDate, setSelectedOverviewDate] = useState(null);
   const ability = useContext(AbilityContext);
 
-  const editable = ability.can("edit", "data");
+  const editable =
+    (ability.can("edit", "data") &&
+      selectedFormData?.created_by === authUser?.id) ||
+    authUser?.is_superuser;
 
   const { active: activeLang } = language;
   const text = useMemo(() => {
@@ -104,8 +113,11 @@ const MonitoringDetail = () => {
 
   const overviewQuestions = useMemo(() => {
     const forms =
-      window?.forms?.filter((f) => f?.content?.parent === parseInt(form, 10)) ||
-      [];
+      window?.forms?.filter((f) =>
+        selectedForm
+          ? f?.id === selectedForm
+          : f?.content?.parent === parseInt(form, 10)
+      ) || [];
     return forms
       .map((f) => f.content.question_group)
       .flat()
@@ -118,7 +130,7 @@ const MonitoringDetail = () => {
         name: q.label,
         type: q.type,
       }));
-  }, [form]);
+  }, [form, selectedForm]);
 
   const columns = [
     {
@@ -183,6 +195,20 @@ const MonitoringDetail = () => {
   const goToMonitoringForm = async (form) => {
     const { uuid } = selectedFormData;
     navigate(`/control-center/form/${form}/${uuid}`);
+  };
+
+  const onChangeMonitoringForm = (value) => {
+    if (formIdFromUrl && formIdFromUrl !== `${value}`) {
+      // Reset the URL to remove form_id query parameter
+      const url = new URL(window.location.href);
+      url.searchParams.delete("form_id");
+      window.history.replaceState({}, "", url);
+    }
+    setSelectedForm(value);
+    setSelectedOverviewQuestion(null);
+    setSelectedOverviewDate(null);
+    setUpdateRecord(true);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -292,27 +318,25 @@ const MonitoringDetail = () => {
               }}
             >
               <TabPane tab={text.manageDataTab1} key="registration-data">
-                <DataDetail
-                  record={selectedFormData}
-                  updateRecord={updateRecord}
-                  updater={setUpdateRecord}
-                  setDeleteData={setDeleteData}
-                  setEditedRecord={setEditedRecord}
-                  editedRecord={editedRecord}
-                  isPublic={editable}
-                  isFullScreen
-                />
+                <div className="registration-data-wrapper">
+                  <DataDetail
+                    record={selectedFormData}
+                    updateRecord={updateRecord}
+                    updater={setUpdateRecord}
+                    setDeleteData={setDeleteData}
+                    setEditedRecord={setEditedRecord}
+                    editedRecord={editedRecord}
+                    isPublic={!editable}
+                    isFullScreen
+                  />
+                </div>
               </TabPane>
               <TabPane tab={text.manageDataTab2} key="monitoring-data">
                 <Row style={{ marginBottom: "16px" }}>
                   <Col flex={1}>
                     <Select
                       value={selectedForm}
-                      onChange={(value) => {
-                        setSelectedForm(value);
-                        setUpdateRecord(true);
-                        setCurrentPage(1);
-                      }}
+                      onChange={onChangeMonitoringForm}
                       fieldNames={{ label: "name", value: "id" }}
                       options={childrenForms}
                       placeholder={text.selectFormPlaceholder}
@@ -345,7 +369,7 @@ const MonitoringDetail = () => {
                           setDeleteData={setDeleteData}
                           setEditedRecord={setEditedRecord}
                           editedRecord={editedRecord}
-                          isPublic={editable}
+                          isPublic={!editable}
                         />
                       ),
                       expandIcon: ({ expanded, onExpand, record }) =>
@@ -376,11 +400,7 @@ const MonitoringDetail = () => {
                   <Col>
                     <Select
                       value={selectedForm}
-                      onChange={(value) => {
-                        setSelectedForm(value);
-                        setUpdateRecord(true);
-                        setCurrentPage(1);
-                      }}
+                      onChange={onChangeMonitoringForm}
                       fieldNames={{ label: "name", value: "id" }}
                       options={childrenForms}
                       placeholder={text.selectFormPlaceholder}
@@ -421,10 +441,24 @@ const MonitoringDetail = () => {
                   renderEmpty={() => <Empty description={text.noFormText} />}
                 ></ConfigProvider>
                 <Row>
-                  <MonitoringOverview
-                    question={selectedOverviewQuestion}
-                    date={selectedOverviewDate}
-                  />
+                  {updateRecord ? (
+                    <Space
+                      style={{ paddingTop: 18, color: "#9e9e9e9e" }}
+                      size="middle"
+                    >
+                      <Spin
+                        indicator={
+                          <LoadingOutlined style={{ color: "#1b91ff" }} spin />
+                        }
+                      />
+                      <span>{text.loadingText}</span>
+                    </Space>
+                  ) : (
+                    <MonitoringOverview
+                      question={selectedOverviewQuestion}
+                      date={selectedOverviewDate}
+                    />
+                  )}
                 </Row>
               </TabPane>
             </Tabs>

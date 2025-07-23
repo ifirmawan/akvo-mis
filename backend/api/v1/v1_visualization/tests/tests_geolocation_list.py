@@ -1,4 +1,5 @@
 import time
+from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -14,19 +15,25 @@ fake = Faker()
 
 @override_settings(USE_TZ=False, TEST_ENV=True)
 class GeolocationListTestCases(TestCase, ProfileTestHelperMixin):
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
+            "fake_complete_data_seeder",
+            "--test=true",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
     def setUp(self):
         super().setUp()
         self.maxDiff = None
         call_command("administration_seeder", "--test")
         call_command("form_seeder", "--test")
         call_command("default_roles_seeder", "--test", 1)
-        call_command(
-            "fake_data_seeder",
-            repeat=5,
-            test=True,
-            approved=True,
-            draft=False,
-        )
+        self.call_command(repeat=2, test=True, approved=True, draft=False)
         self.form = Forms.objects.get(pk=1)
         self.data = (
             self.form.form_form_data.filter(
@@ -169,3 +176,65 @@ class GeolocationListTestCases(TestCase, ProfileTestHelperMixin):
         duration = end_time - start_time
         self.assertLess(duration, 2)  # Ensure response time is under 2 seconds
         self.assertEqual(response.status_code, 200)
+
+    def test_geolocation_list_by_non_superuser(self):
+        """
+            Test that a non-superuser can access the geolocation list
+            and that the administration filter works correctly.
+        """
+        adm = self.data.administration
+        non_superuser = self.create_user(
+            email="non_superuser@example.com",
+            role_level=self.IS_ADMIN,
+            administration=adm,
+            form=self.form,
+        )
+        non_superuser.set_password("test")
+        non_superuser.save()
+
+        non_superuser_token = self.get_auth_token(
+            non_superuser.email, "test"
+        )
+
+        response = self.client.get(
+            f"/api/v1/maps/geolocation/{self.form.id}",
+            HTTP_AUTHORIZATION=f"Bearer {non_superuser_token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreater(len(data), 0)
+
+        user_role = non_superuser.user_user_role.order_by(
+            "administration__level__level"
+        ).first()
+        self.assertIn(
+            user_role.administration.id,
+            [d["administration_id"] for d in data],
+        )
+
+    def test_geolocation_list_with_no_data_due_user_role_empty(self):
+        """
+            Test that the geolocation list returns an empty list
+            when the user has no roles or administrations.
+        """
+        no_role_user = self.create_user(
+            email="no_role_user@example.com",
+            role_level=self.IS_ADMIN,
+            form=self.form,
+        )
+        no_role_user.set_password("test")
+        no_role_user.save()
+
+        no_role_user_token = self.get_auth_token(
+            no_role_user.email, "test"
+        )
+
+        no_role_user.user_user_role.all().delete()  # Ensure no roles exist
+
+        response = self.client.get(
+            f"/api/v1/maps/geolocation/{self.form.id}",
+            HTTP_AUTHORIZATION=f"Bearer {no_role_user_token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data, [])

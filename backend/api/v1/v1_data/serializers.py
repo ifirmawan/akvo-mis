@@ -27,6 +27,7 @@ from utils.custom_serializer_fields import (
 )
 from utils.functions import update_date_time_format, get_answer_value
 from utils.functions import get_answer_history
+from django.conf import settings
 
 
 class SubmitFormDataSerializer(serializers.ModelSerializer):
@@ -255,7 +256,8 @@ class SubmitFormSerializer(serializers.Serializer):
                 options=option,
                 created_by=self.context.get("user"),
             )
-        obj_data.save_to_file
+        if not settings.TEST_ENV:
+            obj_data.save_to_file
 
         return object
 
@@ -322,10 +324,6 @@ class ListFormDataRequestSerializer(serializers.Serializer):
     administration = CustomPrimaryKeyRelatedField(
         queryset=Administration.objects.none(), required=False
     )
-    questions = CustomListField(
-        child=CustomPrimaryKeyRelatedField(queryset=Questions.objects.none()),
-        required=False,
-    )
     parent = serializers.CharField(required=False)
 
     def __init__(self, **kwargs):
@@ -333,7 +331,6 @@ class ListFormDataRequestSerializer(serializers.Serializer):
         self.fields.get(
             "administration"
         ).queryset = Administration.objects.all()
-        self.fields.get("questions").child.queryset = Questions.objects.all()
 
 
 class ListFormDataSerializer(serializers.ModelSerializer):
@@ -643,7 +640,12 @@ class SubmitPendingFormSerializer(serializers.Serializer):
 
         Answers.objects.bulk_create(answers)
 
-        if direct_to_data and not obj_data.parent and not obj_data.is_pending:
+        if (
+            direct_to_data and
+            not obj_data.parent and
+            not obj_data.is_pending and
+            not settings.TEST_ENV
+        ):
             # Only save to file if the data is not pending
             # and does not have a parent
             obj_data.save_to_file

@@ -95,39 +95,10 @@
           ]
         },
         {
-          "id": 1749632196724,
-          "name": "weather_condition",
-          "label": "Weather Condition",
-          "order": 6,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "rainy",
-              "label": "Rainy",
-              "id": 1749632202487,
-              "order": 1
-            },
-            {
-              "value": "cloudy",
-              "label": "Cloudy",
-              "id": 1749632202488,
-              "order": 2
-            },
-            {
-              "value": "fine",
-              "label": "Fine",
-              "id": 1749632227282,
-              "order": 3
-            }
-          ]
-        },
-        {
           "id": 1749632249972,
           "name": "type_of_water_source",
           "label": "Type of Water Source",
-          "order": 7,
+          "order": 6,
           "type": "option",
           "required": true,
           "meta": false,
@@ -186,7 +157,7 @@
           "id": 1749632480584,
           "name": "project_implementation_date",
           "label": "Project Implementation date",
-          "order": 8,
+          "order": 7,
           "type": "date",
           "required": true,
           "meta": false
@@ -195,7 +166,7 @@
           "id": 1749624452993,
           "name": "implementing_agency",
           "label": "Who is the implementing agency/agencies?",
-          "order": 9,
+          "order": 8,
           "type": "option",
           "options": [
             {
@@ -242,7 +213,7 @@
           "id": 174962445299,
           "name": "project_background",
           "label": "Project Background",
-          "order": 10,
+          "order": 9,
           "type": "text",
           "required": true,
           "meta": false

@@ -21,6 +21,15 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        # Get all non-test users
+        users = SystemUser.objects.exclude(
+            email__contains="@test.com"
+        ).all()
+        user_forms = {}
+        for user in users:
+            user_forms[user.id] = [
+                uf.form for uf in user.user_form.all()
+            ]
         # truncate all forms and related data
         forms = Forms.objects.all()
         for form in forms:
@@ -47,7 +56,15 @@ class Command(BaseCommand):
 
         # Re-assign forms to users
         for user in SystemUser.objects.all():
-            # Assign forms to the user
-            user.user_form.set(Forms.objects.all())
+            # restore the user's forms
+            if user.id in user_forms:
+                # filter Forms that were assigned to the user
+                forms = Forms.objects.filter(
+                    id__in=[uf.id for uf in user_forms[user.id]]
+                ).all()
+                for form in forms:
+                    user.user_form.create(
+                        form=form,
+                    )
         # Output success message
         self.stdout.write(self.style.SUCCESS("Successfully reset all forms."))

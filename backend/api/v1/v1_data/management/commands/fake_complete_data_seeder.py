@@ -167,6 +167,14 @@ class Command(BaseCommand):
         # Initialize incremental creation date
         current_created = base_created
 
+        existing_data_count = FormData.objects.filter(
+            is_pending=False,
+            is_draft=False,
+        ).count()
+        if existing_data_count > 0:
+            # If there are existing data, start from the next index
+            index = existing_data_count % total_points
+
         try:
             with transaction.atomic():
                 for r in range(repeat):

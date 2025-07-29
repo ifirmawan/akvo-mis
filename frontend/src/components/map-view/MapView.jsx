@@ -110,18 +110,21 @@ const MapView = ({ dataset, loading, position }) => {
               icon={{
                 className: "custom-marker",
                 iconSize: [32, 32],
-                html: `<span style="background-color:#64A73B; border:2px solid #fff;"/>`,
+                html: `<span style="background-color:${
+                  d?.color || "#64A73B"
+                }; border:2px solid #fff;"/>`,
               }}
             >
-              <Button
-                type="link"
+              <a
                 href={`/control-center/data/${selectedForm}/monitoring/${d.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ padding: 0 }}
               >
-                {d.name}
-              </Button>
+                {d?.values?.map((v) => v?.value).join(", ") ||
+                  d?.value ||
+                  d.name}
+              </a>
             </Map.Marker>
           ))}
         {Map.getGeoJSONList(window?.topojson).map((sd, sx) => (

@@ -65,7 +65,12 @@ def formdata_stats(request, form_id, version):
                 "value": a.value,
             }
             for fd in form_data
-            for a in fd.children.last().data_answer.filter(
+            for ld in [fd.children.filter(
+                form_id=form_id,
+                is_pending=False,
+                is_draft=False,
+            ).last()] if ld
+            for a in ld.data_answer.filter(
                 question_id=question.id
             ).all()
         ]

@@ -1,0 +1,378 @@
+from django.core.management import call_command
+from django.test.utils import override_settings
+from rest_framework.test import APITestCase
+from django.utils.timezone import make_aware
+from datetime import datetime
+from api.v1.v1_profile.models import Administration
+from api.v1.v1_forms.models import (
+    Forms,
+    QuestionTypes,
+    Questions,
+    QuestionGroup,
+)
+from api.v1.v1_data.models import FormData
+from api.v1.v1_visualization.functions import refresh_materialized_data
+from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
+
+
+@override_settings(USE_TZ=False, TEST_ENV=True)
+class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
+    def setUp(self):
+        super().setUp()
+        self.maxDiff = None
+        call_command("administration_seeder", "--test")
+
+        # Create a new superuser
+        self.user = self.create_user(
+            email="super@akvo.org",
+            role_level=self.IS_SUPER_ADMIN,
+        )
+
+        self.registration = Forms.objects.create(
+            id=8100,
+            name="Registration Form",
+            parent=None,
+        )
+        self.monitoring = Forms.objects.create(
+            name="Monitoring Form",
+            parent=self.registration,
+        )
+
+        self.base_url = (
+            f"/api/v1/visualization/formdata-stats/{self.monitoring.id}"
+        )
+
+        self.question_group = QuestionGroup.objects.create(
+            form=self.monitoring, name="qg_1"
+        )
+        # Create questions for the monitoring form
+        # Number question
+        self.number_question = Questions.objects.create(
+            id=8101,
+            question_group=self.question_group,
+            form=self.monitoring,
+            name="test_number_question",
+            type=QuestionTypes.number,
+        )
+        # Option question
+        self.option_question = Questions.objects.create(
+            id=8102,
+            question_group=self.question_group,
+            form=self.monitoring,
+            name="test_option_question",
+            type=QuestionTypes.option,
+        )
+        self.option_question.options.create(
+            id=810201,
+            order=1,
+            label="Option 1",
+            value="option_1",
+        )
+        self.option_question.options.create(
+            id=810202,
+            order=2,
+            label="Option 2",
+            value="option_2",
+        )
+        # Multiple option question
+        self.multiple_option_question = Questions.objects.create(
+            id=8103,
+            question_group=self.question_group,
+            form=self.monitoring,
+            name="test_multiple_option_question",
+            type=QuestionTypes.multiple_option,
+        )
+        self.multiple_option_question.options.create(
+            id=810301,
+            order=1,
+            label="Multiple Option 1",
+            value="multiple_option_1",
+        )
+        self.multiple_option_question.options.create(
+            id=810302,
+            order=2,
+            label="Multiple Option 2",
+            value="multiple_option_2",
+        )
+        self.multiple_option_question.options.create(
+            id=810303,
+            order=3,
+            label="Multiple Option 3",
+            value="multiple_option_3",
+        )
+
+        # Create a new data registration 1 and the monitoring data
+        adm = Administration.objects.filter(
+            level__level=4
+        ).order_by('?').first()
+        self.reg_data_1 = FormData.objects.create(
+            id=9100,
+            geo=[-18.1190718, 178.4504677],
+            uuid="21796178-d317-40d3-95e2-f3bbecca047c",
+            name="Registration Data",
+            administration=adm,
+            created_by=self.user,
+            form=self.registration,
+        )
+        self.create_monitoring_data(
+            parent_data=self.reg_data_1,
+            created_date=datetime(2025, 8, 1),
+            answers={
+                'number_question': 1,
+                'option_question': 'option_1',
+                'multiple_option_question': [
+                    'multiple_option_1', 'multiple_option_2'
+                ]
+            }
+        )
+        self.create_monitoring_data(
+            parent_data=self.reg_data_1,
+            created_date=datetime(2025, 8, 5),
+            answers={
+                'number_question': 2,
+                'option_question': 'option_2',
+                'multiple_option_question': [
+                    'multiple_option_2', 'multiple_option_3'
+                ]
+            }
+        )
+
+        # Create a new data registration 2 and the monitoring data
+        self.reg_data_2 = FormData.objects.create(
+            id=9101,
+            geo=[-18.1175162, 178.4478261],
+            uuid="c7275b7e-b654-43b1-a5c9-8e3b98019414",
+            name="Registration Data 2",
+            administration=adm,
+            created_by=self.user,
+            form=self.registration,
+        )
+        self.create_monitoring_data(
+            parent_data=self.reg_data_2,
+            created_date=datetime(2025, 8, 10),
+            answers={
+                'number_question': 3,
+                'option_question': 'option_1',
+                'multiple_option_question': [
+                    'multiple_option_2', 'multiple_option_3'
+                ]
+            }
+        )
+        self.create_monitoring_data(
+            parent_data=self.reg_data_2,
+            created_date=datetime(2025, 8, 15),
+            answers={
+                'number_question': 4,
+                'option_question': 'option_2',
+                'multiple_option_question': [
+                    'multiple_option_1', 'multiple_option_3'
+                ]
+            }
+        )
+        # Refresh the materialized view
+        refresh_materialized_data()
+
+    def test_form_data_stats_with_option_type_question(self):
+        response = self.client.get(
+            f"{self.base_url}/?question_id={self.option_question.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("options", data)
+        self.assertIn("data", data)
+
+        self.assertTrue(isinstance(data["data"], list))
+        self.assertEqual(len(data["data"]), 2)
+
+        self.assertEqual(
+            data["options"],
+            [
+                {
+                    "id": 810201,
+                    "label": "Option 1",
+                },
+                {
+                    "id": 810202,
+                    "label": "Option 2",
+                }
+            ]
+        )
+
+        self.assertEqual(
+            data["data"],
+            [
+                {
+                    "id": 9100,
+                    "value": 810202,
+                },
+                {
+                    "id": 9101,
+                    "value": 810202,
+                }
+            ]
+        )
+
+    def test_form_data_stats_with_multiple_option_type_question(self):
+        response = self.client.get(
+            f"{self.base_url}/?question_id={self.multiple_option_question.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("options", data)
+        self.assertIn("data", data)
+
+        self.assertTrue(isinstance(data["data"], list))
+        self.assertEqual(len(data["data"]), 4)
+
+        self.assertEqual(
+            data["options"],
+            [
+                {
+                    "id": 810301,
+                    "label": "Multiple Option 1",
+                },
+                {
+                    "id": 810302,
+                    "label": "Multiple Option 2",
+                },
+                {
+                    "id": 810303,
+                    "label": "Multiple Option 3",
+                }
+            ]
+        )
+
+        self.assertEqual(
+            data["data"],
+            [
+                {
+                    "id": 9100,
+                    "value": 810302,
+                },
+                {
+                    "id": 9100,
+                    "value": 810303,
+                },
+                {
+                    "id": 9101,
+                    "value": 810301
+                },
+                {
+                    "id": 9101,
+                    "value": 810303
+                }
+            ]
+        )
+
+    def test_form_data_stats_with_number_type_question(self):
+        response = self.client.get(
+            f"{self.base_url}/?question_id={self.number_question.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+
+        self.assertEqual(len(data["data"]), 2)
+
+        self.assertEqual(data["options"], [])
+
+        self.assertEqual(
+            data["data"],
+            [
+                {
+                    "id": 9100,
+                    "value": 2,
+                },
+                {
+                    "id": 9101,
+                    "value": 4,
+                }
+            ]
+        )
+
+    def test_form_data_stats_with_invalid_question_id(self):
+        response = self.client.get(
+            f"{self.base_url}/?question_id=9999"
+        )
+        self.assertEqual(response.status_code, 400)
+        data = response.json()
+        self.assertEqual(
+            data["message"],
+            'Invalid pk "9999" - object does not exist.'
+        )
+
+    def test_form_data_stats_with_invalid_form_id(self):
+        response = self.client.get(
+            "/api/v1/visualization/formdata-stats/9999"
+        )
+        self.assertEqual(response.status_code, 404)
+        data = response.json()
+        self.assertEqual(data["detail"], "Not found.")
+
+    def test_form_data_stats_without_question_id(self):
+        response = self.client.get(self.base_url)
+        self.assertEqual(response.status_code, 400)
+        data = response.json()
+        self.assertIn("message", data)
+        self.assertEqual(data["message"], "question_id is required.")
+
+    def test_form_data_stats_without_form_id(self):
+        response = self.client.get(
+            "/api/v1/visualization/formdata-stats/"
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def create_monitoring_data(
+        self,
+        parent_data,
+        created_date,
+        answers=None
+    ):
+        monitoring_data = FormData.objects.create(
+            geo=parent_data.geo,
+            uuid=parent_data.uuid,
+            parent=parent_data,
+            administration=parent_data.administration,
+            created_by=self.user,
+            form=self.monitoring,
+        )
+
+        if created_date:
+            monitoring_data.created = make_aware(created_date)
+            monitoring_data.save()
+            monitoring_data.refresh_from_db()
+
+        if answers:
+            for question_attr, answer_value in answers.items():
+                question = getattr(self, question_attr, None)
+                if not question:
+                    continue
+
+                if question.type == QuestionTypes.number:
+                    monitoring_data.data_answer.create(
+                        question=question,
+                        value=answer_value,
+                        created_by=self.user,
+                        index=0,
+                    )
+                elif question.type == QuestionTypes.option:
+                    option = question.options.get(value=answer_value)
+                    monitoring_data.data_answer.create(
+                        question=question,
+                        created_by=self.user,
+                        index=0,
+                        options=[option.value],
+                    )
+                elif question.type == QuestionTypes.multiple_option:
+                    if isinstance(answer_value, list):
+                        options = [
+                            question.options.get(value=value).value
+                            for value in answer_value
+                        ]
+                        monitoring_data.data_answer.create(
+                            question=question,
+                            created_by=self.user,
+                            index=0,
+                            options=options,
+                        )
+
+        return monitoring_data

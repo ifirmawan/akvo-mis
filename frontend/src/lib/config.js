@@ -712,10 +712,6 @@ const config = {
     ],
     optionTypes: ["option", "multiple_option", "aggregate"],
   },
-  submissionType: {
-    registration: 1,
-    monitoring: 2,
-  },
   maxLevelApproval: 3,
   minEntityLevel: 0,
   batchAttachment: {
@@ -738,6 +734,26 @@ const config = {
       ".odt",
     ],
     maxSize: 10, // 10 MB
+  },
+  mapConfig: {
+    defaultZoom: 6,
+    defaultCenter: [0, 0],
+    markerSizeRange: [10, 50],
+    markerColorRange: [
+      "#47CC65",
+      "#EC8964",
+      "#5195ED",
+      "#D187DD",
+      "#9E84E9",
+      "#D36B6B",
+      "#CFB52A",
+      "#43C6CE",
+      "#AA9B7E",
+      "#BDDF38",
+      "#52B0AE",
+      "#F2AEAD",
+    ],
+    highlightColor: "#84b4cc",
   },
 };
 

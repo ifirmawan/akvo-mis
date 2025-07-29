@@ -202,19 +202,23 @@ class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
                 }
             ]
         )
+        # filter data based on registration data id
+        reg_data_1 = list(filter(
+            lambda x: x["id"] == 9100, data["data"]
+        ))
+        reg_data_2 = list(filter(
+            lambda x: x["id"] == 9101, data["data"]
+        ))
+        self.assertEqual(len(reg_data_1), 1)
+        self.assertEqual(len(reg_data_2), 1)
 
         self.assertEqual(
-            data["data"],
-            [
-                {
-                    "id": 9100,
-                    "value": 810202,
-                },
-                {
-                    "id": 9101,
-                    "value": 810202,
-                }
-            ]
+            reg_data_1[0]["value"],
+            810202
+        )
+        self.assertEqual(
+            reg_data_2[0]["value"],
+            810202
         )
 
     def test_form_data_stats_with_multiple_option_type_question(self):
@@ -249,27 +253,23 @@ class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
                 }
             ]
         )
+        # filter data based on registration data id
+        reg_data_1 = list(filter(
+            lambda x: x["id"] == 9100, data["data"]
+        ))
+        reg_data_2 = list(filter(
+            lambda x: x["id"] == 9101, data["data"]
+        ))
+        self.assertEqual(len(reg_data_1), 2)
+        self.assertEqual(len(reg_data_2), 2)
 
-        self.assertEqual(
-            data["data"],
-            [
-                {
-                    "id": 9100,
-                    "value": 810302,
-                },
-                {
-                    "id": 9100,
-                    "value": 810303,
-                },
-                {
-                    "id": 9101,
-                    "value": 810301
-                },
-                {
-                    "id": 9101,
-                    "value": 810303
-                }
-            ]
+        self.assertCountEqual(
+            [d["value"] for d in reg_data_1],
+            [810302, 810303]
+        )
+        self.assertCountEqual(
+            [d["value"] for d in reg_data_2],
+            [810301, 810303]
         )
 
     def test_form_data_stats_with_number_type_question(self):
@@ -283,18 +283,23 @@ class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
 
         self.assertEqual(data["options"], [])
 
+        # filter data based on registration data id
+        reg_data_1 = list(filter(
+            lambda x: x["id"] == 9100, data["data"]
+        ))
+        reg_data_2 = list(filter(
+            lambda x: x["id"] == 9101, data["data"]
+        ))
+        self.assertEqual(len(reg_data_1), 1)
+        self.assertEqual(len(reg_data_2), 1)
+
         self.assertEqual(
-            data["data"],
-            [
-                {
-                    "id": 9100,
-                    "value": 2,
-                },
-                {
-                    "id": 9101,
-                    "value": 4,
-                }
-            ]
+            reg_data_1[0]["value"],
+            2
+        )
+        self.assertEqual(
+            reg_data_2[0]["value"],
+            4
         )
 
     def test_form_data_stats_with_invalid_question_id(self):

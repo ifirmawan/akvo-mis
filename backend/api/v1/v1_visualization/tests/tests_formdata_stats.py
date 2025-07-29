@@ -87,18 +87,21 @@ class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
             order=1,
             label="Multiple Option 1",
             value="multiple_option_1",
+            color="red",
         )
         self.multiple_option_question.options.create(
             id=810302,
             order=2,
             label="Multiple Option 2",
             value="multiple_option_2",
+            color="blue",
         )
         self.multiple_option_question.options.create(
             id=810303,
             order=3,
             label="Multiple Option 3",
             value="multiple_option_3",
+            color="green",
         )
 
         # Create a new data registration 1 and the monitoring data
@@ -190,10 +193,12 @@ class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
                 {
                     "id": 810201,
                     "label": "Option 1",
+                    "color": None,
                 },
                 {
                     "id": 810202,
                     "label": "Option 2",
+                    "color": None,
                 }
             ]
         )
@@ -230,14 +235,17 @@ class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
                 {
                     "id": 810301,
                     "label": "Multiple Option 1",
+                    "color": "red",
                 },
                 {
                     "id": 810302,
                     "label": "Multiple Option 2",
+                    "color": "blue",
                 },
                 {
                     "id": 810303,
                     "label": "Multiple Option 3",
+                    "color": "green",
                 }
             ]
         )

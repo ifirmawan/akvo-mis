@@ -17,7 +17,7 @@ from utils.custom_serializer_fields import (
 class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionOptions
-        fields = ["id", "label"]
+        fields = ["id", "label", "color"]
 
 
 class FormDataAnswerSerializer(serializers.Serializer):

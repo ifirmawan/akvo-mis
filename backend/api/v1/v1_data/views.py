@@ -47,7 +47,7 @@ from api.v1.v1_forms.constants import (
 from api.v1.v1_forms.models import Forms, Questions
 from api.v1.v1_profile.models import Administration
 from api.v1.v1_approval.constants import DataApprovalStatus
-
+from api.v1.v1_visualization.functions import refresh_materialized_data
 from mis.settings import REST_FRAMEWORK
 from utils.custom_permissions import (
     IsSubmitter,
@@ -311,6 +311,8 @@ class FormDataAddListView(APIView):
         data.save()
         if not settings.TEST_ENV:
             data.save_to_file
+            # Refresh materialized view after saving data
+            refresh_materialized_data()
         return Response(
             {"message": "direct update success"}, status=status.HTTP_200_OK
         )
@@ -883,6 +885,8 @@ class PublishDraftFormDataView(APIView):
             not settings.TEST_ENV
         ):
             draft_data.save_to_file
+            # Refresh materialized view after saving data
+            refresh_materialized_data()
 
         return Response(
             {"message": "Draft published successfully"},

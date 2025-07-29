@@ -19,6 +19,7 @@ from api.v1.v1_profile.models import (
 from api.v1.v1_users.models import SystemUser, Organisation
 from api.v1.v1_mobile.models import MobileAssignment
 from api.v1.v1_profile.constants import TEST_GEO_DATA
+from api.v1.v1_visualization.functions import refresh_materialized_data
 
 fake = Faker()
 
@@ -410,6 +411,8 @@ class Command(BaseCommand):
                             f"Created {count} draft data entries "
                             f"for form {form_name}"
                         )
+            # Refresh materialized view after all data is created
+            refresh_materialized_data()
             self.stdout.write(
                 self.style.SUCCESS(
                     f'Successfully created {repeat} fake data entries'

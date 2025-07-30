@@ -334,11 +334,166 @@ class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
         )
         self.assertEqual(response.status_code, 404)
 
+    def test_form_data_stats_with_non_supported_question_type(self):
+        # Create a new question with an unsupported type
+        unsupported_question = Questions.objects.create(
+            id=8104,
+            question_group=self.question_group,
+            form=self.monitoring,
+            name="test_unsupported_question",
+            type=QuestionTypes.text,
+        )
+        response = self.client.get(
+            f"{self.base_url}/?question_id={unsupported_question.id}"
+        )
+        self.assertEqual(response.status_code, 400)
+        data = response.json()
+        self.assertEqual(
+            data["message"],
+            'Invalid pk "8104" - object does not exist.'
+        )
+
+    def test_form_data_stats_with_multiple_monitoring_forms(self):
+        # Create another monitoring form
+        another_monitoring = Forms.objects.create(
+            name="Another Monitoring Form",
+            parent=self.registration,
+        )
+        another_group = QuestionGroup.objects.create(
+            form=another_monitoring, name="another_qg_1"
+        )
+        self.another_question = Questions.objects.create(
+            id=8105,
+            question_group=another_group,
+            form=another_monitoring,
+            name="test_another_question",
+            type=QuestionTypes.number,
+        )
+        self.another_option_question = Questions.objects.create(
+            id=8106,
+            question_group=another_group,
+            form=another_monitoring,
+            name="test_another_option_question",
+            type=QuestionTypes.option,
+        )
+        self.another_option_question.options.create(
+            id=810601,
+            order=1,
+            label="Another Option 1",
+            value="another_option_1",
+        )
+        self.another_option_question.options.create(
+            id=810602,
+            order=2,
+            label="Another Option 2",
+            value="another_option_2",
+        )
+
+        # Create monitoring data for the new form
+        self.create_monitoring_data(
+            parent_data=self.reg_data_1,
+            created_date=datetime(2025, 8, 20),
+            answers={
+                'another_question': 5,
+                'another_option_question': 'another_option_1',
+            },
+            form=another_monitoring,
+        )
+        self.create_monitoring_data(
+            parent_data=self.reg_data_1,
+            created_date=datetime(2025, 8, 25),
+            answers={
+                'another_question': 21,
+                'another_option_question': 'another_option_1',
+            },
+            form=another_monitoring,
+        )
+        self.create_monitoring_data(
+            parent_data=self.reg_data_2,
+            created_date=datetime(2025, 8, 20),
+            answers={
+                'another_question': 6,
+                'another_option_question': 'another_option_2',
+            },
+            form=another_monitoring,
+        )
+        self.create_monitoring_data(
+            parent_data=self.reg_data_2,
+            created_date=datetime(2025, 8, 25),
+            answers={
+                'another_question': 77,
+                'another_option_question': 'another_option_1',
+            },
+            form=another_monitoring,
+        )
+
+        # Refresh the materialized view for the new form
+        refresh_materialized_data()
+
+        response = self.client.get(
+            f"/api/v1/visualization/formdata-stats/{another_monitoring.id}/"
+            f"?question_id={self.another_question.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("data", data)
+
+        # filter data based on registration data id
+        reg_data_1 = list(filter(
+            lambda x: x["id"] == 9100, data["data"]
+        ))
+        reg_data_2 = list(filter(
+            lambda x: x["id"] == 9101, data["data"]
+        ))
+        self.assertEqual(len(reg_data_1), 1)
+        self.assertEqual(len(reg_data_2), 1)
+
+        self.assertEqual(
+            reg_data_1[0]["value"],
+            21
+        )
+        self.assertEqual(
+            reg_data_2[0]["value"],
+            77
+        )
+
+        response = self.client.get(
+            f"/api/v1/visualization/formdata-stats/{another_monitoring.id}/"
+            f"?question_id={self.another_option_question.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("data", data)
+
+        self.assertIn("options", data)
+        self.assertTrue(isinstance(data["data"], list))
+        self.assertEqual(len(data["data"]), 2)
+
+        # filter data based on registration data id
+        reg_data_1 = list(filter(
+            lambda x: x["id"] == 9100, data["data"]
+        ))
+        reg_data_2 = list(filter(
+            lambda x: x["id"] == 9101, data["data"]
+        ))
+        self.assertEqual(len(reg_data_1), 1)
+        self.assertEqual(len(reg_data_2), 1)
+
+        self.assertEqual(
+            reg_data_1[0]["value"],
+            810601
+        )
+        self.assertEqual(
+            reg_data_2[0]["value"],
+            810601
+        )
+
     def create_monitoring_data(
         self,
         parent_data,
         created_date,
-        answers=None
+        answers=None,
+        form=None,
     ):
         monitoring_data = FormData.objects.create(
             geo=parent_data.geo,
@@ -346,7 +501,7 @@ class FormDataStatsAPITestCases(APITestCase, ProfileTestHelperMixin):
             parent=parent_data,
             administration=parent_data.administration,
             created_by=self.user,
-            form=self.monitoring,
+            form=form if form else self.monitoring,
         )
 
         if created_date:

@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                 ) tmp
                 LEFT JOIN (
                     SELECT *,
-                        ROW_NUMBER() OVER (PARTITION BY parent_id ORDER BY created DESC) as rn
+                        ROW_NUMBER() OVER (PARTITION BY parent_id, form_id ORDER BY created DESC) as rn
                     FROM data
                     WHERE parent_id IS NOT NULL
                         AND is_pending = FALSE

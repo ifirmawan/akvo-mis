@@ -4,6 +4,7 @@ import { groupBy, sumBy, chain, takeRight } from "lodash";
 import { scaleQuantize } from "d3-scale";
 import { MapView } from "../../../components";
 import { api, store, uiText, geo, QUESTION_TYPES, config } from "../../../lib";
+import { color } from "../../../util";
 const { getBounds } = geo;
 
 const ManageDataMap = () => {
@@ -109,6 +110,7 @@ const ManageDataMap = () => {
             ...item,
             hidden: typeof item?.value === "undefined" || item?.value === null,
             color: item?.value <= 0 ? "#FFF" : colorScale(item?.value),
+            values: null, // Reset values for numeric questions
           };
         });
         setDataset(_dataset);
@@ -117,26 +119,11 @@ const ManageDataMap = () => {
           setLoading(false);
         }, 500);
       } else {
-        /**
-         * Handle case where options are available for the question
-         * This can happen for questions like option or multiple_option where options are defined
-         * In this case, we will set the legend options and dataset with the data from apiData
-         * and reset the legend title
-         * The options will have a color assigned from the config or default to transparent
-         * The dataset will have the values mapped to the options
-         * and the color assigned from the options
-         * If the question is multiple_option, we will group the data by id
-         * and map the values to the options
-         * If the question is single option, we will just map the value to the option
-         * The color will be assigned from the options
-         * or default to transparent if not available.
-         */
+        // Generate dynamic colors based on the number of options
+        const dynamicColors = color.forMarker(apiData?.options?.length);
         const options = apiData?.options?.map((o, ox) => ({
           ...o,
-          color:
-            o?.color ||
-            config.mapConfig.markerColorRange?.[ox] ||
-            "transparent",
+          color: o?.color || dynamicColors[ox],
         }));
         setLegendOptions(options);
         const _dataset = dataset.map((d) => {
@@ -147,20 +134,21 @@ const ManageDataMap = () => {
                 : (acc[item.id] = [item]);
               return acc;
             }, {});
+            const dataValues = groupedData?.[d?.id]
+              ?.map((item) => {
+                const option = options?.find((o) => o?.id === item?.value);
+                return {
+                  color: option?.color,
+                  value: option?.label,
+                  hidden:
+                    typeof item?.value === "undefined" || item?.value === null,
+                };
+              })
+              ?.filter((v) => !v.hidden);
             return {
               ...d,
-              values: groupedData?.[d?.id]
-                ?.map((item) => {
-                  const option = options?.find((o) => o?.id === item?.value);
-                  return {
-                    color: option?.color,
-                    value: option?.label,
-                    hidden:
-                      typeof item?.value === "undefined" ||
-                      item?.value === null,
-                  };
-                })
-                ?.filter((v) => !v.hidden),
+              values: dataValues,
+              hidden: dataValues.length === 0,
             };
           }
           const optionID = apiData?.data?.find(
@@ -248,13 +236,14 @@ const ManageDataMap = () => {
         const selected = [{ prop: adm?.level_name, value: adm?.name }];
         const pos = getBounds(selected);
         setPosition(pos);
+        setMapForm(mapForms?.[0]?.id);
         setLoading(false);
       } catch (error) {
         setDataset([]);
         setLoading(false);
       }
     },
-    [selectedForm, dataset]
+    [selectedForm, dataset, mapForms]
   );
 
   useEffect(() => {
@@ -270,7 +259,6 @@ const ManageDataMap = () => {
         const isFormChanged = selectedForm && selectedForm !== prevForm;
         if (isFormChanged) {
           setDataset([]);
-          setMapForm(null);
           setActiveQuestion(null);
           setLegendOptions([]);
           setLegendTitle(null);
@@ -311,6 +299,10 @@ const ManageDataMap = () => {
             style={{ minWidth: 320 }}
             value={activeQuestion}
             onChange={onQuestionChange}
+            onClear={() => {
+              onMapFormChange(mapForm);
+            }}
+            allowClear
           />
         </Space>
       </div>

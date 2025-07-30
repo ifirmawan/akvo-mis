@@ -70,6 +70,25 @@
     justify-content: center;
     font-size: 12px;
   }
+  &.multiple-option {
+    span {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%; /* Makes it a circle */
+      position: relative;
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background-color: #fff;
+      }
+    }
+  }
 }
 
 .shape-legend {

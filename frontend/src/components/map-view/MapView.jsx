@@ -20,6 +20,23 @@ const MapView = ({ dataset, loading, position }) => {
   const mapInstance = useRef(null);
   const defPos = geo.defaultPos();
 
+  const renderMarker = (d) => {
+    if (d?.values?.length) {
+      return `<span style="background: conic-gradient(${d.values
+        .map(
+          (v, i) =>
+            `${v.color} ${i * (100 / d.values.length)}% ${
+              (i + 1) * (100 / d.values.length)
+            }%`
+        )
+        .join(", ")})"></span>`;
+    }
+    const bgColor = d?.color || "#64A73B";
+    return `<span class="custom-marker" style="background-color:${bgColor};">${
+      d?.value ? (!isNaN(d.value) ? d.value : "") : ""
+    }</span>`;
+  };
+
   const mapStyle = (feature) => {
     const activeAdm = takeRight(selectedAdm, 1)[0];
     return {
@@ -110,11 +127,11 @@ const MapView = ({ dataset, loading, position }) => {
               latlng={d.geo}
               key={dx}
               icon={{
-                className: "custom-marker",
+                className: `custom-marker ${
+                  d?.values?.length > 1 ? "multiple-option" : ""
+                }`,
                 iconSize: [32, 32],
-                html: `<span style="background-color:${
-                  d?.color || "#64A73B"
-                };">${d?.value ? (!isNaN(d.value) ? d.value : "") : ""}</span>`,
+                html: renderMarker(d),
               }}
             >
               <a
@@ -123,7 +140,7 @@ const MapView = ({ dataset, loading, position }) => {
                 rel="noopener noreferrer"
                 style={{ padding: 0 }}
               >
-                {d?.values?.map((v) => v?.value).join(", ") || d.name}
+                {d.name}
               </a>
             </Map.Marker>
           ))}

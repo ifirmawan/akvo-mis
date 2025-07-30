@@ -61,5 +61,44 @@
     height: 1.5rem;
     border-radius: 50%;
     display: block;
+    border: 2px solid #fff;
+    color: rgba(0, 0, 0, 0.85);
+    padding: 4px 2px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+}
+
+.shape-legend {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  z-index: 2;
+  background-color: #fffe;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 13px;
+
+  .legend-wrap {
+    width: 100%;
+    margin-top: 5px;
+    font-weight: $font-weight-medium;
+
+    .legend-item {
+      cursor: pointer;
+      margin: 0 1px;
+      border: solid transparent 2px;
+
+      &.legend-selected {
+        border: solid #036799 2px;
+        border-right: solid 2px #036799;
+        color: #fff;
+      }
+    }
   }
 }

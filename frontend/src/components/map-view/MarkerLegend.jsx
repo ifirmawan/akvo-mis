@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Space } from "antd";
 
-const MapMarkerLegend = ({ title = "", options = [], onClick = () => {} }) => {
+const MarkerLegend = ({ title = "", options = [], onClick = () => {} }) => {
   const [activeOption, setActiveOption] = useState(null);
 
   const handleOnClick = (option) => {
@@ -45,4 +45,4 @@ const MapMarkerLegend = ({ title = "", options = [], onClick = () => {} }) => {
   );
 };
 
-export default MapMarkerLegend;
+export default MarkerLegend;

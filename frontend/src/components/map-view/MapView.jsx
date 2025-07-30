@@ -3,6 +3,8 @@ import { Button, Space } from "antd";
 import { Map } from "akvo-charts";
 import takeRight from "lodash/takeRight";
 import { store, geo } from "../../lib";
+import ShapeLegend from "./ShapeLegend";
+import MarkerLegend from "./MarkerLegend";
 
 import {
   ZoomInOutlined,
@@ -112,7 +114,7 @@ const MapView = ({ dataset, loading, position }) => {
                 iconSize: [32, 32],
                 html: `<span style="background-color:${
                   d?.color || "#64A73B"
-                }; border:2px solid #fff;"/>`,
+                };">${d?.value ? (!isNaN(d.value) ? d.value : "") : ""}</span>`,
               }}
             >
               <a
@@ -121,9 +123,7 @@ const MapView = ({ dataset, loading, position }) => {
                 rel="noopener noreferrer"
                 style={{ padding: 0 }}
               >
-                {d?.values?.map((v) => v?.value).join(", ") ||
-                  d?.value ||
-                  d.name}
+                {d?.values?.map((v) => v?.value).join(", ") || d.name}
               </a>
             </Map.Marker>
           ))}
@@ -142,5 +142,8 @@ const MapView = ({ dataset, loading, position }) => {
     </div>
   );
 };
+
+MapView.MarkerLegend = MarkerLegend;
+MapView.ShapeLegend = ShapeLegend;
 
 export default MapView;

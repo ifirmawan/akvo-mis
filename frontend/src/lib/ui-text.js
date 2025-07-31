@@ -950,6 +950,9 @@ const uiText = {
     checkboxSelectAll: "Select all {{name}}",
     selectMonitoringFormPlaceholder: "Select Monitoring Form",
     selectQuestionPlaceholder: "Select Question",
+    formAccess: "Form Access",
+    userAccess: "User Access",
+    inviteNewUser: "Invite New User",
   },
 
   de: {},

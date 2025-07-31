@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Row, Col, Form, Button, Input, Select, Checkbox, message } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import { ACCESS_LEVELS_LIST, api, store, uiText } from "../../lib";
+import {
+  ACCESS_LEVELS_LIST,
+  api,
+  FEATURE_ACCESS_GROUPS,
+  store,
+  uiText,
+} from "../../lib";
 import { Breadcrumbs, DescriptionPanel } from "../../components";
 
 const { useForm } = Form;
@@ -139,7 +145,7 @@ const AddRolePage = () => {
                   <Input.TextArea placeholder={text.roleDescription} rows={4} />
                 </Form.Item>
                 <Form.Item
-                  label={text.roleAccess}
+                  label={text.formAccess}
                   name="role_access"
                   rules={[{ required: true, message: text.roleAccessRequired }]}
                 >
@@ -153,6 +159,25 @@ const AddRolePage = () => {
                     </Row>
                   </Checkbox.Group>
                 </Form.Item>
+                {FEATURE_ACCESS_GROUPS.map((group) => (
+                  <Form.Item
+                    key={group.key}
+                    label={text[group.textKey]}
+                    name={group.key}
+                  >
+                    <Checkbox.Group>
+                      <Row>
+                        {group.features.map((feature) => (
+                          <Col key={feature.key}>
+                            <Checkbox value={feature.value}>
+                              {text[feature.textKey]}
+                            </Checkbox>
+                          </Col>
+                        ))}
+                      </Row>
+                    </Checkbox.Group>
+                  </Form.Item>
+                ))}
                 <Row justify="end">
                   <Button type="primary" htmlType="submit" shape="round">
                     {text.saveButton}

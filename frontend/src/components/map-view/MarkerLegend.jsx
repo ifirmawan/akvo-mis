@@ -5,6 +5,11 @@ const MarkerLegend = ({ title = "", options = [], onClick = () => {} }) => {
   const [activeOption, setActiveOption] = useState(null);
 
   const handleOnClick = (option) => {
+    if (activeOption?.id === option.id) {
+      setActiveOption(null);
+      onClick(null);
+      return;
+    }
     setActiveOption(option);
     onClick(option);
   };
@@ -32,7 +37,7 @@ const MarkerLegend = ({ title = "", options = [], onClick = () => {} }) => {
               />
               <span
                 style={{
-                  fontWeight: activeOption?.id === sO.id ? "600" : "400",
+                  fontWeight: activeOption?.id === sO.id ? "bold" : "400",
                 }}
               >
                 {sO?.label}

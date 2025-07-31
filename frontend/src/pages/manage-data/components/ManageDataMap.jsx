@@ -96,6 +96,14 @@ const ManageDataMap = () => {
 
       if (selectedLegendOption) {
         // Filter by marker legend selection
+        if (d?.values?.length > 0) {
+          // For multiple option questions, check if any value matches the selected option
+          return d.values.some(
+            (v) =>
+              v.value === selectedLegendOption.value ||
+              v.color === selectedLegendOption.color
+          );
+        }
         return (
           d.value === selectedLegendOption.label ||
           d.color === selectedLegendOption.color

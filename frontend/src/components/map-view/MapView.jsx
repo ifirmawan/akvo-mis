@@ -3,7 +3,7 @@ import { Button, Space } from "antd";
 import { Map } from "akvo-charts";
 import takeRight from "lodash/takeRight";
 import { store, geo } from "../../lib";
-import ShapeLegend from "./ShapeLegend";
+import GradationLegend from "./GradationLegend";
 import MarkerLegend from "./MarkerLegend";
 
 import {
@@ -161,6 +161,6 @@ const MapView = ({ dataset, loading, position }) => {
 };
 
 MapView.MarkerLegend = MarkerLegend;
-MapView.ShapeLegend = ShapeLegend;
+MapView.GradationLegend = GradationLegend;
 
 export default MapView;

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Col, Row, Spin, Select, Space } from "antd";
-import { groupBy, sumBy, chain, takeRight } from "lodash";
+import { takeRight } from "lodash";
 import { scaleQuantize } from "d3-scale";
 import { MapView } from "../../../components";
 import { api, store, uiText, geo, QUESTION_TYPES, config } from "../../../lib";
@@ -17,6 +17,8 @@ const ManageDataMap = () => {
   const [legendTitle, setLegendTitle] = useState(null);
   const [activeQuestion, setActiveQuestion] = useState(null);
   const [isNumeric, setIsNumeric] = useState(false);
+  const [selectedLegendOption, setSelectedLegendOption] = useState(null);
+  const [selectedGradationIndex, setSelectedGradationIndex] = useState(null);
 
   const { active: activeLang } = store.useState((s) => s.language);
   const text = useMemo(() => {
@@ -50,33 +52,83 @@ const ManageDataMap = () => {
       ?.filter((qg) => qg?.options?.length > 0);
   }, [mapForm]);
 
-  const shapeColors = chain(groupBy(dataset, "administration_id"))
-    .map((l, lI) => {
-      const values = sumBy(l, "administration_id");
-      return { name: lI, values };
-    })
-    .value();
+  // Calculate color scale based on numeric data values for shape coloring
+  const colorScale = useMemo(() => {
+    // Extract numeric values from dataset, filtering out null/undefined values
+    const numericValues = dataset
+      .map((d) => d.value)
+      .filter((v) => typeof v === "number" && !isNaN(v) && v > 0);
 
-  const domain = shapeColors
-    .reduce(
-      (acc, curr) => {
-        const v = curr.values;
-        const [min, max] = acc;
-        return [min, v > max ? v : max];
-      },
-      [0, 0]
-    )
-    .map((acc, index) => {
-      if (index && acc) {
-        acc = acc < 10 ? 10 : acc;
-        acc = 100 * Math.floor((acc + 50) / 100);
+    if (numericValues.length === 0 || !isNumeric || !dataset.length) {
+      return scaleQuantize().domain([0, 1]).range(config.mapConfig.colorRange);
+    }
+
+    // Calculate domain based on actual data distribution
+    const maxValue = Math.max(...numericValues);
+    let domainMax = maxValue;
+
+    if (maxValue <= 10) {
+      // For small values, round up to the nearest 5 or 10
+      domainMax = Math.ceil(maxValue / 5) * 5;
+    } else if (maxValue <= 100) {
+      // For medium values, round up to nearest 10
+      domainMax = Math.ceil(maxValue / 10) * 10;
+    } else {
+      // For larger values, round up to nearest 50
+      domainMax = Math.ceil(maxValue / 50) * 50;
+    }
+    return scaleQuantize()
+      .domain([0, domainMax])
+      .range(config.mapConfig.colorRange);
+  }, [dataset, isNumeric]);
+
+  // Compute filtered dataset based on legend selections
+  const filteredDataset = useMemo(() => {
+    if (!selectedLegendOption && selectedGradationIndex === null) {
+      // No filters applied, return all non-hidden items
+      return dataset.filter((d) => !d.hidden);
+    }
+
+    return dataset.filter((d) => {
+      if (d.hidden) {
+        return false;
       }
-      return acc;
-    });
 
-  const colorScale = scaleQuantize()
-    .domain(domain)
-    .range(config.mapConfig.colorRange);
+      if (selectedLegendOption) {
+        // Filter by marker legend selection
+        return (
+          d.value === selectedLegendOption.label ||
+          d.color === selectedLegendOption.color
+        );
+      }
+
+      if (selectedGradationIndex !== null) {
+        // Filter by gradation legend selection
+        const colorRange = config.mapConfig.colorRange;
+        return d.color === colorRange[selectedGradationIndex];
+      }
+
+      return true;
+    });
+  }, [dataset, selectedLegendOption, selectedGradationIndex]);
+
+  const handleMarkerLegendClick = (option) => {
+    setSelectedLegendOption(option);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+    setSelectedGradationIndex(null); // Reset gradation selection
+  };
+
+  const handleGradationLegendClick = (index) => {
+    setSelectedGradationIndex(index);
+    setSelectedLegendOption(null); // Reset marker selection
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  };
 
   const fetchStats = async (questionId, questionType) => {
     try {
@@ -103,13 +155,41 @@ const ManageDataMap = () => {
          * and reset the legend options and title
          */
         setLegendOptions([]);
+
+        // Create color scale based on API data values for numeric questions
+        const numericValues =
+          apiData?.data
+            ?.map((item) => item.value)
+            ?.filter((v) => typeof v === "number" && !isNaN(v) && v > 0) || [];
+
+        let currentColorScale;
+        if (numericValues.length === 0) {
+          currentColorScale = scaleQuantize()
+            .domain([0, 1])
+            .range(config.mapConfig.colorRange);
+        } else {
+          const maxValue = Math.max(...numericValues);
+          let domainMax = maxValue;
+
+          if (maxValue <= 10) {
+            domainMax = Math.ceil(maxValue / 5) * 5;
+          } else if (maxValue <= 100) {
+            domainMax = Math.ceil(maxValue / 10) * 10;
+          } else {
+            domainMax = Math.ceil(maxValue / 50) * 50;
+          }
+          currentColorScale = scaleQuantize()
+            .domain([0, domainMax])
+            .range(config.mapConfig.colorRange);
+        }
+
         const _dataset = dataset.map((d) => {
           const item = apiData?.data?.find((a) => a.id === d.id);
           return {
             ...d,
             ...item,
             hidden: typeof item?.value === "undefined" || item?.value === null,
-            color: item?.value <= 0 ? "#FFF" : colorScale(item?.value),
+            color: item?.value <= 0 ? "#FFF" : currentColorScale(item?.value),
             values: null, // Reset values for numeric questions
           };
         });
@@ -179,9 +259,15 @@ const ManageDataMap = () => {
     setActiveQuestion(null);
     setLegendOptions([]);
     setLegendTitle(null);
-    setDataset(
-      dataset.map((d) => ({ ...d, color: null, value: null, values: null }))
-    );
+    setSelectedLegendOption(null);
+    setSelectedGradationIndex(null);
+    const resetDataset = dataset.map((d) => ({
+      ...d,
+      color: null,
+      value: null,
+      values: null,
+    }));
+    setDataset(resetDataset);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -195,6 +281,8 @@ const ManageDataMap = () => {
     setLegendTitle(q?.label);
     setActiveQuestion(value);
     setIsNumeric(q?.type === QUESTION_TYPES.number);
+    setSelectedLegendOption(null);
+    setSelectedGradationIndex(null);
     await fetchStats(value, q?.type);
   };
 
@@ -226,12 +314,11 @@ const ManageDataMap = () => {
           });
           setDataset(_dataset);
         } else {
-          setDataset(
-            apiData?.map((d) => ({
-              ...d,
-              hidden: false,
-            }))
-          );
+          const newDataset = apiData?.map((d) => ({
+            ...d,
+            hidden: false,
+          }));
+          setDataset(newDataset);
         }
         const selected = [{ prop: adm?.level_name, value: adm?.name }];
         const pos = getBounds(selected);
@@ -262,6 +349,8 @@ const ManageDataMap = () => {
           setActiveQuestion(null);
           setLegendOptions([]);
           setLegendTitle(null);
+          setSelectedLegendOption(null);
+          setSelectedGradationIndex(null);
         }
         if (isFormChanged || administration) {
           setPrevForm(selectedForm);
@@ -273,13 +362,7 @@ const ManageDataMap = () => {
     return () => unsubscribe();
   }, [fetchData, prevForm, selectedForm]);
 
-  return loading ? (
-    <Row justify="center" align="middle" style={{ minHeight: 400 }}>
-      <Col>
-        <Spin tip={text.loadingText} spinning />
-      </Col>
-    </Row>
-  ) : (
+  return (
     <div className="manage-data-map">
       <div className="map-filter">
         <Space direction="vertical" size="middle">
@@ -300,24 +383,39 @@ const ManageDataMap = () => {
             value={activeQuestion}
             onChange={onQuestionChange}
             onClear={() => {
+              setSelectedLegendOption(null);
+              setSelectedGradationIndex(null);
               onMapFormChange(mapForm);
             }}
             allowClear
           />
         </Space>
       </div>
-      <MapView
-        dataset={dataset?.filter((d) => !d.hidden)}
-        loading={loading}
-        position={position}
-      />
+      {loading ? (
+        <Row justify="center" align="middle" style={{ minHeight: 400 }}>
+          <Col>
+            <Spin tip={text.loadingText} spinning />
+          </Col>
+        </Row>
+      ) : (
+        <MapView
+          dataset={filteredDataset}
+          loading={loading}
+          position={position}
+        />
+      )}
       {legendOptions.length > 0 && (
-        <MapView.MarkerLegend title={legendTitle} options={legendOptions} />
+        <MapView.MarkerLegend
+          title={legendTitle}
+          options={legendOptions}
+          onClick={handleMarkerLegendClick}
+        />
       )}
       {isNumeric && (
-        <MapView.ShapeLegend
+        <MapView.GradationLegend
           title={legendTitle}
           thresholds={colorScale.thresholds()}
+          onClick={handleGradationLegendClick}
         />
       )}
     </div>

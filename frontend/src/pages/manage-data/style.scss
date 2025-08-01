@@ -92,12 +92,46 @@
         cursor: pointer;
       }
     }
-    .custom-marker {
-      span {
-        width: 1.5rem;
-        height: 1.5rem;
-        border-radius: 50%;
-        display: block;
+    .manage-data-map {
+      position: relative;
+      z-index: 0;
+      height: 600px;
+
+      .map-filter {
+        position: absolute;
+        right: 0;
+        top: 24px;
+        left: 24px;
+        z-index: 1;
+        width: fit-content;
+        padding: 16px;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .marker-legend {
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #f9f9f9d9;
+        padding: 14px 12px 10px;
+        font-size: 13px;
+        text-align: center;
+        padding-bottom: 8px;
+
+        .legend-item {
+          color: #5a5f63;
+          cursor: pointer;
+
+          .circle-legend {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 4px;
+          }
+        }
       }
     }
   }

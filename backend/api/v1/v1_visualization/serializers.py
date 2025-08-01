@@ -1,6 +1,80 @@
 from rest_framework import serializers
-from api.v1.v1_data.models import FormData, Administration
-from utils.custom_serializer_fields import CustomPrimaryKeyRelatedField
+from api.v1.v1_data.models import (
+    FormData,
+    Administration,
+)
+from api.v1.v1_forms.models import (
+    Questions,
+    QuestionOptions,
+    QuestionTypes,
+)
+from utils.custom_serializer_fields import (
+    CustomPrimaryKeyRelatedField,
+    CustomIntegerField,
+)
+
+
+class OptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionOptions
+        fields = ["id", "label", "color"]
+
+
+class FormDataAnswerSerializer(serializers.Serializer):
+    id = CustomIntegerField()
+    value = CustomIntegerField()
+
+    class Meta:
+        fields = ["id", "value"]
+
+
+class FormDataStatSerializer(serializers.Serializer):
+    options = serializers.ListField(
+        child=OptionSerializer()
+    )
+    data = serializers.ListField(
+        child=FormDataAnswerSerializer()
+    )
+
+    class Meta:
+        fields = ["options", "data"]
+
+
+class FormDataStatsFilterSerializer(serializers.Serializer):
+    question_id = CustomPrimaryKeyRelatedField(
+        queryset=Questions.objects.none(),
+        required=True,
+    )
+
+    def validate_question_id(self, value):
+        valid_types = [
+            QuestionTypes.number,
+            QuestionTypes.option,
+            QuestionTypes.multiple_option,
+        ]
+        if value.type not in valid_types:
+            raise serializers.ValidationError(
+                "Question type must be one of: "
+                "number, option, multiple_option."
+            )
+        return value
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        form = self.context.get('form')
+        self.fields['question_id'].queryset = Questions.objects.filter(
+            form=form,
+            type__in=[
+                QuestionTypes.number,
+                QuestionTypes.option,
+                QuestionTypes.multiple_option,
+            ]
+        ).all()
+
+    class Meta:
+        fields = [
+            "question_id",
+        ]
 
 
 class MonitoringStatSerializer(serializers.Serializer):

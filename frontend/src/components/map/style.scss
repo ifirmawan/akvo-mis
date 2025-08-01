@@ -94,34 +94,3 @@
     }
   }
 }
-
-.shape-legend {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  width: 100%;
-  z-index: 2;
-  background-color: #fffe;
-  padding: 8px 12px;
-  text-align: center;
-  font-size: 13px;
-
-  .legend-wrap {
-    width: 100%;
-    margin-top: 5px;
-    font-weight: $font-weight-medium;
-
-    .legend-item {
-      cursor: pointer;
-      margin: 0 1px;
-      border: solid transparent 2px;
-
-      &.legend-selected {
-        border: solid #036799 2px;
-        border-right: solid 2px #036799;
-        color: #fff;
-      }
-    }
-  }
-}

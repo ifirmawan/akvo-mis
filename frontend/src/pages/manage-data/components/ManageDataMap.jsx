@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Col, Row, Spin, Select, Space } from "antd";
+import { Select, Space } from "antd";
 import { takeRight } from "lodash";
 import { scaleQuantize } from "d3-scale";
-import { MapView } from "../../../components";
+import { GradationLegend, MapView, MarkerLegend } from "../../../components";
 import { api, store, uiText, geo, QUESTION_TYPES, config } from "../../../lib";
 import { color } from "../../../util";
 const { getBounds } = geo;
@@ -125,7 +125,7 @@ const ManageDataMap = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 100);
     setSelectedGradationIndex(null); // Reset gradation selection
   };
 
@@ -135,7 +135,7 @@ const ManageDataMap = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 100);
   };
 
   const fetchStats = async (questionId, questionType) => {
@@ -152,7 +152,7 @@ const ManageDataMap = () => {
         setLoading(true);
         setTimeout(() => {
           setLoading(false);
-        }, 500);
+        }, 100);
         return;
       }
       if (apiData?.options?.length === 0) {
@@ -205,7 +205,7 @@ const ManageDataMap = () => {
         setLoading(true);
         setTimeout(() => {
           setLoading(false);
-        }, 500);
+        }, 100);
       } else {
         // Generate dynamic colors based on the number of options
         const dynamicColors = color.forMarker(apiData?.options?.length);
@@ -255,7 +255,7 @@ const ManageDataMap = () => {
         setLoading(true);
         setTimeout(() => {
           setLoading(false);
-        }, 500);
+        }, 100);
       }
     } catch (error) {
       console.error("Error fetching geolocation stats:", error);
@@ -279,7 +279,7 @@ const ManageDataMap = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 100);
   };
 
   const onQuestionChange = async (value) => {
@@ -399,28 +399,21 @@ const ManageDataMap = () => {
           />
         </Space>
       </div>
-      {loading ? (
-        <Row justify="center" align="middle" style={{ minHeight: 400 }}>
-          <Col>
-            <Spin tip={text.loadingText} spinning />
-          </Col>
-        </Row>
-      ) : (
-        <MapView
-          dataset={filteredDataset}
-          loading={loading}
-          position={position}
-        />
-      )}
+      <MapView
+        dataset={filteredDataset}
+        loading={loading}
+        position={position}
+      />
+      {/* )} */}
       {legendOptions.length > 0 && (
-        <MapView.MarkerLegend
+        <MarkerLegend
           title={legendTitle}
           options={legendOptions}
           onClick={handleMarkerLegendClick}
         />
       )}
       {isNumeric && (
-        <MapView.GradationLegend
+        <GradationLegend
           title={legendTitle}
           thresholds={colorScale.thresholds()}
           onClick={handleGradationLegendClick}

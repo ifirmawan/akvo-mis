@@ -1,10 +1,9 @@
+/* global L */
 import React, { useCallback, useEffect, useRef } from "react";
 import { Button, Space } from "antd";
 import { Map } from "akvo-charts";
 import takeRight from "lodash/takeRight";
 import { store, geo } from "../../lib";
-import GradationLegend from "./GradationLegend";
-import MarkerLegend from "./MarkerLegend";
 
 import {
   ZoomInOutlined,
@@ -18,6 +17,7 @@ const MapView = ({ dataset, loading, position }) => {
   const selectedAdm = store.useState((s) => s.administration);
 
   const mapInstance = useRef(null);
+  const lg = useRef(null);
   const defPos = geo.defaultPos();
 
   const renderMarker = (d) => {
@@ -56,6 +56,7 @@ const MapView = ({ dataset, loading, position }) => {
     if (map && !loading) {
       map.scrollWheelZoom.disable();
       map.zoomControl.remove();
+      lg.current = L.layerGroup().addTo(map);
     }
   }, [loading]);
 
@@ -75,6 +76,45 @@ const MapView = ({ dataset, loading, position }) => {
   useEffect(() => {
     disableScrollWheelZoom();
   }, [disableScrollWheelZoom]);
+
+  useEffect(() => {
+    if (lg.current && !loading) {
+      lg.current.clearLayers();
+    }
+
+    return () => {
+      if (lg.current) {
+        lg.current.clearLayers();
+        lg.current = null;
+      }
+    };
+  }, [lg, loading]);
+
+  useEffect(() => {
+    if (lg.current && !loading && dataset?.length) {
+      lg.current.clearLayers();
+      dataset
+        .filter(
+          (d) =>
+            !d?.hidden && d?.geo && Array.isArray(d.geo) && d.geo.length === 2
+        )
+        .forEach((d) => {
+          const marker = L.marker(d.geo, {
+            icon: L.divIcon({
+              className: `custom-marker ${
+                d?.values?.length > 1 ? "multiple-option" : ""
+              }`,
+              iconSize: [32, 32],
+              iconAnchor: [16, 16],
+              html: renderMarker(d),
+            }),
+          }).bindPopup(
+            `<a href="/control-center/data/${selectedForm}/monitoring/${d.id}" target="_blank" rel="noopener noreferrer" style="padding: 0;">${d.name}</a>`
+          );
+          lg.current.addLayer(marker);
+        });
+    }
+  }, [lg, selectedForm, dataset, loading]);
 
   return (
     <div className="map-container">
@@ -120,30 +160,6 @@ const MapView = ({ dataset, loading, position }) => {
           mapInstance.current = el;
         }}
       >
-        {dataset
-          ?.filter((d) => d?.geo)
-          ?.map((d, dx) => (
-            <Map.Marker
-              latlng={d.geo}
-              key={dx}
-              icon={{
-                className: `custom-marker ${
-                  d?.values?.length > 1 ? "multiple-option" : ""
-                }`,
-                iconSize: [32, 32],
-                html: renderMarker(d),
-              }}
-            >
-              <a
-                href={`/control-center/data/${selectedForm}/monitoring/${d.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ padding: 0 }}
-              >
-                {d.name}
-              </a>
-            </Map.Marker>
-          ))}
         {Map.getGeoJSONList(window?.topojson).map((sd, sx) => (
           <Map.GeoJson
             key={sx}
@@ -159,8 +175,5 @@ const MapView = ({ dataset, loading, position }) => {
     </div>
   );
 };
-
-MapView.MarkerLegend = MarkerLegend;
-MapView.GradationLegend = GradationLegend;
 
 export default MapView;

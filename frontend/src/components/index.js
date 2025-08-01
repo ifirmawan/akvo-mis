@@ -37,3 +37,5 @@ export { default as CreateBatchModal } from "./CreateBatchModal";
 export { default as DocumentUploader } from "./DocumentUploader";
 export { default as RawDataTable } from "./RawDataTable";
 export { default as MapView } from "./map-view/MapView";
+export { default as MarkerLegend } from "./map-view/MarkerLegend";
+export { default as GradationLegend } from "./map-view/GradationLegend";

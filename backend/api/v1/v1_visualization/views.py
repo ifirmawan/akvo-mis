@@ -1,20 +1,119 @@
+import json
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime
 from django.db.models import Q
 from api.v1.v1_data.models import FormData, Answers
-from api.v1.v1_forms.models import Forms
+from api.v1.v1_forms.models import Forms, QuestionTypes
 from api.v1.v1_visualization.serializers import (
     MonitoringStatSerializer,
     GeoLocationListSerializer,
     GeoLocationFilterSerializer,
+    FormDataStatSerializer,
+    FormDataStatsFilterSerializer,
 )
+from api.v1.v1_visualization.models import ViewDataOptions
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from utils.custom_serializer_fields import validate_serializers_message
+
+
+@extend_schema(
+    description=(
+        "Get the statistics of form data based on"
+        "a specific monitoring form ID and question ID."
+    ),
+    tags=["Visualization"],
+    responses=FormDataStatSerializer(many=True),
+    parameters=[
+        OpenApiParameter(
+            name="question_id",
+            required=True,
+            type=OpenApiTypes.NUMBER,
+            location=OpenApiParameter.QUERY,
+            description="The question ID to extract the value from",
+        ),
+    ],
+)
+@api_view(["GET"])
+def formdata_stats(request, form_id, version):
+    form = get_object_or_404(Forms, pk=form_id)
+    serializer = FormDataStatsFilterSerializer(
+        data=request.GET,
+        context={"form": form}
+    )
+    if not serializer.is_valid():
+        return Response(
+            {"message": validate_serializers_message(serializer.errors)},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    question = serializer.validated_data.get("question_id")
+    options = []
+    if question.type == QuestionTypes.number:
+        parent_form = form.parent
+        form_data = parent_form.form_form_data.filter(
+            is_pending=False,
+            is_draft=False,
+        ).all()
+        data = [
+            {
+                "id": fd.id,
+                "value": a.value,
+            }
+            for fd in form_data
+            for ld in [fd.children.filter(
+                form_id=form_id,
+                is_pending=False,
+                is_draft=False,
+            ).last()] if ld
+            for a in ld.data_answer.filter(
+                question_id=question.id
+            ).all()
+        ]
+        return Response(
+            FormDataStatSerializer(
+                instance={
+                    "options": options,
+                    "data": data,
+                }
+            ).data,
+            status=status.HTTP_200_OK,
+        )
+    if question.type in [
+        QuestionTypes.option,
+        QuestionTypes.multiple_option,
+    ]:
+        options = question.options.all()
+    data_options = ViewDataOptions.objects.filter(
+        form=form,
+    ).all()
+    data = [
+        {
+            "id": do.parent_data_id,
+            "value": v,
+            "question_id": int(o.split("||")[0]),
+        }
+        for do in data_options
+        for o in do.options
+        for v in json.loads(o.split("||")[1])
+    ]
+    # filter data based on the question_id
+    data = list(filter(
+        lambda x: x["question_id"] == question.id, data
+    ))
+    return Response(
+        FormDataStatSerializer(
+            instance={
+                "options": options,
+                "data": data,
+            }
+        ).data,
+        status=status.HTTP_200_OK,
+    )
 
 
 @extend_schema(

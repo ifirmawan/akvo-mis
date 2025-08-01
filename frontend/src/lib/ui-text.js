@@ -948,6 +948,8 @@ const uiText = {
     manageDataTabList: "Datapoint List",
     manageDataTabMap: "Map View",
     checkboxSelectAll: "Select all {{name}}",
+    selectMonitoringFormPlaceholder: "Select Monitoring Form",
+    selectQuestionPlaceholder: "Select Question",
   },
 
   de: {},

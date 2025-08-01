@@ -18,6 +18,7 @@ from api.v1.v1_forms.models import (
 )
 from api.v1.v1_profile.models import Administration, EntityData
 from api.v1.v1_users.models import Organisation
+from api.v1.v1_visualization.functions import refresh_materialized_data
 from utils.custom_serializer_fields import (
     CustomPrimaryKeyRelatedField,
     UnvalidatedField,
@@ -258,6 +259,8 @@ class SubmitFormSerializer(serializers.Serializer):
             )
         if not settings.TEST_ENV:
             obj_data.save_to_file
+        # Refresh materialized view after saving data
+        refresh_materialized_data()
 
         return object
 
@@ -649,6 +652,8 @@ class SubmitPendingFormSerializer(serializers.Serializer):
             # Only save to file if the data is not pending
             # and does not have a parent
             obj_data.save_to_file
+            # Refresh materialized view after saving data
+            refresh_materialized_data()
 
         return obj_data
 

@@ -399,13 +399,6 @@ const ManageDataMap = () => {
           />
         </Space>
       </div>
-      {/* {loading ? (
-        <Row justify="center" align="middle" style={{ minHeight: 400 }}>
-          <Col>
-            <Spin tip={text.loadingText} spinning />
-          </Col>
-        </Row>
-      ) : ( */}
       <MapView
         dataset={filteredDataset}
         loading={loading}

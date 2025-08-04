@@ -149,7 +149,7 @@ class AddUserByNonSuperUserTestCase(TestCase, ProfileTestHelperMixin):
                 DataAccessTypes.submit
             ],
         ).first()
-        parent_adm = self.adm.ancestors.first()
+        parent_adm = self.adm.parent
         payload = {
             "email": "newuser2.1@test.com",
             "first_name": "User",

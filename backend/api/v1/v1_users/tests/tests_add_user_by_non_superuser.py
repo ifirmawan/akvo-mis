@@ -171,18 +171,16 @@ class AddUserByNonSuperUserTestCase(TestCase, ProfileTestHelperMixin):
         )
         self.assertEqual(response.status_code, 400)
         data = response.json()
-        self.assertEqual(data, {
-            "message": (
-                "You do not have permission to add users at"
-                " a higher administration level"
-            ),
-            "details": {
-                "administration": [
-                    "You do not have permission to add users at"
-                    " a higher administration level"
-                ]
-            }
-        })
+        self.assertIn("message", data)
+        self.assertEqual(
+            data["message"],
+            (
+                "You do not have permission to add users "
+                "with this role's administration level|"
+                "You do not have permission to add users "
+                "at a higher administration level"
+            )
+        )
 
     def test_add_user_by_invalid_permissions_non_superuser(self):
         # Remove feature access for the user
@@ -226,4 +224,50 @@ class AddUserByNonSuperUserTestCase(TestCase, ProfileTestHelperMixin):
         })
         self.assertFalse(
             SystemUser.objects.filter(email=payload["email"]).exists()
+        )
+
+    def test_add_user_by_non_superuser_with_outside_them_role(self):
+        user_roles = self.user.user_user_role.values_list(
+            'role__id', flat=True
+        )
+        role = Role.objects.filter(
+            administration_level__level=self.adm.level.level - 1,
+            role_role_feature_access__access=FeatureAccessTypes.invite_user
+        ).exclude(pk__in=user_roles).order_by("?").first()
+
+        payload = {
+            "email": "newadmin3.1@test.com",
+            "first_name": "Admin",
+            "last_name": self.adm.name,
+            "forms": [self.form.id],
+            "organisation": self.org.id,
+            "roles": [
+                {
+                    "role": role.id,
+                    "administration": self.adm.id,
+                }
+            ]
+        }
+        response = self.client.post(
+            "/api/v1/user",
+            payload,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}"
+        )
+        self.assertEqual(response.status_code, 400)
+        response_data = response.json()
+        self.assertEqual(
+            response_data,
+            {
+                "message": (
+                    "You do not have permission to add users "
+                    "with this role's administration level"
+                ),
+                "details": {
+                    "role": [
+                        "You do not have permission to add users "
+                        "with this role's administration level"
+                    ]
+                }
+            }
         )

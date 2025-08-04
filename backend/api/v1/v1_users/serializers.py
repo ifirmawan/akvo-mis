@@ -282,12 +282,46 @@ class AddRolesSerializer(serializers.Serializer):
             raise ValidationError(
                 'You do not have permission to assign roles'
             )
-        if user_role.administration.level.level > administration.level.level:
+        user_adm_level = user_role.administration.level.level
+        if user_adm_level > administration.level.level:
             raise ValidationError(
                 "You do not have permission to add users at "
                 "a higher administration level"
             )
         return administration
+
+    def validate_role(self, role):
+        user = self.context.get('user')
+        if user.is_superuser:
+            return role
+        if not user:
+            raise ValidationError(
+                'User context is required for role validation'
+            )
+        invite_u = FeatureAccessTypes.invite_user
+        user_role = user.user_user_role.filter(
+            role__role_role_feature_access__access=invite_u,
+        ).first()
+        if not user_role:
+            raise ValidationError(
+                'You do not have permission to assign roles'
+            )
+        user_adm_level = user_role.administration.level.level
+        if user_adm_level > role.administration_level.level:
+            raise ValidationError(
+                "You do not have permission to add users "
+                "with this role's administration level"
+            )
+        return role
+
+    # def validate(self, attrs):
+    #     role = attrs.get('role')
+    #     administration = attrs.get('administration')
+    #     # check adm level mismatch between role and administration
+    #     if role.administration_level.level != administration.level.level:
+    #         raise ValidationError(
+    #             "Role and administration level mismatch"
+    #         )
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

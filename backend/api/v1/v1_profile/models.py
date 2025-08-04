@@ -2,7 +2,11 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from api.v1.v1_profile.constants import DataAccessTypes
+from api.v1.v1_profile.constants import (
+    DataAccessTypes,
+    FeatureAccessTypes,
+    FeatureTypes,
+)
 from api.v1.v1_users.models import SystemUser
 
 
@@ -170,6 +174,29 @@ class RoleAccess(models.Model):
     class Meta:
         unique_together = ("role", "data_access")
         db_table = "role_access"
+
+
+class RoleFeatureAccess(models.Model):
+    role = models.ForeignKey(
+        to=Role, on_delete=models.CASCADE,
+        related_name="role_role_feature_access"
+    )
+    type = models.IntegerField(
+        choices=FeatureTypes.FieldStr.items(),
+    )
+    access = models.IntegerField(
+        choices=FeatureAccessTypes.FieldStr.items(),
+    )
+
+    def __str__(self):
+        return (
+            f"{self.role.name} - {FeatureTypes.FieldStr[self.type]} - "
+            f"{FeatureAccessTypes.FieldStr[self.access]}"
+        )
+
+    class Meta:
+        unique_together = ("role", "type", "access")
+        db_table = "role_feature_access"
 
 
 class UserRole(models.Model):

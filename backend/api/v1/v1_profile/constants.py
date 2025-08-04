@@ -41,6 +41,26 @@ class DataAccessTypes:
     }
 
 
+class FeatureAccessTypes:
+    invite_user = 1
+
+    FieldStr = {
+        invite_user: "Invite User",
+    }
+
+
+class FeatureTypes:
+    user_access = 1
+    FieldStr = {
+        user_access: "User Access",
+    }
+    FieldGroup = {
+        user_access: [
+           FeatureAccessTypes.invite_user
+        ]
+    }
+
+
 ADMINISTRATION_CSV_FILE = f"{COUNTRY_NAME}-administration.csv"
 
 # This is the default administration data used for testing

@@ -30,6 +30,7 @@ from utils.custom_serializer_fields import (
     CustomBooleanField,
     CustomMultipleChoiceField,
 )
+from api.v1.v1_profile.constants import FeatureAccessTypes
 from utils.custom_helper import CustomPasscode
 from utils.custom_generator import update_sqlite
 
@@ -265,6 +266,29 @@ class AddRolesSerializer(serializers.Serializer):
         help_text='Administration to assign role to user'
     )
 
+    def validate_administration(self, administration):
+        user = self.context.get('user')
+        if user.is_superuser:
+            return administration
+        if not user:
+            raise ValidationError(
+                'User context is required for role validation'
+            )
+        invite_u = FeatureAccessTypes.invite_user
+        user_role = user.user_user_role.filter(
+            role__role_role_feature_access__access=invite_u,
+        ).first()
+        if not user_role:
+            raise ValidationError(
+                'You do not have permission to assign roles'
+            )
+        if user_role.administration.level.level > administration.level.level:
+            raise ValidationError(
+                "You do not have permission to add users at "
+                "a higher administration level"
+            )
+        return administration
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.fields.get('role').queryset = Role.objects.all()
@@ -295,6 +319,11 @@ class AddEditUserSerializer(serializers.ModelSerializer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.fields.get('organisation').queryset = Organisation.objects.all()
+
+    def validate_roles(self, roles):
+        return AddRolesSerializer(
+            data=roles, many=True, context=self.context
+        ).is_valid(raise_exception=True)
 
     def validate(self, attrs):
         if self.instance:
@@ -412,7 +441,9 @@ class AddEditUserSerializer(serializers.ModelSerializer):
 
         if roles_data:
             # Validate each role data
-            serializer = AddRolesSerializer(data=roles_data, many=True)
+            serializer = AddRolesSerializer(
+                data=roles_data, many=True, context=self.context
+            )
             if not serializer.is_valid():
                 errors = {}
                 # Process role validation errors

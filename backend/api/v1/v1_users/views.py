@@ -57,7 +57,7 @@ from api.v1.v1_users.serializers import (
     UpdateProfileSerializer,
 )
 from mis.settings import REST_FRAMEWORK, WEBDOMAIN
-from utils.custom_permissions import IsSuperAdmin
+from utils.custom_permissions import AddUserAccess, IsSuperAdmin
 from utils.custom_serializer_fields import validate_serializers_message
 from utils.default_serializers import DefaultResponseSerializer
 from utils.email_helper import send_email
@@ -351,7 +351,7 @@ def list_levels(request, version):
     summary="To add user",
 )
 @api_view(["POST"])
-@permission_classes([IsAuthenticated, IsSuperAdmin])
+@permission_classes([IsAuthenticated, AddUserAccess])
 def add_user(request, version):
     serializer = AddEditUserSerializer(
         data=request.data, context={"user": request.user}

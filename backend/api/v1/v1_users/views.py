@@ -464,7 +464,7 @@ def add_user(request, version):
     ],
 )
 @api_view(["GET"])
-@permission_classes([IsAuthenticated, IsSuperAdmin])
+@permission_classes([IsAuthenticated, AddUserAccess])
 def list_users(request, version):
     serializer = ListUserRequestSerializer(data=request.GET)
     if not serializer.is_valid():
@@ -475,6 +475,9 @@ def list_users(request, version):
 
     filter_data = {}
     exclude_data = {"password__exact": ""}
+
+    if not request.user.is_superuser:
+        filter_data["is_superuser"] = False
 
     if serializer.validated_data.get("administration"):
         filter_adm = serializer.validated_data.get("administration")

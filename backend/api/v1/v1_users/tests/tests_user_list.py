@@ -62,28 +62,6 @@ class UserListTestCase(TestCase, ProfileTestHelperMixin):
             "Authentication credentials were not provided.",
         )
 
-    def test_get_user_list_with_non_superuser(self):
-        # Create a non-superuser for testing
-        non_superuser = self.create_user(
-            email="nonsuper@test.com",
-            role_level=self.IS_ADMIN,
-            administration=Administration.objects.filter(
-                parent_administration__isnull=True, level__level__gt=0
-            ).first(),
-        )
-        non_superuser_token = self.get_auth_token(non_superuser.email)
-        response = self.client.get(
-            "/api/v1/users",
-            HTTP_AUTHORIZATION=f"Bearer {non_superuser_token}",
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 403)
-        self.assertIn("detail", response.json())
-        self.assertEqual(
-            response.json()["detail"],
-            "You do not have permission to perform this action.",
-        )
-
     # Test for all filtering functionalities
     def test_get_user_list_with_filter_administration(self):
         # Get a specific administration

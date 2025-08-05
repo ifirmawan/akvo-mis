@@ -33,6 +33,7 @@ from api.v1.v1_profile.models import (
     Levels,
     Role,
 )
+from api.v1.v1_profile.constants import FeatureAccessTypes, FeatureTypes
 from api.v1.v1_users.models import (
     SystemUser,
     Organisation,
@@ -449,13 +450,6 @@ def add_user(request, version):
             location=OpenApiParameter.QUERY,
         ),
         OpenApiParameter(
-            name="descendants",
-            required=False,
-            default=True,
-            type=OpenApiTypes.BOOL,
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
             name="search",
             required=False,
             type=OpenApiTypes.STR,
@@ -479,24 +473,29 @@ def list_users(request, version):
     if not request.user.is_superuser:
         filter_data["is_superuser"] = False
 
-    if serializer.validated_data.get("administration"):
-        filter_adm = serializer.validated_data.get("administration")
-
-        if serializer.validated_data.get("descendants"):
-            # Include all descendants using path hierarchy
-            filter_path = "{0}{1}.".format(
-                filter_adm.path, filter_adm.id
-            ) if filter_adm.path else f"{filter_adm.id}."
-            filter_descendants = list(
-                Administration.objects.filter(
-                    path__startswith=filter_path
-                ).values_list("id", flat=True)
-            )
-            filter_descendants.append(filter_adm.id)
-            final_set = set(filter_descendants)
-        else:
-            # Only include the specific administration, no descendants
-            final_set = {filter_adm.id}
+    filter_adm = serializer.validated_data.get("administration")
+    if not request.user.is_superuser:
+        user_adm = request.user.user_user_role.filter(
+            role__role_role_feature_access__type=FeatureTypes.user_access,
+            role__role_role_feature_access__access=(
+                FeatureAccessTypes.invite_user
+            ),
+        ).order_by(
+            "administration__level__level"
+        ).first()
+        if not filter_adm and user_adm:
+            filter_adm = user_adm.administration
+    if filter_adm:
+        filter_path = "{0}{1}.".format(
+            filter_adm.path, filter_adm.id
+        ) if filter_adm.path else f"{filter_adm.id}."
+        filter_descendants = list(
+            Administration.objects.filter(
+                path__startswith=filter_path
+            ).values_list("id", flat=True)
+        )
+        filter_descendants.append(filter_adm.id)
+        final_set = set(filter_descendants)
 
         # Apply filter by administration IDs
         # Only apply filtering if administration level > 0 (not national level)

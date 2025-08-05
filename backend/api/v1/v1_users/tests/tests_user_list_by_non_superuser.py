@@ -1,9 +1,9 @@
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.db.models import Q, Count
 from api.v1.v1_forms.models import Forms
 from api.v1.v1_profile.models import Administration
-# , Role, UserRole
 from api.v1.v1_users.models import Organisation
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
@@ -138,3 +138,56 @@ class UserListByNonSuperUserTestCase(TestCase, ProfileTestHelperMixin):
         user_data = response.json()
         self.assertEqual(user_data["total"], 0)
         self.assertEqual(user_data["data"], [])
+
+    def test_user_list_by_non_superuser_filtered_adm_by_default(self):
+        # Create a user with different administration
+        parent_adm = self.adm.ancestors.last()
+        higher_adm = Administration.objects.filter(
+            level=parent_adm.level,
+        ).exclude(
+            pk=parent_adm.id
+        ).first()
+
+        other_users = []
+        child_u = self.create_user(
+            email="high.adm@test.com",
+            role_level=self.IS_ADMIN,
+            administration=higher_adm,
+            form=self.form,
+        )
+        other_users.append(child_u)
+
+        for child_adm in higher_adm.parent_administration.all():
+            child_u = self.create_user(
+                email=f"other.{child_adm.id}@test.com",
+                role_level=self.IS_ADMIN,
+                administration=child_adm,
+                form=self.form,
+            )
+            other_users.append(child_u)
+
+        # Test that the default administration is used
+        # when no filter is applied
+        response = self.client.get(
+            "/api/v1/users",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        user_data = response.json()
+        # Check that the total matches
+        # the number of users in the default administration
+        adms = Administration.objects.filter(
+            Q(id=self.adm.id) |
+            Q(path__startswith=f"{self.adm.path}{self.adm.id}.")
+        )
+        total_users = adms.aggregate(
+            total=Count('user_role_administration')
+        )['total']
+        self.assertEqual(user_data["total"], total_users)
+        # Make sure the other users are not included
+        for user in user_data['data']:
+            self.assertNotIn(
+                user['email'],
+                [u.email for u in other_users]
+            )

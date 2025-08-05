@@ -951,8 +951,10 @@ const uiText = {
     selectMonitoringFormPlaceholder: "Select Monitoring Form",
     selectQuestionPlaceholder: "Select Question",
     formAccess: "Form Access",
-    userAccess: "User Access",
-    inviteNewUser: "Invite New User",
+    roleFeatures: "Role Features",
+    rolesLabel: "Role(s)",
+    isSuperAdminLabel: "Is Superadmin?",
+    showPendingUsers: "Show Pending Users",
   },
 
   de: {},

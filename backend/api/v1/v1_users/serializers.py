@@ -783,10 +783,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
 class RoleOptionSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source='name')
     value = serializers.IntegerField(source='id')
+    level = serializers.ReadOnlyField(source='administration_level.level')
 
     class Meta:
         model = Role
-        fields = ["label", "value", "administration_level"]
+        fields = ["label", "value", "level", "administration_level"]
 
 
 class UpdateProfileSerializer(serializers.ModelSerializer):

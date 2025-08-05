@@ -82,6 +82,7 @@ const TypeCascade = ({
   const initialDropdowns = useMemo(() => {
     const parentIDs =
       cascadeParent === 'administrator.sqlite' ? prevAdmAnswer || [] : parentId || [0];
+    const nationalAdm = dataSource?.find((ds) => !ds?.parent);
     const filterDs = dataSource
       ?.filter((ds) => {
         if (cascadeType && ds?.entity) {
@@ -116,7 +117,19 @@ const TypeCascade = ({
       return [];
     }
     const groupedDs = groupBy(filterDs, 'parent');
+    // Modify groupedDs if one of the group key is national id
     if (parentIDs.length > 1 && Object.keys(groupedDs).length > 1) {
+      const nationalGroup = Object.entries(groupedDs).find(
+        ([key]) => parseInt(key, 10) === nationalAdm?.id,
+      );
+      if (nationalGroup) {
+        return [
+          {
+            options: nationalGroup[1],
+            value: value?.[0] || null,
+          },
+        ];
+      }
       return Object.values(groupedDs).map((options, ox) => {
         const defaultValue = value?.[ox] || null;
         let answer = defaultValue;

@@ -150,7 +150,9 @@ const AddAssignment = () => {
     try {
       const administrations = selectedAdministrations?.length
         ? selectedAdministrations?.map((adm) => adm?.id || adm)
-        : [authUser.administration.id];
+        : authUser?.is_superuser
+        ? [authUser.administration.id]
+        : authUser?.roles?.map((r) => r?.administration?.id);
       const payload = {
         name,
         forms,

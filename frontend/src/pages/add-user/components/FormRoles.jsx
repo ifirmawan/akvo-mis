@@ -52,16 +52,7 @@ const FormRoles = ({ form, text, roles = [], disabled = false }) => {
                             showSearch
                             placeholder={text.selectRole}
                             options={roles.filter(
-                              (role) =>
-                                !fields.some(
-                                  (f) =>
-                                    f.name !== field.name &&
-                                    form.getFieldValue([
-                                      "roles",
-                                      f.name,
-                                      "role",
-                                    ]) === role.value
-                                )
+                              (r) => r?.level >= authUser?.administration?.level
                             )}
                             optionFilterProp="label"
                             filterOption={(input, option) =>

@@ -288,6 +288,23 @@ class AddRolesSerializer(serializers.Serializer):
                 "You do not have permission to add users at "
                 "a higher administration level"
             )
+        # Check if the administration is outside the user's administration path
+        user_adm_path = (
+            f"{user_role.administration.path}{user_role.administration.id}."
+        )
+        invalid_children = (
+            not administration.path.startswith(user_adm_path) and
+            administration.level.level > user_adm_level
+        )
+        invalid_adm = (
+            administration.level.level == user_adm_level and
+            administration.id != user_role.administration.id
+        )
+        if invalid_children or invalid_adm:
+            raise ValidationError(
+                "You do not have permission to add users "
+                "in this administration"
+            )
         return administration
 
     def validate_role(self, role):
@@ -314,14 +331,15 @@ class AddRolesSerializer(serializers.Serializer):
             )
         return role
 
-    # def validate(self, attrs):
-    #     role = attrs.get('role')
-    #     administration = attrs.get('administration')
-    #     # check adm level mismatch between role and administration
-    #     if role.administration_level.level != administration.level.level:
-    #         raise ValidationError(
-    #             "Role and administration level mismatch"
-    #         )
+    def validate(self, attrs):
+        role = attrs.get('role')
+        administration = attrs.get('administration')
+        # check adm level mismatch between role and administration
+        if role.administration_level.level != administration.level.level:
+            raise ValidationError(
+                "Role and administration level mismatch"
+            )
+        return attrs
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -358,17 +376,6 @@ class AddEditUserSerializer(serializers.ModelSerializer):
         return AddRolesSerializer(
             data=roles, many=True, context=self.context
         ).is_valid(raise_exception=True)
-
-    def validate(self, attrs):
-        if self.instance:
-            if (
-                not self.context.get('user').is_superuser
-                and self.instance != self.context.get('user')
-            ):
-                raise ValidationError(
-                    'You do not have permission to edit this user'
-                )
-        return attrs
 
     def create(self, validated_data):
         try:
@@ -579,7 +586,7 @@ class UserFormSerializer(serializers.ModelSerializer):
 
 class UserRoleSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source='role.name')
-    administration = serializers.CharField(source='administration.name')
+    administration = serializers.CharField(source='administration.full_name')
 
     class Meta:
         model = UserRole
@@ -757,6 +764,18 @@ class UserRoleEditSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.ANY)
     def get_adm_path(self, instance: UserRole):
+        user = self.context.get('user')
+        if not user.is_superuser:
+            invite_user = FeatureAccessTypes.invite_user
+            user_role = user.user_user_role.filter(
+                role__administration_level=instance.administration.level,
+                role__role_role_feature_access__access=invite_user,
+            ).first()
+            if (
+                user_role and
+                user_role.administration == instance.administration
+            ):
+                return None
         if instance.administration.path:
             adm = instance.administration
             return [
@@ -798,9 +817,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(UserRoleEditSerializer(many=True))
     def get_roles(self, instance: SystemUser):
+        user = self.context.get('user')
         return UserRoleEditSerializer(
             instance=instance.user_user_role.all(),
             many=True,
+            context={'user': user}
         ).data
 
     @extend_schema_field(OrganisationSerializer)
@@ -848,10 +869,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
 class RoleOptionSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source='name')
     value = serializers.IntegerField(source='id')
+    level = serializers.ReadOnlyField(source='administration_level.level')
 
     class Meta:
         model = Role
-        fields = ["label", "value", "administration_level"]
+        fields = ["label", "value", "level", "administration_level"]
 
 
 class UpdateProfileSerializer(serializers.ModelSerializer):

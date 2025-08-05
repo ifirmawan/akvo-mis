@@ -575,7 +575,7 @@ def get_user_roles(request, version):
 
 
 class UserEditDeleteView(APIView):
-    permission_classes = [IsAuthenticated, IsSuperAdmin]
+    permission_classes = [IsAuthenticated, AddUserAccess]
 
     @extend_schema(
         responses={200: UserDetailSerializer, 204: DefaultResponseSerializer},
@@ -585,7 +585,10 @@ class UserEditDeleteView(APIView):
     def get(self, request, user_id, version):
         instance = get_object_or_404(SystemUser, pk=user_id, deleted_at=None)
         return Response(
-            UserDetailSerializer(instance=instance).data,
+            UserDetailSerializer(
+                instance=instance,
+                context={"user": request.user}
+            ).data,
             status=status.HTTP_200_OK,
         )
 

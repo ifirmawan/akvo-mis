@@ -2,8 +2,10 @@ import React from "react";
 import { Form, Space, Select, Button, Row, Col } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import AdministrationInput from "./AdministrationInput";
+import { store } from "../../../lib";
 
 const FormRoles = ({ form, text, roles = [], disabled = false }) => {
+  const authUser = store.useState((s) => s.user);
   return (
     <Form.List
       name="roles"
@@ -51,18 +53,23 @@ const FormRoles = ({ form, text, roles = [], disabled = false }) => {
                           <Select
                             showSearch
                             placeholder={text.selectRole}
-                            options={roles.filter(
-                              (role) =>
-                                !fields.some(
-                                  (f) =>
-                                    f.name !== field.name &&
-                                    form.getFieldValue([
-                                      "roles",
-                                      f.name,
-                                      "role",
-                                    ]) === role.value
-                                )
-                            )}
+                            options={roles
+                              .filter(
+                                (r) =>
+                                  r?.level >= authUser?.administration?.level
+                              )
+                              .filter(
+                                (role) =>
+                                  !fields.some(
+                                    (f) =>
+                                      f.name !== field.name &&
+                                      form.getFieldValue([
+                                        "roles",
+                                        f.name,
+                                        "role",
+                                      ]) === role.value
+                                  )
+                              )}
                             optionFilterProp="label"
                             filterOption={(input, option) =>
                               option.label

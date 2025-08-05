@@ -668,7 +668,7 @@ class UserRoleListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'role', 'administration',
             'is_approver', 'is_submitter', 'is_editor',
-            'can_delete',
+            'can_delete', 'can_invite_user',
         ]
 
 

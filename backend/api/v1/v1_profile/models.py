@@ -234,6 +234,12 @@ class UserRole(models.Model):
             data_access=DataAccessTypes.delete
         ).exists()
 
+    def can_invite_user(self):
+        return self.role.role_role_feature_access.filter(
+            type=FeatureTypes.user_access,
+            access=FeatureAccessTypes.invite_user,
+        ).exists()
+
     def __str__(self):
         return f"{self.user.name} - {self.role.name} ({self.administration})"
 

@@ -2,8 +2,10 @@ import React from "react";
 import { Form, Space, Select, Button, Row, Col } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import AdministrationInput from "./AdministrationInput";
+import { store } from "../../../lib";
 
 const FormRoles = ({ form, text, roles = [], disabled = false }) => {
+  const authUser = store.useState((s) => s.user);
   return (
     <Form.List
       name="roles"

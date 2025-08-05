@@ -234,9 +234,9 @@
         {
           "id": 1749621742326,
           "name": "sizes_of_pipes",
-          "label": "Sizes of  pipes?",
+          "label": "Sizes of pipes?",
           "order": 11,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [

@@ -20,6 +20,7 @@ import {
   processRepeatableQuestions,
   transformValue,
   getCascadeAnswerAPI,
+  config,
 } from "../../lib";
 import { pick, isEmpty } from "lodash";
 import { PageLoader, Breadcrumbs, DescriptionPanel } from "../../components";
@@ -355,6 +356,13 @@ const ManageDraftForm = () => {
                   extra: q?.extra,
                 };
               }
+            }
+
+            if (q?.type === QUESTION_TYPES.geo) {
+              qVal = {
+                ...qVal,
+                center: config.mapConfig.defaultCenter,
+              };
             }
             return qVal;
           })

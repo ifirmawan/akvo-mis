@@ -737,7 +737,7 @@ const config = {
   },
   mapConfig: {
     defaultZoom: 6,
-    defaultCenter: [0, 0],
+    defaultCenter: [-17.4549073, 177.7098545], // Fiji
     markerSizeRange: [10, 50],
     highlightColor: "#84b4cc",
     colorRange: ["#bbedda", "#a7e1cb", "#92d5bd", "#7dcaaf", "#67bea1"],

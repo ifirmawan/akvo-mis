@@ -712,7 +712,7 @@
           "label": "Comments from Supervisor",
           "order": 1,
           "type": "text",
-          "required": false,
+          "required": true,
           "meta": false
         },
         {
@@ -721,7 +721,7 @@
           "label": "Comments from DWS Staff",
           "order": 2,
           "type": "text",
-          "required": false,
+          "required": true,
           "meta": false
         }
       ],

@@ -141,7 +141,7 @@
           "name": "locality_plan",
           "label": "Locality Plan",
           "order": 7,
-          "type": "text",
+          "type": "geo",
           "required": true,
           "meta": false,
           "dependency": [

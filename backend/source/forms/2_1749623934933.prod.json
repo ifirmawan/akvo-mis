@@ -99,7 +99,7 @@
           "name": "type_of_water_source",
           "label": "Type of Water Source",
           "order": 6,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -167,7 +167,7 @@
           "name": "implementing_agency",
           "label": "Who is the implementing agency/agencies?",
           "order": 8,
-          "type": "option",
+          "type": "multiple_option",
           "options": [
             {
               "value": "water_authority_of_fiji",

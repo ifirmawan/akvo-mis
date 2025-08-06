@@ -154,11 +154,26 @@
           ]
         },
         {
+          "id": 1749632991459,
+          "name": "why_the_water_sample_could_not_be_taken_other",
+          "label": "Why the water sample could not be taken? (If other, please specify)",
+          "order": 4,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749632887312,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
           "id": 1749633001462,
           "name": "method_of_water_testing_used",
           "label": "Method of Water Testing Used?",
           "order": 4,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [

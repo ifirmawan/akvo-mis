@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Select, Space } from "antd";
 import PropTypes from "prop-types";
 import { store, api } from "../../../lib";
@@ -13,6 +13,9 @@ const AdministrationInput = ({
 }) => {
   const { user } = store.useState((state) => state);
   const [administration, setAdministration] = useState([]);
+  const maxLevelValue = useMemo(() => {
+    return maxLevel || user?.administration?.level || null;
+  }, [maxLevel, user]);
 
   const fetchUserAdmin = useCallback(async () => {
     if (user) {
@@ -102,11 +105,13 @@ const AdministrationInput = ({
         {administration
           .filter(
             (x) =>
-              (x?.children?.length && !maxLevel) ||
-              (maxLevel && x?.level < maxLevel - 1 && x?.children?.length) // show children based on maxLevel
+              (x?.children?.length && !maxLevelValue) ||
+              (maxLevelValue &&
+                x?.level < maxLevelValue - 1 &&
+                x?.children?.length) // show children based on maxLevel
           )
           .map((region, regionIdx) => {
-            if (maxLevel === null || regionIdx + 1 < maxLevel) {
+            if (maxLevelValue === null || regionIdx + 1 < maxLevelValue) {
               const selectValues = administration[regionIdx + 1]?.id || null;
               return (
                 <div key={regionIdx}>
@@ -129,11 +134,23 @@ const AdministrationInput = ({
                     optionFilterProp="children"
                     className="custom-select"
                   >
-                    {region.children?.map((optionValue, optionIdx) => (
-                      <Select.Option key={optionIdx} value={optionValue.id}>
-                        {optionValue.name}
-                      </Select.Option>
-                    ))}
+                    {region.children
+                      ?.filter((c) => {
+                        if (!user?.is_superuser && user?.roles?.length) {
+                          return user.roles.some((role) => {
+                            if (role?.administration?.level_id === c.level) {
+                              return role.administration.id === c.id;
+                            }
+                            return true;
+                          });
+                        }
+                        return c;
+                      })
+                      .map((optionValue, optionIdx) => (
+                        <Select.Option key={optionIdx} value={optionValue.id}>
+                          {optionValue.name}
+                        </Select.Option>
+                      ))}
                   </Select>
                 </div>
               );

@@ -289,12 +289,15 @@ class AddRolesSerializer(serializers.Serializer):
                 "a higher administration level"
             )
         # Check if the administration is outside the user's administration path
-        user_adm_path = (
-            f"{user_role.administration.path}{user_role.administration.id}."
-        )
+        user_adm_paths = [
+            f"{ur.administration.path}{ur.administration.id}."
+            for ur in user.user_user_role.all()
+        ]
         invalid_children = (
-            not administration.path.startswith(user_adm_path) and
-            administration.level.level > user_adm_level
+            administration.level.level > user_adm_level and
+            not any(
+                administration.path.startswith(path) for path in user_adm_paths
+            )
         )
         invalid_adm = (
             administration.level.level == user_adm_level and
@@ -574,7 +577,7 @@ class UserAdministrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Administration
-        fields = ['id', 'name', 'level', 'full_name']
+        fields = ['id', 'name', 'level', 'level_id', 'full_name']
 
 
 class UserFormSerializer(serializers.ModelSerializer):

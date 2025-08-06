@@ -145,9 +145,12 @@ const Users = () => {
           pending ? "true" : "false"
         }`;
 
-        url += selectedAdministration?.id
-          ? `&administration=${selectedAdministration.id}`
-          : `&administration=${authUser?.administration?.id}`;
+        if (
+          selectedAdministration &&
+          selectedAdministration?.id !== authUser?.administration?.id
+        ) {
+          url += `&administration=${selectedAdministration.id}`;
+        }
 
         if (trained !== null && typeof trained !== "undefined") {
           url += `&trained=${trained ? "true" : "false"}`;

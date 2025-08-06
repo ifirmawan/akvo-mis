@@ -304,6 +304,12 @@ def set_user_password(request, version):
             location=OpenApiParameter.QUERY,
         ),
         OpenApiParameter(
+            name="filter_children",
+            required=False,
+            type={"type": "array", "items": {"type": "number"}},
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
             name="max_level",
             required=False,
             type=OpenApiTypes.NUMBER,
@@ -317,7 +323,7 @@ def list_administration(request, version, administration_id):
     instance = get_object_or_404(Administration, pk=administration_id)
     filter = request.GET.get("filter")
     max_level = request.GET.get("max_level")
-    filter_children = []
+    filter_children = request.GET.getlist("filter_children")
     return Response(
         ListAdministrationSerializer(
             instance=instance,

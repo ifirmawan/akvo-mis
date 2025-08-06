@@ -98,7 +98,7 @@ const dataPointsQuery = () => ({
     try {
       const repeatsVal = repeats ? { repeats } : {};
       const submittedVal = submitted !== undefined ? { submitted } : {};
-      const syncedAtVal = syncedAt ? { syncedAt } : {};
+      const syncedAtVal = syncedAt !== undefined ? { syncedAt } : {};
       const res = await sql.updateRow(
         db,
         'datapoints',

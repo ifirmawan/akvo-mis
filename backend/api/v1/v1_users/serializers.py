@@ -1,7 +1,7 @@
 from django.core import signing
 from django.core.signing import BadSignature
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Min
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
@@ -298,7 +298,9 @@ class AddRolesSerializer(serializers.Serializer):
         )
         invalid_adm = (
             administration.level.level == user_adm_level and
-            administration.id != user_role.administration.id
+            administration.id not in user.user_user_role.values_list(
+                'administration__id', flat=True
+            )
         )
         if invalid_children or invalid_adm:
             raise ValidationError(
@@ -697,6 +699,22 @@ class UserSerializer(serializers.ModelSerializer):
                 level__level=0
             ).first()
             return UserAdministrationSerializer(instance=adm).data
+        # Check if there are multiple user roles at the minimum level
+        min_level = instance.user_user_role.aggregate(
+            min_level=Min('administration__level__level')
+        )['min_level']
+        # Count how many roles are at the minimum level
+        roles_at_min_level = instance.user_user_role.filter(
+            administration__level__level=min_level
+        )
+        if roles_at_min_level.count() > 1:
+            # Multiple roles at same minimum level, return parent
+            first_role = roles_at_min_level.first()
+            if first_role and first_role.administration.parent:
+                parent = first_role.administration.parent
+                return UserAdministrationSerializer(
+                    instance=parent
+                ).data
         # Order UserRole by administration level and get the first one
         user_role = UserRole.objects.filter(user=instance) \
             .order_by('administration__level__level').first()
@@ -789,7 +807,6 @@ class UserRoleEditSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-    administration = serializers.SerializerMethodField()
     roles = serializers.SerializerMethodField()
     organisation = serializers.SerializerMethodField()
     trained = CustomBooleanField(default=False)
@@ -797,23 +814,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
     pending_approval = serializers.SerializerMethodField()
     data = serializers.SerializerMethodField()
     pending_batch = serializers.SerializerMethodField()
-
-    @extend_schema_field(UserAdministrationSerializer)
-    def get_administration(self, instance: SystemUser):
-        if instance.is_superuser:
-            adm = Administration.objects.filter(
-                parent__isnull=True,
-                level__level=0
-            ).first()
-            return UserAdministrationSerializer(instance=adm).data
-        # Order UserRole by administration level and get the first one
-        user_role = UserRole.objects.filter(user=instance) \
-            .order_by('administration__level__level').first()
-        if user_role:
-            return UserAdministrationSerializer(
-                instance=user_role.administration
-            ).data
-        return None
 
     @extend_schema_field(UserRoleEditSerializer(many=True))
     def get_roles(self, instance: SystemUser):
@@ -862,7 +862,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'email', 'roles',
             'organisation', 'trained', 'phone_number',
             'forms', 'pending_approval', 'data',
-            'pending_batch', 'is_superuser', 'administration',
+            'pending_batch', 'is_superuser',
         ]
 
 

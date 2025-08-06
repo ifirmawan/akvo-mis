@@ -57,7 +57,6 @@ class UserDetailsTestCase(TestCase, ProfileTestHelperMixin):
                 "data",
                 "pending_batch",
                 "is_superuser",
-                "administration",
             ],
         )
 

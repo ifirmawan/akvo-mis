@@ -88,7 +88,7 @@
           "name": "comment_on_the_plant_effluent",
           "label": "Comment on the plant effluent",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -204,8 +204,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -223,8 +223,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -242,8 +242,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -261,8 +261,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -280,8 +280,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -299,8 +299,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -318,8 +318,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -337,8 +337,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -356,8 +356,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -375,8 +375,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -394,8 +394,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -413,8 +413,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -432,8 +432,8 @@
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["lab_test"]
             }
           ],
           "rule": {

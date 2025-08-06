@@ -749,7 +749,7 @@
           "name": "describe_the_inflow_at_the_inlet",
           "label": "Describe the inflow at the inlet?",
           "order": 2,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -847,7 +847,7 @@
           "name": "comment_on_operation_of_the_screening_system",
           "label": "Comment on operation of the screening system",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -917,7 +917,7 @@
           "name": "comment_on_the_operation_of_the_grit_removal_system",
           "label": "Comment on the operation of the grit removal system",
           "order": 3,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -1029,7 +1029,7 @@
           "name": "comment_on_the_influent_pumping_system",
           "label": "Comment on the influent pumping system",
           "order": 2,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -1152,7 +1152,7 @@
           "name": "comment_on_the_operation_of_the_primary_clarifiers",
           "label": "Comment on the operation of the primary clarifiers",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -1276,7 +1276,7 @@
           "name": "comment_on_the_operation_of_the_trickling_filters",
           "label": "Comment on the operation of the Trickling Filters",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -1376,7 +1376,7 @@
           "name": "comment_on_the_operation_of_the_activated_sludge_system",
           "label": "Comment on the operation of the Activated Sludge System",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -1470,7 +1470,7 @@
           "name": "comment_on_the_operation_of_the_stabilization_lagoons",
           "label": "Comment on the operation of the stabilization lagoons",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -1564,7 +1564,7 @@
           "name": "comment_on_the_anaerobic_lagoons",
           "label": "Comment on the Anaerobic lagoons",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -1744,7 +1744,7 @@
           "name": "comment_on_the_operation_of_the_secondary_clarifiers",
           "label": "Comment on the operation of the secondary clarifiers",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -1862,7 +1862,7 @@
           "name": "comment_on_operation_of_the_sludge_aerobic_digestion",
           "label": "Comment on operation of the sludge aerobic digestion",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -1950,7 +1950,7 @@
           "name": "comment_on_the_sludge_handling_system",
           "label": "Comment on the sludge handling system",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -2038,7 +2038,7 @@
           "name": "comment_on_the_drying_beds",
           "label": "Comment on the drying beds",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "dependency": [
             {
@@ -2218,7 +2218,7 @@
           "name": "comment_on_the_plant_effluent",
           "label": "Comment on the plant effluent",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -2276,10 +2276,40 @@
           "rule": null
         },
         {
+          "id": 1748917751258,
+          "name": "method_of_testing_for_plant_effluent",
+          "label": "Method of Testing for plant effluent",
+          "order": 3,
+          "type": "option",
+          "required": true,
+          "meta": true,
+          "options": [
+            {
+              "value": "lab_test",
+              "label": "Lab Test",
+              "id": 1748917712581,
+              "order": 1
+            },
+            {
+              "value": "testing_kits",
+              "label": "Testing Kits",
+              "id": 1748917712582,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1748919463685,
+              "options": ["yes"]
+            }
+          ],
+          "rule": null
+        },
+        {
           "id": 1748917775963,
           "name": "take_photo_of_effluent_sampling_point",
           "label": "Take photo of effluent sampling point",
-          "order": 3,
+          "order": 4,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -2297,15 +2327,15 @@
           "id": 1748917834124,
           "name": "what_is_the_p_h",
           "label": "What is the pH?",
-          "order": 4,
+          "order": 5,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2316,15 +2346,15 @@
           "id": 1748917875406,
           "name": "what_is_the_conductivity_in_s_cm",
           "label": "What is the Conductivity in \u00b5S/cm?",
-          "order": 5,
+          "order": 6,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2335,15 +2365,15 @@
           "id": 1748917911534,
           "name": "what_is_the_salinity_in_ppt",
           "label": "What is the Salinity in ppt?",
-          "order": 6,
+          "order": 7,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2354,15 +2384,15 @@
           "id": 1748917965636,
           "name": "what_is_the_bod_in_mg_l",
           "label": "What is the BOD in mg/L?",
-          "order": 7,
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2373,15 +2403,15 @@
           "id": 1748918135898,
           "name": "what_is_the_cod_in_mg_l",
           "label": "What is the COD in mg/L?",
-          "order": 8,
+          "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2392,15 +2422,15 @@
           "id": 1748918151349,
           "name": "what_is_the_tss_in_mg_l",
           "label": "What is the TSS in mg/L?",
-          "order": 9,
+          "order": 10,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2411,15 +2441,15 @@
           "id": 1748918169799,
           "name": "what_is_the_chloride_level_in_mg_l",
           "label": "What is the Chloride level in mg/L?",
-          "order": 10,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2430,15 +2460,15 @@
           "id": 1748918181691,
           "name": "what_is_the_ammonia_level_in_mg_l",
           "label": "What is the Ammonia level in mg/L?",
-          "order": 11,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2449,15 +2479,15 @@
           "id": 1748918205623,
           "name": "what_is_the_total_nitrogen_level_in_mg_l",
           "label": "What is the Total Nitrogen level in mg/L?",
-          "order": 12,
+          "order": 13,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2468,15 +2498,15 @@
           "id": 1748918225750,
           "name": "what_is_the_nitrate_level_in_mg_l",
           "label": "What is the Nitrate level in mg/L?",
-          "order": 13,
+          "order": 14,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2487,15 +2517,15 @@
           "id": 1748918253206,
           "name": "what_is_the_nitrite_level_in_mg_l",
           "label": "What is the Nitrite Level in mg/L?",
-          "order": 14,
+          "order": 15,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2506,15 +2536,15 @@
           "id": 1748918278780,
           "name": "what_is_the_total_phosphorus_in_mg_l",
           "label": "What is the Total Phosphorus in mg/L?",
-          "order": 15,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {
@@ -2525,15 +2555,15 @@
           "id": 1748918340794,
           "name": "what_is_the_total_alkalinity_in_mg_l",
           "label": "What is the Total Alkalinity in mg/L?",
-          "order": 16,
+          "order": 17,
           "type": "number",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748917751257,
-              "options": ["yes"]
+              "id": 1748917751258,
+              "options": ["lab_test"]
             }
           ],
           "rule": {

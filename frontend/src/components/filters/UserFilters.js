@@ -26,16 +26,22 @@ const UserFilters = ({ fetchData, pending, setPending, loading, button }) => {
     return uiText[activeLang];
   }, [activeLang]);
 
+  const maxRoleLevel = useMemo(() => {
+    return authUser?.is_superuser
+      ? authUser.administration?.level
+      : authUser?.roles?.length
+      ? Math.min(...authUser.roles.map((r) => r?.administration?.level))
+      : null;
+  }, [authUser]);
+
   const fetchRoles = useCallback(async () => {
     try {
       const { data: apiData } = await api.get("/user/roles");
-      setRoles(
-        apiData?.filter((r) => r?.level >= authUser?.administration?.level)
-      );
+      setRoles(apiData?.filter((r) => r?.level >= maxRoleLevel));
     } catch (error) {
       console.error("Failed to fetch roles:", error);
     }
-  }, [authUser?.administration?.level]);
+  }, [maxRoleLevel]);
 
   useEffect(() => {
     fetchRoles();

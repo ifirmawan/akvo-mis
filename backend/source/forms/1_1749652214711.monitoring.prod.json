@@ -17,6 +17,29 @@
       "repeatable": false,
       "questions": [
         {
+          "id": 1749635348201,
+          "name": "do_you_have_drinking_water_safety_plan_dwsp_for_the_treatment_plant",
+          "label": "Do you have Drinking Water Safety Plan (DWSP) for the Treatment Plant?",
+          "order": 6,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749635382011,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749635382012,
+              "order": 2
+            }
+          ]
+        },
+        {
           "id": 1749652214713,
           "name": "name_of_contact_person",
           "label": "Name of Contact Person",
@@ -53,7 +76,13 @@
           "order": 4,
           "type": "text",
           "required": false,
-          "meta": false
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749635348201,
+              "options": ["yes"]
+            }
+          ]
         },
         {
           "id": 1749652517417,
@@ -75,6 +104,12 @@
               "label": "No",
               "id": 1749652526457,
               "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749635348201,
+              "options": ["yes"]
             }
           ]
         },
@@ -278,7 +313,7 @@
           "name": "which_water_quality_checks_are_carried_out_at_the_plant",
           "label": "Which water quality checks are carried out at the plant?",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -348,7 +383,7 @@
           "name": "method_of_water_testing_used",
           "label": "Method of Water Testing used?",
           "order": 3,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -608,7 +643,7 @@
           "name": "what_is_the_raw_water_source",
           "label": "What is the raw water source?",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -695,8 +730,8 @@
         },
         {
           "id": 1749693588994,
-          "name": "please_provide_details_of_the_risk",
-          "label": "Please provide details of the risk",
+          "name": "please_provide_details_of_the_risks_with_the_source",
+          "label": "Please provide details of the risks",
           "order": 5,
           "type": "option",
           "required": true,
@@ -741,10 +776,25 @@
           ]
         },
         {
+          "id": 1749693691980,
+          "name": "please_provide_details_of_the_risks_with_the_source_other",
+          "label": "Please provide details of the risks (Other)",
+          "order": 6,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749693588994,
+              "options": ["any_other_(specify)"]
+            }
+          ]
+        },
+        {
           "id": 1749693712512,
           "name": "are_you_able_to_take_photo_of_risk",
           "label": "Are you able to take photo of risk?",
-          "order": 6,
+          "order": 7,
           "type": "option",
           "required": true,
           "meta": false,
@@ -773,7 +823,7 @@
           "id": 1749693763655,
           "name": "take_photo_of_risks",
           "label": "Take Photo of risks",
-          "order": 7,
+          "order": 8,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -788,8 +838,8 @@
           "id": 1749693821961,
           "name": "how_is_the_raw_water_transported_to_the_plant",
           "label": "How is the raw water transported to the plant?",
-          "order": 8,
-          "type": "option",
+          "order": 9,
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -835,7 +885,7 @@
           "id": 1749693904912,
           "name": "how_many_raw_water_pumps_are_there",
           "label": "How many raw water pumps are there?",
-          "order": 9,
+          "order": 10,
           "type": "number",
           "required": true,
           "meta": false,
@@ -854,7 +904,7 @@
           "id": 1749693978189,
           "name": "how_many_pumps_are_operational_and_on_standby",
           "label": "How many pumps are operational and on standby?",
-          "order": 10,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
@@ -873,7 +923,7 @@
           "id": 1749694016524,
           "name": "are_there_any_risks_associated_with_the_pumps",
           "label": "Are there any risks associated with the pumps?",
-          "order": 11,
+          "order": 12,
           "type": "option",
           "required": true,
           "meta": false,
@@ -904,9 +954,9 @@
         },
         {
           "id": 1749694060099,
-          "name": "please_provide_details_of_the_risks",
+          "name": "please_provide_details_of_the_risks_with_the_pumps",
           "label": "Please provide details of the risks",
-          "order": 12,
+          "order": 13,
           "type": "option",
           "required": true,
           "meta": false,
@@ -944,10 +994,25 @@
           ]
         },
         {
+          "id": 1749694146460,
+          "name": "please_provide_details_of_the_risks_with_the_pumps_other",
+          "label": "Please provide details of the risks (Other)",
+          "order": 14,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749694060099,
+              "options": ["any_other_(specify)"]
+            }
+          ]
+        },
+        {
           "id": 1749694138975,
           "name": "are_you_able_to_take_photo_of_risks",
           "label": "Are you able to take photo of risks?",
-          "order": 13,
+          "order": 15,
           "type": "option",
           "required": true,
           "meta": false,
@@ -977,7 +1042,7 @@
           "id": 1749694172836,
           "name": "take_photo_of_the_risks",
           "label": "Take photo of the risks",
-          "order": 14,
+          "order": 16,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -993,7 +1058,7 @@
           "id": 1749694260130,
           "name": "are_there_any_risks_associated_with_the_raw_water_gravity_system",
           "label": "Are there any risks associated with the raw water gravity system?",
-          "order": 15,
+          "order": 17,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1022,7 +1087,7 @@
           "id": 1749694347720,
           "name": "please_provide_details_of_the_issues_risks_for_raw_water_gravity_system",
           "label": "Please Provide details of the issues / risks for Raw Water Gravity System:",
-          "order": 16,
+          "order": 18,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1060,10 +1125,25 @@
           ]
         },
         {
+          "id": 1749694410980,
+          "name": "please_provide_details_of_the_issues_risks_for_raw_water_gravity_system_other",
+          "label": "Please provide details of the issues / risks (Other)",
+          "order": 19,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749694347720,
+              "options": ["any_other_(specify)"]
+            }
+          ]
+        },
+        {
           "id": 1749694427341,
           "name": "are_you_able_to_take_photo_of_the_issue_risks",
           "label": "Are you able to take photo of the issue / risks?",
-          "order": 17,
+          "order": 20,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1092,7 +1172,7 @@
           "id": 1749694490283,
           "name": "take_photo_of_the_risks_associated_with_the_raw_water_gravity_system",
           "label": "Take photo of the risks associated with the raw water gravity system",
-          "order": 18,
+          "order": 21,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -1108,7 +1188,7 @@
           "id": 1749694662387,
           "name": "are_you_able_to_physically_visit_the_raw_water_source",
           "label": "Are you able to physically visit the raw water source?",
-          "order": 19,
+          "order": 22,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1137,7 +1217,7 @@
           "id": 1749694731204,
           "name": "take_geolocation_of_the_raw_water_source",
           "label": "Take Geolocation of the raw water source",
-          "order": 20,
+          "order": 23,
           "type": "geo",
           "required": true,
           "meta": false,
@@ -1152,7 +1232,7 @@
           "id": 1749694766149,
           "name": "record_line_from_raw_water_source_to_the_treatment_plant",
           "label": "Record line from Raw Water Source to the Treatment Plant",
-          "order": 21,
+          "order": 24,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1179,7 +1259,7 @@
           "name": "what_chemicals_are_use_for_water_treatment_on_the_day_of_inspection",
           "label": "What chemicals are use for water treatment on the day of Inspection ?",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -2075,7 +2155,7 @@
           "name": "types_of_clarifiers_sedimentation_tanks_at_the_plant",
           "label": "Types of Clarifiers/Sedimentation Tanks at the Plant",
           "order": 8,
-          "type": "option",
+          "type": "multiple_option",
           "required": false,
           "meta": false,
           "options": [
@@ -2243,7 +2323,7 @@
           "name": "types_of_filtration_system",
           "label": "Types of Filtration System",
           "order": 13,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -2399,7 +2479,7 @@
           "name": "types_of_backwash_sludge_removal_system",
           "label": "Types of Backwash Sludge Removal System",
           "order": 18,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -2555,7 +2635,7 @@
           "name": "what_disinfection_techniques_are_used_at_the_plant",
           "label": "What Disinfection Techniques are used at the Plant?",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -3251,7 +3331,7 @@
           "name": "what_are_type_of_flow_meters",
           "label": "What are type of Flow Meters?",
           "order": 2,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [

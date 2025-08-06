@@ -53,7 +53,7 @@
           "name": "which_water_quality_checks_are_carried_out_at_the_plant",
           "label": "Which water quality checks are carried out at the plant?",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -123,7 +123,7 @@
           "name": "method_of_water_testing_used",
           "label": "Method of Water Testing used?",
           "order": 3,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [

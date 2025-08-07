@@ -58,7 +58,7 @@
           "order": 5,
           "type": "option",
           "required": true,
-          "meta": true,
+          "meta": false,
           "options": [
             {
               "value": "villages",

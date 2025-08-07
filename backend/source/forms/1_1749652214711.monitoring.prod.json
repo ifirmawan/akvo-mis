@@ -1500,7 +1500,7 @@
         },
         {
           "id": 1749696125775,
-          "name": "risks_associated_with_alum_dosing",
+          "name": "has_alum_dosing_risks",
           "label": "Are there any risks associated with Alum dosing?",
           "order": 10,
           "type": "option",
@@ -1529,7 +1529,7 @@
         },
         {
           "id": 1749696173219,
-          "name": "risks_associated_with_alum_dosing",
+          "name": "alum_dosing_risk_details",
           "label": "What are the risks associated with Alum dosing?",
           "order": 11,
           "type": "multiple_option",
@@ -1627,7 +1627,7 @@
         },
         {
           "id": 1749696429991,
-          "name": "risks_associated_with_soda_ash_dosing",
+          "name": "has_soda_ash_dosing_risks",
           "label": "Are there any risks associated with Soda Ash dosing?",
           "order": 15,
           "type": "option",
@@ -1656,7 +1656,7 @@
         },
         {
           "id": 1749696465230,
-          "name": "risks_associated_with_soda_ash_dosing",
+          "name": "soda_ash_dosing_risk_details",
           "label": "What are the risks associated with Soda Ash dosing?",
           "order": 16,
           "type": "multiple_option",
@@ -2822,22 +2822,6 @@
               "options": ["yes"]
             }
           ]
-        },
-        {
-          "id": 1749698932646,
-          "name": "photo_of_risks_chlorine_gas_dosing_system",
-          "label": "Take Photo of risks/Chlorine Gas Dosing System",
-          "order": 8,
-          "type": "photo",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749698699399,
-              "options": ["yes"]
-            }
-          ],
-          "limit": 5.0
         },
         {
           "id": 1749704716001,

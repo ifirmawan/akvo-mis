@@ -47,7 +47,7 @@ const DataFilters = ({
   const [downloading, setDownloading] = useState(false);
   const [selectedChildForms, setSelectedChildForms] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const isUserHasForms = authUser?.forms ? authUser.forms.length : false;
+  const isUserHasForms = authUser?.is_superuser || authUser?.forms?.length || 0;
   const language = store.useState((s) => s.language);
   const { active: activeLang } = language;
 
@@ -306,9 +306,7 @@ const DataFilters = ({
                 shape="round"
                 icon={<PlusOutlined />}
                 type="primary"
-                disabled={
-                  !isUserHasForms && authUser?.role?.value !== "Super Admin"
-                }
+                disabled={!isUserHasForms}
                 onClick={goToAddForm}
               >
                 {text.addNewButton}

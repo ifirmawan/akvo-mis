@@ -16,20 +16,20 @@
       "repeatable": false,
       "questions": [
         {
-          "id": 1749611049541,
-          "name": "division_province",
-          "label": "Which Division - Province are you in?",
+          "id": 1749611657406,
+          "name": "pump_station_name",
+          "label": "Name of Pump Station",
           "order": 1,
-          "type": "administration",
+          "type": "text",
           "required": true,
           "meta": true
         },
         {
-          "id": 1749611657406,
-          "name": "pump_station_name",
-          "label": "Name of Pump Station",
+          "id": 1749611049541,
+          "name": "division_province",
+          "label": "Which Division - Province are you in?",
           "order": 2,
-          "type": "text",
+          "type": "administration",
           "required": true,
           "meta": true
         },

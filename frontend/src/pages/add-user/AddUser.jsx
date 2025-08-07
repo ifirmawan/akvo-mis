@@ -368,7 +368,7 @@ const AddUser = () => {
                             mode="multiple"
                             getPopupContainer={(trigger) => trigger.parentNode}
                             placeholder={text.selectText}
-                            options={allForms}
+                            options={forms}
                             optionFilterProp="name"
                             fieldNames={{ label: "name", value: "id" }}
                             allowClear

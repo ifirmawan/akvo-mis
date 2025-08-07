@@ -17,7 +17,7 @@
       "questions": [
         {
           "id": 1749624452990,
-          "name": "which_division_province_tikina",
+          "name": "division_province_tikina",
           "label": "Which Division-Province-Tikina?",
           "order": 1,
           "type": "administration",
@@ -44,7 +44,7 @@
         },
         {
           "id": 1749631945703,
-          "name": "do_you_have_water_committee",
+          "name": "has_water_committee",
           "label": "Do you have Water Committee",
           "order": 4,
           "type": "option",
@@ -67,7 +67,7 @@
         },
         {
           "id": 1749632130938,
-          "name": "is_the_water_committee_active",
+          "name": "water_committee_active",
           "label": "Is the Water Committee active?",
           "order": 5,
           "type": "option",
@@ -96,7 +96,7 @@
         },
         {
           "id": 1749632249972,
-          "name": "type_of_water_source",
+          "name": "water_source_type",
           "label": "Type of Water Source",
           "order": 6,
           "type": "multiple_option",

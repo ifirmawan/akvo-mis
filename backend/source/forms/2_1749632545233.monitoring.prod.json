@@ -18,7 +18,7 @@
       "questions": [
         {
           "id": 1749632545235,
-          "name": "date_of_inspection",
+          "name": "inspection_date",
           "label": "Date of Inspection",
           "order": 1,
           "type": "date",
@@ -27,7 +27,7 @@
         },
         {
           "id": 1749632793266,
-          "name": "name_of_the_village_headman_tnk_village_nurse",
+          "name": "village_contact_name",
           "label": "Name of the village headman/TNK/village nurse?",
           "order": 2,
           "type": "text",
@@ -36,7 +36,7 @@
         },
         {
           "id": 1749632819551,
-          "name": "phone_contact_of_the_village_headman_tnk_or_village_nurse",
+          "name": "village_contact_phone",
           "label": "Phone contact of the Village Headman/TNK or village nurse?",
           "order": 3,
           "type": "text",
@@ -85,7 +85,7 @@
         },
         {
           "id": 1749632647507,
-          "name": "are_you_able_to_collect_the_water_sample",
+          "name": "can_collect_water_sample",
           "label": "Are you able to collect the water sample?",
           "order": 2,
           "type": "option",
@@ -108,7 +108,7 @@
         },
         {
           "id": 1749632887312,
-          "name": "why_the_water_sample_could_not_be_taken",
+          "name": "reason_sample_not_taken",
           "label": "Why the water sample could not be taken?",
           "order": 3,
           "type": "option",
@@ -155,7 +155,7 @@
         },
         {
           "id": 1749632991459,
-          "name": "why_the_water_sample_could_not_be_taken_other",
+          "name": "reason_sample_not_taken_other",
           "label": "Why the water sample could not be taken? (If other, please specify)",
           "order": 4,
           "type": "text",
@@ -170,7 +170,7 @@
         },
         {
           "id": 1749633001462,
-          "name": "method_of_water_testing_used",
+          "name": "water_testing_method",
           "label": "Method of Water Testing Used?",
           "order": 4,
           "type": "multiple_option",
@@ -205,7 +205,7 @@
         },
         {
           "id": 1749633073911,
-          "name": "take_photo_of_sampling_point",
+          "name": "sampling_point_photo",
           "label": "Take Photo of Sampling Point",
           "order": 5,
           "type": "photo",
@@ -221,7 +221,7 @@
         },
         {
           "id": 1749633110662,
-          "name": "description_of_sampling_point",
+          "name": "sampling_point_description",
           "label": "Description of Sampling Point",
           "order": 6,
           "type": "text",
@@ -236,7 +236,7 @@
         },
         {
           "id": 1749633148176,
-          "name": "level_of_contamination_for_h_2_s_kit",
+          "name": "h2s_kit_contamination_level",
           "label": "Level of Contamination for H2S kit?",
           "order": 7,
           "type": "option",
@@ -277,7 +277,7 @@
         },
         {
           "id": 1749633220745,
-          "name": "what_is_the_turbidity_in_ntu",
+          "name": "turbidity_ntu",
           "label": "What is the Turbidity in NTU?",
           "order": 8,
           "type": "number",
@@ -295,7 +295,7 @@
         },
         {
           "id": 1749633259392,
-          "name": "what_is_the_total_coliform_count_in_1_cfu_100_ml",
+          "name": "total_coliform_cfu_100ml",
           "label": "What is the Total Coliform count in 1cfu/100ml?",
           "order": 9,
           "type": "number",
@@ -313,7 +313,7 @@
         },
         {
           "id": 1749633295165,
-          "name": "what_is_the_faecal_coliform_count_in_1_cfu_100_ml",
+          "name": "fecal_coliform_cfu_100ml",
           "label": "What is the Faecal Coliform count in 1cfu/100ml?",
           "order": 10,
           "type": "number",
@@ -331,7 +331,7 @@
         },
         {
           "id": 1749633325456,
-          "name": "what_is_the_e_coli_count_using_cbt_bags",
+          "name": "e_coli_count_cbt",
           "label": "What is the E.Coli Count using CBT Bags?",
           "order": 11,
           "type": "number",
@@ -358,7 +358,7 @@
         },
         {
           "id": 1749633373968,
-          "name": "the_current_status_of_this_system",
+          "name": "system_status",
           "label": "The current status of this system?",
           "order": 13,
           "type": "option",
@@ -387,7 +387,7 @@
         },
         {
           "id": 1749633421496,
-          "name": "signature_of_officer",
+          "name": "officer_signature",
           "label": "Signature of Officer",
           "order": 14,
           "type": "signature",

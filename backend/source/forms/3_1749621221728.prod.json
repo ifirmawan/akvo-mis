@@ -16,10 +16,19 @@
       "repeatable": false,
       "questions": [
         {
+          "id": 1749621221731,
+          "name": "name",
+          "label": "Project name",
+          "order": 1,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
           "id": 1749621221730,
           "name": "which_division_province_tikina",
           "label": "Which Division-Province-Tikina",
-          "order": 1,
+          "order": 2,
           "type": "administration",
           "required": true,
           "meta": true
@@ -28,7 +37,7 @@
           "id": 1749621329696,
           "name": "village_name",
           "label": "Village Name",
-          "order": 2,
+          "order": 3,
           "type": "text",
           "required": true,
           "meta": true

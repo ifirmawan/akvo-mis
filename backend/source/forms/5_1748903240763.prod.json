@@ -17,26 +17,23 @@
       "translations": null,
       "questions": [
         {
+          "id": 1748903442166,
+          "name": "plant_name",
+          "label": "Name of the Plant",
+          "order": 1,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
           "id": 1748903240794,
           "name": "division",
           "label": "Which Division are you in?",
-          "order": 1,
+          "order": 2,
           "type": "administration",
           "required": true,
           "meta": true,
           "rule": null,
-          "dependency": null
-        },
-        {
-          "id": 1748903442166,
-          "name": "plant_name",
-          "label": "Name of the Plant",
-          "order": 2,
-          "type": "text",
-          "required": true,
-          "meta": true,
-          "rule": null,
-          "options": null,
           "dependency": null
         },
         {

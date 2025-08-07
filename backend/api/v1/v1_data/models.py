@@ -152,6 +152,8 @@ class FormData(SoftDeletes, Draft):
             administration__in=administrations,
             user__user_form__form__in=forms,
             role__role_role_access__data_access=DataAccessTypes.approve,
+        ).exclude(
+            user__password__exact=""
         ).exists()
         return approvers
 

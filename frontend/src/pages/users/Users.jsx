@@ -22,7 +22,7 @@ const Users = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { language } = store.useState((s) => s);
+  const { language, user: authUser } = store.useState((s) => s);
   const { active: activeLang } = language;
   const text = useMemo(() => {
     return uiText[activeLang];
@@ -144,9 +144,14 @@ const Users = () => {
         let url = `users?page=${currentPage}&pending=${
           pending ? "true" : "false"
         }`;
-        if (selectedAdministration?.id) {
+
+        if (
+          selectedAdministration &&
+          selectedAdministration?.id !== authUser?.administration?.id
+        ) {
           url += `&administration=${selectedAdministration.id}`;
         }
+
         if (trained !== null && typeof trained !== "undefined") {
           url += `&trained=${trained ? "true" : "false"}`;
         }
@@ -177,7 +182,7 @@ const Users = () => {
           });
       }
     },
-    [notify, text.usersLoadFail]
+    [notify, text.usersLoadFail, authUser]
   );
 
   useEffect(() => {

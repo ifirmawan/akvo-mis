@@ -233,7 +233,7 @@ APK_UPLOAD_SECRET = environ.get("APK_UPLOAD_SECRET")
 MASTER_DATA = "./source"
 STORAGE_PATH = environ.get("STORAGE_PATH", "./storage")
 
-FORM_GEO_VALUE = {"lat": 9.145, "lng": 40.4897}
+FORM_GEO_VALUE = {"lat": -18.1236015, "lng": 178.3805867}  # Fiji coordinates
 
 BUCKET_NAME = "mis"
 FAKE_STORAGE = False

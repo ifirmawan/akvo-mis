@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { Button, Space } from "antd";
 import { Map } from "akvo-charts";
 import takeRight from "lodash/takeRight";
-import { store, geo } from "../../lib";
+import { store, geo, config } from "../../lib";
 
 import {
   ZoomInOutlined,
@@ -99,7 +99,7 @@ const MapView = ({ dataset, loading, position }) => {
             !d?.hidden && d?.geo && Array.isArray(d.geo) && d.geo.length === 2
         )
         .forEach((d) => {
-          const marker = L.marker(d.geo, {
+          const marker = L.marker(geo.fixCoordinates(d.geo), {
             icon: L.divIcon({
               className: `custom-marker ${
                 d?.values?.length > 1 ? "multiple-option" : ""
@@ -151,7 +151,7 @@ const MapView = ({ dataset, loading, position }) => {
       <Map.Container
         tile={geo.tile}
         config={{
-          center: [-17.713371, 179.065033],
+          center: config.mapConfig.defaultCenter,
           zoom: 8,
           height: 600,
           width: "100%",

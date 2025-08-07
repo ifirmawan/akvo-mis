@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Row, Col, Table, Button, Space, Divider, Tag } from "antd";
 import { Link } from "react-router-dom";
+import groupBy from "lodash/groupBy";
 import { store, uiText } from "../../lib";
 
 const RoleDetail = ({ record, onDelete, deleting }) => {
@@ -57,6 +58,27 @@ const RoleDetail = ({ record, onDelete, deleting }) => {
                         {item.data_access_name}
                       </Tag>
                     ))}
+                  </div>
+                ),
+              },
+              {
+                key: "role_features",
+                field: text.roleFeatures,
+                value: (
+                  <div>
+                    {/** record.role_features group by type and show all access_name as tag  */}
+                    {Object.entries(groupBy(record.role_features, "type")).map(
+                      ([type, features]) => (
+                        <div key={type} className="role-feature-group">
+                          <strong>{features[0].type_name}:</strong>
+                          {features.map((access) => (
+                            <Tag key={access.id} className="role-feature-item">
+                              {access.access_name}
+                            </Tag>
+                          ))}
+                        </div>
+                      )
+                    )}
                   </div>
                 ),
               },

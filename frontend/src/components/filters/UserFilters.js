@@ -1,16 +1,19 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./style.scss";
 import { Row, Col, Space, Input, Select, Checkbox } from "antd";
-const { Search } = Input;
-
-import { store, config, api } from "../../lib";
+import { store, config, api, uiText } from "../../lib";
 import AdministrationDropdown from "./AdministrationDropdown";
 import RemoveFiltersButton from "./RemoveFiltersButton";
 
+const { Search } = Input;
 const { Option } = Select;
 
 const UserFilters = ({ fetchData, pending, setPending, loading, button }) => {
-  const { filters } = store.useState((state) => state);
+  const {
+    filters,
+    language,
+    user: authUser,
+  } = store.useState((state) => state);
   const { trained, role, organisation, query } = filters;
 
   const { trainedStatus } = config;
@@ -18,14 +21,27 @@ const UserFilters = ({ fetchData, pending, setPending, loading, button }) => {
   const [organisations, setOrganisations] = useState([]);
   const [roles, setRoles] = useState([]);
 
+  const { active: activeLang } = language;
+  const text = useMemo(() => {
+    return uiText[activeLang];
+  }, [activeLang]);
+
+  const maxRoleLevel = useMemo(() => {
+    return authUser?.is_superuser
+      ? authUser.administration?.level
+      : authUser?.roles?.length
+      ? Math.min(...authUser.roles.map((r) => r?.administration?.level))
+      : null;
+  }, [authUser]);
+
   const fetchRoles = useCallback(async () => {
     try {
       const { data: apiData } = await api.get("/user/roles");
-      setRoles(apiData);
+      setRoles(apiData?.filter((r) => r?.level >= maxRoleLevel));
     } catch (error) {
       console.error("Failed to fetch roles:", error);
     }
-  }, []);
+  }, [maxRoleLevel]);
 
   useEffect(() => {
     fetchRoles();
@@ -146,7 +162,7 @@ const UserFilters = ({ fetchData, pending, setPending, loading, button }) => {
             disabled={loading}
             checked={pending}
           >
-            Show Pending Users
+            {text.showPendingUsers}
           </Checkbox>
         </Col>
       </Row>

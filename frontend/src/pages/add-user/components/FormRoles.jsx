@@ -6,6 +6,11 @@ import { store } from "../../../lib";
 
 const FormRoles = ({ form, text, roles = [], disabled = false }) => {
   const authUser = store.useState((s) => s.user);
+  const maxRoleLevel = authUser?.is_superuser
+    ? authUser.administration?.level
+    : authUser?.roles?.length
+    ? Math.min(...authUser.roles.map((r) => r?.administration?.level))
+    : null;
   return (
     <Form.List
       name="roles"
@@ -54,7 +59,7 @@ const FormRoles = ({ form, text, roles = [], disabled = false }) => {
                             showSearch
                             placeholder={text.selectRole}
                             options={roles.filter(
-                              (r) => r?.level >= authUser?.administration?.level
+                              (r) => r?.level >= maxRoleLevel
                             )}
                             optionFilterProp="label"
                             filterOption={(input, option) =>

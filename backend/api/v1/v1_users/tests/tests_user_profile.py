@@ -96,11 +96,12 @@ class UserProfileTestCase(TestCase, ProfileTestHelperMixin):
                 'is_submitter',
                 'is_editor',
                 'can_delete',
+                'can_invite_user',
             ]
         )
         self.assertEqual(
             list(data["roles"][0]["administration"]),
-            ['id', 'name', 'level', 'full_name']
+            ['id', 'name', 'level', 'level_id', 'full_name']
         )
 
     def test_user_profile_with_invalid_token(self):

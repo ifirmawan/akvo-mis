@@ -1,6 +1,10 @@
 from django.core.management import BaseCommand
 
-from api.v1.v1_profile.constants import DataAccessTypes
+from api.v1.v1_profile.constants import (
+    DataAccessTypes,
+    FeatureAccessTypes,
+    FeatureTypes
+)
 from api.v1.v1_profile.models import Levels
 
 
@@ -42,6 +46,12 @@ class Command(BaseCommand):
                 )
                 admin_role.role_role_access.create(
                     data_access=DataAccessTypes.delete
+                )
+
+                # Add user access feature
+                admin_role.role_role_feature_access.create(
+                    type=FeatureTypes.user_access,
+                    access=FeatureAccessTypes.invite_user
                 )
 
             # Create Submitter role

@@ -1,7 +1,7 @@
 from django.core import signing
 from django.core.signing import BadSignature
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Min
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
@@ -30,6 +30,7 @@ from utils.custom_serializer_fields import (
     CustomBooleanField,
     CustomMultipleChoiceField,
 )
+from api.v1.v1_profile.constants import FeatureAccessTypes
 from utils.custom_helper import CustomPasscode
 from utils.custom_generator import update_sqlite
 
@@ -265,6 +266,86 @@ class AddRolesSerializer(serializers.Serializer):
         help_text='Administration to assign role to user'
     )
 
+    def validate_administration(self, administration):
+        user = self.context.get('user')
+        if user.is_superuser:
+            return administration
+        if not user:
+            raise ValidationError(
+                'User context is required for role validation'
+            )
+        invite_u = FeatureAccessTypes.invite_user
+        user_role = user.user_user_role.filter(
+            role__role_role_feature_access__access=invite_u,
+        ).first()
+        if not user_role:
+            raise ValidationError(
+                'You do not have permission to assign roles'
+            )
+        user_adm_level = user_role.administration.level.level
+        if user_adm_level > administration.level.level:
+            raise ValidationError(
+                "You do not have permission to add users at "
+                "a higher administration level"
+            )
+        # Check if the administration is outside the user's administration path
+        user_adm_paths = [
+            f"{ur.administration.path}{ur.administration.id}."
+            for ur in user.user_user_role.all()
+        ]
+        invalid_children = (
+            administration.level.level > user_adm_level and
+            not any(
+                administration.path.startswith(path) for path in user_adm_paths
+            )
+        )
+        invalid_adm = (
+            administration.level.level == user_adm_level and
+            administration.id not in user.user_user_role.values_list(
+                'administration__id', flat=True
+            )
+        )
+        if invalid_children or invalid_adm:
+            raise ValidationError(
+                "You do not have permission to add users "
+                "in this administration"
+            )
+        return administration
+
+    def validate_role(self, role):
+        user = self.context.get('user')
+        if user.is_superuser:
+            return role
+        if not user:
+            raise ValidationError(
+                'User context is required for role validation'
+            )
+        invite_u = FeatureAccessTypes.invite_user
+        user_role = user.user_user_role.filter(
+            role__role_role_feature_access__access=invite_u,
+        ).first()
+        if not user_role:
+            raise ValidationError(
+                'You do not have permission to assign roles'
+            )
+        user_adm_level = user_role.administration.level.level
+        if user_adm_level > role.administration_level.level:
+            raise ValidationError(
+                "You do not have permission to add users "
+                "with this role's administration level"
+            )
+        return role
+
+    def validate(self, attrs):
+        role = attrs.get('role')
+        administration = attrs.get('administration')
+        # check adm level mismatch between role and administration
+        if role.administration_level.level != administration.level.level:
+            raise ValidationError(
+                "Role and administration level mismatch"
+            )
+        return attrs
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.fields.get('role').queryset = Role.objects.all()
@@ -296,16 +377,10 @@ class AddEditUserSerializer(serializers.ModelSerializer):
         super().__init__(**kwargs)
         self.fields.get('organisation').queryset = Organisation.objects.all()
 
-    def validate(self, attrs):
-        if self.instance:
-            if (
-                not self.context.get('user').is_superuser
-                and self.instance != self.context.get('user')
-            ):
-                raise ValidationError(
-                    'You do not have permission to edit this user'
-                )
-        return attrs
+    def validate_roles(self, roles):
+        return AddRolesSerializer(
+            data=roles, many=True, context=self.context
+        ).is_valid(raise_exception=True)
 
     def create(self, validated_data):
         try:
@@ -412,7 +487,9 @@ class AddEditUserSerializer(serializers.ModelSerializer):
 
         if roles_data:
             # Validate each role data
-            serializer = AddRolesSerializer(data=roles_data, many=True)
+            serializer = AddRolesSerializer(
+                data=roles_data, many=True, context=self.context
+            )
             if not serializer.is_valid():
                 errors = {}
                 # Process role validation errors
@@ -500,7 +577,7 @@ class UserAdministrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Administration
-        fields = ['id', 'name', 'level', 'full_name']
+        fields = ['id', 'name', 'level', 'level_id', 'full_name']
 
 
 class UserFormSerializer(serializers.ModelSerializer):
@@ -514,7 +591,7 @@ class UserFormSerializer(serializers.ModelSerializer):
 
 class UserRoleSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source='role.name')
-    administration = serializers.CharField(source='administration.name')
+    administration = serializers.CharField(source='administration.full_name')
 
     class Meta:
         model = UserRole
@@ -603,7 +680,7 @@ class UserRoleListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'role', 'administration',
             'is_approver', 'is_submitter', 'is_editor',
-            'can_delete',
+            'can_delete', 'can_invite_user',
         ]
 
 
@@ -625,6 +702,22 @@ class UserSerializer(serializers.ModelSerializer):
                 level__level=0
             ).first()
             return UserAdministrationSerializer(instance=adm).data
+        # Check if there are multiple user roles at the minimum level
+        min_level = instance.user_user_role.aggregate(
+            min_level=Min('administration__level__level')
+        )['min_level']
+        # Count how many roles are at the minimum level
+        roles_at_min_level = instance.user_user_role.filter(
+            administration__level__level=min_level
+        )
+        if roles_at_min_level.count() > 1:
+            # Multiple roles at same minimum level, return parent
+            first_role = roles_at_min_level.first()
+            if first_role and first_role.administration.parent:
+                parent = first_role.administration.parent
+                return UserAdministrationSerializer(
+                    instance=parent
+                ).data
         # Order UserRole by administration level and get the first one
         user_role = UserRole.objects.filter(user=instance) \
             .order_by('administration__level__level').first()
@@ -692,6 +785,18 @@ class UserRoleEditSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.ANY)
     def get_adm_path(self, instance: UserRole):
+        user = self.context.get('user')
+        if not user.is_superuser:
+            invite_user = FeatureAccessTypes.invite_user
+            user_role = user.user_user_role.filter(
+                role__administration_level=instance.administration.level,
+                role__role_role_feature_access__access=invite_user,
+            ).first()
+            if (
+                user_role and
+                user_role.administration == instance.administration
+            ):
+                return None
         if instance.administration.path:
             adm = instance.administration
             return [
@@ -705,7 +810,6 @@ class UserRoleEditSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-    administration = serializers.SerializerMethodField()
     roles = serializers.SerializerMethodField()
     organisation = serializers.SerializerMethodField()
     trained = CustomBooleanField(default=False)
@@ -714,28 +818,13 @@ class UserDetailSerializer(serializers.ModelSerializer):
     data = serializers.SerializerMethodField()
     pending_batch = serializers.SerializerMethodField()
 
-    @extend_schema_field(UserAdministrationSerializer)
-    def get_administration(self, instance: SystemUser):
-        if instance.is_superuser:
-            adm = Administration.objects.filter(
-                parent__isnull=True,
-                level__level=0
-            ).first()
-            return UserAdministrationSerializer(instance=adm).data
-        # Order UserRole by administration level and get the first one
-        user_role = UserRole.objects.filter(user=instance) \
-            .order_by('administration__level__level').first()
-        if user_role:
-            return UserAdministrationSerializer(
-                instance=user_role.administration
-            ).data
-        return None
-
     @extend_schema_field(UserRoleEditSerializer(many=True))
     def get_roles(self, instance: SystemUser):
+        user = self.context.get('user')
         return UserRoleEditSerializer(
             instance=instance.user_user_role.all(),
             many=True,
+            context={'user': user}
         ).data
 
     @extend_schema_field(OrganisationSerializer)
@@ -776,7 +865,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'email', 'roles',
             'organisation', 'trained', 'phone_number',
             'forms', 'pending_approval', 'data',
-            'pending_batch', 'is_superuser', 'administration',
+            'pending_batch', 'is_superuser',
         ]
 
 

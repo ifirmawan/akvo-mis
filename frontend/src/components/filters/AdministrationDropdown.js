@@ -13,13 +13,10 @@ const AdministrationDropdown = ({
   maxLevel = null,
   allowMultiple = false,
   persist = false,
-  currentId = null,
   onChange,
   limitLevel = false,
   showSelectAll = false,
   selectedAdministrations = [],
-  certify = null,
-  excluded = [],
   ...props
 }) => {
   const { user, administration, levels, language } = store.useState(
@@ -196,14 +193,17 @@ const AdministrationDropdown = ({
                     className="custom-select"
                   >
                     {region.children
-                      .filter(
-                        (c) =>
-                          ((!certify &&
-                            (!currentId ||
-                              c?.id !== parseInt(currentId, 10))) ||
-                            (certify && c?.id !== certify)) &&
-                          !excluded?.includes(c?.id)
-                      ) // prevents circular loops when primary ID has the same parent ID
+                      ?.filter((c) => {
+                        if (!user?.is_superuser && user?.roles?.length) {
+                          return user.roles.some((role) => {
+                            if (role?.administration?.level_id === c.level) {
+                              return role.administration.id === c.id;
+                            }
+                            return true;
+                          });
+                        }
+                        return c;
+                      })
                       .map((optionValue, optionIdx) => (
                         <Select.Option key={optionIdx} value={optionValue.id}>
                           {optionValue.name}
@@ -236,8 +236,6 @@ AdministrationDropdown.propTypes = {
   maxLevel: PropTypes.number,
   allowMultiple: PropTypes.bool,
   onChange: PropTypes.func,
-  certify: PropTypes.number,
-  excluded: PropTypes.array,
 };
 
 export default React.memo(AdministrationDropdown);

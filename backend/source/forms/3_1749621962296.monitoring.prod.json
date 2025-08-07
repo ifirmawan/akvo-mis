@@ -27,7 +27,7 @@
         },
         {
           "id": 1749622571775,
-          "name": "who_is_the_project_implementing_agency_agencies",
+          "name": "implementing_agencies",
           "label": "Who is the project Implementing agency/agencies?",
           "order": 2,
           "type": "multiple_option",
@@ -115,7 +115,7 @@
         },
         {
           "id": 1749622726346,
-          "name": "are_you_able_to_visit_all_construction_sites",
+          "name": "can_visit_all_sites",
           "label": "Are you able to visit all construction sites?",
           "order": 6,
           "type": "option",
@@ -153,7 +153,7 @@
         },
         {
           "id": 1749622785185,
-          "name": "are_you_able_to_take_the_sample",
+          "name": "can_take_sample",
           "label": "Are you able to take the sample?",
           "order": 8,
           "type": "option",
@@ -182,7 +182,7 @@
         },
         {
           "id": 1749622849604,
-          "name": "water_quality_test_conducted",
+          "name": "water_test_type",
           "label": "Water Quality Test Conducted",
           "order": 9,
           "type": "option",
@@ -217,7 +217,7 @@
         },
         {
           "id": 1749622914162,
-          "name": "h_2_s_contamination_level",
+          "name": "h2s_contamination_level",
           "label": "H2S contamination Level?",
           "order": 10,
           "type": "option",
@@ -258,7 +258,7 @@
         },
         {
           "id": 1749622982588,
-          "name": "e_coli_level_using_cbt",
+          "name": "ecoli_level_cbt",
           "label": "E.coli Level using CBT?",
           "order": 11,
           "type": "number",
@@ -276,7 +276,7 @@
         },
         {
           "id": 1749623024122,
-          "name": "what_is_the_total_coliform_count",
+          "name": "total_coliform_count",
           "label": "What is the Total Coliform count?",
           "order": 12,
           "type": "number",
@@ -294,7 +294,7 @@
         },
         {
           "id": 1749623074194,
-          "name": "what_is_the_faecl_coliform_count",
+          "name": "fecal_coliform_count",
           "label": "What is the Faecl Coliform Count?",
           "order": 13,
           "type": "number",
@@ -312,7 +312,7 @@
         },
         {
           "id": 1749623109418,
-          "name": "what_is_the_turbidity_in_ntu",
+          "name": "turbidity_ntu",
           "label": "What is the Turbidity in NTU?",
           "order": 14,
           "type": "number",
@@ -330,7 +330,7 @@
         },
         {
           "id": 1749623144273,
-          "name": "what_is_the_conductivity",
+          "name": "conductivity",
           "label": "What is the Conductivity?",
           "order": 15,
           "type": "number",
@@ -348,7 +348,7 @@
         },
         {
           "id": 1749623177296,
-          "name": "what_is_the_p_h_level",
+          "name": "ph_level",
           "label": "What is the pH level?",
           "order": 16,
           "type": "number",
@@ -366,7 +366,7 @@
         },
         {
           "id": 1749623219730,
-          "name": "what_is_the_salinity_in_ppt",
+          "name": "salinity_ppt",
           "label": "What is the salinity in ppt?",
           "order": 17,
           "type": "number",
@@ -395,7 +395,7 @@
       "questions": [
         {
           "id": 1749628892285,
-          "name": "what_type_of_pipes_have_been_used",
+          "name": "pipe_type",
           "label": "What type of pipes have been used",
           "order": 1,
           "type": "option",
@@ -418,7 +418,7 @@
         },
         {
           "id": 1749622183227,
-          "name": "number_of_pvc_pipes_installed",
+          "name": "num_pvc_pipes",
           "label": "Number of PVC pipes installed?",
           "order": 2,
           "type": "number",
@@ -433,7 +433,7 @@
         },
         {
           "id": 1749629023498,
-          "name": "number_of_polyethelene_pipes_installed",
+          "name": "num_polyethylene_pipes",
           "label": "Number of Polyethelene  pipes installed ?",
           "order": 3,
           "type": "number",
@@ -448,7 +448,7 @@
         },
         {
           "id": 1749623423010,
-          "name": "construction_of_new_reservoir",
+          "name": "new_reservoir_construction",
           "label": "Construction of New Reservoir",
           "order": 4,
           "type": "text",
@@ -457,7 +457,7 @@
         },
         {
           "id": 1749623471120,
-          "name": "number_of_washouts",
+          "name": "num_washouts",
           "label": "Number of Washouts",
           "order": 5,
           "type": "number",
@@ -466,7 +466,7 @@
         },
         {
           "id": 1749623487441,
-          "name": "number_of_air_valves",
+          "name": "num_air_valves",
           "label": "Number of Air valves",
           "order": 6,
           "type": "number",
@@ -475,7 +475,7 @@
         },
         {
           "id": 1749623525590,
-          "name": "number_of_showers",
+          "name": "num_showers",
           "label": "Number of showers",
           "order": 7,
           "type": "number",
@@ -484,7 +484,7 @@
         },
         {
           "id": 1749623541877,
-          "name": "number_of_taps",
+          "name": "num_taps",
           "label": "Number of Taps",
           "order": 8,
           "type": "number",
@@ -493,7 +493,7 @@
         },
         {
           "id": 1749623561268,
-          "name": "is_the_project_complete",
+          "name": "project_complete",
           "label": "Is the project complete?",
           "order": 9,
           "type": "option",
@@ -516,7 +516,7 @@
         },
         {
           "id": 1749623590078,
-          "name": "what_percentage_of_the_project_is_complete",
+          "name": "project_completion_percent",
           "label": "What percentage of the project is complete?",
           "order": 10,
           "type": "number",
@@ -547,7 +547,7 @@
       "questions": [
         {
           "id": 1749622228627,
-          "name": "take_photos",
+          "name": "photos",
           "label": "Take Photos",
           "order": 1,
           "type": "photo",
@@ -557,7 +557,7 @@
         },
         {
           "id": 1749623648243,
-          "name": "final_comments_and_recommendations",
+          "name": "final_comments",
           "label": "Final Comments and Recommendations",
           "order": 2,
           "type": "text",
@@ -566,7 +566,7 @@
         },
         {
           "id": 1749623674045,
-          "name": "signature_of_implementing_agency_representative",
+          "name": "implementing_agency_signature",
           "label": "Signature of Implementing Agency Representative",
           "order": 3,
           "type": "signature",
@@ -575,7 +575,7 @@
         },
         {
           "id": 1749623691256,
-          "name": "signature_of_dws_officer",
+          "name": "dws_officer_signature",
           "label": "Signature of DWS Officer",
           "order": 4,
           "type": "signature",

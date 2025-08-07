@@ -9,7 +9,7 @@
   "question_groups": [
     {
       "id": 1749621221729,
-      "name": "location_of_village",
+      "name": "village_location",
       "label": "Location of Village",
       "description": null,
       "order": 1,
@@ -17,7 +17,7 @@
       "questions": [
         {
           "id": 1749621221731,
-          "name": "name",
+          "name": "project_name",
           "label": "Project name",
           "order": 1,
           "type": "text",
@@ -26,7 +26,7 @@
         },
         {
           "id": 1749621221730,
-          "name": "which_division_province_tikina",
+          "name": "division_province_tikina",
           "label": "Which Division-Province-Tikina",
           "order": 2,
           "type": "administration",
@@ -62,7 +62,7 @@
         },
         {
           "id": 1749621374500,
-          "name": "type_of_water_source",
+          "name": "water_source_type",
           "label": "Type of Water Source?",
           "order": 5,
           "type": "multiple_option",
@@ -97,7 +97,7 @@
         },
         {
           "id": 1749621461754,
-          "name": "construction_of_new_water_catchment_dam",
+          "name": "has_new_catchment_dam",
           "label": "Construction of New Water Catchment/Dam?",
           "order": 6,
           "type": "option",
@@ -126,7 +126,7 @@
         },
         {
           "id": 1749621517282,
-          "name": "construction_of_borehole",
+          "name": "has_borehole",
           "label": "Construction of borehole?",
           "order": 7,
           "type": "option",
@@ -155,7 +155,7 @@
         },
         {
           "id": 1749621557442,
-          "name": "installation_of_pump_system",
+          "name": "has_pump_system",
           "label": "Installation of Pump system?",
           "order": 8,
           "type": "option",
@@ -184,7 +184,7 @@
         },
         {
           "id": 1749621611527,
-          "name": "installation_of_rainwater_harvesting_system",
+          "name": "has_rainwater_harvesting",
           "label": "Installation of Rainwater Harvesting System?",
           "order": 9,
           "type": "option",
@@ -213,7 +213,7 @@
         },
         {
           "id": 1749621690983,
-          "name": "installation_of_desalination_plant",
+          "name": "has_desalination_plant",
           "label": "Installation of Desalination Plant?",
           "order": 10,
           "type": "option",
@@ -242,7 +242,7 @@
         },
         {
           "id": 1749621742326,
-          "name": "sizes_of_pipes",
+          "name": "pipe_sizes",
           "label": "Sizes of pipes?",
           "order": 11,
           "type": "multiple_option",

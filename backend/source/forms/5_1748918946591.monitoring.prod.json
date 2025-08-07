@@ -10,7 +10,7 @@
   "question_groups": [
     {
       "id": 1748918946592,
-      "name": "waf_quick_inspection_info",
+      "name": "quick_inspection_info",
       "label": "WAF Quick Inspection Info",
       "description": null,
       "order": 1,
@@ -19,7 +19,7 @@
       "questions": [
         {
           "id": 1748905754740,
-          "name": "plant_inspection_date",
+          "name": "inspection_date",
           "label": "Plant inspection date?",
           "order": 1,
           "type": "date",
@@ -30,7 +30,7 @@
         },
         {
           "id": 1748918946593,
-          "name": "what_is_the_total_population_connected_to_this_plant",
+          "name": "total_population_connected",
           "label": "What is the total population connected to this plant?",
           "order": 2,
           "type": "number",
@@ -40,7 +40,7 @@
         },
         {
           "id": 1748919242741,
-          "name": "name_of_plant_supervisor",
+          "name": "plant_supervisor_name",
           "label": "Name of Plant Supervisor",
           "order": 3,
           "type": "text",
@@ -50,7 +50,7 @@
         },
         {
           "id": 1748919277906,
-          "name": "number_of_staffs_at_the_plant",
+          "name": "num_staff_at_plant",
           "label": "Number of staffs at the plant?",
           "order": 4,
           "type": "number",
@@ -62,7 +62,7 @@
         },
         {
           "id": 1748919298813,
-          "name": "take_photo_of_the_inlet",
+          "name": "inlet_photo",
           "label": "Take photo of the inlet",
           "order": 4,
           "type": "photo",
@@ -85,7 +85,7 @@
       "questions": [
         {
           "id": 1748919315351,
-          "name": "comment_on_the_plant_effluent",
+          "name": "effluent_comment",
           "label": "Comment on the plant effluent",
           "order": 1,
           "type": "multiple_option",
@@ -122,7 +122,7 @@
         },
         {
           "id": 1748919463685,
-          "name": "are_you_able_to_take_the_sample",
+          "name": "can_take_sample",
           "label": "Are you able to take the sample?",
           "order": 2,
           "type": "option",
@@ -147,7 +147,7 @@
         },
         {
           "id": 1748919506489,
-          "name": "method_of_testing_for_plant_effluent",
+          "name": "effluent_test_method",
           "label": "Method of Testing for plant effluent",
           "order": 3,
           "type": "option",
@@ -177,7 +177,7 @@
         },
         {
           "id": 1748919559845,
-          "name": "take_photo_of_effluent_sampling_point",
+          "name": "effluent_sampling_photo",
           "label": "Take photo of effluent sampling point",
           "order": 4,
           "type": "photo",
@@ -195,7 +195,7 @@
         },
         {
           "id": 1748919593257,
-          "name": "what_is_the_p_h",
+          "name": "ph_value",
           "label": "What is the pH?",
           "order": 5,
           "type": "number",
@@ -214,8 +214,8 @@
         },
         {
           "id": 1748919645360,
-          "name": "what_is_the_conductivity_in_s_cm",
-          "label": "What is the Conductivity in \u00b5S/cm",
+          "name": "conductivity_usc_cm",
+          "label": "What is the Conductivity in µS/cm",
           "order": 6,
           "type": "number",
           "required": true,
@@ -233,7 +233,7 @@
         },
         {
           "id": 1748919658117,
-          "name": "what_is_the_salinity_in_ppt",
+          "name": "salinity_ppt",
           "label": "What is the Salinity in ppt?",
           "order": 7,
           "type": "number",
@@ -252,7 +252,7 @@
         },
         {
           "id": 1748919671218,
-          "name": "what_is_the_bod_in_mg_l",
+          "name": "bod_mg_l",
           "label": "What is the BOD in mg/L?",
           "order": 8,
           "type": "number",
@@ -271,7 +271,7 @@
         },
         {
           "id": 1748919685763,
-          "name": "what_is_the_cod_in_mg_l",
+          "name": "cod_mg_l",
           "label": "What is the COD in mg/L?",
           "order": 9,
           "type": "number",
@@ -290,7 +290,7 @@
         },
         {
           "id": 1748919698125,
-          "name": "what_is_the_tss_in_mg_l",
+          "name": "tss_mg_l",
           "label": "What is the TSS in mg/L?",
           "order": 10,
           "type": "number",
@@ -309,7 +309,7 @@
         },
         {
           "id": 1748919725794,
-          "name": "what_is_the_chloride_level_in_mg_l",
+          "name": "chloride_mg_l",
           "label": "What is the Chloride level in mg/L?",
           "order": 11,
           "type": "number",
@@ -328,7 +328,7 @@
         },
         {
           "id": 1748919753340,
-          "name": "what_is_the_ammonia_level_in_mg_l",
+          "name": "ammonia_mg_l",
           "label": "What is the Ammonia level in mg/L?",
           "order": 12,
           "type": "number",
@@ -347,7 +347,7 @@
         },
         {
           "id": 1748919773039,
-          "name": "what_is_the_total_nitrogen_level_in_mg_l",
+          "name": "total_nitrogen_mg_l",
           "label": "What is the Total Nitrogen level in mg/L?",
           "order": 13,
           "type": "number",
@@ -366,7 +366,7 @@
         },
         {
           "id": 1748919790364,
-          "name": "what_is_the_nitrate_level_in_mg_l",
+          "name": "nitrate_mg_l",
           "label": "What is the Nitrate level in mg/L?",
           "order": 14,
           "type": "number",
@@ -385,7 +385,7 @@
         },
         {
           "id": 1748919813379,
-          "name": "what_is_the_nitrite_level_in_mg_l",
+          "name": "nitrite_mg_l",
           "label": "What is the Nitrite Level in mg/L?",
           "order": 15,
           "type": "number",
@@ -404,7 +404,7 @@
         },
         {
           "id": 1748919829510,
-          "name": "what_is_the_total_phosphorus_in_mg_l",
+          "name": "total_phosphorus_mg_l",
           "label": "What is the Total Phosphorus in mg/L?",
           "order": 16,
           "type": "number",
@@ -423,7 +423,7 @@
         },
         {
           "id": 1748919885579,
-          "name": "what_is_the_total_alkalinity_in_mg_l",
+          "name": "total_alkalinity_mg_l",
           "label": "What is the Total Alkalinity in mg/L?",
           "order": 17,
           "type": "number",
@@ -445,7 +445,7 @@
     },
     {
       "id": 1748919341458,
-      "name": "constraints_and_recommendations",
+      "name": "constraints_recommendations",
       "label": "Constraints and Recommendations",
       "description": null,
       "order": 3,
@@ -454,7 +454,7 @@
       "questions": [
         {
           "id": 1748919341459,
-          "name": "24_do_you_have_any_work_related_constraints",
+          "name": "has_constraints",
           "label": "24. Do you have any work related constraints?",
           "order": 1,
           "type": "option",
@@ -479,7 +479,7 @@
         },
         {
           "id": 1748919922789,
-          "name": "please_provide_details_for_constraints",
+          "name": "constraints_details",
           "label": "Please provide details for constraints",
           "order": 2,
           "type": "text",
@@ -496,7 +496,7 @@
         },
         {
           "id": 1748919962161,
-          "name": "any_final_recommendation",
+          "name": "has_final_recommendation",
           "label": "Any final recommendation?",
           "order": 3,
           "type": "option",
@@ -521,7 +521,7 @@
         },
         {
           "id": 1748919992109,
-          "name": "what_are_your_final_recommendations",
+          "name": "final_recommendations",
           "label": "What are your final recommendations?",
           "order": 4,
           "type": "multiple_option",
@@ -581,7 +581,7 @@
         },
         {
           "id": 1748920085643,
-          "name": "what_are_the_final_recommendations_from_the_dws_staff_on_the_overall_operations_and_remedial_actions_for_the_plant",
+          "name": "dws_staff_final_recommendations",
           "label": "What are the final recommendations from the DWS staff  on the overall operations and remedial actions for the plant?",
           "order": 5,
           "type": "text",
@@ -598,7 +598,7 @@
         },
         {
           "id": 1748920135334,
-          "name": "signature_of_dws_staff",
+          "name": "dws_staff_signature",
           "label": "Signature of DWS Staff",
           "order": 6,
           "type": "signature",

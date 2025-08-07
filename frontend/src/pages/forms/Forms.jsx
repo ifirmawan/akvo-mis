@@ -399,12 +399,6 @@ const Forms = () => {
                   };
                 }
               }
-              if (q?.type === QUESTION_TYPES.geo) {
-                qVal = {
-                  ...qVal,
-                  center: config.mapConfig.defaultCenter,
-                };
-              }
               return qVal;
             })
             .filter((x) => !x?.hidden); // filter out hidden questions

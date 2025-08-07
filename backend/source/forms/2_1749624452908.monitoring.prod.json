@@ -62,7 +62,7 @@
           "name": "locality_plan_details",
           "label": "Locality Plan",
           "order": 4,
-          "type": "text",
+          "type": "geo",
           "required": true,
           "meta": false,
           "dependency": [

@@ -33,6 +33,7 @@ from api.v1.v1_profile.models import (
     Levels,
     Role,
 )
+from api.v1.v1_profile.constants import FeatureAccessTypes, FeatureTypes
 from api.v1.v1_users.models import (
     SystemUser,
     Organisation,
@@ -57,7 +58,7 @@ from api.v1.v1_users.serializers import (
     UpdateProfileSerializer,
 )
 from mis.settings import REST_FRAMEWORK, WEBDOMAIN
-from utils.custom_permissions import IsSuperAdmin
+from utils.custom_permissions import AddUserAccess, IsSuperAdmin
 from utils.custom_serializer_fields import validate_serializers_message
 from utils.default_serializers import DefaultResponseSerializer
 from utils.email_helper import send_email
@@ -303,6 +304,12 @@ def set_user_password(request, version):
             location=OpenApiParameter.QUERY,
         ),
         OpenApiParameter(
+            name="filter_children",
+            required=False,
+            type={"type": "array", "items": {"type": "number"}},
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
             name="max_level",
             required=False,
             type=OpenApiTypes.NUMBER,
@@ -316,7 +323,7 @@ def list_administration(request, version, administration_id):
     instance = get_object_or_404(Administration, pk=administration_id)
     filter = request.GET.get("filter")
     max_level = request.GET.get("max_level")
-    filter_children = []
+    filter_children = request.GET.getlist("filter_children")
     return Response(
         ListAdministrationSerializer(
             instance=instance,
@@ -351,7 +358,7 @@ def list_levels(request, version):
     summary="To add user",
 )
 @api_view(["POST"])
-@permission_classes([IsAuthenticated, IsSuperAdmin])
+@permission_classes([IsAuthenticated, AddUserAccess])
 def add_user(request, version):
     serializer = AddEditUserSerializer(
         data=request.data, context={"user": request.user}
@@ -449,13 +456,6 @@ def add_user(request, version):
             location=OpenApiParameter.QUERY,
         ),
         OpenApiParameter(
-            name="descendants",
-            required=False,
-            default=True,
-            type=OpenApiTypes.BOOL,
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
             name="search",
             required=False,
             type=OpenApiTypes.STR,
@@ -464,7 +464,7 @@ def add_user(request, version):
     ],
 )
 @api_view(["GET"])
-@permission_classes([IsAuthenticated, IsSuperAdmin])
+@permission_classes([IsAuthenticated, AddUserAccess])
 def list_users(request, version):
     serializer = ListUserRequestSerializer(data=request.GET)
     if not serializer.is_valid():
@@ -476,24 +476,32 @@ def list_users(request, version):
     filter_data = {}
     exclude_data = {"password__exact": ""}
 
-    if serializer.validated_data.get("administration"):
-        filter_adm = serializer.validated_data.get("administration")
+    if not request.user.is_superuser:
+        filter_data["is_superuser"] = False
 
-        if serializer.validated_data.get("descendants"):
-            # Include all descendants using path hierarchy
-            filter_path = "{0}{1}.".format(
-                filter_adm.path, filter_adm.id
-            ) if filter_adm.path else f"{filter_adm.id}."
-            filter_descendants = list(
-                Administration.objects.filter(
-                    path__startswith=filter_path
-                ).values_list("id", flat=True)
-            )
-            filter_descendants.append(filter_adm.id)
-            final_set = set(filter_descendants)
-        else:
-            # Only include the specific administration, no descendants
-            final_set = {filter_adm.id}
+    filter_adm = serializer.validated_data.get("administration")
+    if not request.user.is_superuser:
+        user_adm = request.user.user_user_role.filter(
+            role__role_role_feature_access__type=FeatureTypes.user_access,
+            role__role_role_feature_access__access=(
+                FeatureAccessTypes.invite_user
+            ),
+        ).order_by(
+            "administration__level__level"
+        ).first()
+        if not filter_adm and user_adm:
+            filter_adm = user_adm.administration
+    if filter_adm:
+        filter_path = "{0}{1}.".format(
+            filter_adm.path, filter_adm.id
+        ) if filter_adm.path else f"{filter_adm.id}."
+        filter_descendants = list(
+            Administration.objects.filter(
+                path__startswith=filter_path
+            ).values_list("id", flat=True)
+        )
+        filter_descendants.append(filter_adm.id)
+        final_set = set(filter_descendants)
 
         # Apply filter by administration IDs
         # Only apply filtering if administration level > 0 (not national level)
@@ -573,7 +581,7 @@ def get_user_roles(request, version):
 
 
 class UserEditDeleteView(APIView):
-    permission_classes = [IsAuthenticated, IsSuperAdmin]
+    permission_classes = [IsAuthenticated, AddUserAccess]
 
     @extend_schema(
         responses={200: UserDetailSerializer, 204: DefaultResponseSerializer},
@@ -583,7 +591,10 @@ class UserEditDeleteView(APIView):
     def get(self, request, user_id, version):
         instance = get_object_or_404(SystemUser, pk=user_id, deleted_at=None)
         return Response(
-            UserDetailSerializer(instance=instance).data,
+            UserDetailSerializer(
+                instance=instance,
+                context={"user": request.user}
+            ).data,
             status=status.HTTP_200_OK,
         )
 

@@ -1,7 +1,23 @@
 from rest_framework.permissions import BasePermission
 
 from django.db.models import Q
-from api.v1.v1_profile.constants import DataAccessTypes
+from api.v1.v1_profile.constants import (
+    DataAccessTypes,
+    FeatureAccessTypes,
+    FeatureTypes,
+)
+
+
+class AddUserAccess(BasePermission):
+    def has_permission(self, request, view):
+        if not request.user.is_superuser:
+            # Check if the user has invite user access
+            invite_user = FeatureAccessTypes.invite_user
+            return request.user.user_user_role.filter(
+                role__role_role_feature_access__type=FeatureTypes.user_access,
+                role__role_role_feature_access__access=invite_user,
+            ).exists()
+        return request.user.is_superuser
 
 
 class IsEditor(BasePermission):

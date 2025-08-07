@@ -6,6 +6,7 @@ from jsmin import jsmin
 from mis.settings import COUNTRY_NAME, APP_NAME, APP_SHORT_NAME
 from api.v1.v1_forms.models import Forms
 from api.v1.v1_profile.models import Levels
+from api.v1.v1_profile.constants import FeatureTypes, FeatureAccessTypes
 from api.v1.v1_forms.serializers import FormDataSerializer
 
 
@@ -35,6 +36,21 @@ class Command(BaseCommand):
                     "content": FormDataSerializer(instance=form).data,
                 }
             )
+        role_features = []
+        for key, value in FeatureTypes.FieldStr.items():
+            role_features.append(
+                {
+                    "id": key,
+                    "name": value,
+                    "access": [
+                        {
+                            "id": access_id,
+                            "name": FeatureAccessTypes.FieldStr[access_id],
+                        }
+                        for access_id in FeatureTypes.FieldGroup[key]
+                    ],
+                }
+            )
         min_config = jsmin(
             "".join(
                 [
@@ -53,6 +69,9 @@ class Command(BaseCommand):
                         "name": APP_NAME,
                         "shortName": APP_SHORT_NAME,
                     }),
+                    ";",
+                    "var roleFeatures=",
+                    json.dumps(role_features),
                     ";",
                 ]
             )

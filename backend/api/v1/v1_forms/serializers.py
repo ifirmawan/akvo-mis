@@ -89,7 +89,7 @@ class ListQuestionSerializer(serializers.ModelSerializer):
             ).first()
             user_role = user.user_user_role.filter(
                 administration__parent__isnull=False
-            ).first()
+            ).order_by("administration__level__level").first()
             if user_role:
                 administration = user_role.administration
             # max depth for cascade question in national form
@@ -104,12 +104,19 @@ class ListQuestionSerializer(serializers.ModelSerializer):
                     extra_objects = {
                         "query_params": "&max_level=1",
                     }
+                initial = administration.id
+                if administration.parent:
+                    filter_children = "&".join([
+                        f"filter_children={ur.administration.id}"
+                        for ur in user.user_user_role.filter(
+                            administration__parent=administration.parent
+                        ).all()
+                    ])
+                    initial = f"{administration.parent.id}?{filter_children}"
                 return {
                     "endpoint": "/api/v1/administration",
                     "list": "children",
-                    "initial": "{0}?filter={1}".format(
-                        administration.parent_id, administration.id
-                    ),
+                    "initial":  initial,
                     **extra_objects,
                 }
             return {

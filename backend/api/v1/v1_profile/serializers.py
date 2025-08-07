@@ -2,17 +2,6 @@ import random
 import string
 from typing import Any, Dict, cast
 from rest_framework import serializers
-from api.v1.v1_profile.models import (
-    Administration,
-    AdministrationAttribute,
-    AdministrationAttributeValue,
-    Entity,
-    EntityData,
-    Levels,
-    Role,
-    RoleAccess,
-    DataAccessTypes,
-)
 from utils.custom_serializer_fields import (
     CustomPrimaryKeyRelatedField,
     CustomListField,
@@ -24,6 +13,22 @@ from utils.custom_generator import (
 )
 from django.db.models import F, Value
 from django.db.models.functions import Substr, Concat, Length
+from api.v1.v1_profile.models import (
+    Administration,
+    AdministrationAttribute,
+    AdministrationAttributeValue,
+    Entity,
+    EntityData,
+    Levels,
+    Role,
+    RoleAccess,
+    RoleFeatureAccess,
+)
+from api.v1.v1_profile.constants import (
+    DataAccessTypes,
+    FeatureAccessTypes,
+    FeatureTypes,
+)
 
 
 class RelatedAdministrationField(serializers.PrimaryKeyRelatedField):
@@ -393,6 +398,30 @@ class ListEntityDataSerializer(serializers.ModelSerializer):
         fields = ["id", "code", "name"]
 
 
+class RoleFeatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoleFeatureAccess
+        fields = [
+            "id",
+            "type",
+            "access",
+        ]
+
+
+class RoleFeatureItemSerializer(serializers.Serializer):
+    type = serializers.ChoiceField(
+        choices=list(FeatureTypes.FieldStr.keys()),
+        help_text="Type of the feature",
+    )
+    access = serializers.ChoiceField(
+        choices=list(FeatureAccessTypes.FieldStr.keys()),
+        help_text="Access level for the feature",
+    )
+
+    class Meta:
+        fields = ["type", "access"]
+
+
 class RoleSerializer(serializers.ModelSerializer):
     # Define role_access as a SerializerMethodField for serialization
     role_access = CustomListField(
@@ -406,6 +435,19 @@ class RoleSerializer(serializers.ModelSerializer):
         read_only=True,
         help_text="List of data access types for this role",
     )
+    role_features = serializers.ListField(
+        child=RoleFeatureItemSerializer(),
+        write_only=True,
+        required=False,
+        default=[],
+        help_text="List of features and their access levels for this role",
+    )
+    role_features_list = RoleFeatureSerializer(
+        source="role_role_feature_access",
+        many=True,
+        read_only=True,
+        help_text="List of features and their access levels for this role",
+    )
     administration_level = CustomPrimaryKeyRelatedField(
         queryset=Levels.objects.all(),
     )
@@ -418,6 +460,8 @@ class RoleSerializer(serializers.ModelSerializer):
             "description",
             "role_access",
             "role_access_list",
+            "role_features",
+            "role_features_list",
             "administration_level",
         ]
 
@@ -427,26 +471,46 @@ class RoleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         role_access = validated_data.pop("role_access", [])
+        role_features = validated_data.pop("role_features", [])
         instance = super().create(validated_data)
         # Create RoleAccess objects individually and save them
         for access in role_access:
             RoleAccess.objects.create(role=instance, data_access=access)
+
+        # Create RoleFeatureAccess objects individually and save them
+        for feature in role_features:
+            RoleFeatureAccess.objects.create(
+                role=instance,
+                type=feature["type"],
+                access=feature["access"],
+            )
         return instance
 
     def update(self, instance, validated_data):
         role_access = validated_data.pop("role_access", [])
+        role_features = validated_data.pop("role_features", [])
         instance = super().update(instance, validated_data)
         # Remove existing data access
         instance.role_role_access.all().delete()
         # Create new role access objects
         for access in role_access:
             RoleAccess.objects.create(role=instance, data_access=access)
+        # Remove existing feature access
+        instance.role_role_feature_access.all().delete()
+        # Create new role feature access objects
+        for feature in role_features:
+            RoleFeatureAccess.objects.create(
+                role=instance,
+                type=feature["type"],
+                access=feature["access"],
+            )
         return instance
 
 
 class RoleDetailSerializer(serializers.ModelSerializer):
     administration_level = AdministrationLevelsSerializer(read_only=True)
     role_access = serializers.SerializerMethodField()
+    role_features = serializers.SerializerMethodField()
     total_users = serializers.SerializerMethodField()
 
     def get_total_users(self, obj: Role):
@@ -464,6 +528,18 @@ class RoleDetailSerializer(serializers.ModelSerializer):
             for access in obj.role_role_access.all()
         ]
 
+    def get_role_features(self, obj: Role):
+        return [
+            {
+                "id": feature.id,
+                "type": feature.type,
+                "access": feature.access,
+                "type_name": FeatureTypes.FieldStr[feature.type],
+                "access_name": FeatureAccessTypes.FieldStr[feature.access],
+            }
+            for feature in obj.role_role_feature_access.all()
+        ]
+
     class Meta:
         model = Role
         fields = [
@@ -472,5 +548,6 @@ class RoleDetailSerializer(serializers.ModelSerializer):
             "description",
             "administration_level",
             "role_access",
+            "role_features",
             "total_users",
         ]

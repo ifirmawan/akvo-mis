@@ -66,6 +66,7 @@ class RolesEndpointTestCase(TestCase, ProfileTestHelperMixin):
                 "description",
                 "administration_level",
                 "role_access",
+                "role_features",
                 "total_users",
             ]
         )

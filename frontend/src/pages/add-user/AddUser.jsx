@@ -80,14 +80,14 @@ const AddUser = () => {
 
   const onFinish = (values) => {
     setSubmitting(true);
-    const nationalAdm = administration.find((adm) => adm.level === 0);
+    const userAdm = authUser?.administration?.id;
     const payload = {
       ...values,
       roles: (values.roles || []).map((r) => ({
         role: r.role,
         administration: Array.isArray(r.administration)
-          ? takeRight(r.administration, 1)?.[0] || nationalAdm?.id
-          : r.administration || nationalAdm?.id,
+          ? takeRight(r.administration, 1)?.[0] || userAdm
+          : r.administration || userAdm,
       })),
     };
     api[id ? "put" : "post"](id ? `user/${id}` : "user", payload)
@@ -312,14 +312,19 @@ const AddUser = () => {
                       </Select>
                     </Form.Item>
                   </div>
-                  <div className="form-row">
-                    <Form.Item label="Is Superadmin?" name="is_superuser">
-                      <Radio.Group disabled={isSelfData}>
-                        <Radio value={true}>{text.yesText}</Radio>
-                        <Radio value={false}>{text.noText}</Radio>
-                      </Radio.Group>
-                    </Form.Item>
-                  </div>
+                  {authUser?.is_superuser && (
+                    <div className="form-row">
+                      <Form.Item
+                        label={text.isSuperAdminLabel}
+                        name="is_superuser"
+                      >
+                        <Radio.Group disabled={isSelfData}>
+                          <Radio value={true}>{text.yesText}</Radio>
+                          <Radio value={false}>{text.noText}</Radio>
+                        </Radio.Group>
+                      </Form.Item>
+                    </div>
+                  )}
                   {!formInstance.getFieldValue("is_superuser") && (
                     <Row
                       justify="start"
@@ -328,7 +333,7 @@ const AddUser = () => {
                       style={{ marginTop: "24px" }}
                     >
                       <Col span={6} className=" ant-form-item-label">
-                        <label>Role(s)</label>
+                        <label>{text.rolesLabel}</label>
                       </Col>
                       <Col span={18}>
                         <FormRoles

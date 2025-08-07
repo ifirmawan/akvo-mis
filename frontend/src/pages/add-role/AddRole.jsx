@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Row, Col, Form, Button, Input, Select, Checkbox, message } from "antd";
+import {
+  Row,
+  Col,
+  Form,
+  Button,
+  Input,
+  Select,
+  Checkbox,
+  message,
+  Space,
+} from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { ACCESS_LEVELS_LIST, api, store, uiText } from "../../lib";
 import { Breadcrumbs, DescriptionPanel } from "../../components";
@@ -33,13 +43,31 @@ const AddRolePage = () => {
     },
   ];
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async ({
+    name,
+    description,
+    administration_level,
+    role_access,
+    ...values
+  }) => {
     try {
+      const roleFeatures = Object.keys(values)
+        .filter((key) => key.startsWith("role_features_"))
+        .reduce((acc, key) => {
+          const type = key.split("_").pop();
+          const access = values[key] || [];
+          acc.push({ type, access });
+          return acc;
+        }, [])
+        .flatMap((r) =>
+          r.access.map((a) => ({ access: a, type: parseInt(r.type, 10) }))
+        );
       const payload = {
-        name: values.name,
-        description: values.description,
-        administration_level: values.administration_level,
-        role_access: values.role_access,
+        name,
+        description,
+        administration_level,
+        role_access,
+        role_features: roleFeatures,
       };
       if (id) {
         await api.put(`/role/${id}`, payload);
@@ -63,13 +91,24 @@ const AddRolePage = () => {
     if (id) {
       try {
         const { data: roleData } = await api.get(`/role/${id}`);
-
-        form.setFieldsValue({
+        const initialValues = {
           name: roleData.name,
           description: roleData.description,
           administration_level: roleData.administration_level?.id,
           role_access: roleData.role_access?.map((rc) => rc?.data_access) || [],
+        };
+        const roleFeatures = roleData.role_features.reduce((acc, feature) => {
+          const key = `role_features_${feature.type}`;
+          if (!acc[key]) {
+            acc[key] = [];
+          }
+          acc[key].push(feature.access);
+          return acc;
+        }, {});
+        Object.keys(roleFeatures).forEach((key) => {
+          initialValues[key] = roleFeatures[key];
         });
+        form.setFieldsValue(initialValues);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -139,7 +178,7 @@ const AddRolePage = () => {
                   <Input.TextArea placeholder={text.roleDescription} rows={4} />
                 </Form.Item>
                 <Form.Item
-                  label={text.roleAccess}
+                  label={text.formAccess}
                   name="role_access"
                   rules={[{ required: true, message: text.roleAccessRequired }]}
                 >
@@ -153,6 +192,23 @@ const AddRolePage = () => {
                     </Row>
                   </Checkbox.Group>
                 </Form.Item>
+                {window.roleFeatures.map((group) => (
+                  <Form.Item
+                    key={group.id}
+                    label={group.name}
+                    name={`role_features_${group.id}`}
+                  >
+                    <Checkbox.Group>
+                      <Space direction="horizontal" size="small">
+                        {group.access.map((a) => (
+                          <Checkbox value={a.id} key={a.id}>
+                            {a.name}
+                          </Checkbox>
+                        ))}
+                      </Space>
+                    </Checkbox.Group>
+                  </Form.Item>
+                ))}
                 <Row justify="end">
                   <Button type="primary" htmlType="submit" shape="round">
                     {text.saveButton}

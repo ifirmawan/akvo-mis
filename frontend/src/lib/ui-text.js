@@ -950,6 +950,11 @@ const uiText = {
     checkboxSelectAll: "Select all {{name}}",
     selectMonitoringFormPlaceholder: "Select Monitoring Form",
     selectQuestionPlaceholder: "Select Question",
+    formAccess: "Form Access",
+    roleFeatures: "Role Features",
+    rolesLabel: "Role(s)",
+    isSuperAdminLabel: "Is Superadmin?",
+    showPendingUsers: "Show Pending Users",
   },
 
   de: {},

@@ -27,7 +27,7 @@
         },
         {
           "id": 1749612064689,
-          "name": "take_photo_of_pump_station",
+          "name": "pump_station_photo",
           "label": "Take photo of Pump Station",
           "order": 2,
           "type": "photo",
@@ -40,7 +40,7 @@
     },
     {
       "id": 1749611990752,
-      "name": "general_information_on_pump_station",
+      "name": "general_info_pump_station",
       "label": "General Information on Pump Station",
       "description": null,
       "order": 2,
@@ -48,7 +48,7 @@
       "questions": [
         {
           "id": 1749611990753,
-          "name": "log_book_available_and_updated",
+          "name": "log_book_updated",
           "label": "Log Book available and updated?",
           "order": 1,
           "type": "option",
@@ -71,7 +71,7 @@
         },
         {
           "id": 1749612149744,
-          "name": "ground_conditions",
+          "name": "ground_condition",
           "label": "Ground Conditions",
           "order": 2,
           "type": "option",
@@ -110,7 +110,7 @@
         },
         {
           "id": 1749612390514,
-          "name": "building_conditions",
+          "name": "building_condition",
           "label": "Building Conditions",
           "order": 3,
           "type": "option",
@@ -149,7 +149,7 @@
         },
         {
           "id": 1749612437237,
-          "name": "security_gate_and_fencing",
+          "name": "security_gate_fencing",
           "label": "Security gate and Fencing",
           "order": 4,
           "type": "option",
@@ -424,7 +424,7 @@
         },
         {
           "id": 1749613433763,
-          "name": "guardrails_for_pump_sation",
+          "name": "guardrails_pump_station",
           "label": "Guardrails for Pump Sation",
           "order": 14,
           "type": "option",
@@ -453,7 +453,7 @@
         },
         {
           "id": 1749613489958,
-          "name": "number_of_pumps_in_operation",
+          "name": "num_pumps_operational",
           "label": "Number of pumps in operation",
           "order": 15,
           "type": "number",
@@ -462,7 +462,7 @@
         },
         {
           "id": 1749613513292,
-          "name": "number_of_pumps_standby",
+          "name": "num_pumps_standby",
           "label": "Number of pumps standby",
           "order": 16,
           "type": "number",
@@ -546,7 +546,7 @@
         },
         {
           "id": 1749613710063,
-          "name": "pump_station_status",
+          "name": "station_status",
           "label": "Pump Station Status",
           "order": 20,
           "type": "option",
@@ -700,7 +700,7 @@
     },
     {
       "id": 1749612019054,
-      "name": "comments_and_recommendations",
+      "name": "comments_recommendations",
       "label": "Comments and Recommendations",
       "description": null,
       "order": 3,
@@ -708,7 +708,7 @@
       "questions": [
         {
           "id": 1749612019055,
-          "name": "comments_from_supervisor",
+          "name": "supervisor_comments",
           "label": "Comments from Supervisor",
           "order": 1,
           "type": "text",
@@ -717,7 +717,7 @@
         },
         {
           "id": 1749614058464,
-          "name": "comments_from_dws_staff",
+          "name": "dws_staff_comments",
           "label": "Comments from DWS Staff",
           "order": 2,
           "type": "text",

@@ -10,7 +10,7 @@
   "question_groups": [
     {
       "id": 1749627302949,
-      "name": "general_information",
+      "name": "general_info",
       "label": "General Information",
       "description": null,
       "order": 1,
@@ -27,7 +27,7 @@
         },
         {
           "id": 1749627462936,
-          "name": "take_photo_of_pump_station",
+          "name": "pump_station_photo",
           "label": "Take photo of Pump Station",
           "order": 2,
           "type": "photo",
@@ -37,7 +37,7 @@
         },
         {
           "id": 1749627499538,
-          "name": "number_of_pumps_in_operation",
+          "name": "num_pumps_operational",
           "label": "Number of pumps in operation",
           "order": 3,
           "type": "number",
@@ -46,7 +46,7 @@
         },
         {
           "id": 1749627528651,
-          "name": "number_of_pumps_standby",
+          "name": "num_pumps_standby",
           "label": "Number of pumps standby",
           "order": 4,
           "type": "number",
@@ -55,7 +55,7 @@
         },
         {
           "id": 1749627552609,
-          "name": "pump_station_status",
+          "name": "station_status",
           "label": "Pump Station Status",
           "order": 5,
           "type": "option",
@@ -128,7 +128,7 @@
     },
     {
       "id": 1749627686321,
-      "name": "comments_and_recommendations",
+      "name": "comments_recommendations",
       "label": "Comments and Recommendations",
       "description": null,
       "order": 2,
@@ -136,7 +136,7 @@
       "questions": [
         {
           "id": 1749627698340,
-          "name": "comments_from_supervisor",
+          "name": "supervisor_comments",
           "label": "Comments from Supervisor",
           "order": 1,
           "type": "text",
@@ -145,7 +145,7 @@
         },
         {
           "id": 1749627734073,
-          "name": "comments_from_dws_staff",
+          "name": "dws_staff_comments",
           "label": "Comments from DWS Staff",
           "order": 2,
           "type": "text",

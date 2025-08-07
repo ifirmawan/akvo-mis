@@ -17,7 +17,7 @@
       "questions": [
         {
           "id": 1749611049541,
-          "name": "which_division_province_are_you_in",
+          "name": "division_province",
           "label": "Which Division - Province are you in?",
           "order": 1,
           "type": "administration",
@@ -26,7 +26,7 @@
         },
         {
           "id": 1749611657406,
-          "name": "name_of_pump_station",
+          "name": "pump_station_name",
           "label": "Name of Pump Station",
           "order": 2,
           "type": "text",

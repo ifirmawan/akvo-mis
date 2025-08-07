@@ -117,12 +117,12 @@ const getColorScale = ({ method, colors, colorRange }) => {
 /**
  * Coordinate normalization functions for handling International Date Line
  */
-const normalizeLat = (lat) => {
+const normalizeLon = (lat) => {
   // Normalize latitude to be within -90 to 90 degrees
   return ((lat + 180) % 360) - 180;
 };
 
-const shiftLatPositive = (lat) => {
+const shiftLonPositive = (lat) => {
   // Shift latitude to be within 0 to 180 degrees
   return lat % 360;
 };
@@ -132,10 +132,9 @@ const fixCoordinates = (coords) => {
     return coords;
   }
   const [lat, lon] = coords;
-  const normalizedLat = normalizeLat(lat);
-  const fixedLat = shiftLatPositive(normalizedLat);
-
-  return [fixedLat, lon];
+  const normalizedLon = normalizeLon(lon);
+  const fixedLon = shiftLonPositive(normalizedLon);
+  return [lat, fixedLon];
 };
 
 const geo = {
@@ -147,8 +146,8 @@ const geo = {
   getBounds: getBounds,
   getColorScale: getColorScale,
   defaultPos: defaultPos,
-  normalizeLat: normalizeLat,
-  shiftLatPositive: shiftLatPositive,
+  normalizeLon: normalizeLon,
+  shiftLonPositive: shiftLonPositive,
   fixCoordinates: fixCoordinates,
 };
 

@@ -16,10 +16,19 @@
       "repeatable": false,
       "questions": [
         {
+          "id": 1749635249444,
+          "name": "plant_name",
+          "label": "Name of the Plant",
+          "order": 1,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
           "id": 1749634736799,
           "name": "plant_type",
           "label": "What is the type of the plant?",
-          "order": 1,
+          "order": 2,
           "type": "option",
           "required": true,
           "meta": true,
@@ -48,7 +57,7 @@
           "id": 1749635162210,
           "name": "division",
           "label": "Which Division?",
-          "order": 2,
+          "order": 3,
           "type": "administration",
           "required": true,
           "meta": true
@@ -57,19 +66,10 @@
           "id": 1749635227708,
           "name": "inspection_date",
           "label": "Date of inspection?",
-          "order": 3,
+          "order": 4,
           "type": "date",
           "required": true,
           "meta": false
-        },
-        {
-          "id": 1749635249444,
-          "name": "plant_name",
-          "label": "Name of the Plant",
-          "order": 4,
-          "type": "text",
-          "required": true,
-          "meta": true
         },
         {
           "id": 1749635281187,
@@ -85,9 +85,12 @@
           "name": "designed_capacity_megalitres",
           "label": "What is the Designed Capacity of Plant in megalitres?",
           "order": 6,
-          "type": "text",
+          "type": "number",
           "required": true,
-          "meta": false
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          }
         },
         {
           "id": 1749635348200,

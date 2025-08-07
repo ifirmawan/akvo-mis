@@ -20,7 +20,6 @@ import {
   processEntityCascades,
   processRepeatableQuestions,
   transformValue,
-  config,
 } from "../../lib";
 import { pick, isEmpty } from "lodash";
 import { PageLoader, Breadcrumbs, DescriptionPanel } from "../../components";

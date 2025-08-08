@@ -644,12 +644,12 @@ class SubmitPendingFormSerializer(serializers.Serializer):
         Answers.objects.bulk_create(answers)
 
         if (
+            not is_draft and
             not obj_data.parent and
             not obj_data.is_pending and
             not settings.TEST_ENV
         ):
-            # Only save to file if the data is not pending
-            # and does not have a parent
+            # If the form is not a draft, not a parent form, and not pending
             obj_data.save_to_file
             # Refresh materialized view after saving data
             refresh_materialized_data()

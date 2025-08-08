@@ -9,17 +9,26 @@
   "question_groups": [
     {
       "id": 1749621221729,
-      "name": "location_of_village",
+      "name": "village_location",
       "label": "Location of Village",
       "description": null,
       "order": 1,
       "repeatable": false,
       "questions": [
         {
-          "id": 1749621221730,
-          "name": "which_division_province_tikina",
-          "label": "Which Division-Province-Tikina",
+          "id": 1749621221731,
+          "name": "project_name",
+          "label": "Project name",
           "order": 1,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
+          "id": 1749621221730,
+          "name": "division_province_tikina",
+          "label": "Which Division-Province-Tikina",
+          "order": 2,
           "type": "administration",
           "required": true,
           "meta": true
@@ -28,7 +37,7 @@
           "id": 1749621329696,
           "name": "village_name",
           "label": "Village Name",
-          "order": 2,
+          "order": 3,
           "type": "text",
           "required": true,
           "meta": true
@@ -37,26 +46,150 @@
           "id": 1749622286673,
           "name": "gps_location",
           "label": "GPS Location",
-          "order": 3,
+          "order": 4,
           "type": "geo",
           "required": true,
           "meta": true
         },
         {
+          "id": 1749622291234,
+          "name": "project_target_group",
+          "label": "The project is meant for?",
+          "order": 5,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "villages",
+              "label": "Villages",
+              "id": 1749622291233,
+              "order": 1
+            },
+            {
+              "value": "households",
+              "label": "Households",
+              "id": 1749622291235,
+              "order": 2
+            },
+            {
+              "value": "institutions",
+              "label": "Institutions",
+              "id": 1749622291236,
+              "order": 3
+            },
+            {
+              "value": "combination",
+              "label": "Combination (Specify)",
+              "id": 1749622291237,
+              "order": 4
+            }
+          ]
+        },
+        {
+          "id": 1749622304567,
+          "name": "project_target_group_combination",
+          "label": "For combined project state the institutions involved?",
+          "order": 6,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "school",
+              "label": "School",
+              "id": 1749622304568,
+              "order": 1
+            },
+            {
+              "value": "healthcare_facility",
+              "label": "Healthcare Facility",
+              "id": 1749622304569,
+              "order": 2
+            },
+            {
+              "value": "other",
+              "label": "Other (Specify)",
+              "id": 1749622304571,
+              "order": 3
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622291234,
+              "options": ["combination"]
+            }
+          ]
+        },
+        {
+          "id": 1749622317890,
+          "name": "other_institution",
+          "label": "Other Institution (Specify)",
+          "order": 7,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622304567,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
+          "id": 1749622327890,
+          "name": "number_of_households",
+          "label": "Number of Households",
+          "order": 8,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622291234,
+              "options": ["households"]
+            }
+          ]
+        },
+        {
+          "id": 1749622341234,
+          "name": "number_of_population",
+          "label": "Number of Population",
+          "order": 9,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622291234,
+              "options": ["institutions", "villages", "combination"]
+            }
+          ]
+        },
+        {
+          "id": 1749622354567,
+          "name": "project_cost",
+          "label": "What is the project cost?",
+          "order": 10,
+          "type": "number",
+          "required": true,
+          "meta": false
+        },
+        {
           "id": 1749621347162,
           "name": "project_background",
           "label": "Project Background",
-          "order": 4,
+          "order": 11,
           "type": "text",
           "required": true,
           "meta": false
         },
         {
           "id": 1749621374500,
-          "name": "type_of_water_source",
+          "name": "water_source_type",
           "label": "Type of Water Source?",
-          "order": 5,
-          "type": "option",
+          "order": 12,
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -88,9 +221,9 @@
         },
         {
           "id": 1749621461754,
-          "name": "construction_of_new_water_catchment_dam",
+          "name": "has_new_catchment_dam",
           "label": "Construction of New Water Catchment/Dam?",
-          "order": 6,
+          "order": 13,
           "type": "option",
           "required": true,
           "meta": false,
@@ -116,10 +249,25 @@
           ]
         },
         {
+          "id": 1749621494567,
+          "name": "catchment_dam_photo",
+          "label": "Photo of the Catchment/Dam",
+          "order": 14,
+          "type": "photo",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621461754,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
           "id": 1749621517282,
-          "name": "construction_of_borehole",
+          "name": "has_borehole",
           "label": "Construction of borehole?",
-          "order": 7,
+          "order": 15,
           "type": "option",
           "required": true,
           "meta": false,
@@ -145,10 +293,25 @@
           ]
         },
         {
+          "id": 1749621541234,
+          "name": "borehole_photo",
+          "label": "Photo of the Borehole",
+          "order": 16,
+          "type": "photo",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621517282,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
           "id": 1749621557442,
-          "name": "installation_of_pump_system",
+          "name": "has_pump_system",
           "label": "Installation of Pump system?",
-          "order": 8,
+          "order": 17,
           "type": "option",
           "required": true,
           "meta": false,
@@ -174,10 +337,25 @@
           ]
         },
         {
+          "id": 1749621581234,
+          "name": "pump_system_photo",
+          "label": "Photo of the Pump System",
+          "order": 18,
+          "type": "photo",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621557442,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
           "id": 1749621611527,
-          "name": "installation_of_rainwater_harvesting_system",
+          "name": "has_rainwater_harvesting",
           "label": "Installation of Rainwater Harvesting System?",
-          "order": 9,
+          "order": 19,
           "type": "option",
           "required": true,
           "meta": false,
@@ -203,10 +381,40 @@
           ]
         },
         {
+          "id": 1749621711234,
+          "name": "rainwater_harvesting_photo",
+          "label": "Photo of the Rainwater Harvesting System",
+          "order": 20,
+          "type": "photo",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621611527,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749621624567,
+          "name": "number_of_rainwater_harvesting_systems",
+          "label": "Please Identify the number of Rainwater harvesting system installed.",
+          "order": 21,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621611527,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
           "id": 1749621690983,
-          "name": "installation_of_desalination_plant",
+          "name": "has_desalination_plant",
           "label": "Installation of Desalination Plant?",
-          "order": 10,
+          "order": 22,
           "type": "option",
           "required": true,
           "meta": false,
@@ -232,10 +440,25 @@
           ]
         },
         {
+          "id": 1749621634567,
+          "name": "desalination_plant_photo",
+          "label": "Photo of the Desalination Plant",
+          "order": 23,
+          "type": "photo",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621690983,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
           "id": 1749621742326,
-          "name": "sizes_of_pipes",
+          "name": "pipe_sizes",
           "label": "Sizes of pipes?",
-          "order": 11,
+          "order": 24,
           "type": "multiple_option",
           "required": true,
           "meta": false,

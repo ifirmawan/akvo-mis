@@ -16,10 +16,28 @@
       "repeatable": false,
       "questions": [
         {
-          "id": 1749624452990,
-          "name": "which_division_province_tikina",
-          "label": "Which Division-Province-Tikina?",
+          "id": 1749624452994,
+          "name": "eps_name",
+          "label": "EPS Name",
           "order": 1,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
+          "id": 1749624452990,
+          "name": "division_province_tikina",
+          "label": "Which Division-Province-Tikina?",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
+          "id": 1749624452990,
+          "name": "division_province_tikina",
+          "label": "Which Division-Province-Tikina?",
+          "order": 3,
           "type": "administration",
           "required": true,
           "meta": true
@@ -28,7 +46,7 @@
           "id": 1749624452991,
           "name": "village_name",
           "label": "Village Name",
-          "order": 2,
+          "order": 4,
           "type": "text",
           "required": true,
           "meta": true
@@ -37,16 +55,16 @@
           "id": 1749624452992,
           "name": "gps_location",
           "label": "GPS Location",
-          "order": 3,
+          "order": 5,
           "type": "geo",
           "required": true,
           "meta": true
         },
         {
           "id": 1749631945703,
-          "name": "do_you_have_water_committee",
+          "name": "has_water_committee",
           "label": "Do you have Water Committee",
-          "order": 4,
+          "order": 6,
           "type": "option",
           "required": true,
           "meta": false,
@@ -67,9 +85,9 @@
         },
         {
           "id": 1749632130938,
-          "name": "is_the_water_committee_active",
+          "name": "water_committee_active",
           "label": "Is the Water Committee active?",
-          "order": 5,
+          "order": 7,
           "type": "option",
           "required": true,
           "meta": false,
@@ -96,10 +114,10 @@
         },
         {
           "id": 1749632249972,
-          "name": "type_of_water_source",
+          "name": "water_source_type",
           "label": "Type of Water Source",
-          "order": 6,
-          "type": "option",
+          "order": 8,
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -157,7 +175,7 @@
           "id": 1749632480584,
           "name": "project_implementation_date",
           "label": "Project Implementation date",
-          "order": 7,
+          "order": 9,
           "type": "date",
           "required": true,
           "meta": false
@@ -166,8 +184,8 @@
           "id": 1749624452993,
           "name": "implementing_agency",
           "label": "Who is the implementing agency/agencies?",
-          "order": 8,
-          "type": "option",
+          "order": 10,
+          "type": "multiple_option",
           "options": [
             {
               "value": "water_authority_of_fiji",
@@ -213,7 +231,7 @@
           "id": 174962445299,
           "name": "project_background",
           "label": "Project Background",
-          "order": 9,
+          "order": 11,
           "type": "text",
           "required": true,
           "meta": false

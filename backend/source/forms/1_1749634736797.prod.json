@@ -16,13 +16,22 @@
       "repeatable": false,
       "questions": [
         {
-          "id": 1749634736799,
-          "name": "what_is_the_type_of_the_plant",
-          "label": "What is the type of the plant?",
+          "id": 1749635249444,
+          "name": "plant_name",
+          "label": "Name of the Plant",
           "order": 1,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
+          "id": 1749634736799,
+          "name": "plant_type",
+          "label": "What is the type of the plant?",
+          "order": 2,
           "type": "option",
           "required": true,
-          "meta": true,
+          "meta": false,
           "options": [
             {
               "value": "conventional",
@@ -46,34 +55,25 @@
         },
         {
           "id": 1749635162210,
-          "name": "which_division",
+          "name": "division",
           "label": "Which Division?",
-          "order": 2,
+          "order": 3,
           "type": "administration",
           "required": true,
           "meta": true
         },
         {
           "id": 1749635227708,
-          "name": "date_of_inspection",
+          "name": "inspection_date",
           "label": "Date of inspection?",
-          "order": 3,
+          "order": 4,
           "type": "date",
           "required": true,
           "meta": false
         },
         {
-          "id": 1749635249444,
-          "name": "name_of_the_plant",
-          "label": "Name of the Plant",
-          "order": 4,
-          "type": "text",
-          "required": true,
-          "meta": true
-        },
-        {
           "id": 1749635281187,
-          "name": "when_was_the_plant_constructed",
+          "name": "constructed_date",
           "label": "When was the plant constructed?",
           "order": 5,
           "type": "date",
@@ -82,16 +82,19 @@
         },
         {
           "id": 1749635313175,
-          "name": "what_is_the_designed_capacity_of_plant_in_megalitres",
+          "name": "designed_capacity_megalitres",
           "label": "What is the Designed Capacity of Plant in megalitres?",
           "order": 6,
-          "type": "text",
+          "type": "number",
           "required": true,
-          "meta": false
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          }
         },
         {
           "id": 1749635348200,
-          "name": "do_you_have_drinking_water_safety_plan_dwsp_for_the_treatment_plant",
+          "name": "has_dwsp",
           "label": "Do you have Drinking Water Safety Plan (DWSP) for the Treatment Plant?",
           "order": 7,
           "type": "option",
@@ -114,7 +117,7 @@
         },
         {
           "id": 1749635380553,
-          "name": "do_you_have_a_dwsp_steering_committee",
+          "name": "has_dwsp_steering_committee",
           "label": "Do you have a DWSP Steering Committee?",
           "order": 8,
           "type": "option",
@@ -142,137 +145,10 @@
           ]
         },
         {
-          "id": 1749635441478,
-          "name": "who_are_members_of_this_committee",
-          "label": "Who are members of this committee?",
-          "order": 9,
-          "type": "text",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749635348200,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749635498392,
-          "name": "do_you_have_the_relevant_standard_operating_procedures_so_ps_for_the_treatment_plant",
-          "label": "Do you have the relevant Standard Operating Procedures(SOPs) for the treatment plant?",
-          "order": 10,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749635510528,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749635510529,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749635348200,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749635536016,
-          "name": "which_so_ps_do_you_have",
-          "label": "Which SOPs do you have?",
-          "order": 11,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "chlorination",
-              "label": "Chlorination",
-              "id": 1749635542008,
-              "order": 1
-            },
-            {
-              "value": "chemical_mixing",
-              "label": "Chemical Mixing",
-              "id": 1749635542009,
-              "order": 2
-            },
-            {
-              "value": "water_quality_testing",
-              "label": "Water Quality Testing",
-              "id": 1749635578525,
-              "order": 3
-            },
-            {
-              "value": "reservoir_level_checks",
-              "label": "Reservoir Level checks",
-              "id": 1749635597305,
-              "order": 4
-            },
-            {
-              "value": "ohs_procedures",
-              "label": "OHS procedures",
-              "id": 1749635606500,
-              "order": 5
-            },
-            {
-              "value": "bachwash",
-              "label": "Bachwash",
-              "id": 1749635612446,
-              "order": 6
-            },
-            {
-              "value": "checmical_storage",
-              "label": "Checmical Storage",
-              "id": 1749635626546,
-              "order": 7
-            },
-            {
-              "value": "pup_operations",
-              "label": "Pup operations",
-              "id": 1749635635653,
-              "order": 8
-            },
-            {
-              "value": "system_verifications",
-              "label": "System Verifications",
-              "id": 1749635644548,
-              "order": 9
-            },
-            {
-              "value": "scada_operations",
-              "label": "Scada  Operations",
-              "id": 1749635654214,
-              "order": 10
-            },
-            {
-              "value": "cleaning_of_filters",
-              "label": "Cleaning of filters",
-              "id": 1749635664005,
-              "order": 11
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749635498392,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
           "id": 1749635692873,
-          "name": "take_geolocation_of_water_treatment_plant",
+          "name": "geolocation",
           "label": "Take Geolocation of Water Treatment Plant",
-          "order": 12,
+          "order": 9,
           "type": "geo",
           "required": true,
           "meta": true

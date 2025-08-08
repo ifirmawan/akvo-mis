@@ -36,7 +36,7 @@
         },
         {
           "id": 1749630629477,
-          "name": "are_you_able_to_capture_the_locality_plan",
+          "name": "can_capture_locality_plan",
           "label": "Are you able to capture the locality Plan?",
           "order": 3,
           "type": "option",
@@ -59,10 +59,10 @@
         },
         {
           "id": 1749630671371,
-          "name": "locality_plan",
+          "name": "locality_plan_details",
           "label": "Locality Plan",
           "order": 4,
-          "type": "text",
+          "type": "geo",
           "required": true,
           "meta": false,
           "dependency": [
@@ -74,7 +74,7 @@
         },
         {
           "id": 1749630733310,
-          "name": "are_you_able_to_take_the_water_sample",
+          "name": "can_take_water_sample",
           "label": "Are you able to take the water sample",
           "order": 5,
           "type": "option",
@@ -103,7 +103,7 @@
         },
         {
           "id": 1749630785253,
-          "name": "water_test_conducted",
+          "name": "water_test_type",
           "label": "Water test conducted?",
           "order": 6,
           "type": "option",
@@ -138,7 +138,7 @@
         },
         {
           "id": 1749630842082,
-          "name": "level_of_contamination_of_h_2_s_results",
+          "name": "h2s_contamination_level",
           "label": "Level of contamination of H2S Results?",
           "order": 7,
           "type": "option",
@@ -179,7 +179,7 @@
         },
         {
           "id": 1749630906302,
-          "name": "level_of_contamination_using_cbt_bags",
+          "name": "cbt_bag_contamination_level",
           "label": "Level of Contamination using CBT bags?",
           "order": 8,
           "type": "number",
@@ -197,7 +197,7 @@
         },
         {
           "id": 1749631093126,
-          "name": "what_is_the_total_coliform_level",
+          "name": "total_coliform_level",
           "label": "What is the Total Coliform Level?",
           "order": 9,
           "type": "number",
@@ -215,7 +215,7 @@
         },
         {
           "id": 1749631148928,
-          "name": "what_is_the_faecal_coliform_level",
+          "name": "fecal_coliform_level",
           "label": "What is the Faecal Coliform Level?",
           "order": 10,
           "type": "number",
@@ -233,7 +233,7 @@
         },
         {
           "id": 1749631183056,
-          "name": "what_is_the_turbidity_in_ntu",
+          "name": "turbidity_ntu",
           "label": "What is the Turbidity in NTU?",
           "order": 11,
           "type": "number",
@@ -251,7 +251,7 @@
         },
         {
           "id": 1749631209249,
-          "name": "what_is_the_p_h",
+          "name": "ph_value",
           "label": "What is the pH",
           "order": 12,
           "type": "number",
@@ -269,7 +269,7 @@
         },
         {
           "id": 1749631237584,
-          "name": "what_is_the_conductivity",
+          "name": "conductivity",
           "label": "What is the Conductivity?",
           "order": 13,
           "type": "number",
@@ -287,7 +287,7 @@
         },
         {
           "id": 1749631278297,
-          "name": "what_is_the_salinity_in_ppt",
+          "name": "salinity_ppt",
           "label": "What is the Salinity in ppt?",
           "order": 14,
           "type": "number",
@@ -415,7 +415,7 @@
         },
         {
           "id": 1749631574376,
-          "name": "what_percentage_of_project_is_complete",
+          "name": "project_completion_percent",
           "label": "What percentage of project is complete?",
           "order": 12,
           "type": "number",
@@ -438,7 +438,7 @@
       "questions": [
         {
           "id": 1749624521442,
-          "name": "take_photo",
+          "name": "photo",
           "label": "Take Photo",
           "order": 1,
           "type": "photo",
@@ -448,7 +448,7 @@
         },
         {
           "id": 1749631662652,
-          "name": "comment_on_photo_taken",
+          "name": "photo_comment",
           "label": "Comment on Photo taken",
           "order": 2,
           "type": "text",
@@ -468,7 +468,7 @@
       "questions": [
         {
           "id": 1749624532451,
-          "name": "general_remarks_and_recommendations",
+          "name": "remarks_and_recommendations",
           "label": "General Remarks and Recommendations",
           "order": 1,
           "type": "text",
@@ -477,7 +477,7 @@
         },
         {
           "id": 1749631698734,
-          "name": "signature_of_officer",
+          "name": "officer_signature",
           "label": "Signature of Officer",
           "order": 2,
           "type": "signature",

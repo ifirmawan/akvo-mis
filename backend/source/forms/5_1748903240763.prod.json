@@ -17,10 +17,19 @@
       "translations": null,
       "questions": [
         {
-          "id": 1748903240794,
-          "name": "which_division_are_you_in",
-          "label": "Which Division are you in?",
+          "id": 1748903442166,
+          "name": "plant_name",
+          "label": "Name of the Plant",
           "order": 1,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
+          "id": 1748903240794,
+          "name": "division",
+          "label": "Which Division are you in?",
+          "order": 2,
           "type": "administration",
           "required": true,
           "meta": true,
@@ -28,20 +37,8 @@
           "dependency": null
         },
         {
-          "id": 1748903442166,
-          "name": "name_of_the_plant",
-          "label": "Name of the Plant",
-          "order": 2,
-          "type": "text",
-          "required": true,
-          "meta": true,
-          "rule": null,
-          "options": null,
-          "dependency": null
-        },
-        {
           "id": 1748903539202,
-          "name": "which_year_was_the_plant_commissioned",
+          "name": "commissioned_year",
           "label": "Which Year was the plant commissioned?",
           "order": 3,
           "type": "number",
@@ -53,7 +50,7 @@
         },
         {
           "id": 1748903613622,
-          "name": "what_is_the_design_capacity_of_the_plant_cubic_metres_per_day",
+          "name": "design_capacity_m3_day",
           "label": "What is the Design Capacity of the Plant cubic metres per day?",
           "order": 4,
           "type": "number",
@@ -67,7 +64,7 @@
         },
         {
           "id": 1748903733856,
-          "name": "what_are_the_different_treatment_processes_available_at_the_plant",
+          "name": "treatment_processes",
           "label": "What are the different treatment processes available at the plant?",
           "order": 5,
           "type": "multiple_option",
@@ -200,7 +197,7 @@
         },
         {
           "id": 1748904054931,
-          "name": "are_there_any_pump_station_at_the_treatment_plant",
+          "name": "has_pump_station",
           "label": "Are there any pump station at the treatment plant?",
           "order": 6,
           "type": "option",
@@ -225,7 +222,7 @@
         },
         {
           "id": 1748904102151,
-          "name": "total_number_of_pump_stations",
+          "name": "num_pump_stations",
           "label": "Total number of pump stations",
           "order": 7,
           "type": "number",
@@ -242,7 +239,7 @@
         },
         {
           "id": 1748904158071,
-          "name": "what_are_types_of_pump_stations",
+          "name": "pump_station_types",
           "label": "What are types of pump stations?",
           "order": 8,
           "type": "multiple_option",
@@ -296,7 +293,7 @@
         },
         {
           "id": 1748904470602,
-          "name": "how_many_raw_sewage_pump_stations",
+          "name": "num_raw_sewage_pump_stations",
           "label": "How many raw sewage pump stations?",
           "order": 9,
           "type": "number",
@@ -313,7 +310,7 @@
         },
         {
           "id": 1748904517975,
-          "name": "how_many_re_circulation_pump_stations",
+          "name": "num_recirculation_pump_stations",
           "label": "How many re-circulation pump stations?",
           "order": 10,
           "type": "number",
@@ -330,7 +327,7 @@
         },
         {
           "id": 1748904551256,
-          "name": "how_many_sludge_pump_stations",
+          "name": "num_sludge_pump_stations",
           "label": "How many sludge pump stations?",
           "order": 11,
           "type": "number",
@@ -347,7 +344,7 @@
         },
         {
           "id": 1748904618481,
-          "name": "how_many_supernatant_pump_stations",
+          "name": "num_supernatant_pump_stations",
           "label": "How many supernatant pump stations?",
           "order": 12,
           "type": "number",
@@ -366,7 +363,7 @@
         },
         {
           "id": 1748904692704,
-          "name": "how_many_influent_pump_station",
+          "name": "num_influent_pump_stations",
           "label": "How many influent pump station",
           "order": 13,
           "type": "number",
@@ -383,7 +380,7 @@
         },
         {
           "id": 1748904732921,
-          "name": "how_many_effluent_pump_stations",
+          "name": "num_effluent_pump_stations",
           "label": "How many Effluent Pump Stations?",
           "order": 14,
           "type": "number",
@@ -400,7 +397,7 @@
         },
         {
           "id": 1748904785806,
-          "name": "take_geolocation_of_waste_water_treatment_plant",
+          "name": "geolocation",
           "label": "Take Geolocation of Waste water Treatment Plant",
           "order": 15,
           "type": "geo",
@@ -412,7 +409,7 @@
         },
         {
           "id": 1748904831222,
-          "name": "take_photo_of_the_treatment_plant",
+          "name": "plant_photo",
           "label": "Take photo of the treatment plant",
           "order": 16,
           "type": "photo",

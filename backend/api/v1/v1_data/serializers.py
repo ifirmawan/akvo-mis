@@ -644,7 +644,6 @@ class SubmitPendingFormSerializer(serializers.Serializer):
         Answers.objects.bulk_create(answers)
 
         if (
-            direct_to_data and
             not obj_data.parent and
             not obj_data.is_pending and
             not settings.TEST_ENV

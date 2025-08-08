@@ -39,7 +39,7 @@ class DataBatch(models.Model):
     # Get all the approvers for this batch
     def approvers(self):
         administrations = [self.administration]
-        if self.administration.ancestors.count():
+        if self.administration.parent:
             # merge adm with ancestors
             ancestors = self.administration.ancestors.all()
             administrations = list(ancestors) + [self.administration]
@@ -51,6 +51,8 @@ class DataBatch(models.Model):
         user_roles = UserRole.objects.filter(
             administration__in=administrations,
             role__role_role_access__data_access=DataAccessTypes.approve,
+        ).exclude(
+            user__password__exact=""
         ).select_related("user", "role")
         # Apply form access filter
         form_filter = [form]

@@ -26,10 +26,15 @@ class Command(BaseCommand):
             email__contains="@test.com"
         ).all()
         user_forms = {}
+        mobile_forms = {}
         for user in users:
             user_forms[user.id] = [
                 uf.form for uf in user.user_form.all()
             ]
+            for mobile_assignment in user.mobile_assignments.all():
+                mobile_forms[mobile_assignment.id] = [
+                    form for form in mobile_assignment.forms.all()
+                ]
         # truncate all forms and related data
         forms = Forms.objects.all()
         for form in forms:
@@ -50,9 +55,14 @@ class Command(BaseCommand):
                 stderr=self.stderr,
             )
         # Reset user form assignments
-        SystemUser.objects.filter(
+        test_users = SystemUser.objects.filter(
             email__contains="@test.com"
-        ).delete(hard=True)
+        ).all()
+        for user in test_users:
+            # delete all mobile assignments for test users
+            user.mobile_assignments.all().delete()
+            # delete all user forms for test users
+            user.delete(hard=True)
 
         # Re-assign forms to users
         for user in SystemUser.objects.all():
@@ -66,5 +76,18 @@ class Command(BaseCommand):
                     user.user_form.create(
                         form=form,
                     )
+            # restore the mobile assignments
+            for mobile_assignment in user.mobile_assignments.all():
+                if mobile_assignment.id in mobile_forms:
+                    # filter Forms that were assigned to the mobile assignment
+                    forms = Forms.objects.filter(
+                        id__in=[
+                            f.id for f in mobile_forms[mobile_assignment.id]
+                        ]
+                    ).all()
+                    for form in forms:
+                        mobile_assignment.forms.add(form)
+                # save the mobile assignment
+                mobile_assignment.save()
         # Output success message
         self.stdout.write(self.style.SUCCESS("Successfully reset all forms."))

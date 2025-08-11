@@ -64,7 +64,7 @@ class MobileAssignmentApiSyncNewDraftTest(
             *self.administration_children
         )
         self.mobile_assignment.forms.add(self.form)
-        self.mobile_token = self.get_assignmen_token(passcode)
+        self.mobile_token = self.get_assignment_token(passcode)
 
     def test_sync_new_draft(self):
         """
@@ -304,7 +304,7 @@ class MobileAssignmentApiSyncNewDraftTest(
             self.administration
         )
         mobile_assignment.forms.add(self.form)
-        super_token = self.get_assignmen_token(passcode)
+        super_token = self.get_assignment_token(passcode)
 
         # Create an initial draft submission
         draft = FormData.objects.create(

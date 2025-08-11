@@ -11,7 +11,7 @@ class HasTestClientProtocol(Protocol):
 
 class AssignmentTokenTestHelperMixin:
 
-    def get_assignmen_token(self: HasTestClientProtocol, passcode: str) -> str:
+    def get_assignment_token(self: HasTestClientProtocol, passcode: str) -> str:
         resp = self.client.post(
             '/api/v1/device/auth',
             {'code': passcode},

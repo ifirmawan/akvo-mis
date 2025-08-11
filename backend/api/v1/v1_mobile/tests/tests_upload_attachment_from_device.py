@@ -52,7 +52,7 @@ class MobileUploadAttachmentTestCase(TestCase, AssignmentTokenTestHelperMixin):
         os.remove(self.document_file)
 
     def test_upload_image(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
 
         allowed_file_types = [
             "jpg",
@@ -78,7 +78,7 @@ class MobileUploadAttachmentTestCase(TestCase, AssignmentTokenTestHelperMixin):
         os.remove(f"{STORAGE_PATH}/attachments/{uploaded_filename}")
 
     def test_upload_document(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
 
         allowed_file_types = [
             "pdf",
@@ -104,7 +104,7 @@ class MobileUploadAttachmentTestCase(TestCase, AssignmentTokenTestHelperMixin):
         os.remove(f"{STORAGE_PATH}/attachments/{uploaded_filename}")
 
     def test_file_upload_with_no_extension(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
 
         filename = generate_file(filename="test")
         allowed_file_types = [
@@ -128,7 +128,7 @@ class MobileUploadAttachmentTestCase(TestCase, AssignmentTokenTestHelperMixin):
         os.remove(filename)
 
     def test_file_upload_with_no_file(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
 
         allowed_file_types = [
             "pdf",
@@ -150,7 +150,7 @@ class MobileUploadAttachmentTestCase(TestCase, AssignmentTokenTestHelperMixin):
         )
 
     def test_file_upload_with_invalid_file_type(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
 
         filename = generate_file(filename="test.txt")
         allowed_file_types = [
@@ -174,7 +174,7 @@ class MobileUploadAttachmentTestCase(TestCase, AssignmentTokenTestHelperMixin):
         os.remove(filename)
 
     def test_file_upload_with_no_allowed_file_types(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
 
         params = "&".join(
             f"allowed_file_types={ext}" for ext in []

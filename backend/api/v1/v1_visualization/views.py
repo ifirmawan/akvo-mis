@@ -53,6 +53,50 @@ def formdata_stats(request, form_id, version):
         )
     question = serializer.validated_data.get("question_id")
     options = []
+    if not form.parent:
+        if question.type in [
+            QuestionTypes.option,
+            QuestionTypes.multiple_option,
+        ]:
+            options = question.options.all()
+        data = []
+        for d in form.form_form_data.filter(
+            is_pending=False,
+            is_draft=False,
+        ).all():
+            if question.type == QuestionTypes.number:
+                data.extend([
+                    {
+                        "id": d.id,
+                        "value": a.value,
+                    }
+                    for a in d.data_answer.filter(
+                        question_id=question.id
+                    ).all()
+                ])
+            if question.type in [
+                QuestionTypes.option,
+                QuestionTypes.multiple_option,
+            ]:
+                for a in d.data_answer.filter(
+                    question_id=question.id
+                ).all():
+                    for v in a.options:
+                        v_data = question.options.filter(value=v).first()
+                        if v_data:
+                            data.append({
+                                "id": d.id,
+                                "value": v_data.id,
+                            })
+        return Response(
+            FormDataStatSerializer(
+                instance={
+                    "options": options,
+                    "data": data,
+                }
+            ).data,
+            status=status.HTTP_200_OK,
+        )
     if question.type == QuestionTypes.number:
         parent_form = form.parent
         form_data = parent_form.form_form_data.filter(

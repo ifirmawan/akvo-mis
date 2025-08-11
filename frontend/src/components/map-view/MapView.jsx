@@ -91,7 +91,7 @@ const MapView = ({ dataset, loading, position }) => {
   }, [lg, loading]);
 
   useEffect(() => {
-    if (lg.current && !loading && dataset?.length) {
+    if (lg.current && !loading) {
       lg.current.clearLayers();
       dataset
         .filter(

@@ -208,7 +208,7 @@ class FakeCompleteDataSeederTestCase(TestCase, AssignmentTokenTestHelperMixin):
         mobile_user = user.mobile_assignments.order_by('id').first()
         self.assertIsNotNone(mobile_user)
         passcode = CustomPasscode().decode(mobile_user.passcode)
-        token = self.get_assignmen_token(passcode)
+        token = self.get_assignment_token(passcode)
 
         mobile_adm = mobile_user.administrations.first()
         payload = {

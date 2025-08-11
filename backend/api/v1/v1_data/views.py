@@ -8,6 +8,7 @@ from wsgiref.util import FileWrapper
 from django.utils import timezone
 from django.http import HttpResponse
 from django.db.models import Q
+from django_q.tasks import async_task
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
     extend_schema,
@@ -47,7 +48,6 @@ from api.v1.v1_forms.constants import (
 from api.v1.v1_forms.models import Forms, Questions
 from api.v1.v1_profile.models import Administration
 from api.v1.v1_approval.constants import DataApprovalStatus
-from api.v1.v1_visualization.functions import refresh_materialized_data
 from mis.settings import REST_FRAMEWORK
 from utils.custom_permissions import (
     IsSubmitter,
@@ -311,8 +311,8 @@ class FormDataAddListView(APIView):
         data.save()
         if not settings.TEST_ENV:
             data.save_to_file
-            # Refresh materialized view after saving data
-            refresh_materialized_data()
+            # Refresh materialized view via async task
+            async_task("api.v1.v1_data.tasks.seed_approved_data", data)
         return Response(
             {"message": "direct update success"}, status=status.HTTP_200_OK
         )
@@ -885,8 +885,8 @@ class PublishDraftFormDataView(APIView):
             not settings.TEST_ENV
         ):
             draft_data.save_to_file
-            # Refresh materialized view after saving data
-            refresh_materialized_data()
+            # Refresh materialized view via async task
+            async_task("api.v1.v1_data.tasks.seed_approved_data", draft_data)
 
         return Response(
             {"message": "Draft published successfully"},

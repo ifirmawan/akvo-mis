@@ -553,7 +553,10 @@ def get_datapoint_download_list(request, version):
     assignment = cast(MobileAssignmentToken, request.auth).assignment
     forms = assignment.forms.values("id")
     administrations = [
-        {"id": a.id, "path": a.path}
+        {
+            "id": a.id,
+            "path": f"{a.path}{a.id}." if a.path else f"{a.id}."
+        }
         for a in assignment.administrations.all()
     ]
     paginator = Pagination()
@@ -566,8 +569,9 @@ def get_datapoint_download_list(request, version):
     # Build path query by combining conditions for all administration paths
     path_query = Q()
     for admin in administrations:
-        adm_path = admin["path"] if admin["path"] else admin["id"]
-        path_query |= Q(administration__path__startswith=adm_path)
+        path_query |= Q(
+            administration__path__startswith=admin["path"]
+        )
     # Combine both queries with the form filter
     queryset = FormData.objects.filter(
         admin_id_query | (path_query & Q(form_id__in=forms))

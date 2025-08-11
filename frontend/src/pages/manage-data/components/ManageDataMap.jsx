@@ -19,6 +19,7 @@ const ManageDataMap = () => {
   const [isNumeric, setIsNumeric] = useState(false);
   const [selectedLegendOption, setSelectedLegendOption] = useState(null);
   const [selectedGradationIndex, setSelectedGradationIndex] = useState(null);
+  const [isLocationFetched, setIsLocationFetched] = useState(false);
 
   const { active: activeLang } = store.useState((s) => s.language);
   const text = useMemo(() => {
@@ -32,7 +33,19 @@ const ManageDataMap = () => {
 
   const mapQuestions = useMemo(() => {
     const f = window?.forms?.find((f) => f.id === mapForm);
-    return f?.content?.question_group
+    const registrationGroup = window?.forms?.find((f) => f.id === selectedForm);
+    const groupQuestions =
+      registrationGroup?.content?.question_group &&
+      f?.content?.question_group?.length
+        ? [
+            ...registrationGroup.content.question_group.map((qg) => ({
+              ...qg,
+              formID: selectedForm,
+            })),
+            ...f.content.question_group,
+          ]
+        : f?.content?.question_group;
+    return groupQuestions
       ?.map((qg) => ({
         label: qg?.label,
         options: qg?.question
@@ -47,10 +60,11 @@ const ManageDataMap = () => {
             label: q?.label,
             value: q?.id,
             type: q?.type,
+            formID: qg?.formID || mapForm,
           })),
       }))
       ?.filter((qg) => qg?.options?.length > 0);
-  }, [mapForm]);
+  }, [mapForm, selectedForm]);
 
   // Calculate color scale based on numeric data values for shape coloring
   const colorScale = useMemo(() => {
@@ -138,9 +152,10 @@ const ManageDataMap = () => {
     }, 100);
   };
 
-  const fetchStats = async (questionId, questionType) => {
+  const fetchStats = async (questionId, questionType, questionForm = null) => {
     try {
-      const apiURL = `/visualization/formdata-stats/${mapForm}?question_id=${questionId}`;
+      const mapFormID = questionForm || mapForm;
+      const apiURL = `/visualization/formdata-stats/${mapFormID}?question_id=${questionId}`;
       const { data: apiData } = await api.get(apiURL);
       if (apiData?.data?.length === 0) {
         // Hide all markers if no data is available
@@ -291,14 +306,14 @@ const ManageDataMap = () => {
     setIsNumeric(q?.type === QUESTION_TYPES.number);
     setSelectedLegendOption(null);
     setSelectedGradationIndex(null);
-    await fetchStats(value, q?.type);
+    await fetchStats(value, q.type, q.formID);
   };
 
   const fetchData = useCallback(
     async (selectedAdm = [], formChanges = false) => {
       try {
-        if (selectedAdm?.length === 0 && dataset?.length > 0 && !formChanges) {
-          // If no administration is selected, we can skip fetching data
+        if (!formChanges && isLocationFetched) {
+          // If the form hasn't changed and location data is already fetched, skip fetching
           return;
         }
         const adm = takeRight(selectedAdm, 1)[0];
@@ -328,17 +343,19 @@ const ManageDataMap = () => {
           }));
           setDataset(newDataset);
         }
+        setIsLocationFetched(true);
         const selected = [{ prop: adm?.level_name, value: adm?.name }];
         const pos = getBounds(selected);
         setPosition(pos);
         setMapForm(mapForms?.[0]?.id);
         setLoading(false);
       } catch (error) {
+        setIsLocationFetched(true);
         setDataset([]);
         setLoading(false);
       }
     },
-    [selectedForm, dataset, mapForms]
+    [selectedForm, dataset, mapForms, isLocationFetched]
   );
 
   useEffect(() => {
@@ -352,7 +369,8 @@ const ManageDataMap = () => {
       ({ selectedForm, administration }) => {
         // Only trigger loading if selectedForm actually changed
         const isFormChanged = selectedForm && selectedForm !== prevForm;
-        if (isFormChanged) {
+        if (isFormChanged && isLocationFetched) {
+          setIsLocationFetched(false);
           setDataset([]);
           setActiveQuestion(null);
           setLegendOptions([]);
@@ -368,7 +386,7 @@ const ManageDataMap = () => {
       }
     );
     return () => unsubscribe();
-  }, [fetchData, prevForm, selectedForm]);
+  }, [fetchData, prevForm, selectedForm, isLocationFetched]);
 
   return (
     <div className="manage-data-map">

@@ -160,6 +160,7 @@ class DataBatchListByApproverTestCase(TestCase, ProfileTestHelperMixin):
         data = FormData.objects.filter(
             is_pending=True,
             administration__level__level=4,
+            form__parent__isnull=True,
         ).exclude(
             pk=self.data.pk
         ).first()

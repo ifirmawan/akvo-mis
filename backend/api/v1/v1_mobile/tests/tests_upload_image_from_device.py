@@ -50,7 +50,7 @@ class MobileAssignmentUploadImages(TestCase, AssignmentTokenTestHelperMixin):
         os.remove(self.filename)
 
     def test_upload_image(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
 
         response = self.client.post(
             '/api/v1/device/images',

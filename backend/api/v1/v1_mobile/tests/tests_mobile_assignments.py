@@ -137,9 +137,14 @@ class MobileAssignmentTestCase(TestCase, ProfileTestHelperMixin):
         self.assertEqual(len(data['administrations']), 1)
 
     def test_update_relations(self):
-        adm1 = Administration.objects.first()
-        adm2 = Administration.objects.all()[1]
-        adm3 = Administration.objects.filter(parent=adm2).first()
+        adm1 = Administration.objects.filter(
+            level__level=1
+        ).order_by("?").first()
+        [adm2, adm3] = Administration.objects.filter(
+            path__startswith="{0}{1}".format(
+                adm1.path, adm1.id
+            )
+        ).all()[:2]
         form1 = Forms.objects.get(pk=1)
         form2 = Forms.objects.get(pk=4)
         assignment = MobileAssignment.objects.create_assignment(

@@ -57,7 +57,7 @@ class MobileAssignmentApiSyncTest(
         self.mobile_assignment.forms.add(self.form)
 
     def test_get_form_details(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
         response = self.client.get(
             f"/api/v1/device/form/{self.form.id}",
             follow=True,
@@ -77,7 +77,7 @@ class MobileAssignmentApiSyncTest(
         )
 
     def test_mobile_sync_to_pending_datapoint(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
         response = self.client.get(
             f"/api/v1/device/form/{self.form.id}",
             follow=True,

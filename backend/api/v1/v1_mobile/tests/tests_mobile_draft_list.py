@@ -90,7 +90,7 @@ class MobileAssignmentApiDraftListTest(
             *self.administration_children
         )
         self.mobile_assignment.forms.add(self.form)
-        self.mobile_token = self.get_assignmen_token(passcode)
+        self.mobile_token = self.get_assignment_token(passcode)
 
     def test_get_draft_list(self):
         """

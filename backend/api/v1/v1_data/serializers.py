@@ -1,6 +1,7 @@
 import requests
 from django.db.models import Q
 from django.utils import timezone
+from django_q.tasks import async_task
 
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field, inline_serializer
@@ -18,7 +19,6 @@ from api.v1.v1_forms.models import (
 )
 from api.v1.v1_profile.models import Administration, EntityData
 from api.v1.v1_users.models import Organisation
-from api.v1.v1_visualization.functions import refresh_materialized_data
 from utils.custom_serializer_fields import (
     CustomPrimaryKeyRelatedField,
     UnvalidatedField,
@@ -259,8 +259,8 @@ class SubmitFormSerializer(serializers.Serializer):
             )
         if not settings.TEST_ENV:
             obj_data.save_to_file
-        # Refresh materialized view after saving data
-        refresh_materialized_data()
+        # Refresh materialized view via async task
+        async_task("api.v1.v1_data.tasks.seed_approved_data", obj_data)
 
         return object
 
@@ -651,8 +651,8 @@ class SubmitPendingFormSerializer(serializers.Serializer):
         ):
             # If the form is not a draft, not a parent form, and not pending
             obj_data.save_to_file
-            # Refresh materialized view after saving data
-            refresh_materialized_data()
+            # Refresh materialized view via async task
+            async_task("api.v1.v1_data.tasks.seed_approved_data", obj_data)
 
         return obj_data
 

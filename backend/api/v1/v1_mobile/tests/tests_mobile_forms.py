@@ -83,7 +83,7 @@ class MobileFormsApiTest(TestCase, AssignmentTokenTestHelperMixin):
             )
 
     def test_get_form_details(self):
-        token = self.get_assignmen_token(self.passcode)
+        token = self.get_assignment_token(self.passcode)
         response = self.client.get(
             f"/api/v1/device/form/{self.form.id}",
             follow=True,

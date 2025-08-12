@@ -248,70 +248,428 @@
           "rule": {
             "allowDecimal": true
           }
-        },
-        {
-          "id": 1749631209249,
-          "name": "ph_value",
-          "label": "What is the pH",
-          "order": 12,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            }
-          ],
-          "rule": {
-            "allowDecimal": true
-          }
-        },
-        {
-          "id": 1749631237584,
-          "name": "conductivity",
-          "label": "What is the Conductivity?",
-          "order": 13,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            }
-          ],
-          "rule": {
-            "allowDecimal": true
-          }
-        },
-        {
-          "id": 1749631278297,
-          "name": "salinity_ppt",
-          "label": "What is the Salinity in ppt?",
-          "order": 14,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            }
-          ],
-          "rule": {
-            "allowDecimal": true
-          }
         }
       ],
       "repeat_text": null
+    },
+    {
+      "id": 1754995200001,
+      "name": "physical_analysis",
+      "label": "Physical Analysis",
+      "description": null,
+      "order": 2,
+      "repeatable": false,
+      "questions": [
+        {
+          "id": 1754995200101,
+          "name": "temperature_c",
+          "label": "Temperature °C - 2550B (APHA Method Code)",
+          "order": 1,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200102,
+          "name": "ph",
+          "label": "pH - 4500-H+B (APHA Method Code)",
+          "order": 2,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true,
+            "min": 0,
+            "max": 14
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200103,
+          "name": "physical_analysis_conductivity",
+          "label": "Conductivity µS/cm - 2510B (APHA Method Code)",
+          "order": 3,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200104,
+          "name": "salinity",
+          "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
+          "order": 4,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1754995200201,
+      "name": "solids_analysis",
+      "label": "Solids Analysis",
+      "description": null,
+      "order": 3,
+      "repeatable": false,
+      "questions": [
+        {
+          "id": 1754995200301,
+          "name": "total_dissolved_solids",
+          "label": "Total Dissolved Solids mg/L - 2540C (APHA Method Code)",
+          "order": 1,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200302,
+          "name": "total_suspended_solids",
+          "label": "Total Suspended Solids mg/L - 2540D (APHA Method Code)",
+          "order": 2,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200303,
+          "name": "total_solids",
+          "label": "Total Solids mg/L - 2540B (APHA Method Code)",
+          "order": 3,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200304,
+          "name": "settleable_solids",
+          "label": "Settleable Solids mls - 2540F (APHA Method Code)",
+          "order": 4,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1754995200401,
+      "name": "nutrients_analysis",
+      "label": "Nutrients Analysis",
+      "description": null,
+      "order": 4,
+      "repeatable": false,
+      "questions": [
+        {
+          "id": 1754995200501,
+          "name": "ammonia",
+          "label": "Ammonia mg/L - 4500-NH3 H (APHA Method Code)",
+          "order": 1,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200502,
+          "name": "total_kjeldhal_nitrogen",
+          "label": "Total Kjeldhal Nitrogen mg/L - 4500-NorgB (APHA Method Code)",
+          "order": 2,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200503,
+          "name": "nitrate",
+          "label": "Nitrate mg/L - 4500-NO-3- I (APHA Method Code)",
+          "order": 3,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200504,
+          "name": "nitrite",
+          "label": "Nitrite mg/L - 4500-NO-3- I (APHA Method Code)",
+          "order": 4,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200505,
+          "name": "total_phosphorus",
+          "label": "Total Phosphorus mg/L - 4500-P E (APHA Method Code)",
+          "order": 5,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1754995200601,
+      "name": "chemical_analysis",
+      "label": "Chemical Analysis",
+      "description": null,
+      "order": 5,
+      "repeatable": false,
+      "questions": [
+        {
+          "id": 1754995200701,
+          "name": "chemical_oxygen_demand",
+          "label": "Chemical Oxygen Demand mg/L - 5220B (APHA Method Code)",
+          "order": 1,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200702,
+          "name": "dissolved_oxygen",
+          "label": "Dissolved Oxygen mg/L - 4500-O-C (APHA Method Code)",
+          "order": 2,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200703,
+          "name": "total_alkalinity",
+          "label": "Total Alkalinity mg/L - 2320B (APHA Method Code)",
+          "order": 3,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200704,
+          "name": "chloride",
+          "label": "Chloride mg/L - 4500-Cl-C (APHA Method Code)",
+          "order": 4,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200705,
+          "name": "oil_and_grease",
+          "label": "Oil & Grease mg/L - 5520D (APHA Method Code)",
+          "order": 5,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
+          "id": 1754995200706,
+          "name": "total_sulphides",
+          "label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
+          "order": 6,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1754995200801,
+      "name": "biological_analysis",
+      "label": "Biological Analysis",
+      "description": null,
+      "order": 6,
+      "repeatable": false,
+      "questions": [
+        {
+          "id": 1754995200901,
+          "name": "bod",
+          "label": "BOD mg/L - 5210B (APHA Method Code)",
+          "order": 1,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749630785253,
+              "options": ["lab_test"]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 1749624505914,
       "name": "project_scope",
       "label": "Project Scope",
       "description": null,
-      "order": 2,
+      "order": 7,
       "repeatable": false,
       "questions": [
         {
@@ -433,7 +791,7 @@
       "name": "project_photos",
       "label": "Project Photos",
       "description": null,
-      "order": 3,
+      "order": 8,
       "repeatable": true,
       "questions": [
         {
@@ -463,7 +821,7 @@
       "name": "final_remarks",
       "label": "Final Remarks",
       "description": null,
-      "order": 4,
+      "order": 9,
       "repeatable": false,
       "questions": [
         {

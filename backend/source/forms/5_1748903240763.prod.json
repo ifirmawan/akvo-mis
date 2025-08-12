@@ -206,16 +206,16 @@
           "rule": null,
           "options": [
             {
-              "value": "no",
-              "label": "No",
-              "id": 1748904066578,
-              "order": 2
-            },
-            {
               "value": "yes",
               "label": "Yes",
               "id": 1748904066576,
               "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1748904066578,
+              "order": 2
             }
           ],
           "dependency": null

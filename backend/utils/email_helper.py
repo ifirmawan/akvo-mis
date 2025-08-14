@@ -214,7 +214,7 @@ def email_context(context: dict, type: str):
                 "info_text": "There is data that is pending your approval!",
                 "extend_body": """
             To approve/reject this data submission please visit
-            the platform [Data > Manage Approvals] page.
+            the platform [Data > Approvals] page.
             """,
                 "align": "left",
                 "explore_button": True,

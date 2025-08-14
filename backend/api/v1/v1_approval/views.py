@@ -198,10 +198,7 @@ def list_pending_batch(request, version):
 )
 def list_data_batch(request, version, batch_id):
     batch = get_object_or_404(DataBatch, pk=batch_id)
-    batch_list = batch.batch_data_list.filter(
-        batch__approved=False,
-        data__is_pending=True,
-    ).order_by("-created")
+    batch_list = batch.batch_data_list.order_by("-created")
     data = [
         d.data for d in batch_list
     ]
@@ -342,7 +339,6 @@ class BatchSummaryView(APIView):
         # Get all answers for these questions in the batch
         answers = Answers.objects.filter(
             data__data_batch_list__batch=batch,
-            data__is_pending=True,
             question__in=questions,
         ).distinct("question")
         return Response(

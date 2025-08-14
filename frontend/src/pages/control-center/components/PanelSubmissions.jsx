@@ -9,7 +9,7 @@ import {
 import { api, columnsBatch, columnsPending, store, uiText } from "../../../lib";
 import { Link } from "react-router-dom";
 import { useNotification } from "../../../util/hooks";
-import { isEmpty, without, union, xor } from "lodash";
+import { isEmpty, without, union, xor, uniq } from "lodash";
 
 const { TabPane } = Tabs;
 
@@ -104,7 +104,7 @@ const PanelSubmissions = () => {
     }
     selectedRowKeys.includes(id)
       ? setSelectedRowKeys(without(selectedRowKeys, id))
-      : setSelectedRowKeys(ids);
+      : setSelectedRowKeys(uniq(ids));
   };
 
   const onSelectAllTableRow = (isSelected) => {

@@ -130,7 +130,7 @@ const AddRolePage = () => {
           <Col>
             <Breadcrumbs pagePath={pagePath} />
             <DescriptionPanel
-              description={text.addRoleDescription}
+              description={text.addRoleDescription(id)}
               title={panelTitle}
             />
           </Col>

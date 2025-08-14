@@ -55,12 +55,7 @@ Object {
     </React.Fragment>,
     "addOrganisation": "Add Organization",
     "addRole": "Add Role",
-    "addRoleDescription": <React.Fragment>
-      This page allows you to add roles to the 
-      Test App
-       
-      platform.
-    </React.Fragment>,
+    "addRoleDescription": [Function],
     "addUser": "Add User",
     "addUserDescription": <React.Fragment>
       This page allows you to add users to the 

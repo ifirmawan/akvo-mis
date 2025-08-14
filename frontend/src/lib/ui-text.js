@@ -871,10 +871,10 @@ const uiText = {
     roleErrDeleteTitle: "Unable to delete the role",
     roleDeleteTitle: "You are about to delete the role",
     roleConfirmDelete: "Are you sure you want to delete {roleName}?",
-    addRoleDescription: (
+    addRoleDescription: (id) => (
       <Fragment>
-        This page allows you to add roles to the {window.appConfig.name}{" "}
-        platform.
+        This page allows you to {id ? "edit" : "add"} roles to the{" "}
+        {window.appConfig.name} platform.
       </Fragment>
     ),
     selectRole: "Select role...",

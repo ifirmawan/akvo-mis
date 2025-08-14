@@ -143,6 +143,17 @@ const Submissions = () => {
     }
   }, [dataset, selectedRowKeys]);
 
+  // Reset current page when selected form changes
+  useEffect(() => {
+    const unsubscribe = store.subscribe(
+      ({ selectedForm }) => ({ selectedForm }),
+      () => {
+        setCurrentPage(1);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
   const handleChange = (e) => {
     setCurrentPage(e.current);
   };
@@ -249,7 +260,13 @@ const Submissions = () => {
             <Tabs
               className="main-tab"
               activeKey={dataTab}
-              onChange={setDataTab}
+              onChange={(key) => {
+                setDataTab(key);
+                setCurrentPage(1);
+                setExpandedKeys([]);
+                setSelectedRowKeys([]);
+                setSelectedRows([]);
+              }}
               tabBarExtraContent={btnBatchSelected}
             >
               <TabPane
@@ -364,6 +381,7 @@ const Submissions = () => {
           setModalVisible(false);
         }}
         onSuccess={() => {
+          setCurrentPage(1);
           setSelectedRowKeys([]);
           setSelectedRows([]);
           setDataTab("pending-approval");

@@ -21,6 +21,7 @@ const ManageDataMap = () => {
   const [selectedGradationIndex, setSelectedGradationIndex] = useState(null);
   const [isLocationFetched, setIsLocationFetched] = useState(false);
 
+  const selectedAdm = store.useState((s) => s.administration);
   const { active: activeLang } = store.useState((s) => s.language);
   const text = useMemo(() => {
     return uiText[activeLang];
@@ -309,54 +310,63 @@ const ManageDataMap = () => {
     await fetchStats(value, q.type, q.formID);
   };
 
-  const fetchData = useCallback(
-    async (selectedAdm = [], formChanges = false) => {
-      try {
-        if (!formChanges && isLocationFetched) {
-          // If the form hasn't changed and location data is already fetched, skip fetching
-          return;
-        }
-        const adm = takeRight(selectedAdm, 1)[0];
-        const apiURL = adm?.id
-          ? `/maps/geolocation/${selectedForm}?administration=${adm.id}`
-          : `/maps/geolocation/${selectedForm}`;
-        const { data: apiData } = await api.get(apiURL);
-        if (dataset?.length > 0 && !formChanges) {
-          const _dataset = dataset.map((d) => {
-            const item = apiData?.find((a) => a.id === d.id);
-            if (item) {
-              return {
-                ...d,
-                hidden: false,
-              };
-            }
+  const fetchData = useCallback(async () => {
+    try {
+      if (isLocationFetched) {
+        // If location data is already fetched, no need to refetch
+        return;
+      }
+      const adm = takeRight(selectedAdm, 1)[0];
+      const apiURL = adm?.id
+        ? `/maps/geolocation/${selectedForm}?administration=${adm.id}`
+        : `/maps/geolocation/${selectedForm}`;
+      const { data: apiData } = await api.get(apiURL);
+      if (dataset?.length > 0 && prevForm !== selectedForm) {
+        setPrevForm(selectedForm);
+        const _dataset = dataset.map((d) => {
+          const item = apiData?.find((a) => a.id === d.id);
+          if (item) {
             return {
               ...d,
-              hidden: true,
+              hidden: false,
             };
-          });
-          setDataset(_dataset);
-        } else {
-          const newDataset = apiData?.map((d) => ({
+          }
+          return {
             ...d,
-            hidden: false,
-          }));
-          setDataset(newDataset);
-        }
-        setIsLocationFetched(true);
-        const selected = [{ prop: adm?.level_name, value: adm?.name }];
-        const pos = getBounds(selected);
-        setPosition(pos);
-        setMapForm(mapForms?.[0]?.id);
-        setLoading(false);
-      } catch (error) {
-        setIsLocationFetched(true);
-        setDataset([]);
-        setLoading(false);
+            hidden: true,
+          };
+        });
+        setDataset(_dataset);
+        setLoading(true);
+      } else {
+        const newDataset = apiData?.map((d) => ({
+          ...d,
+          hidden: false,
+        }));
+        setDataset(newDataset);
+        setLoading(true);
       }
-    },
-    [selectedForm, dataset, mapForms, isLocationFetched]
-  );
+      setIsLocationFetched(true);
+      const selected = [{ prop: adm?.level_name, value: adm?.name }];
+      const pos = getBounds(selected);
+      setPosition(pos);
+      setMapForm(mapForms?.[0]?.id);
+      setTimeout(() => {
+        setLoading(false);
+      }, 100);
+    } catch (error) {
+      setIsLocationFetched(true);
+      setDataset([]);
+      setLoading(false);
+    }
+  }, [
+    selectedAdm,
+    prevForm,
+    selectedForm,
+    dataset,
+    mapForms,
+    isLocationFetched,
+  ]);
 
   useEffect(() => {
     fetchData();
@@ -367,26 +377,22 @@ const ManageDataMap = () => {
     const unsubscribe = store.subscribe(
       ({ selectedForm, administration }) => ({ selectedForm, administration }),
       ({ selectedForm, administration }) => {
-        // Only trigger loading if selectedForm actually changed
         const isFormChanged = selectedForm && selectedForm !== prevForm;
-        if (isFormChanged && isLocationFetched) {
+        if ((isFormChanged || administration) && isLocationFetched) {
+          // If form or administration changes, reset state and fetch new data
+          if (isFormChanged) {
+            setActiveQuestion(null);
+            setLegendOptions([]);
+            setLegendTitle(null);
+            setSelectedLegendOption(null);
+            setSelectedGradationIndex(null);
+          }
           setIsLocationFetched(false);
-          setDataset([]);
-          setActiveQuestion(null);
-          setLegendOptions([]);
-          setLegendTitle(null);
-          setSelectedLegendOption(null);
-          setSelectedGradationIndex(null);
-        }
-        if (isFormChanged || administration) {
-          setPrevForm(selectedForm);
-          setLoading(true);
-          fetchData(administration, isFormChanged);
         }
       }
     );
     return () => unsubscribe();
-  }, [fetchData, prevForm, selectedForm, isLocationFetched]);
+  }, [prevForm, selectedForm, isLocationFetched]);
 
   return (
     <div className="manage-data-map">

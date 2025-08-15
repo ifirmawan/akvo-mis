@@ -532,7 +532,6 @@ class ListBatchSummarySerializer(serializers.ModelSerializer):
         if instance.question.type == QuestionTypes.number:
             val = Answers.objects.filter(
                 data__data_batch_list__batch=batch,
-                data__is_pending=True,
                 question_id=instance.question.id
             ).aggregate(Sum("value"))
             return val.get("value__sum")
@@ -540,7 +539,6 @@ class ListBatchSummarySerializer(serializers.ModelSerializer):
             return (
                 Answers.objects.filter(
                     data__data_batch_list__batch=batch,
-                    data__is_pending=True,
                     question_id=instance.question.id
                 )
                 .distinct("value")
@@ -551,7 +549,6 @@ class ListBatchSummarySerializer(serializers.ModelSerializer):
             for option in instance.question.options.all():
                 val = Answers.objects.filter(
                     data__data_batch_list__batch=batch,
-                    data__is_pending=True,
                     question_id=instance.question.id,
                     options__contains=option.value,
                 ).count()

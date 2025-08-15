@@ -332,8 +332,8 @@ const Users = () => {
       >
         <p>{text.deleteUserTitle}</p>
         <br />
-        <img src="/assets/user.svg" height="80" />
-        <h2>
+        <img src="/assets/user.svg" height="80" width="100%" />
+        <h2 style={{ textAlign: "center" }}>
           {deleteUser?.first_name} {deleteUser?.last_name}
         </h2>
         <p>{text.deleteUserDesc}</p>
@@ -342,15 +342,13 @@ const Users = () => {
             {
               title: "Locations",
               dataIndex: "administration",
-              render: (cell) => cell.name,
             },
             {
               title: "Credentials",
               dataIndex: "role",
-              render: (cell) => cell.value,
             },
           ]}
-          dataSource={[deleteUser]}
+          dataSource={deleteUser?.roles || []}
           rowKey="id"
           pagination={false}
         />

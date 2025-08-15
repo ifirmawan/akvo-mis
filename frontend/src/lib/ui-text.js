@@ -743,9 +743,10 @@ const uiText = {
     ),
     // Home Page
     homeQuickLinks: [
-      { text: "Privacy Policy", href: "/privacy-policy" },
-      { text: "Terms & Conditions", href: "/terms-n-conditions" },
-      { text: "Cookie Policy", href: "/cookie-policy" },
+      { text: "Privacy Policy", href: "/privacy-policy", isPage: true },
+      { text: "Terms & Conditions", href: "/terms-n-conditions", isPage: true },
+      { text: "Cookie Policy", href: "/cookie-policy", isPage: true },
+      { text: "Download DWS DataPro App", href: "/app", isPage: false },
     ],
     homeJumbotronTitle: <Fragment>{window.appConfig.name}</Fragment>,
     homeJumbotronSubtitle: (

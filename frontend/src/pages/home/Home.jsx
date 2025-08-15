@@ -110,9 +110,20 @@ const Home = () => {
             <ul className="quick-links-list">
               {text.homeQuickLinks.map((link, index) => (
                 <li key={index} className="mb-2">
-                  <Link to={link.href} className="text-white/60">
-                    {link.text}
-                  </Link>
+                  {link.isPage ? (
+                    <Link to={link.href} className="text-white/60">
+                      {link.text}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className="text-white/60"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {link.text}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

@@ -433,15 +433,23 @@ Object {
     "homeQuickLinks": Array [
       Object {
         "href": "/privacy-policy",
+        "isPage": true,
         "text": "Privacy Policy",
       },
       Object {
         "href": "/terms-n-conditions",
+        "isPage": true,
         "text": "Terms & Conditions",
       },
       Object {
         "href": "/cookie-policy",
+        "isPage": true,
         "text": "Cookie Policy",
+      },
+      Object {
+        "href": "/app",
+        "isPage": false,
+        "text": "Download DWS DataPro App",
       },
     ],
     "homeStructureImage": Object {

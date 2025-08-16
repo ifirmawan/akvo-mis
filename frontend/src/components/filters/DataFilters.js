@@ -10,18 +10,18 @@ import {
   Badge,
   Tooltip,
 } from "antd";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AdministrationDropdown from "./AdministrationDropdown";
 import FormDropdown from "./FormDropdown.js";
 import { useNotification } from "../../util/hooks";
 import { api, store, uiText } from "../../lib";
-import { takeRight } from "lodash";
+// import { takeRight } from "lodash";
 import RemoveFiltersButton from "./RemoveFiltersButton";
 import AdvancedFilters from "./AdvancedFilters";
 import {
   PlusOutlined,
-  DownloadOutlined,
-  UploadOutlined,
+  // DownloadOutlined,
+  // UploadOutlined,
   FileWordOutlined,
   DownOutlined,
 } from "@ant-design/icons";
@@ -37,13 +37,13 @@ const DataFilters = ({
     user: authUser,
     selectedForm,
     loadingForm,
-    administration,
+    // administration,
     showAdvancedFilters,
   } = store.useState((s) => s);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { notify } = useNotification();
-  const [exporting, setExporting] = useState(false);
+  // const [exporting, setExporting] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [selectedChildForms, setSelectedChildForms] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -59,29 +59,29 @@ const DataFilters = ({
     return window.forms?.filter((f) => f?.content?.parent === selectedForm);
   }, [selectedForm]);
 
-  const exportGenerate = ({ key }) => {
-    setExporting(true);
-    const adm_id = takeRight(administration, 1)[0]?.id;
-    api
-      .get(
-        `download/generate?form_id=${selectedForm}&administration_id=${adm_id}&type=${key}`
-      )
-      .then(() => {
-        notify({
-          type: "success",
-          message: `Data exported successfully`,
-        });
-        setExporting(false);
-        navigate("/downloads");
-      })
-      .catch(() => {
-        notify({
-          type: "error",
-          message: "Export failed",
-        });
-        setExporting(false);
-      });
-  };
+  // const exportGenerate = ({ key }) => {
+  //   setExporting(true);
+  //   const adm_id = takeRight(administration, 1)[0]?.id;
+  //   api
+  //     .get(
+  //       `download/generate?form_id=${selectedForm}&administration_id=${adm_id}&type=${key}`
+  //     )
+  //     .then(() => {
+  //       notify({
+  //         type: "success",
+  //         message: `Data exported successfully`,
+  //       });
+  //       setExporting(false);
+  //       navigate("/downloads");
+  //     })
+  //     .catch(() => {
+  //       notify({
+  //         type: "error",
+  //         message: "Export failed",
+  //       });
+  //       setExporting(false);
+  //     });
+  // };
 
   const exportDataReport = useCallback(async () => {
     setDownloading(true);
@@ -134,22 +134,22 @@ const DataFilters = ({
     navigate(`/control-center/form/${selectedForm}`);
   };
 
-  const downloadTypes = [
-    {
-      key: "all",
-      label: text.allData,
-      onClick: (param) => {
-        exportGenerate(param);
-      },
-    },
-    {
-      key: "recent",
-      label: text.latestData,
-      onClick: (param) => {
-        exportGenerate(param);
-      },
-    },
-  ];
+  // const downloadTypes = [
+  //   {
+  //     key: "all",
+  //     label: text.allData,
+  //     onClick: (param) => {
+  //       exportGenerate(param);
+  //     },
+  //   },
+  //   {
+  //     key: "recent",
+  //     label: text.latestData,
+  //     onClick: (param) => {
+  //       exportGenerate(param);
+  //     },
+  //   },
+  // ];
 
   const childFormMenuItems = useMemo(() => {
     const formItems = childForms.map((form) => ({
@@ -240,13 +240,13 @@ const DataFilters = ({
         </Col>
         <Col>
           <Space>
-            <Can I="upload" a="data">
+            {/* <Can I="upload" a="data">
               <Link to="/control-center/data/upload">
                 <Button shape="round" icon={<UploadOutlined />}>
                   {text.bulkUpload}
                 </Button>
               </Link>
-            </Can>
+            </Can> */}
             {pathname === "/control-center/data" && (
               <Space>
                 {selectedRowKeys.length === 0 ? (
@@ -285,7 +285,7 @@ const DataFilters = ({
                 )}
               </Space>
             )}
-            {pathname === "/control-center/data" && (
+            {/* {pathname === "/control-center/data" && (
               <Can I="create" a="downloads">
                 <Dropdown
                   menu={{ items: downloadTypes }}
@@ -300,7 +300,7 @@ const DataFilters = ({
                   </Button>
                 </Dropdown>
               </Can>
-            )}
+            )} */}
             <Can I="manage" a="submissions">
               <Button
                 shape="round"

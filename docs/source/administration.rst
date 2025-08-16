@@ -15,40 +15,35 @@ Manage Users (Add, Delete and Modify Users)
 
 1. From the Sidebar of the control center, click the :bolditalic:`Users` menu to add a new user, modify an existing user or delete an existing user.
 
-.. image:: ../assests/image48.png
+.. image:: ../assests/users-list.png
    :alt: Manage User
    :width: 100%
 
 2. To add a new user, click the :bolditalic:`ADD NEW USER` button. Next, on the new page fill all the mandatory fields and assign the user an organisation, designation, role, administrative region and questionnaires. Finally, click the Add User button to notify your new user.
 
-.. image:: ../assests/image23.png
+.. image:: ../assests/users-add.png
    :alt: Add new User
    :width: 100%
 
 
-.. image:: ../assests/image36.png
+.. image:: ../assests/users-add-save.png
    :alt: Add new User
    :width: 100%
 
 3. To delete an existing user, expand the toggle button next to the user and click the delete the :bolditalic:`DELETE` button. Next, confirm you are deleting the user by clicking the DELETE button in the pop-up window.
 
-.. image:: ../assests/image29.png
+.. image:: ../assests/users-delete.png
    :alt: Delete User
    :width: 100%
 
+1. To modify an existing user, expand the toggle button next to the user and click the :bolditalic:`EDIT` button. Edit the user details in the new page and then click the :bolditalic:`UPDATE USER` button.
 
-.. image:: ../assests/image1.png
-   :alt: Delete User
-   :width: 100%
-
-4. To modify an existing user, expand the toggle button next to the user and click the :bolditalic:`EDIT` button. Edit the user details in the new page and then click the :bolditalic:`UPDATE USER` button.
-
-.. image:: ../assests/image24.png
-   :alt: Delete User
+.. image:: ../assests/users-edit-expand.png
+   :alt: Expand to edit user
    :width: 100%
 
 
-.. image:: ../assests/image8.png
+.. image:: ../assests/users-edit.png
    :alt: Edited User
    :width: 100%
 
@@ -57,56 +52,14 @@ Validation Tree
 
 1. Select the :bolditalic:`Validation Tree` sub menu from the users menu section of the sidebar to see the approvers for each submitted form across different administrative areas.
 
-.. image:: ../assests/image47.png
+.. image:: ../assests/validation-tree.png
    :alt: Data validation
    :width: 100%
 
 2. Click on the questionnaire blocks and administrative blocks to see the approvers for each submitted form across different administrative areas
 
-.. image:: ../assests/image22.png
+.. image:: ../assests/validation-tree.png
    :alt: Data validation
-   :width: 100%
-
-
-.. _certification_assignment:
-
-Certification Assignment
-------------------------
-
-1. Select the :bolditalic:`Certification Assignment` sub-menu from the Users menu section of the sidebar to view the assignments across different administrative areas.
-
-.. image:: ../assests/certification-assignment-1.png
-   :alt: Certification assignment menu
-   :width: 100%
-
-2. To add a new assignment, click the :bolditalic:`New Assignment` button.
-
-.. image:: ../assests/certification-assignment-2.png
-   :alt: Add new certification assignment
-   :width: 100%
-
-3. On the new page, select a sub-county in the **Certifying-subcounty** field and choose one or more villages in the **Villages to certify** field. Ensure that the selected villages belong to different sub-counties. Then, click :bolditalic:`Save` to store the new assignment.
-
-.. image:: ../assests/certification-assignment-3.png
-   :alt: Store new certification assignment
-   :width: 100%
-
-4. To see details of an assignment, click the expand button.
-
-.. image:: ../assests/certification-assignment-4.png
-   :alt: Details certification assignment
-   :width: 100%
-
-5. To modify or delete an assignment, click the **Edit** button
-
-.. image:: ../assests/certification-assignment-5.png
-   :alt: Edit certification assignment
-   :width: 100%
-
-6. Click the **Delete** button to remove the assignment
-
-.. image:: ../assests/certification-assignment-6.png
-   :alt: Delete certification assignment
    :width: 100%
 
 .. _mobile_assignment:
@@ -144,12 +97,12 @@ Mobile Assignment
 
 5. Click the **Save** button to apply the changes.
 
-.. image:: ../assests/mobile-users-6.png
+.. image:: ../assests/mobile-users-5.png
    :alt: Mobile assignment save
    :width: 100%
 
 6. Click the **Delete** button to remove the mobile user.
 
-.. image:: ../assests/mobile-users-5.png
+.. image:: ../assests/mobile-users-6.png
    :alt: Mobile assignment delete
    :width: 100%

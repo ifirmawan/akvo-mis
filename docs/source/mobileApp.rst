@@ -81,8 +81,7 @@ Syncing datapoints is a feature that pulls data from the server to the mobile ap
 
 * Re-fetching forms
 * Re-downloading administration, organisations and entities data
-* Getting the latest datapoints for monitoring and verification
-* Getting certification assignments
+* Getting all registration submissions
 
 To sync data with the server, follow these steps:
 
@@ -116,30 +115,6 @@ Monitoring
 A monitoring submission can be made when datapoints from the server are available after synchronization. This submission also undergoes an approval process similar to registration submissions.
 
 .. image:: ../assests/mobile-monitoring.png
-    :alt: Mobile 
-    :width: 100%
-
-============
-Verification
-============
-
-A verification submission is available if it is activated in the questionnaire form. If not, this type of submission will not appear. Verification submissions do not require an approval process. Once the user completes the questionnaire, submits, and syncs, the datapoints will be available immediately.
-
-
-.. image:: ../assests/mobile-verification.png
-    :alt: Mobile 
-    :width: 100%
-
-=============
-Certification
-=============
-
-A certification submission is a complex type of submission because it requires creating a :ref:`certification assignment<certification_assignment>` first.
-:ref:`This certification assignment<certification_assignment>` is done on the admin panel and contains a list of administrations outside the mobile user's access rights but within the same county.
-The certification list includes a dropdown filter to select which administration to process, making it easier for the mobile user to focus on one place before moving to another.
-
-
-.. image:: ../assests/mobile-certification.png
     :alt: Mobile 
     :width: 100%
 

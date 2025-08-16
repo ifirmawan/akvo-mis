@@ -162,7 +162,7 @@ export const config = [
             name: 'Niveau de précision',
           },
         ],
-        options: accuracyLevels,
+        options: accuracyLevels.sort((a, b) => b.value - a.value),
       },
       {
         id: 43,

@@ -164,6 +164,8 @@ const ManageDataMap = () => {
           ...d,
           hidden: true,
         }));
+        setLegendOptions([]);
+        setLegendTitle(null);
         setDataset(_dataset);
         setLoading(true);
         setTimeout(() => {

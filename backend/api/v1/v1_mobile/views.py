@@ -247,7 +247,9 @@ def sync_pending_form_data(request, version):
             instance=draft_exists,
             data=data,
             context={
-                "user": user
+                "user": user,
+                "form": form,
+                "is_draft": is_draft,
             }
         )
     if not serializer.is_valid():

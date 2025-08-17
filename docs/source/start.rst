@@ -39,6 +39,8 @@ Roles and Permissions principal
 
 Roles in Akvo MIS define the permissions and access per administration level. Each role can be assigned to users, allowing them to perform specific actions within the system. The roles are designed to ensure that users have the necessary permissions to carry out their tasks while maintaining security and data integrity.
 
+.. _form_access:
+
 Form access
 =============
 
@@ -50,6 +52,7 @@ Each role can have different permissions for form access, which include:
 - **Edit**: Users can edit existing data in the forms.
 - **Delete**: Users can delete data from the forms.
 
+.. _user_access:
 
 User access
 =============

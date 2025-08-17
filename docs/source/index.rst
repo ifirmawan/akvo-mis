@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to Akvo MIS's documentation!
-=================================
+============================================
 
 |Build Status| |Repo Size| |Languages| |Issues| |Last Commit| |Coverage
 Status|

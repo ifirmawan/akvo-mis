@@ -254,7 +254,7 @@ const ManageDataMap = () => {
             return {
               ...d,
               values: dataValues,
-              hidden: dataValues.length === 0,
+              hidden: dataValues?.length === 0,
             };
           }
           const optionID = apiData?.data?.find(

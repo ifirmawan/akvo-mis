@@ -178,7 +178,7 @@
         {
           "id": 1749621431234,
           "name": "has_desalination_installation",
-          "label": "Installation of Desalination Installation?",
+          "label": "Is there a desalination installation in place?",
           "order": 11,
           "type": "option",
           "required": true,

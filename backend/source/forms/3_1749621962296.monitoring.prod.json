@@ -175,10 +175,39 @@
           ]
         },
         {
+          "id": 1749622774567,
+          "name": "weather_condition",
+          "label": "Weather Condition",
+          "order": 9,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "id": 1849622785184,
+              "value": "cloudy",
+              "label": "Cloudy",
+              "order": 1
+            },
+            {
+              "id": 1849622785185,
+              "value": "rainy",
+              "label": "Rainy",
+              "order": 2
+            },
+            {
+              "id": 1849622785186,
+              "value": "fine",
+              "label": "Fine",
+              "order": 3
+            }
+          ]
+        },
+        {
           "id": 1749622785185,
           "name": "can_take_sample",
           "label": "Are you able to take the sample?",
-          "order": 9,
+          "order": 10,
           "type": "option",
           "required": true,
           "meta": false,
@@ -207,7 +236,7 @@
           "id": 1749622849604,
           "name": "water_test_type",
           "label": "Water Quality Test Conducted",
-          "order": 10,
+          "order": 11,
           "type": "option",
           "required": true,
           "meta": false,
@@ -707,6 +736,7 @@
       "description": null,
       "order": 8,
       "repeatable": true,
+      "repeat_text": "Take more photos",
       "questions": [
         {
           "id": 1749622228627,
@@ -741,7 +771,7 @@
           "id": 1749623648243,
           "name": "final_comments",
           "label": "Final Comments and Recommendations",
-          "order": 2,
+          "order": 1,
           "type": "text",
           "required": false,
           "meta": false
@@ -750,7 +780,7 @@
           "id": 1749623661234,
           "name": "improvement_action",
           "label": "Is there any improvement action to be taken by the implementing agency?",
-          "order": 3,
+          "order": 2,
           "type": "option",
           "required": true,
           "meta": false,
@@ -773,7 +803,7 @@
           "id": 1749623674044,
           "name": "improvement_action_details",
           "label": "What are some issues highlighted to be actioned by Implementing Agencies?",
-          "order": 4,
+          "order": 3,
           "type": "text",
           "required": false,
           "meta": false,
@@ -788,7 +818,7 @@
           "id": 1749623674045,
           "name": "implementing_agency_signature",
           "label": "Signature of Implementing Agency Representative",
-          "order": 5,
+          "order": 4,
           "type": "signature",
           "required": true,
           "meta": false
@@ -797,7 +827,7 @@
           "id": 1749623681234,
           "name": "implementing_agency_rep_name",
           "label": "Name of Implementing Agency Representative",
-          "order": 6,
+          "order": 5,
           "type": "text",
           "required": true,
           "meta": false

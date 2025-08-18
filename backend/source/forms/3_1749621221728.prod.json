@@ -67,72 +67,34 @@
               "order": 1
             },
             {
-              "value": "households",
-              "label": "Households",
-              "id": 1749622291235,
+              "value": "settlements",
+              "label": "Settlements",
+              "id": 1749622291234,
               "order": 2
             },
             {
-              "value": "institutions",
-              "label": "Institutions",
-              "id": 1749622291236,
+              "value": "households",
+              "label": "Households",
+              "id": 1749622291235,
               "order": 3
             },
             {
-              "value": "combination",
-              "label": "Combination (Specify)",
+              "value": "government_stations",
+              "label": "Government Stations",
               "id": 1749622291237,
               "order": 4
-            }
-          ]
-        },
-        {
-          "id": 1749622304567,
-          "name": "project_target_group_combination",
-          "label": "For combined project state the institutions involved?",
-          "order": 6,
-          "type": "multiple_option",
-          "required": true,
-          "meta": false,
-          "options": [
+            },
             {
               "value": "school",
               "label": "School",
               "id": 1749622304568,
-              "order": 1
+              "order": 5
             },
             {
               "value": "healthcare_facility",
               "label": "Healthcare Facility",
               "id": 1749622304569,
-              "order": 2
-            },
-            {
-              "value": "other",
-              "label": "Other (Specify)",
-              "id": 1749622304571,
-              "order": 3
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749622291234,
-              "options": ["combination"]
-            }
-          ]
-        },
-        {
-          "id": 1749622317890,
-          "name": "other_institution",
-          "label": "Other Institution (Specify)",
-          "order": 7,
-          "type": "text",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622304567,
-              "options": ["other"]
+              "order": 6
             }
           ]
         },
@@ -140,37 +102,25 @@
           "id": 1749622327890,
           "name": "number_of_households",
           "label": "Number of Households",
-          "order": 8,
+          "order": 6,
           "type": "number",
           "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622291234,
-              "options": ["households"]
-            }
-          ]
+          "meta": false
         },
         {
           "id": 1749622341234,
           "name": "number_of_population",
           "label": "Number of Population",
-          "order": 9,
+          "order": 7,
           "type": "number",
           "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622291234,
-              "options": ["institutions", "villages", "combination"]
-            }
-          ]
+          "meta": false
         },
         {
           "id": 1749622354567,
           "name": "project_cost",
           "label": "What is the project cost?",
-          "order": 10,
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false
@@ -179,7 +129,7 @@
           "id": 1749621347162,
           "name": "project_background",
           "label": "Project Background",
-          "order": 11,
+          "order": 9,
           "type": "text",
           "required": true,
           "meta": false
@@ -188,7 +138,7 @@
           "id": 1749621374500,
           "name": "water_source_type",
           "label": "Type of Water Source?",
-          "order": 12,
+          "order": 10,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -216,6 +166,56 @@
               "label": "Sea Water",
               "id": 1749621419610,
               "order": 4
+            },
+            {
+              "value": "desalination",
+              "label": "Desalination",
+              "id": 1749621427890,
+              "order": 5
+            }
+          ]
+        },
+        {
+          "id": 1749621431234,
+          "name": "has_desalination_installation",
+          "label": "Installation of Desalination Installation?",
+          "order": 11,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749621441233,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749621441235,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749621374500,
+              "options": ["desalination"]
+            }
+          ]
+        },
+        {
+          "id": 1749621441234,
+          "name": "desalination_photo",
+          "label": "Photo of the Desalination Installation",
+          "order": 12,
+          "type": "photo",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621431234,
+              "options": ["yes"]
             }
           ]
         },

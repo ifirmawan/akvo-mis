@@ -223,59 +223,12 @@
               "label": "CBT Test",
               "id": 1749622856422,
               "order": 2
-            },
-            {
-              "value": "h2s_test",
-              "label": "H2S Test",
-              "id": 1749622868510,
-              "order": 3
             }
           ],
           "dependency": [
             {
               "id": 1749622785185,
               "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749622914162,
-          "name": "h2s_contamination_level",
-          "label": "H2S contamination Level?",
-          "order": 11,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "high_risk",
-              "label": "High Risk",
-              "id": 1749622922356,
-              "order": 1
-            },
-            {
-              "value": "moderate_risk",
-              "label": "Moderate Risk",
-              "id": 1749622922357,
-              "order": 2
-            },
-            {
-              "value": "low_risk",
-              "label": "Low Risk",
-              "id": 1749622941879,
-              "order": 3
-            },
-            {
-              "value": "no_risk",
-              "label": "No Risk",
-              "id": 1749622948622,
-              "order": 4
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749622849604,
-              "options": ["h2s_test"]
             }
           ]
         },
@@ -731,42 +684,13 @@
           "meta": false
         },
         {
-          "id": 1749623561268,
-          "name": "project_complete",
-          "label": "Is the project complete?",
-          "order": 9,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749623567771,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749623567772,
-              "order": 2
-            }
-          ]
-        },
-        {
           "id": 1749623590078,
           "name": "project_completion_percent",
           "label": "What percentage of the project is complete?",
           "order": 10,
           "type": "number",
           "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749623561268,
-              "options": ["no"]
-            }
-          ],
+          "meta": false,          
           "rule": {
             "max": 100,
             "min": 0,
@@ -782,7 +706,7 @@
       "label": "Project Photos",
       "description": null,
       "order": 8,
-      "repeatable": false,
+      "repeatable": true,
       "questions": [
         {
           "id": 1749622228627,
@@ -794,6 +718,25 @@
           "meta": false,
           "limit": 5.0
         },
+        {
+          "id": 1749622238628,
+          "name": "photo_description",
+          "label": "Describe the photo",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false
+        }
+      ]
+    },
+    {
+      "id": 1749623648242,
+      "name": "final_comments",
+      "label": "Final Comments",
+      "description": null,
+      "order": 9,
+      "repeatable": false,
+      "questions": [
         {
           "id": 1749623648243,
           "name": "final_comments",
@@ -851,11 +794,29 @@
           "meta": false
         },
         {
+          "id": 1749623681234,
+          "name": "implementing_agency_rep_name",
+          "label": "Name of Implementing Agency Representative",
+          "order": 6,
+          "type": "text",
+          "required": true,
+          "meta": false
+        },
+        {
           "id": 1749623691256,
           "name": "dws_officer_signature",
           "label": "Signature of DWS Officer",
           "order": 6,
           "type": "signature",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749623704567,
+          "name": "dws_officer_name",
+          "label": "Name of DWS Officer",
+          "order": 7,
+          "type": "text",
           "required": true,
           "meta": false
         }

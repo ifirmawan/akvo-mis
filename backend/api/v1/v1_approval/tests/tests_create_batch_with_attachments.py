@@ -6,6 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from api.v1.v1_data.models import FormData
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
+from api.v1.v1_profile.constants import DataAccessTypes
 from api.v1.v1_approval.models import DataBatch
 
 
@@ -279,32 +280,31 @@ class CreateDataBatchWithAttachmentsTestCase(TestCase, ProfileTestHelperMixin):
         self.assertEqual(batch_count_before, batch_count_after)
 
     def test_user_without_submit_role(self):
-        # Remove submit access role from the user
-        user_role_path = ('api.v1.v1_approval.serializers.SystemUser.'
-                          'user_user_role')
-        with mock.patch(user_role_path) as mock_user_role:
-            # Mock user_user_role.filter to return empty queryset
-            mock_user_role.filter.return_value = mock.MagicMock()
-            mock_user_role.filter.return_value.first.return_value = None
+        # Remove submit role from the user
+        self.submitter.user_user_role.filter(
+            role__role_role_access__data_access=DataAccessTypes.submit,
+        ).delete()
+        # Attempt to create a batch without submit role
+        payload = {
+            "name": "Test Batch No Submit Role",
+            "data": [self.data.id],
+        }
 
-            payload = {
-                "name": "Test Batch No Submit Role",
-                "data": [self.data.id],
-            }
+        response = self.client.post(
+            "/api/v1/batch",
+            payload,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
 
-            response = self.client.post(
-                "/api/v1/batch",
-                payload,
-                content_type="application/json",
-                HTTP_AUTHORIZATION=f"Bearer {self.token}",
-            )
-
-            # Verify the response is an error
-            self.assertEqual(response.status_code, 400)
-            response_json = response.json()
-            self.assertIn("detail", response_json)
-            error_msg = "User does not have permission to create a batch."
-            self.assertIn(error_msg, response_json["detail"])
+        # Verify the response is an error
+        self.assertEqual(response.status_code, 400)
+        response_json = response.json()
+        self.assertIn("detail", response_json)
+        self.assertIn(
+            "All data must belong to the user's administrations.",
+            response_json["detail"]["data"]
+        )
 
     def test_create_batch_with_invalid_file_format(self):
         """Test that attempting to create a batch with an invalid file format

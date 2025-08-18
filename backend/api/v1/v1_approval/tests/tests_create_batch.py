@@ -180,7 +180,7 @@ class CreateDataBatchTestCase(TestCase, ProfileTestHelperMixin):
         # Create additional data entries with a different administration
         other_administration = (
             Administration.objects.exclude(
-                id=self.data.administration.id,
+                path__startswith=self.data.administration.path,
             )
             .filter(level=self.data.administration.level)
             .first()

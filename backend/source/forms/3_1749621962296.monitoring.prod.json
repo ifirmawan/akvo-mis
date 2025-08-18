@@ -421,32 +421,10 @@
           "dependency": [{ "id": 1749622849604, "options": ["lab_test"] }]
         },
         {
-          "id": 1723459200041,
-          "name": "total_alkalinity",
-          "label": "Total Alkalinity mg/L - 2320B (APHA Method Code)",
-          "order": 3,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749622849604, "options": ["lab_test"] }]
-        },
-        {
-          "id": 1723459200042,
-          "name": "chloride",
-          "label": "Chloride mg/L - 4500-Cl-C (APHA Method Code)",
-          "order": 4,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749622849604, "options": ["lab_test"] }]
-        },
-        {
           "id": 1723459200043,
           "name": "oil_and_grease",
           "label": "Oil & Grease mg/L - 5520D (APHA Method Code)",
-          "order": 5,
+          "order": 3,
           "type": "number",
           "required": true,
           "meta": false,
@@ -457,7 +435,7 @@
           "id": 1723459200044,
           "name": "total_sulphides",
           "label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
-          "order": 6,
+          "order": 4,
           "type": "number",
           "required": true,
           "meta": false,

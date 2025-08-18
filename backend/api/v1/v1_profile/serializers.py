@@ -514,7 +514,8 @@ class RoleDetailSerializer(serializers.ModelSerializer):
     total_users = serializers.SerializerMethodField()
 
     def get_total_users(self, obj: Role):
-        return obj.role_user_role.count()
+        # Use distinct to count unique users
+        return obj.role_user_role.values('user').distinct().count()
 
     def get_role_access(self, obj: Role):
         return [

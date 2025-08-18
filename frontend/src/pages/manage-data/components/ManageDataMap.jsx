@@ -383,6 +383,7 @@ const ManageDataMap = () => {
         if ((isFormChanged || administration) && isLocationFetched) {
           // If form or administration changes, reset state and fetch new data
           if (isFormChanged) {
+            setIsNumeric(false);
             setActiveQuestion(null);
             setLegendOptions([]);
             setLegendTitle(null);

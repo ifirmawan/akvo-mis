@@ -682,16 +682,50 @@ class CreateBatchSerializer(serializers.Serializer):
                         " pending data items."
                     )
                 })
-        # Check if data has different administrations
-        administrations = set(
-            data.administration_id for data in attrs.get("data")
+        ordered_data = sorted(
+            attrs.get("data"),
+            key=lambda x: x.administration.level.level
         )
-        if len(administrations) > 1:
+        first_data = ordered_data[0]
+        user = self.context.get("user")
+        adm_ids = [first_data.administration.id]
+        if first_data.administration.ancestors:
+            adm_ids = [
+                *first_data.administration.ancestors.values_list(
+                    "id", flat=True
+                ),
+                first_data.administration.id
+            ]
+        user_role = user.user_user_role.filter(
+            role__role_role_access__data_access=DataAccessTypes.submit,
+            administration__in=adm_ids
+        ).order_by(
+            "administration__level__level"
+        ).first()
+        if not user_role:
             raise ValidationError({
                 "data": (
-                    "All data must belong to the same administration."
+                    "All data must belong to the user's administrations."
                 )
             })
+        # Make sure all data have starting with the same administration path
+        user_adm_level = user_role.administration.level.level
+        for data in attrs.get("data"):
+            if (
+                data.administration.level.level > user_adm_level
+            ):
+                adm_path = user_role.administration.id
+                if user_role.administration.path:
+                    adm_path = "{0}{1}.".format(
+                        user_role.administration.path,
+                        user_role.administration.id
+                    )
+                if not data.administration.path.startswith(adm_path):
+                    raise ValidationError({
+                        "data": (
+                            "All data must belong to the same administration."
+                        )
+                    })
         return attrs
 
     def create(self, validated_data):

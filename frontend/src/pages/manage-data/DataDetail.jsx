@@ -48,9 +48,7 @@ const DataDetail = ({
   }, [activeLang]);
   const ability = useContext(AbilityContext);
 
-  const isEditor =
-    (ability.can("edit", "data") && authUser?.id === record?.created_by) ||
-    authUser?.is_superuser;
+  const isEditor = ability.can("edit", "data") || authUser?.is_superuser;
 
   const questionGroups = useMemo(() => {
     const formList = window?.forms || allForms || [];

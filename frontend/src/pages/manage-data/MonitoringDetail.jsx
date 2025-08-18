@@ -85,10 +85,7 @@ const MonitoringDetail = () => {
   const [selectedOverviewDate, setSelectedOverviewDate] = useState(null);
   const ability = useContext(AbilityContext);
 
-  const editable =
-    (ability.can("edit", "data") &&
-      selectedFormData?.created_by === authUser?.id) ||
-    authUser?.is_superuser;
+  const editable = ability.can("edit", "data") || authUser?.is_superuser;
 
   const { active: activeLang } = language;
   const text = useMemo(() => {

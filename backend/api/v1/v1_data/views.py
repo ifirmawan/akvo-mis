@@ -47,6 +47,7 @@ from api.v1.v1_forms.constants import (
 )
 from api.v1.v1_forms.models import Forms, Questions
 from api.v1.v1_profile.models import Administration
+from api.v1.v1_profile.constants import DataAccessTypes
 from api.v1.v1_approval.constants import DataApprovalStatus
 from mis.settings import REST_FRAMEWORK
 from utils.custom_permissions import (
@@ -426,7 +427,9 @@ class DataDetailDeleteView(APIView):
     )
     def delete(self, request, data_id, version):
         instance = get_object_or_404(FormData, pk=data_id, is_pending=False)
-        if instance.created_by_id != request.user.id:
+        if not request.user.is_superuser or request.user.user_role.filter(
+            role__role_role_access__data_access=DataAccessTypes.delete
+        ).exists():
             return Response(
                 {"message": "You are not allowed to perform this action"},
                 status=status.HTTP_400_BAD_REQUEST,

@@ -719,7 +719,7 @@
           "order": 10,
           "type": "number",
           "required": true,
-          "meta": false,          
+          "meta": false,
           "rule": {
             "max": 100,
             "min": 0,

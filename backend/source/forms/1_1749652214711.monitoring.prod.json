@@ -4303,6 +4303,15 @@
           "type": "signature",
           "required": true,
           "meta": false
+        },
+        {
+          "id": 1749700428880,
+          "name": "dws_officer_name",
+          "label": "Name of DWS Officer",
+          "order": 6,
+          "type": "text",
+          "required": true,
+          "meta": false
         }
       ],
       "repeat_text": null

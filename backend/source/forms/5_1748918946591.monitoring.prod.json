@@ -772,6 +772,18 @@
           "options": null,
           "dependency": null,
           "short_label": null
+        },
+        {
+          "id": 1748920151234,
+          "name": "dws_staff_name",
+          "label": "Name of DWS Staff",
+          "order": 7,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": null,
+          "short_label": null
         }
       ],
       "repeat_text": null

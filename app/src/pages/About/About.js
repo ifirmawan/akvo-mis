@@ -28,9 +28,11 @@ const AboutHome = () => {
       })
       .catch((e) => {
         // no update
-        Sentry.captureMessage('[About] Unable to fetch app version');
-        Sentry.captureException(e);
         setUpdateInfo({ status: e?.response?.status || 500, text: trans.noUpdateFound });
+        if (e?.response?.status !== 404) {
+          Sentry.captureMessage('[About] Unable to fetch app version');
+          Sentry.captureException(e);
+        }
       })
       .finally(() => {
         setChecking(false);

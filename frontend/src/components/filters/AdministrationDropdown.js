@@ -93,11 +93,10 @@ const AdministrationDropdown = ({
   const onSelectAll = (e) => {
     if (e.target.checked) {
       setChecked(true);
-      let admItems = null;
-      const multiadministration = administration?.find(
-        (admLevel) => admLevel.level === currLevel.level - 1
-      )?.children;
-      admItems = multiadministration;
+      const admItems =
+        administration?.find(
+          (admLevel) => admLevel.level === currLevel.level - 1
+        )?.children || [];
       if (selectedAdministrations.length === admItems.length) {
         return;
       }
@@ -105,7 +104,19 @@ const AdministrationDropdown = ({
         s.administration = s.administration.concat(admItems);
       });
       if (onChange) {
-        const _values = admItems.map((item) => item.id);
+        const _values = admItems
+          .filter((item) => {
+            if (!user?.is_superuser && user?.roles?.length) {
+              return user.roles.some((role) => {
+                if (role?.administration?.level_id === item.level) {
+                  return role.administration.id === item.id;
+                }
+                return true;
+              });
+            }
+            return item;
+          })
+          .map((item) => item.id);
         onChange(_values);
       }
     } else {
@@ -157,8 +168,19 @@ const AdministrationDropdown = ({
                   ? uniq(
                       administration
                         ?.slice(regionIdx + 1, administration.length)
-                        ?.filter((a) =>
-                          region.children?.some((c) => c?.id === a?.id)
+                        ?.filter(
+                          (a) =>
+                            region.children?.some((c) => c?.id === a?.id) &&
+                            (!user?.is_superuser && user?.roles?.length
+                              ? user.roles.some((role) => {
+                                  if (
+                                    role?.administration?.level_id === a.level
+                                  ) {
+                                    return role.administration.id === a.id;
+                                  }
+                                  return true;
+                                })
+                              : true)
                         )
                         ?.map((a) => a?.id)
                     )

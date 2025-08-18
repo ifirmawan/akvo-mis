@@ -52,10 +52,28 @@
           "meta": true
         },
         {
+          "id": 1749624452995,
+          "name": "village_leader",
+          "label": "Name of the Village Head/WC/Village's Nurse",
+          "order": 5,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
+          "id": 1749624452996,
+          "name": "village_leader_contact",
+          "label": "Contact of the Village Head/WC/Village's Nurse",
+          "order": 6,
+          "type": "number",
+          "required": true,
+          "meta": true
+        },
+        {
           "id": 1749624452992,
           "name": "gps_location",
           "label": "GPS Location",
-          "order": 5,
+          "order": 7,
           "type": "geo",
           "required": true,
           "meta": true
@@ -64,7 +82,7 @@
           "id": 1749631945703,
           "name": "has_water_committee",
           "label": "Do you have Water Committee",
-          "order": 6,
+          "order": 8,
           "type": "option",
           "required": true,
           "meta": false,
@@ -226,6 +244,21 @@
           ],
           "required": true,
           "meta": false
+        },
+        {
+          "id": 1749630688036,
+          "name": "other_implementing_agency",
+          "label": "Other Implementing Agency",
+          "order": 10,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624452993,
+              "options": ["other"]
+            }
+          ]
         },
         {
           "id": 174962445299,

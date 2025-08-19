@@ -106,7 +106,7 @@ const uiText = {
     syncingSuccessText: 'Syncing successful...',
     reSyncingText: 'Re-syncing...',
     doneText: 'Done!',
-    syncErrorText: 'Unable to sync. Please try again later.',
+    syncErrorText: 'Unable to sync. Please try again.',
     about: 'About',
     autoSyncInProgress: 'Auto sync is in progress',
     connectToInternet: 'Connect to the internet to sync',

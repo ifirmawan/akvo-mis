@@ -4089,7 +4089,7 @@
       "questions": [
         {
           "id": 1749653134928,
-          "name": "backup_generator_at_this_facility",
+          "name": "has_backup_generator",
           "label": "Do you have a backup generator at this Facility",
           "order": 1,
           "type": "option",
@@ -4112,8 +4112,8 @@
         },
         {
           "id": 1749699885495,
-          "name": "backup_generator_well_maintained_and_functional",
-          "label": "Is the backup generator well maintained and Functional?",
+          "name": "backup_generator_condition",
+          "label": "Is the backup generator well maintained and functional?",
           "order": 2,
           "type": "option",
           "required": true,
@@ -4131,11 +4131,17 @@
               "id": 1749699894201,
               "order": 2
             }
+          ],
+          "dependency": [
+            {
+              "id": 1749653134928,
+              "options": ["yes"]
+            }
           ]
         },
         {
           "id": 1749699931981,
-          "name": "issues_with_the_backup_generator",
+          "name": "backup_generator_issues",
           "label": "Issues with the backup generator ?",
           "order": 3,
           "type": "text",

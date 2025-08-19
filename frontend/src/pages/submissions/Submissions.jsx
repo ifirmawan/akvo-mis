@@ -18,7 +18,7 @@ import { useNotification } from "../../util/hooks";
 import UploadDetail from "./UploadDetail";
 import BatchDetail from "./BatchDetail";
 import { DataFilters } from "../../components";
-import { isEmpty, union, xor, without } from "lodash";
+import { isEmpty, union, xor, without, uniq } from "lodash";
 
 const { TabPane } = Tabs;
 const { confirm } = Modal;
@@ -202,7 +202,7 @@ const Submissions = () => {
     }
     selectedRowKeys.includes(id)
       ? setSelectedRowKeys(without(selectedRowKeys, id))
-      : setSelectedRowKeys(ids);
+      : setSelectedRowKeys(uniq(ids));
   };
 
   const onSelectAllTableRow = (isSelected) => {

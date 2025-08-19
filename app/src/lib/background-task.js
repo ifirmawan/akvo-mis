@@ -230,7 +230,7 @@ const syncFormSubmission = async (db, activeJob = {}) => {
         failed += 1;
         Sentry.captureException(error);
         // Mark datapoint as not submitted
-        await crudDataPoints.saveToDraft(db, d.id);
+        await crudDataPoints.saveAsPending(db, d.id);
       }
 
       if (activeJob?.id && failed === 0) {

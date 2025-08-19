@@ -120,13 +120,12 @@ const dataPointsQuery = () => ({
       throw new Error(`Error updating datapoint: ${error.message}`);
     }
   },
-  saveToDraft: async (db, id) => {
+  saveAsPending: async (db, id) => {
     const res = await sql.updateRow(
       db,
       'datapoints',
       { id },
       {
-        submitted: 0,
         syncedAt: null,
       },
     );

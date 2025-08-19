@@ -682,8 +682,13 @@ class CreateBatchSerializer(serializers.Serializer):
                         " pending data items."
                     )
                 })
+        return attrs
+
+    def create(self, validated_data):
+        form_id = validated_data.get("data")[0].form_id
+        user: SystemUser = validated_data.get("user")
         ordered_data = sorted(
-            attrs.get("data"),
+            validated_data.get("data"),
             key=lambda x: x.administration.level.level
         )
         first_data = ordered_data[0]
@@ -704,13 +709,15 @@ class CreateBatchSerializer(serializers.Serializer):
         ).first()
         if not user_role:
             raise ValidationError({
-                "data": (
-                    "All data must belong to the user's administrations."
-                )
+                "detail": {
+                    "data": [
+                        "All data must belong to the user's administrations."
+                    ]
+                }
             })
         # Make sure all data have starting with the same administration path
         user_adm_level = user_role.administration.level.level
-        for data in attrs.get("data"):
+        for data in validated_data.get("data"):
             if (
                 data.administration.level.level > user_adm_level
             ):
@@ -722,24 +729,13 @@ class CreateBatchSerializer(serializers.Serializer):
                     )
                 if not data.administration.path.startswith(adm_path):
                     raise ValidationError({
-                        "data": (
-                            "All data must belong to the same administration."
-                        )
+                        "detail": {
+                            "data": [(
+                                "All data must belong to the same "
+                                "administration."
+                            )]
+                        }
                     })
-        return attrs
-
-    def create(self, validated_data):
-        form_id = validated_data.get("data")[0].form_id
-        user: SystemUser = validated_data.get("user")
-        user_role = user.user_user_role.filter(
-            role__role_role_access__data_access=DataAccessTypes.submit
-        ).first()
-        if not user_role:
-            raise ValidationError({
-                "detail": (
-                    "User does not have permission to create a batch."
-                )
-            })
         # try:
         with transaction.atomic():
             obj = DataBatch.objects.create(

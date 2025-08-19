@@ -34,7 +34,7 @@ class Command(BaseCommand):
                             "--file",
                             nargs="?",
                             default=False,
-                            type=int)
+                            type=str)
 
     def handle(self, *args, **options):
         TEST = options.get("test")

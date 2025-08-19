@@ -200,9 +200,11 @@ const Submissions = () => {
     if (val?.parent?.id && val?.parent?.is_pending) {
       ids.push(val.parent.id);
     }
-    selectedRowKeys.includes(id)
-      ? setSelectedRowKeys(without(selectedRowKeys, id))
-      : setSelectedRowKeys(uniq(ids));
+    let rowIds = selectedRowKeys.includes(id)
+      ? without(selectedRowKeys, id)
+      : uniq(ids);
+    rowIds = rowIds.filter((r) => parseInt(r, 10)); // Remove any falsy values
+    setSelectedRowKeys(rowIds);
   };
 
   const onSelectAllTableRow = (isSelected) => {

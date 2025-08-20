@@ -509,7 +509,13 @@ class PendingFormDataView(APIView):
                 required=True,
                 type=OpenApiTypes.NUMBER,
                 location=OpenApiParameter.QUERY,
-            )
+            ),
+            OpenApiParameter(
+                name="selection_ids",
+                required=False,
+                type={"type": "array", "items": {"type": "number"}},
+                location=OpenApiParameter.QUERY,
+            ),
         ],
         summary="To get list of pending form data",
     )
@@ -530,6 +536,19 @@ class PendingFormDataView(APIView):
             is_pending=True,
             is_draft=False,
         ).order_by("-created")
+        # if selection_ids is provided, filter the queryset
+        selection_ids = request.GET.getlist("selection_ids")
+        if selection_ids:
+            # Return without pagination if selection_ids are provided
+            queryset = queryset.filter(
+                id__in=selection_ids
+            )
+            return Response(
+                ListPendingFormDataSerializer(
+                    instance=queryset, many=True
+                ).data,
+                status=status.HTTP_200_OK
+            )
 
         paginator = PageNumberPagination()
         instance = paginator.paginate_queryset(queryset, request)
@@ -856,6 +875,10 @@ class PublishDraftFormDataView(APIView):
     permission_classes = [IsAuthenticated, IsSubmitter]
 
     @extend_schema(
+        request=inline_serializer(
+            "PublishDraftRequestSerializer",
+            fields={}
+        ),
         responses={200: DefaultResponseSerializer},
         tags=["Draft Data"],
         summary="Publish draft form data",

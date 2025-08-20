@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
   Table,
   Checkbox,
@@ -28,8 +28,10 @@ const CreateBatchModal = ({
   const [comment, setComment] = useState("");
   const [fileList, setFileList] = useState([]);
   const [dataError, setDataError] = useState([]);
+  const [dataset, setDataset] = useState([]);
 
-  const { language } = store.useState((s) => s);
+  const selectedForm = store.useState((state) => state.selectedForm);
+  const language = store.useState((s) => s.language);
   const { active: activeLang } = language;
   const { notify } = useNotification();
 
@@ -45,8 +47,10 @@ const CreateBatchModal = ({
     formData.append("name", batchName);
 
     // Add data IDs as JSON string
-    selectedRows.forEach((row, rx) => {
-      formData.append(`data[${rx}]`, row.id);
+    dataset.forEach((d, dx) => {
+      if (d?.id) {
+        formData.append(`data[${dx}]`, d.id);
+      }
     });
 
     // Add comment if present
@@ -97,6 +101,32 @@ const CreateBatchModal = ({
     }
   };
 
+  const fetchDataBySelectedRows = useCallback(() => {
+    if (!selectedRows || !selectedRows.length || !isOpen) {
+      return;
+    }
+    // If selectedRows are provided, fetch data for those rows
+    if (selectedRows.length) {
+      const selectionIds = selectedRows
+        .map((id) => `selection_ids=${id}`)
+        .join("&");
+      api
+        .get(`/form-pending-data/${selectedForm}/?${selectionIds}`)
+        .then(({ data }) => {
+          setDataset(data || []);
+        })
+        .catch(() => {
+          setDataset([]);
+        });
+    } else {
+      setDataset([]);
+    }
+  }, [isOpen, selectedRows, selectedForm]);
+
+  useEffect(() => {
+    fetchDataBySelectedRows();
+  }, [fetchDataBySelectedRows]);
+
   return (
     <Modal
       open={isOpen}
@@ -136,7 +166,7 @@ const CreateBatchModal = ({
       <Table
         bordered
         size="small"
-        dataSource={selectedRows}
+        dataSource={dataset}
         columns={[
           {
             title: "Dataset",

@@ -8,6 +8,7 @@ import { i18n, api } from '../../lib';
 
 const AboutHome = () => {
   const { appVersion, apkURL, apkName } = BuildParamsState.useState((s) => s);
+  const isOnline = UIState.useState((s) => s.online);
   const { lang } = UIState.useState((s) => s);
   const trans = i18n.text(lang);
   const [visible, setVisible] = useState(false);
@@ -79,6 +80,7 @@ const AboutHome = () => {
             buttonStyle={styles.updateButton}
             titleStyle={styles.updateButtonText}
             testID="update-button"
+            disabled={!isOnline}
           />
           {/* EOL Update button */}
 

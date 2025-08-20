@@ -83,10 +83,12 @@ const PanelSubmissions = () => {
 
   useEffect(() => {
     if (dataset.length) {
-      const selectedDataset = selectedRowKeys.map((s) => {
-        const findData = dataset.find((d) => d.id === s);
-        return findData;
-      });
+      const selectedDataset = selectedRowKeys
+        ?.map((s) => {
+          const findData = dataset.find((d) => d.id === s);
+          return findData;
+        })
+        ?.filter((d) => d);
       setSelectedRows(selectedDataset);
     }
   }, [dataset, selectedRowKeys]);

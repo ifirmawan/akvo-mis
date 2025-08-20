@@ -33,7 +33,6 @@ const Submissions = () => {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(0);
-  const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [deleting, setDeleting] = useState(false);
   const { selectedForm } = store.useState((state) => state);
@@ -128,22 +127,9 @@ const Submissions = () => {
   useEffect(() => {
     if (selectedForm) {
       setExpandedKeys([]);
-      setSelectedRows([]);
       setSelectedRowKeys([]);
     }
   }, [selectedForm, dataTab]);
-
-  useEffect(() => {
-    if (dataset.length) {
-      const selectedDataset = selectedRowKeys
-        ?.map((s) => {
-          const findData = dataset.find((d) => d.id === s);
-          return findData;
-        })
-        ?.filter((d) => d);
-      setSelectedRows(selectedDataset);
-    }
-  }, [dataset, selectedRowKeys]);
 
   // Reset current page when selected form changes
   useEffect(() => {
@@ -179,14 +165,14 @@ const Submissions = () => {
           type="primary"
           shape="round"
           onClick={handleOnClickBatchSelectedDataset}
-          disabled={!selectedRows.length && modalButton}
+          disabled={!selectedRowKeys?.length && modalButton}
         >
           {text.batchSelectedDatasets}
         </Button>
       )
     );
   }, [
-    selectedRows,
+    selectedRowKeys,
     modalButton,
     text.batchSelectedDatasets,
     dataTab,
@@ -269,7 +255,6 @@ const Submissions = () => {
                 setCurrentPage(1);
                 setExpandedKeys([]);
                 setSelectedRowKeys([]);
-                setSelectedRows([]);
               }}
               tabBarExtraContent={btnBatchSelected}
             >
@@ -379,7 +364,7 @@ const Submissions = () => {
         </div>
       </div>
       <CreateBatchModal
-        selectedRows={selectedRows}
+        selectedRows={selectedRowKeys}
         isOpen={modalVisible}
         onCancel={() => {
           setModalVisible(false);
@@ -387,7 +372,6 @@ const Submissions = () => {
         onSuccess={() => {
           setCurrentPage(1);
           setSelectedRowKeys([]);
-          setSelectedRows([]);
           setDataTab("pending-approval");
           setModalVisible(false);
         }}

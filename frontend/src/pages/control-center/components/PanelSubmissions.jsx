@@ -18,7 +18,6 @@ const PanelSubmissions = () => {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedTab, setSelectedTab] = useState("pending-data");
   const [modalButton, setModalButton] = useState(true);
@@ -70,7 +69,6 @@ const PanelSubmissions = () => {
 
   useEffect(() => {
     if (selectedForm) {
-      setSelectedRows([]);
       setSelectedRowKeys([]);
     }
   }, [selectedForm]);
@@ -80,18 +78,6 @@ const PanelSubmissions = () => {
       setDataset([]);
     }
   }, [selectedTab]);
-
-  useEffect(() => {
-    if (dataset.length) {
-      const selectedDataset = selectedRowKeys
-        ?.map((s) => {
-          const findData = dataset.find((d) => d.id === s);
-          return findData;
-        })
-        ?.filter((d) => d);
-      setSelectedRows(selectedDataset);
-    }
-  }, [dataset, selectedRowKeys]);
 
   const handlePageChange = (e) => {
     setCurrentPage(e.current);
@@ -142,20 +128,18 @@ const PanelSubmissions = () => {
         setModalVisible(true);
       }
     };
-    if (!!selectedRows.length && modalButton) {
-      return (
-        <Button
-          type="primary"
-          shape="round"
-          onClick={handleOnClickBatchSelectedDataset}
-        >
-          {text.batchSelectedDatasets}
-        </Button>
-      );
-    }
-    return "";
+    return (
+      <Button
+        type="primary"
+        shape="round"
+        onClick={handleOnClickBatchSelectedDataset}
+        disabled={!selectedRowKeys.length && modalButton}
+      >
+        {text.batchSelectedDatasets}
+      </Button>
+    );
   }, [
-    selectedRows,
+    selectedRowKeys,
     modalButton,
     text.batchSelectedDatasets,
     notify,
@@ -253,13 +237,12 @@ const PanelSubmissions = () => {
         </Link>
       </div>
       <CreateBatchModal
-        selectedRows={selectedRows}
+        selectedRows={selectedRowKeys}
         isOpen={modalVisible}
         onCancel={() => {
           setModalVisible(false);
         }}
         onSuccess={() => {
-          setSelectedRows([]);
           setSelectedRowKeys([]);
           setSelectedTab("pending-batch");
           setModalVisible(false);

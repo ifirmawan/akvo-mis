@@ -73,6 +73,7 @@ const QuestionField = ({
             onChange={handleOnChangeField}
             value={value}
             {...questionField}
+            useGallery
           />
         );
       case QUESTION_TYPES.multiple_option:

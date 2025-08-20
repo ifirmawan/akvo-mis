@@ -129,6 +129,12 @@ def get_config_file(request, version):
             location=OpenApiParameter.QUERY,
         )
     ],
+    responses={
+        200: OpenApiResponse(
+            description="HTML email template",
+            response=OpenApiTypes.STR
+        )
+    },
     summary="To show email template by type",
 )
 @api_view(["GET"])

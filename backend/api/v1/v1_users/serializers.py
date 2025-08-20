@@ -668,6 +668,7 @@ class UserRoleListSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source='role.name')
     administration = serializers.SerializerMethodField()
 
+    @extend_schema_field(UserAdministrationSerializer)
     def get_administration(self, instance: UserRole):
         if instance.administration:
             return UserAdministrationSerializer(

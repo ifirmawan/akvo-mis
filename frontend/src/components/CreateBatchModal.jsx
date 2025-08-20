@@ -33,6 +33,9 @@ const CreateBatchModal = ({
   const { active: activeLang } = language;
   const { notify } = useNotification();
 
+  // eslint-disable-next-line no-console
+  console.log("Selected Rows:", selectedRows); // Debugging line
+
   const text = useMemo(() => {
     return uiText[activeLang];
   }, [activeLang]);

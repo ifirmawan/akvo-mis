@@ -487,16 +487,19 @@ def list_users(request, version):
 
     filter_adm = serializer.validated_data.get("administration")
     if not request.user.is_superuser:
-        user_adm = request.user.user_user_role.filter(
+        user_adm_queryset = request.user.user_user_role.filter(
             role__role_role_feature_access__type=FeatureTypes.user_access,
             role__role_role_feature_access__access=(
                 FeatureAccessTypes.invite_user
             ),
         ).order_by(
             "administration__level__level"
-        ).first()
-        if not filter_adm and user_adm:
-            filter_adm = user_adm.administration
+        )
+        if not filter_adm and user_adm_queryset.exists():
+            if user_adm_queryset.count() > 1:
+                filter_adm = user_adm_queryset.first().administration.parent
+            else:
+                filter_adm = user_adm_queryset.first().administration
     if filter_adm:
         filter_path = "{0}{1}.".format(
             filter_adm.path, filter_adm.id

@@ -1,0 +1,134 @@
+* Rural Water Project
+** Rural Water Project (Registration)
+*** Data Point Name: Project Name - Area - Village Name
+*** Add
+**** Who is the project Implementing agency/agencies?
+**** Is the WSMP submitted?
+**** Is the WSMP approved?
+Dependent on *Is the WSMP submitted?*
+**** Construction Start Date?
+**** Do you have Water Committee and Is it active? [Yes, Not Active, No]
+*** Remove
+**** Sizes of Pipes
+**** Type of Water Source?
+and all the child dependencies [NOTE FOR DEV TEAM: Cross questionnaire dependencies]
+*** Modify
+**** Remove Desalination Option on Type of Water Source
+** Rural Water Project - Monitoring (Monitoring)
+*** Data Point Name: DWS Staff Name - Inspection Date
+*** Add
+**** Type of Water Source? (Options: pick from Registration)
+**** Which part of the construction sites you can visit?
+Dam, RAW water main, reservoir, distribution main, reticulation
+**** DAM (REPEAT) -> Will only show if Dam is selected
+***** GPS Location (IF Possible take it from photo metadata)
+***** Name of component
+Collecting Box
+Inlet Strainer
+2nd Outlet
+Screening
+Washout
+Spillway / Overflow
+***** Photo
+***** Description
+**** RAW WATER MAIN (REPEAT) -> Will only show if RAW Water Main is selected
+***** GPS Location (IF Possible take it from photo metadata)
+***** Name of component
+RAW Water Pipeline
+Air Valve
+Washout
+***** Size of Pipe [200, 150, 100, 80, 50][Multiple] -> Dependency if RAW Water Pipeline Selected
+***** Type of Pipe [PVC, Polyethelene][Multiple] -> Dependency if RAW Water Pipeline Selected
+***** Photo
+***** Description
+**** RESERVOIR (REPEAT) -> Will only show if RESERVOIR is selected
+***** GPS Location (IF Possible take it from photo metadata)
+***** Name of component
+Reservoir Inlet
+Reservoir Outlet
+Reservoir Overflow
+Reservoir Inspection Hatch
+Reservoir Breather
+Inlet Valve / Flowmeter Chamber
+Outlet Valve / Flowmeter Chamber
+Inspection Ladder
+Fencing
+Solar Lighting
+Gate and Lock
+***** Size of Pipe [200, 150, 100, 80, 50][Multiple] -> Dependency if Inlet, Outlet and Overflow Selected
+***** Type of Pipe [PVC, Polyethelene][Multiple] -> Dependency if Inlet, outlet, overflow Selected
+***** Photo
+***** Description
+**** DISTRIBUTION MAIN (REPEAT) -> Will only show if Distribution Main is selected
+***** GPS Location (IF Possible take it from photo metadata)
+***** Name of component
+Distribution Pipeline
+Air Valve
+Washout
+***** Size of Pipe [200, 150, 100, 80, 50][Multiple] -> Dependency if Distribution Pipeline Selected
+***** Type of Pipe [PVC, Polyethelene][Multiple] -> Dependency if Distribution Pipeline Selected
+***** Length of Pipe -> Dependency if Distribution Pipeline Selected
+***** Photo
+***** Description
+**** RETICULATION (REPEAT) -> Will only show if reticulation  is selected
+***** GPS Location (IF Possible take it from photo metadata)
+***** Name of component
+Reticulation pipeline
+Washout
+Household Connections
+***** Size of Pipe [200, 150, 100, 80, 50][Multiple] -> Dependency if Reticulation Pipeline Selected
+***** Type of Pipe [PVC, Polyethelene][Multiple] -> Dependency if Reticulation Pipeline Selected
+***** Type of Connnection [Household, Shared][Multiple] -> Dependency if Household Connections
+***** Number of Household Connection -> Dependency if Household
+***** Number of Shared Connection -> Dependency if Shared
+***** Photo
+***** Description
+*** Remove
+**** What type of pipes have been used?
+**** Who is the project Implementing agency/agencies?
+**** Is the WSMP submitted?
+**** Is the WSMP approved?
+**** Construction Start Date?
+**** Locality Plan
+**** Project Photos QG
+*** Modify
+**** Is there any improvement action to be taken by the implementing agency? (wording: add From the last inspection)
+* EPS
+** EPS Registration - (Registration)
+*** Data Point Name: EPS Name - Area - Village Name
+*** Add
+**** Do you have Water Committee and Is it active? [Yes, Not Active, No]
+*** Remove
+**** Type of Water Source
+**** Do you have Water Committee?
+**** Is the Water Comittee Active?
+*** Modify
+**** Implementing Agency Type Other
+** EPS Project Construction - (Monitoring)
+*** Data Point Name: DWS Staff Name - Inspection Date
+*** Add
+**** Inspection Date
+**** Use RURAL PROJECT GENERAL REMARKS, except Implementing Agency
+*** Remove
+**** Locality Plan
+*** Modify
+**** FOR ALL THE QUESTIONS IN THE PROJECT SCOPE QG:
+***** PROJECT SCOPE: BREAK DOWN @NEMANI
+***** REPATABLE PHOTO ON PROJECT SCOPE
+** EPS Water Quality Testing - (Monitoring)
+*** Add
+**** Has the EPS Training been conducted in the Village? [Yes, No]
+*** Remove
+*** Modify
+* Waste Water Plant
+** Waste Water Plant Registration - (Registration)
+** Waste Water Plant Monitoring - (Monitoring)
+** Waste Water Plant Quick Monitoring - (Monitoring)
+* Water Plant
+** Water Plant Registration - (Registration)
+** Water Plant Monitoring - (Monitoring)
+** Water Plant Quick Monitoring - (Monitoring)
+* SPS (Waste Waterpump)
+** Waste Water Pump Registration - (Registration)
+** Waste Water Pump Monitoring - (Monitoring)
+** Waste Water Pump Quick Monitoring - (Monitoring)

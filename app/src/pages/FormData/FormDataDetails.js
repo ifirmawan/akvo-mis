@@ -37,10 +37,9 @@ const SubtitleContent = ({ index, answer, type, source = null, option = [] }) =>
     if (!cascadeID) {
       return;
     }
-    if (source) {
-      const [csValue, db] = await cascades.loadDataSource(source, cascadeID);
+    if (source?.file) {
+      const csValue = await cascades.loadDataSource(source, cascadeID);
       setCascadeValue(csValue);
-      await db.closeAsync();
     }
   }, [answer, source]);
 
@@ -61,7 +60,7 @@ const SubtitleContent = ({ index, answer, type, source = null, option = [] }) =>
         </View>
       );
     case QUESTION_TYPES.cascade:
-      return <Text testID={`text-answer-${index}`}>{cascadeValue?.name || answer}</Text>;
+      return <Text testID={`text-answer-${index}`}>{cascadeValue?.full_path_name || answer}</Text>;
     case QUESTION_TYPES.date:
       return (
         <Text testID={`text-answer-${index}`}>

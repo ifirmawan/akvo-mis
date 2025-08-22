@@ -2,7 +2,6 @@
 import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 import * as Sentry from '@sentry/react-native';
-import sql from '../database/sql';
 
 const DIR_NAME = 'SQLite';
 
@@ -32,17 +31,25 @@ const download = async (downloadUrl, fileUrl, update = false) => {
 };
 
 const loadDataSource = async (source, id = null) => {
+  const { file: cascadeName } = source;
+  const db = await SQLite.openDatabaseAsync(cascadeName, { useNewConnection: true });
+  const statement = await db.prepareAsync('SELECT * FROM nodes');
   try {
-    const { file: cascadeName } = source;
-    const db = SQLite.openDatabaseSync(cascadeName, { useNewConnection: true });
-    const result = id
-      ? await sql.getFirstRow(db, 'nodes', { id })
-      : await sql.getEachRow(db, 'nodes');
-    return [result, db];
+    const result = await statement.executeAsync();
+    const rows = await result.getAllAsync();
+    await result.resetAsync();
+    return id ? rows?.find((r) => r?.id === id) : rows;
   } catch (error) {
     Sentry.captureMessage('[cascades] Unable to load cascade sqlite');
-    Sentry.captureException(error);
+    Sentry.captureException(error, {
+      extra: {
+        source,
+        id,
+      },
+    });
     return Promise.reject(error);
+  } finally {
+    await statement.finalizeAsync();
   }
 };
 

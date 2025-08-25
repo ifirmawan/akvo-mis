@@ -34,19 +34,10 @@
           "meta": true
         },
         {
-          "id": 1749624452990,
-          "name": "division_province_tikina",
-          "label": "Which Division-Province-Tikina?",
-          "order": 3,
-          "type": "administration",
-          "required": true,
-          "meta": true
-        },
-        {
           "id": 1749624452991,
           "name": "village_name",
           "label": "Village Name",
-          "order": 4,
+          "order": 3,
           "type": "text",
           "required": true,
           "meta": true
@@ -55,145 +46,34 @@
           "id": 1749624452995,
           "name": "village_leader",
           "label": "Name of the Village Head/WC/Village's Nurse",
-          "order": 5,
-          "type": "text",
+          "order": 4,
+          "type": "input",
           "required": true,
-          "meta": true
+          "meta": false
         },
         {
           "id": 1749624452996,
           "name": "village_leader_contact",
           "label": "Contact of the Village Head/WC/Village's Nurse",
-          "order": 6,
+          "order": 5,
           "type": "number",
           "required": true,
-          "meta": true
+          "meta": false
         },
         {
           "id": 1749624452992,
           "name": "gps_location",
           "label": "GPS Location",
-          "order": 7,
+          "order": 6,
           "type": "geo",
           "required": true,
           "meta": true
         },
         {
-          "id": 1749631945703,
-          "name": "has_water_committee",
-          "label": "Do you have Water Committee",
-          "order": 8,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749631956909,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749631956910,
-              "order": 2
-            }
-          ]
-        },
-        {
-          "id": 1749632130938,
-          "name": "water_committee_active",
-          "label": "Is the Water Committee active?",
-          "order": 7,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749632137609,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749632137610,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749631945703,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749632249972,
-          "name": "water_source_type",
-          "label": "Type of Water Source",
-          "order": 8,
-          "type": "multiple_option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "river",
-              "label": "River",
-              "id": 1749632257713,
-              "order": 1
-            },
-            {
-              "value": "stream",
-              "label": "Stream",
-              "id": 1749632257714,
-              "order": 2
-            },
-            {
-              "value": "creek",
-              "label": "Creek",
-              "id": 1749632273368,
-              "order": 3
-            },
-            {
-              "value": "spring",
-              "label": "Spring",
-              "id": 1749632286585,
-              "order": 4
-            },
-            {
-              "value": "borehole",
-              "label": "Borehole",
-              "id": 1749632295216,
-              "order": 5
-            },
-            {
-              "value": "well",
-              "label": "Well",
-              "id": 1749632303728,
-              "order": 6
-            },
-            {
-              "value": "aquifer",
-              "label": "Aquifer",
-              "id": 1749632311068,
-              "order": 7
-            },
-            {
-              "value": "rainwater",
-              "label": "Rainwater",
-              "id": 1749632319021,
-              "order": 8
-            }
-          ]
-        },
-        {
           "id": 1749632480584,
           "name": "project_implementation_date",
           "label": "Project Implementation date",
-          "order": 9,
+          "order": 7,
           "type": "date",
           "required": true,
           "meta": false
@@ -202,7 +82,7 @@
           "id": 1749624452993,
           "name": "implementing_agency",
           "label": "Who is the implementing agency/agencies?",
-          "order": 10,
+          "order": 8,
           "type": "multiple_option",
           "options": [
             {
@@ -249,7 +129,7 @@
           "id": 1749630688036,
           "name": "other_implementing_agency",
           "label": "Other Implementing Agency",
-          "order": 10,
+          "order": 9,
           "type": "text",
           "required": false,
           "meta": false,
@@ -264,10 +144,39 @@
           "id": 174962445299,
           "name": "project_background",
           "label": "Project Background",
-          "order": 11,
+          "order": 10,
           "type": "text",
           "required": true,
           "meta": false
+        },
+        {
+          "id": 1749624452105,
+          "name": "water_committee",
+          "label": "Do you have Water Committee and Is it active?",
+          "order": 11,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749624452995,
+              "order": 1
+            },
+            {
+              "value": "not_active",
+              "label": "Not Active",
+              "id": 1749624452997,
+              "order": 2
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749624452996,
+              "order": 3
+            }
+          ]
         }
       ],
       "repeat_text": null

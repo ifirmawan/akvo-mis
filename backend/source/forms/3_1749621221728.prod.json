@@ -20,7 +20,7 @@
           "name": "project_name",
           "label": "Project name",
           "order": 1,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true
         },
@@ -38,7 +38,7 @@
           "name": "village_name",
           "label": "Village Name",
           "order": 3,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true
         },
@@ -238,7 +238,7 @@
           "dependency": [
             {
               "id": 1749622652941,
-              "value": "yes"
+              "options": ["yes"]
             }
           ]
         },
@@ -273,7 +273,7 @@
           "dependency": [
             {
               "id": 1749622652941,
-              "value": "yes"
+              "options": ["yes"]
             }
           ]
         }

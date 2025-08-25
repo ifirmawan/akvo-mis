@@ -17,66 +17,37 @@
       "repeatable": false,
       "questions": [
         {
-          "id": 1749624452910,
-          "name": "construction_start_date",
-          "label": "Construction Start Date?",
+          "id": 1749624452911,
+          "name": "inspection_date",
+          "label": "Inspection Date?",
           "order": 1,
           "type": "date",
           "required": true,
           "meta": true
         },
         {
-          "id": 1749630516825,
-          "name": "proposed_completion_date",
-          "label": "Proposed Completion Date?",
+          "id": 1749624452910,
+          "name": "construction_start_date",
+          "label": "Construction Start Date?",
           "order": 2,
           "type": "date",
           "required": true,
           "meta": false
         },
         {
-          "id": 1749630629477,
-          "name": "can_capture_locality_plan",
-          "label": "Are you able to capture the locality Plan?",
+          "id": 1749630516825,
+          "name": "proposed_completion_date",
+          "label": "Proposed Completion Date?",
           "order": 3,
-          "type": "option",
+          "type": "date",
           "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749630648535,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749630648536,
-              "order": 2
-            }
-          ]
-        },
-        {
-          "id": 1749630671371,
-          "name": "locality_plan_details",
-          "label": "Locality Plan",
-          "order": 4,
-          "type": "geo",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749630629477,
-              "options": ["yes"]
-            }
-          ]
+          "meta": false
         },
         {
           "id": 1749630701234,
           "name": "weather_conditions",
           "label": "Weather Conditions",
-          "order": 5,
+          "order": 4,
           "type": "option",
           "required": true,
           "meta": false,
@@ -102,39 +73,10 @@
           ]
         },
         {
-          "id": 1749630733310,
-          "name": "can_take_water_sample",
-          "label": "Are you able to take the water sample",
-          "order": 6,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749630761955,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749630761956,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749630629477,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
           "id": 1749630785253,
           "name": "water_test_type",
           "label": "Water test conducted?",
-          "order": 7,
+          "order": 5,
           "type": "option",
           "required": true,
           "meta": false,
@@ -151,19 +93,13 @@
               "id": 1749630801972,
               "order": 2
             }
-          ],
-          "dependency": [
-            {
-              "id": 1749630733310,
-              "options": ["yes"]
-            }
           ]
         },
         {
           "id": 1749630906302,
           "name": "cbt_bag_contamination_level",
           "label": "Level of Contamination using CBT bags?",
-          "order": 8,
+          "order": 6,
           "type": "number",
           "required": false,
           "meta": false,
@@ -181,7 +117,7 @@
           "id": 1749631093126,
           "name": "total_coliform_level",
           "label": "What is the Total Coliform Level?",
-          "order": 9,
+          "order": 7,
           "type": "number",
           "required": true,
           "meta": false,
@@ -199,7 +135,7 @@
           "id": 1749631148928,
           "name": "fecal_coliform_level",
           "label": "What is the Faecal Coliform Level?",
-          "order": 10,
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false,
@@ -217,7 +153,7 @@
           "id": 1749631183056,
           "name": "turbidity_ntu",
           "label": "What is the Turbidity in NTU?",
-          "order": 11,
+          "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
@@ -574,9 +510,9 @@
           "name": "officer_name",
           "label": "Name of Officer",
           "order": 3,
-          "type": "text",
+          "type": "input",
           "required": true,
-          "meta": false
+          "meta": true
         }
       ],
       "repeat_text": null

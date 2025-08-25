@@ -20,7 +20,7 @@
           "name": "eps_name",
           "label": "EPS Name",
           "order": 1,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true
         },
@@ -29,7 +29,7 @@
           "name": "division_province_tikina",
           "label": "Which Division-Province-Tikina?",
           "order": 2,
-          "type": "text",
+          "type": "administration",
           "required": true,
           "meta": true
         },
@@ -38,7 +38,7 @@
           "name": "village_name",
           "label": "Village Name",
           "order": 3,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true
         },

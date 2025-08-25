@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 from datetime import datetime, timedelta, time
 
 from django.core.management import BaseCommand
@@ -41,12 +42,16 @@ def create_approver_user(
 ):
     da = DataAccessTypes.approve
     """Create a new approver user for the given administration."""
-    adm_name = administration.name.lower().replace(" ", ".")
+    adm_name = re.sub(r"[^A-Za-z0-9]+", ".", administration.name.lower())
     fake_digit = fake.random_digit_not_null()
+    approver_email = "approver.{0}{1}@test.com".format(
+        adm_name, fake_digit
+    )
+    approver = SystemUser.objects.filter(email=approver_email).first()
+    if approver:
+        return  # Approver already exists
     approver = SystemUser.objects.create_user(
-        email="approver.{0}{1}@test.com".format(
-            adm_name, fake_digit
-        ),
+        email=approver_email,
         first_name=fake.first_name(),
         last_name=fake.last_name(),
         phone_number=fake.phone_number()[:15],
@@ -198,7 +203,9 @@ class Command(BaseCommand):
                     user = SystemUser.objects.filter(
                         **filter_submitter,
                         user_user_role__administration=parent_adm,
-                    ).order_by("?").first()
+                    ) \
+                        .exclude(password__exact="") \
+                        .order_by("?").first()
                     if not user:
                         # create a new user
                         user = SystemUser.objects.create_user(

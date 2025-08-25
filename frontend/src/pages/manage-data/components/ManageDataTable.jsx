@@ -139,12 +139,14 @@ const ManageDataTable = ({
       (s) => s.selectedForm,
       () => {
         setUpdateRecord(true);
+        setCurrentPage(1);
+        setSelectedRowKeys([]);
       }
     );
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [setSelectedRowKeys]);
 
   return (
     <div>

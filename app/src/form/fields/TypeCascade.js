@@ -106,7 +106,7 @@ const TypeCascade = ({
     };
 
     // Handle case where defaultAdm exists (reconstruct path)
-    if (defaultAdm) {
+    if (defaultAdm?.path) {
       const pathParts = [
         ...defaultAdm.path
           .split('.')

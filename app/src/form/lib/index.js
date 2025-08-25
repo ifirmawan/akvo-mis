@@ -348,6 +348,7 @@ export const generateDataPointName = (forms, currentValues, cascades = {}, datap
           }
           return { id: q.id, type: q.type, value };
         })
+        ?.sort((a, b) => a.order - b.order)
     : [];
   const dpName = dataPointNameValues
     .filter((d) => d.type !== QUESTION_TYPES.geo && (d.value || d.value === 0))

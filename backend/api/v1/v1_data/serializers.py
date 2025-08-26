@@ -28,7 +28,6 @@ from utils.custom_serializer_fields import (
 )
 from utils.functions import update_date_time_format, get_answer_value
 from utils.functions import get_answer_history
-from django.conf import settings
 
 
 class SubmitFormDataSerializer(serializers.ModelSerializer):
@@ -257,8 +256,6 @@ class SubmitFormSerializer(serializers.Serializer):
                 options=option,
                 created_by=self.context.get("user"),
             )
-        if not settings.TEST_ENV:
-            obj_data.save_to_file
         # Refresh materialized view via async task
         async_task("api.v1.v1_data.tasks.seed_approved_data", obj_data)
 
@@ -645,12 +642,8 @@ class SubmitPendingFormSerializer(serializers.Serializer):
 
         if (
             not is_draft and
-            not obj_data.parent and
-            not obj_data.is_pending and
-            not settings.TEST_ENV
+            not obj_data.is_pending
         ):
-            # If the form is not a draft, not a parent form, and not pending
-            obj_data.save_to_file
             # Refresh materialized view via async task
             async_task("api.v1.v1_data.tasks.seed_approved_data", obj_data)
 

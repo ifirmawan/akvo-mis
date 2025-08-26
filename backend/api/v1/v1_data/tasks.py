@@ -17,7 +17,7 @@ def seed_approved_data(data: FormData):
     if not data.form.parent and not settings.TEST_ENV:
         # If the form is a parent form, save to file
         data.save_to_file
-        # Refresh materialized view after saving data
-        refresh_materialized_data()
+    # Refresh materialized view after saving data
+    refresh_materialized_data()
 
     return data

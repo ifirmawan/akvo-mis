@@ -169,7 +169,7 @@ def add_fake_answers(data):
                 if prev_answer and prev_answer.options:
                     seed = False
                     for o in prev_answer.options:
-                        if o in d.get("options"):
+                        if o in d.get("options", []):
                             seed = True
         if seed:
             Answers.objects.create(

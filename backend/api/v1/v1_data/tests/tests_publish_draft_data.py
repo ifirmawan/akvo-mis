@@ -1,4 +1,3 @@
-import os
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -7,8 +6,6 @@ from api.v1.v1_forms.models import Forms
 from api.v1.v1_profile.models import Administration
 from api.v1.v1_data.models import FormData
 from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
-from utils import storage
-from mis.settings import STORAGE_PATH
 
 
 @override_settings(USE_TZ=False)
@@ -109,14 +106,6 @@ class PublishDraftFormDataTestCase(TestCase, ProfileTestHelperMixin):
 
         self.assertFalse(published_data.is_pending)
         self.assertFalse(published_data.is_draft)
-
-        # Check if datapoint json is created
-        json_filename = f"datapoints/{published_data.uuid}.json"
-        self.assertTrue(storage.check(json_filename))
-        # Remove the generated file
-        filepath = f"{STORAGE_PATH}/datapoints/{published_data.uuid}.json"
-        if os.path.exists(filepath):
-            os.remove(filepath)
 
         # Verify that the data is now in the manage data via api
         response = self.client.get(

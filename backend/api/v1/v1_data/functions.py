@@ -41,7 +41,7 @@ def set_answer_data(
     if question.type == QuestionTypes.geo:
         option = data.geo
     elif question.type == QuestionTypes.administration:
-        name = data.administration.name
+        name = data.administration.full_path_name.replace("|", " - ")
         value = data.administration.id
     elif question.type == QuestionTypes.text:
         name = fake.company() if question.meta else fake.sentence(nb_words=3)

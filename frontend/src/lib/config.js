@@ -740,7 +740,7 @@ const config = {
     defaultCenter: [-18.1236015, 178.3805867], // Fiji
     markerSizeRange: [10, 50],
     highlightColor: "#84b4cc",
-    colorRange: ["#bbedda", "#a7e1cb", "#92d5bd", "#7dcaaf", "#67bea1"],
+    colorRange: ["#e8f7e3", "#bbedda", "#7dcaaf", "#44a883", "#107550"],
   },
 };
 

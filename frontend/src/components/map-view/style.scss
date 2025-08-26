@@ -120,11 +120,15 @@
       cursor: pointer;
       margin: 0 1px;
       border: solid transparent 2px;
+      color: #2d3436;
 
       &.legend-selected {
         border: solid #036799 2px;
         border-right: solid 2px #036799;
         color: #fff;
+        &:first-child, &:nth-child(2) {
+          color: #005f40;
+        }
       }
     }
   }

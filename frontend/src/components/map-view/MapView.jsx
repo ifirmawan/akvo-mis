@@ -33,7 +33,7 @@ const MapView = ({ dataset, loading, position }) => {
     }
     const bgColor = d?.color || "#64A73B";
     return `<span class="custom-marker" style="background-color:${bgColor};">${
-      d?.value ? (!isNaN(d.value) ? d.value : "") : ""
+      d?.value ? (!isNaN(d.value) ? (d.value > 999 ? "" : d.value) : "") : ""
     }</span>`;
   };
 

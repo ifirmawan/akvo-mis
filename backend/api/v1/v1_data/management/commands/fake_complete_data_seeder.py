@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, time
 from django.core.management import BaseCommand
 from django.utils.timezone import make_aware
 from django.db import transaction
+from django.db.models import Q
 from faker import Faker
 
 from mis.settings import COUNTRY_NAME
@@ -47,9 +48,22 @@ def create_approver_user(
     approver_email = "approver.{0}{1}@test.com".format(
         adm_name, fake_digit
     )
-    approver = SystemUser.objects.filter(email=approver_email).first()
-    if approver:
-        return  # Approver already exists
+    approver = SystemUser.objects.filter(
+        Q(
+            user_user_role__role__role_role_access__data_access=da,
+            user_user_role__administration=administration,
+        ) | Q(email=approver_email)
+    ).order_by("?").first()
+    if not approver:
+        # Check if a deleted user with the same email exists
+        approver = SystemUser.objects_deleted.filter(
+            email=approver_email
+        ).first()
+        if approver:
+            # Restore the deleted user
+            approver.restore()
+            return
+    # Create a new user
     approver = SystemUser.objects.create_user(
         email=approver_email,
         first_name=fake.first_name(),

@@ -289,7 +289,14 @@ class ListQuestionGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionGroup
-        fields = ["name", "label", "question", "repeatable", "repeat_text"]
+        fields = [
+            "name",
+            "label",
+            "question",
+            "repeatable",
+            "repeat_text",
+            "order",
+        ]
 
 
 class ListAdministrationCascadeSerializer(serializers.ModelSerializer):

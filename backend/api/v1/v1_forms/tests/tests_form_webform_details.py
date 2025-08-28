@@ -63,6 +63,7 @@ class WebFormDetailsTestCase(TestCase, ProfileTestHelperMixin):
                 "question",
                 "repeatable",
                 "repeat_text",
+                "order",
             ]
         )
 

@@ -18,7 +18,7 @@
           "label": "Name",
           "short_label": "Name",
           "meta": true,
-          "type": "text",
+          "type": "input",
           "required": true
         },
         {

@@ -222,66 +222,70 @@ const DataDetail = ({
             type="warning"
           />
         )}
-        {dataset.map((r, rI) => (
-          <div className="pending-data-wrapper" key={rI}>
-            <h3>{r.label}</h3>
-            <Table
-              pagination={false}
-              dataSource={r.question}
-              rowClassName={(record) => {
-                const rowEdited =
-                  (record.newValue || record.newValue === 0) &&
-                  !isEqual(record.newValue, record.value)
-                    ? "row-edited"
-                    : "row-normal";
-                return `expandable-row ${rowEdited}`;
-              }}
-              rowKey="id"
-              columns={[
-                {
-                  title: text?.questionCol,
-                  dataIndex: null,
-                  width: "50%",
-                  render: (_, row) =>
-                    row.short_label ? row.short_label : row.label,
-                  className: "table-col-question",
-                },
-                {
-                  title: "Response",
-                  render: (row) => (
-                    <EditableCell
-                      record={row}
-                      parentId={row.question_group}
-                      updateCell={updateCell}
-                      resetCell={resetCell}
-                      pendingData={pendingData}
-                      isPublic={isPublic}
-                      resetButton={resetButton}
-                      readonly={!isEditor}
-                    />
+        {dataset
+          .filter((r) => r?.question?.length)
+          .map((r, rI) => (
+            <div className="pending-data-wrapper" key={rI}>
+              <h3>{r.label}</h3>
+              <Table
+                pagination={false}
+                dataSource={r.question}
+                rowClassName={(record) => {
+                  const rowEdited =
+                    (record.newValue || record.newValue === 0) &&
+                    !isEqual(record.newValue, record.value)
+                      ? "row-edited"
+                      : "row-normal";
+                  return `expandable-row ${rowEdited}`;
+                }}
+                rowKey="id"
+                columns={[
+                  {
+                    title: text?.questionCol,
+                    dataIndex: null,
+                    width: "50%",
+                    render: (_, row) =>
+                      row.short_label ? row.short_label : row.label,
+                    className: "table-col-question",
+                  },
+                  {
+                    title: "Response",
+                    render: (row) => (
+                      <EditableCell
+                        record={row}
+                        parentId={row.question_group}
+                        updateCell={updateCell}
+                        resetCell={resetCell}
+                        pendingData={pendingData}
+                        isPublic={isPublic}
+                        resetButton={resetButton}
+                        readonly={!isEditor}
+                      />
+                    ),
+                    width: "50%",
+                  },
+                  Table.EXPAND_COLUMN,
+                ]}
+                expandable={{
+                  expandIcon: ({ onExpand, record }) => {
+                    if (!record?.history) {
+                      return "";
+                    }
+                    return (
+                      <HistoryOutlined
+                        className="expand-icon"
+                        onClick={(e) => onExpand(record, e)}
+                      />
+                    );
+                  },
+                  expandedRowRender: (record) => (
+                    <HistoryTable record={record} />
                   ),
-                  width: "50%",
-                },
-                Table.EXPAND_COLUMN,
-              ]}
-              expandable={{
-                expandIcon: ({ onExpand, record }) => {
-                  if (!record?.history) {
-                    return "";
-                  }
-                  return (
-                    <HistoryOutlined
-                      className="expand-icon"
-                      onClick={(e) => onExpand(record, e)}
-                    />
-                  );
-                },
-                expandedRowRender: (record) => <HistoryTable record={record} />,
-                rowExpandable: (record) => record?.history,
-              }}
-            />
-          </div>
-        ))}
+                  rowExpandable: (record) => record?.history,
+                }}
+              />
+            </div>
+          ))}
       </div>
       {!isPublic && isEditor && (
         <div className="button-save">

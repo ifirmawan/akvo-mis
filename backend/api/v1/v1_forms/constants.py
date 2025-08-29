@@ -11,6 +11,7 @@ class QuestionTypes:
     autofield = 10
     attachment = 11
     signature = 12
+    input = 13
 
     FieldStr = {
         geo: "Geo",
@@ -25,6 +26,7 @@ class QuestionTypes:
         autofield: "Autofield",
         attachment: "Attachment",
         signature: "Signature",
+        input: "Input",
     }
 
 

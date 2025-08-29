@@ -193,6 +193,7 @@ class Answers(models.Model):
         ]:
             answer = "|".join(map(str, self.options))
         elif q.type in [
+            QuestionTypes.input,
             QuestionTypes.text,
             QuestionTypes.photo,
             QuestionTypes.date,
@@ -220,6 +221,7 @@ class Answers(models.Model):
         ]:
             answer = self.options
         elif q.type in [
+            QuestionTypes.input,
             QuestionTypes.text,
             QuestionTypes.photo,
             QuestionTypes.date,

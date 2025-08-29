@@ -345,6 +345,7 @@ def transform_form_data_for_report(
                                         ):
                                             value = str(answer.name)
                                 elif question.type in [
+                                    QuestionTypes.input,
                                     QuestionTypes.text,
                                     QuestionTypes.photo,
                                     QuestionTypes.autofield,
@@ -442,6 +443,7 @@ def transform_form_data_for_report(
                                 ):  # pragma: no cover
                                     value = str(answer.name)
                         elif question.type in [
+                            QuestionTypes.input,
                             QuestionTypes.text,
                             QuestionTypes.photo,
                             QuestionTypes.autofield,

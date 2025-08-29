@@ -43,7 +43,10 @@ def set_answer_data(
     elif question.type == QuestionTypes.administration:
         name = data.administration.full_path_name.replace("|", " - ")
         value = data.administration.id
-    elif question.type == QuestionTypes.text:
+    elif (
+        question.type == QuestionTypes.text or
+        question.type == QuestionTypes.input
+    ):
         name = fake.company() if question.meta else fake.sentence(nb_words=3)
     elif question.type == QuestionTypes.number:
         min = 1

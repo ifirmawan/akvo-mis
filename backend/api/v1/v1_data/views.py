@@ -287,6 +287,7 @@ class FormDataAddListView(APIView):
             ]:
                 option = answer.get("value")
             elif question.type in [
+                QuestionTypes.input,
                 QuestionTypes.text,
                 QuestionTypes.photo,
                 QuestionTypes.date,
@@ -622,6 +623,7 @@ class PendingFormDataView(APIView):
             ]:
                 option = answer.get("value")
             elif question.type in [
+                QuestionTypes.input,
                 QuestionTypes.text,
                 QuestionTypes.photo,
                 QuestionTypes.date,

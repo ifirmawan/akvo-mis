@@ -435,20 +435,22 @@ const ApprovalDetail = ({
                               {text.saveEditButton}
                             </Button>
                           </div>
-                          {record.data?.map((r, rI) => (
-                            <div className="pending-data-wrapper" key={rI}>
-                              <h3>{r.label}</h3>
-                              <RawDataTable
-                                updateCell={updateCell}
-                                resetCell={resetCell}
-                                dataLoading={dataLoading}
-                                isEditable={approve}
-                                resetButton={resetButton}
-                                expanded={record}
-                                questions={r.question}
-                              />
-                            </div>
-                          ))}
+                          {record.data
+                            ?.filter((r) => r?.question?.length)
+                            ?.map((r, rI) => (
+                              <div className="pending-data-wrapper" key={rI}>
+                                <h3>{r.label}</h3>
+                                <RawDataTable
+                                  updateCell={updateCell}
+                                  resetCell={resetCell}
+                                  dataLoading={dataLoading}
+                                  isEditable={approve}
+                                  resetButton={resetButton}
+                                  expanded={record}
+                                  questions={r.question}
+                                />
+                              </div>
+                            ))}
                         </div>
                       )}
                     </div>

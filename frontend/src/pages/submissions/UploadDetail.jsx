@@ -387,20 +387,22 @@ const UploadDetail = ({ record: batch, setReload }) => {
                         </Space>
                       ) : (
                         <div className={`pending-data-outer`}>
-                          {expanded.data?.map((r, rI) => (
-                            <div className="pending-data-wrapper" key={rI}>
-                              <h3>{r.label}</h3>
-                              <RawDataTable
-                                updateCell={updateCell}
-                                resetCell={resetCell}
-                                dataLoading={dataLoading}
-                                isEditable={isEditable}
-                                resetButton={resetButton}
-                                expanded={expanded}
-                                questions={r.question}
-                              />
-                            </div>
-                          ))}
+                          {expanded.data
+                            ?.filter((r) => r?.question?.length)
+                            ?.map((r, rI) => (
+                              <div className="pending-data-wrapper" key={rI}>
+                                <h3>{r.label}</h3>
+                                <RawDataTable
+                                  updateCell={updateCell}
+                                  resetCell={resetCell}
+                                  dataLoading={dataLoading}
+                                  isEditable={isEditable}
+                                  resetButton={resetButton}
+                                  expanded={expanded}
+                                  questions={r.question}
+                                />
+                              </div>
+                            ))}
                         </div>
                       )}
                       {isEditable && !expanded.loading && (

@@ -98,48 +98,52 @@ const DraftDetail = ({
   ) : (
     <div className="data-detail">
       <div>
-        {dataset.map((r, rI) => (
-          <div className="pending-data-wrapper" key={rI}>
-            <h3>{r.label}</h3>
-            <Table
-              pagination={false}
-              dataSource={r.question}
-              rowClassName="expandable-row row-normal"
-              rowKey="id"
-              columns={[
-                {
-                  title: text?.questionCol,
-                  dataIndex: null,
-                  width: "50%",
-                  render: (_, row) =>
-                    row.short_label ? row.short_label : row.label,
-                  className: "table-col-question",
-                },
-                {
-                  title: "Response",
-                  width: "50%",
-                  render: (row) => <ReadOnlyCell record={row} />,
-                },
-                Table.EXPAND_COLUMN,
-              ]}
-              expandable={{
-                expandIcon: ({ onExpand, record }) => {
-                  if (!record?.history) {
-                    return "";
-                  }
-                  return (
-                    <HistoryOutlined
-                      className="expand-icon"
-                      onClick={(e) => onExpand(record, e)}
-                    />
-                  );
-                },
-                expandedRowRender: (record) => <HistoryTable record={record} />,
-                rowExpandable: (record) => record?.history,
-              }}
-            />
-          </div>
-        ))}
+        {dataset
+          .filter((r) => r?.question?.length)
+          .map((r, rI) => (
+            <div className="pending-data-wrapper" key={rI}>
+              <h3>{r.label}</h3>
+              <Table
+                pagination={false}
+                dataSource={r.question}
+                rowClassName="expandable-row row-normal"
+                rowKey="id"
+                columns={[
+                  {
+                    title: text?.questionCol,
+                    dataIndex: null,
+                    width: "50%",
+                    render: (_, row) =>
+                      row.short_label ? row.short_label : row.label,
+                    className: "table-col-question",
+                  },
+                  {
+                    title: "Response",
+                    width: "50%",
+                    render: (row) => <ReadOnlyCell record={row} />,
+                  },
+                  Table.EXPAND_COLUMN,
+                ]}
+                expandable={{
+                  expandIcon: ({ onExpand, record }) => {
+                    if (!record?.history) {
+                      return "";
+                    }
+                    return (
+                      <HistoryOutlined
+                        className="expand-icon"
+                        onClick={(e) => onExpand(record, e)}
+                      />
+                    );
+                  },
+                  expandedRowRender: (record) => (
+                    <HistoryTable record={record} />
+                  ),
+                  rowExpandable: (record) => record?.history,
+                }}
+              />
+            </div>
+          ))}
       </div>
 
       <div className="data-detail-actions">

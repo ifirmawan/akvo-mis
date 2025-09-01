@@ -782,7 +782,7 @@
           "name": "reservoir_name",
           "label": "Name of component",
           "order": 2,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -899,11 +899,15 @@
             { "id": 1749622726347, "options": ["reservoir"] },
             {
               "id": 1723459210023,
-              "options": [
-                "reservoir_inlet",
-                "reservoir_outlet",
-                "reservoir_overflow"
-              ]
+              "options": ["reservoir_inlet"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_outlet"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_overflow"]
             }
           ]
         },
@@ -933,11 +937,15 @@
             { "id": 1749622726347, "options": ["reservoir"] },
             {
               "id": 1723459210023,
-              "options": [
-                "reservoir_inlet",
-                "reservoir_outlet",
-                "reservoir_overflow"
-              ]
+              "options": ["reservoir_inlet"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_outlet"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_overflow"]
             }
           ]
         }

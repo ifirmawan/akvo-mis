@@ -21,7 +21,7 @@
           "name": "plant_name",
           "label": "Name of the Plant",
           "order": 1,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true
         },

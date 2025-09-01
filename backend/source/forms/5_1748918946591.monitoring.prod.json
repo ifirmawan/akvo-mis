@@ -778,9 +778,9 @@
           "name": "dws_staff_name",
           "label": "Name of DWS Staff",
           "order": 7,
-          "type": "text",
+          "type": "input",
           "required": true,
-          "meta": false,
+          "meta": true,
           "options": null,
           "dependency": null,
           "short_label": null

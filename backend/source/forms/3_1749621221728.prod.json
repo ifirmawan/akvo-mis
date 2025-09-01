@@ -20,7 +20,7 @@
           "name": "project_name",
           "label": "Project name",
           "order": 1,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true
         },
@@ -38,7 +38,7 @@
           "name": "village_name",
           "label": "Village Name",
           "order": 3,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true
         },
@@ -135,50 +135,56 @@
           "meta": false
         },
         {
-          "id": 1749621374500,
-          "name": "water_source_type",
-          "label": "Type of Water Source?",
+          "id": 1749622571775,
+          "name": "implementing_agencies",
+          "label": "Who is the project Implementing agency/agencies?",
           "order": 10,
           "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
             {
-              "value": "surface_water",
-              "label": "Surface Water",
-              "id": 1749621384994,
-              "order": 1
-            },
-            {
-              "value": "ground_water",
-              "label": "Ground Water",
-              "id": 1749621384995,
+              "value": "mineral_resources_department",
+              "label": "Mineral Resources Department",
+              "id": 1749622577768,
               "order": 2
             },
             {
-              "value": "rainwater",
-              "label": "Rainwater",
-              "id": 1749621403460,
+              "value": "rotary_pacific_for_water_foundation",
+              "label": "Rotary Pacific for Water Foundation",
+              "id": 1749622596495,
               "order": 3
             },
             {
-              "value": "sea_water",
-              "label": "Sea Water",
-              "id": 1749621419610,
+              "value": "habitat_of_humanity",
+              "label": "Habitat of Humanity",
+              "id": 1749622605400,
               "order": 4
             },
             {
-              "value": "desalination",
-              "label": "Desalination",
-              "id": 1749621427890,
+              "value": "rural_and_maritime_development",
+              "label": "Rural and Maritime Development",
+              "id": 1749622619579,
               "order": 5
+            },
+            {
+              "value": "commissioner_office",
+              "label": "Commissioner Office",
+              "id": 1749622622244,
+              "order": 6
+            },
+            {
+              "value": "water_authority_of_fiji",
+              "label": "Water Authority of Fiji",
+              "id": 1749622577767,
+              "order": 1
             }
           ]
         },
         {
-          "id": 1749621431234,
-          "name": "has_desalination_installation",
-          "label": "Is there a desalination installation in place?",
+          "id": 1749622652941,
+          "name": "wsmp_submitted",
+          "label": "Is the WSMP submitted?",
           "order": 11,
           "type": "option",
           "required": true,
@@ -187,87 +193,60 @@
             {
               "value": "yes",
               "label": "Yes",
-              "id": 1749621441233,
+              "id": 1749622659285,
               "order": 1
             },
             {
               "value": "no",
               "label": "No",
-              "id": 1749621441235,
+              "id": 1749622659286,
               "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749621374500,
-              "options": ["desalination"]
             }
           ]
         },
         {
-          "id": 1749621441234,
-          "name": "desalination_photo",
-          "label": "Photo of the Desalination Installation",
+          "id": 1749622675800,
+          "name": "wsmp_approved",
+          "label": "Is the WSMP approved?",
           "order": 12,
-          "type": "photo",
-          "required": false,
+          "type": "option",
+          "required": true,
           "meta": false,
-          "dependency": [
+          "options": [
             {
-              "id": 1749621431234,
-              "options": ["yes"]
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622681708,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622681709,
+              "order": 2
             }
           ]
         },
         {
-          "id": 1749621461754,
-          "name": "has_new_catchment_dam",
-          "label": "Construction of New Water Catchment/Dam?",
+          "id": 1749622701234,
+          "name": "construction_start_date",
+          "label": "Construction Start Date",
           "order": 13,
-          "type": "option",
-          "required": true,
+          "type": "date",
+          "required": false,
           "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749621471837,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749621471838,
-              "order": 2
-            }
-          ],
           "dependency": [
             {
-              "id": 1749621374500,
-              "options": ["surface_water"]
+              "id": 1749622652941,
+              "options": ["yes"]
             }
           ]
         },
         {
-          "id": 1749621494567,
-          "name": "catchment_dam_photo",
-          "label": "Photo of the Catchment/Dam",
+          "id": 1749622715678,
+          "name": "water_committee",
+          "label": "Do you have Water Committee and Is it active?",
           "order": 14,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621461754,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621517282,
-          "name": "has_borehole",
-          "label": "Construction of borehole?",
-          "order": 15,
           "type": "option",
           "required": true,
           "meta": false,
@@ -275,229 +254,26 @@
             {
               "value": "yes",
               "label": "Yes",
-              "id": 1749621523401,
+              "id": 1749622721234,
               "order": 1
+            },
+            {
+              "value": "not_active",
+              "label": "Not Active",
+              "id": 1749622721235,
+              "order": 2
             },
             {
               "value": "no",
               "label": "No",
-              "id": 1749621523402,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749621374500,
-              "options": ["ground_water"]
-            }
-          ]
-        },
-        {
-          "id": 1749621541234,
-          "name": "borehole_photo",
-          "label": "Photo of the Borehole",
-          "order": 16,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621517282,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621557442,
-          "name": "has_pump_system",
-          "label": "Installation of Pump system?",
-          "order": 17,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749621564288,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749621564289,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749621374500,
-              "options": ["ground_water", "sea_water"]
-            }
-          ]
-        },
-        {
-          "id": 1749621581234,
-          "name": "pump_system_photo",
-          "label": "Photo of the Pump System",
-          "order": 18,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621557442,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621611527,
-          "name": "has_rainwater_harvesting",
-          "label": "Installation of Rainwater Harvesting System?",
-          "order": 19,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749621619301,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749621619302,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749621374500,
-              "options": ["rainwater"]
-            }
-          ]
-        },
-        {
-          "id": 1749621711234,
-          "name": "rainwater_harvesting_photo",
-          "label": "Photo of the Rainwater Harvesting System",
-          "order": 20,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621611527,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621624567,
-          "name": "number_of_rainwater_harvesting_systems",
-          "label": "Please Identify the number of Rainwater harvesting system installed.",
-          "order": 21,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621611527,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621690983,
-          "name": "has_desalination_plant",
-          "label": "Installation of Desalination Plant?",
-          "order": 22,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749621697642,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749621697643,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749621374500,
-              "options": ["sea_water"]
-            }
-          ]
-        },
-        {
-          "id": 1749621634567,
-          "name": "desalination_plant_photo",
-          "label": "Photo of the Desalination Plant",
-          "order": 23,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621690983,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621742326,
-          "name": "pipe_sizes",
-          "label": "Sizes of pipes?",
-          "order": 24,
-          "type": "multiple_option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "200mm",
-              "label": "200mm",
-              "id": 1749621749850,
-              "order": 1
-            },
-            {
-              "value": "150mm",
-              "label": "150mm",
-              "id": 1749621749851,
-              "order": 2
-            },
-            {
-              "value": "100mm",
-              "label": "100mm",
-              "id": 1749621762591,
+              "id": 1749622721236,
               "order": 3
-            },
+            }
+          ],
+          "dependency": [
             {
-              "value": "80mm",
-              "label": "80mm",
-              "id": 1749621768550,
-              "order": 4
-            },
-            {
-              "value": "50mm",
-              "label": "50mm",
-              "id": 1749621777631,
-              "order": 5
-            },
-            {
-              "value": "25mm",
-              "label": "25mm",
-              "id": 1749621783784,
-              "order": 6
+              "id": 1749622652941,
+              "options": ["yes"]
             }
           ]
         }

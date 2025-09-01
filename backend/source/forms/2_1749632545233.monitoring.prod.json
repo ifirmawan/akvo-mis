@@ -42,6 +42,29 @@
           "type": "number",
           "required": true,
           "meta": false
+        },
+        {
+          "id": 1749632835123,
+          "name": "eps_training_conducted",
+          "label": "Has the EPS Training been conducted in the Village?",
+          "order": 4,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749632842043,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749632842044,
+              "order": 2
+            }
+          ]
         }
       ],
       "repeat_text": null
@@ -529,9 +552,9 @@
           "name": "officer_name",
           "label": "Name of Officer",
           "order": 4,
-          "type": "text",
+          "type": "input",
           "required": true,
-          "meta": false
+          "meta": true
         }
       ],
       "repeat_text": null

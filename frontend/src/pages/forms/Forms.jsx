@@ -206,10 +206,10 @@ const Forms = () => {
       (x) => x.type === QUESTION_TYPES.administration
     )?.value;
 
-    const datapointName = names.length
-      ? datapoint?.name
-        ? `${datapoint.name} - ${names}`
-        : names
+    const datapointName = datapoint?.name
+      ? datapoint.name
+      : names.length
+      ? names
       : `${authUser.administration.name} - ${moment().format("MMM YYYY")}`;
 
     const dataPayload = {

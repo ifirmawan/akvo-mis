@@ -4315,9 +4315,9 @@
           "name": "dws_officer_name",
           "label": "Name of DWS Officer",
           "order": 6,
-          "type": "text",
+          "type": "input",
           "required": true,
-          "meta": false
+          "meta": true
         }
       ],
       "repeat_text": null

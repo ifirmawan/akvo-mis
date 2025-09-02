@@ -5,7 +5,6 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
 from api.v1.v1_forms.models import Questions, Forms
-from api.v1.v1_data.models import FormData
 from api.v1.v1_jobs.job import download_data, generate_definition_sheet
 from api.v1.v1_profile.management.commands import administration_seeder
 
@@ -87,29 +86,54 @@ class BulkUnitTestCase(TestCase):
         self.call_command("-r", 2, "--test", True)
 
     def test_data_download_list_of_columns(self):
-        form_data = FormData.objects.count()
-        self.assertTrue(form_data)
-        form_data = FormData.objects.first()
+        form = Forms.objects.get(pk=1)
+        child_forms = form.children.filter(pk=10002)
+        self.assertTrue(form)
+        form_data = form.form_form_data.order_by("?").first()
         administration = form_data.administration
-        download_response = download_data(form_data.form, [administration.id])
+        download_response = download_data(
+            form=form,
+            administration_ids=[administration.id],
+            child_form_ids=list(child_forms.values_list("id", flat=True))
+        )
         self.assertTrue(download_response)
         download_columns = list(download_response[0].keys())
         questions = Questions.objects.filter(form=form_data.form).values_list(
             "name", flat=True)
-        meta_columns = ["id", "created_at", "created_by", "updated_at",
-                        "updated_by", "datapoint_name", "administration",
-                        "geolocation"]
+        meta_columns = [
+            "id",
+            "created_at",
+            "created_by",
+            "updated_at",
+            "updated_by",
+            "datapoint_name",
+            "administration",
+            "geolocation"
+        ]
         columns = list(
             filter(lambda x: x not in meta_columns, download_columns)
         )
         self.assertEqual(list(columns).sort(), list(questions).sort())
 
-        # test if the download recent data is successful
-        download_response = download_data(
-            form_data.form,
-            [administration.id],
-            "recent")
-        self.assertTrue(download_response)
+        self.assertCountEqual(
+            columns,
+            [
+                'uuid',
+                'name',
+                'gender',
+                'phone',
+                'location',
+                'example_geolocation',
+                'family_members',
+                'picture',
+                'data',
+                'decimal',
+                'multiple_of_two',
+                'do_you_have_pets',
+                'whats_the_pet',
+                'monitoring_date',
+            ]
+        )
 
     def test_generate_definition_sheet(self):
         form = Forms.objects.first()

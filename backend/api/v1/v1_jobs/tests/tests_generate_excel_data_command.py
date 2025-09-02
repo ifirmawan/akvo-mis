@@ -36,31 +36,53 @@ class JobGenerateExcelDataCommand(TestCase):
     def test_download_all_data(self):
         form = Forms.objects.get(pk=1)
 
+        output = StringIO()
         # Test download all data
         call_command(
             "generate_excel_data",
             form.id,
+            stdout=output,
+            stderr=StringIO(),
         )
+        self.assertIn("File uploaded to", output.getvalue())
+
         form_name = form.name.replace(" ", "_").lower()
-        result_file = f"{CRONJOB_RESULT_DIR}/{form_name}-routine.xlsx"
+        result_file = f"{CRONJOB_RESULT_DIR}/{form_name}.xlsx"
         self.assertTrue(storage.check(result_file))
         storage.delete(result_file)
 
-        call_command("generate_excel_data", form.id, "--latest", True)
-
-        result_file = f"{CRONJOB_RESULT_DIR}/{form_name}-routine-latest.xlsx"
-        # self.assertTrue(storage.check(result_file))
-
-        # download_file = storage.download(result_file)
-        # df = pd.read_excel(download_file)
-        # self.assertTrue(df.shape[0])
-
-        storage.delete(result_file)
-
-    def call_generate_excel_data_use_label(self):
+    def test_download_with_child_form(self):
         form = Forms.objects.get(pk=1)
-        call_command("generate_excel_data", form.id, "--use-label", True)
-        form_name = form.name.replace(" ", "_").lower()
-        result_file = f"{CRONJOB_RESULT_DIR}/{form_name}-routine.xlsx"
-        self.assertTrue(storage.check(result_file))
-        storage.delete(result_file)
+        child_form = form.children.first()
+        output = StringIO()
+        # Test download all data
+        call_command(
+            "generate_excel_data",
+            child_form.id,
+            stdout=output,
+            stderr=StringIO(),
+        )
+        self.assertIn("Please use form registration id", output.getvalue())
+
+    def test_download_with_invalid_form_id(self):
+        with self.assertRaisesMessage(
+            Forms.DoesNotExist,
+            "Forms matching query does not exist"
+        ):
+            output = StringIO()
+            call_command(
+                "generate_excel_data",
+                form_id=999,
+                stdout=output,
+                stderr=StringIO(),
+            )
+            self.assertIn("Form id is required", output.getvalue())
+
+    def test_download_with_no_form_id(self):
+        output = StringIO()
+        call_command(
+            "generate_excel_data",
+            stdout=output,
+            stderr=StringIO(),
+        )
+        self.assertIn("Form id is required", output.getvalue())

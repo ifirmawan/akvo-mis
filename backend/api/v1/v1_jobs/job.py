@@ -104,26 +104,51 @@ def generate_data_sheet(
     )
     if len(data):
         df = pd.DataFrame(data)
-        new_columns = {}
+        # Create a mapping of base question names to question info for lookup
+        question_map = {}
+        for question in questions:
+            question_id, question_name, question_type = question
+            question_map[question_name] = {
+                'id': question_id,
+                'type': question_type,
+                'name': question_name
+            }
+        # Get all actual column names from the dataframe (including indexed)
+        actual_columns = [col for col in df.columns if col not in meta_columns]
+        # Ensure all question columns exist in dataframe (base and indexed)
         for question in questions:
             question_id, question_name, question_type = question
             if question_name not in df:
                 df[question_name] = None
-            if use_label:
-                if question_type in [
-                    QuestionTypes.option,
-                    QuestionTypes.multiple_option,
-                ]:
-                    new_columns[question_name] = df[question_name].apply(
-                        lambda x: get_answer_label(x, question_id)
-                    )
-        question_names = [question[1] for question in questions]
+
+        # Process labels for option-type questions (including indexed columns)
+        new_columns = {}
         if use_label:
+            for col_name in actual_columns:
+                # Check if this is an indexed column (contains underscore)
+                base_question_name = (
+                    col_name.split('_')[0] if '_' in col_name else col_name
+                )
+                if base_question_name in question_map:
+                    question_info = question_map[base_question_name]
+                    if question_info['type'] in [
+                        QuestionTypes.option,
+                        QuestionTypes.multiple_option,
+                    ]:
+                        new_columns[col_name] = df[col_name].apply(
+                            lambda x: get_answer_label(x, question_info['id'])
+                        )
+        # Apply label transformations
+        if use_label and new_columns:
             new_df = pd.DataFrame(new_columns)
-            df.drop(columns=list(new_df), inplace=True)
+            df.drop(columns=list(new_columns.keys()), inplace=True)
             df = pd.concat([df, new_df], axis=1)
-        # Reorder columns
-        df = df[meta_columns + question_names]
+        # Reorder columns: meta columns first, then all question columns
+        available_question_columns = [
+            col for col in df.columns if col not in meta_columns
+        ]
+        final_columns = meta_columns + available_question_columns
+        df = df[final_columns]
         df.to_excel(writer, sheet_name="data", index=False)
         generate_definition_sheet(
             writer=writer,

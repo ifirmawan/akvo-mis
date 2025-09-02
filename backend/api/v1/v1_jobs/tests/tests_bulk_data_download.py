@@ -4,14 +4,19 @@ from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
+from rest_framework import status
 from api.v1.v1_forms.models import Questions, Forms
 from api.v1.v1_jobs.job import download_data, generate_definition_sheet
 from api.v1.v1_profile.management.commands import administration_seeder
+from api.v1.v1_profile.models import Administration
+from api.v1.v1_users.models import SystemUser
+from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 from utils.export_form import blank_data_template
+from utils.custom_helper import CustomPasscode
 
 
 @override_settings(USE_TZ=False)
-class BulkUnitTestCase(TestCase):
+class BulkUnitTestCase(TestCase, ProfileTestHelperMixin):
     def call_command(self, *args, **kwargs):
         out = StringIO()
         call_command(
@@ -80,11 +85,115 @@ class BulkUnitTestCase(TestCase):
         # Seed default roles after administration seeder
         call_command("default_roles_seeder", "--test", 1)
 
-        user = {"email": "admin@akvo.org", "password": "Test105*"}
-        user = self.client.post('/api/v1/login',
-                                user,
-                                content_type='application/json')
+        self.client.post(
+            '/api/v1/login',
+            {
+                "email": "admin@akvo.org",
+                "password": "Test105*"
+            },
+            content_type='application/json'
+        )
         self.call_command("-r", 2, "--test", True)
+
+        # Create a mobile assignment for the user
+        user = SystemUser.objects.filter(email="admin@akvo.org").first()
+        mobile_user = user.mobile_assignments.create(
+            name="Test mobile",
+            passcode=CustomPasscode().encode("123456"),
+        )
+        # Assign administration to the mobile assignment
+        user_adm = Administration.objects.filter(parent__isnull=True).first()
+        mobile_user.administrations.add(
+            user_adm
+        )
+        self.form = Forms.objects.get(pk=4)
+        # Assign form to the mobile assignment
+        mobile_user.forms.add(self.form)
+
+        self.mobile_user = mobile_user
+        self.code = CustomPasscode().decode(
+            encoded_passcode=self.mobile_user.passcode
+        )
+        res = self.client.post(
+            "/api/v1/device/auth",
+            {"code": self.code},
+            content_type="application/json",
+        )
+        data = res.json()
+        self.token = data["syncToken"]
+
+    def seed_repeatable_form_data(self):
+        form = Forms.objects.get(pk=4)
+        payload = {
+            "formId": form.id,
+            "name": "Repeatable Test",
+            "duration": 1,
+            "submittedAt": "2025-09-02T02:38:13.807Z",
+            "submitter": self.mobile_user.name,
+            "geo": [6.2088, 106.8456],
+            "answers": {
+                442: "Jane Doe",
+                443: "/attachment/screenshot_likes_123.jpeg",
+                444: "/attachments/my_works_123.pdf",
+                445: "/attachment/application_letter_2025-09-01.pdf",
+                551: "data:base64,examplesignature123",
+                661: "Good Job!",
+                "661-1": "Awesome work!",
+                "661-2": "Lovely!",
+            },
+        }
+        response = self.client.post(
+            "/api/v1/device/sync",
+            payload,
+            follow=True,
+            content_type="application/json",
+            **{"HTTP_AUTHORIZATION": f"Bearer {self.token}"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_data_download_repeatable_questions(self):
+        # Remove existing form data to avoid interference
+        self.form.form_form_data.all().delete(hard=True)
+        self.seed_repeatable_form_data()
+        form_data = self.form.form_form_data.order_by("?").first()
+        administration = form_data.administration
+        download_response = download_data(
+            form=self.form,
+            administration_ids=[administration.id],
+        )
+        self.assertTrue(download_response)
+        download_columns = list(download_response[0].keys())
+        questions = Questions.objects.filter(form=form_data.form).values_list(
+            "name", flat=True)
+        meta_columns = [
+            "id",
+            "created_at",
+            "created_by",
+            "updated_at",
+            "updated_by",
+            "datapoint_name",
+            "administration",
+            "geolocation"
+        ]
+        columns = list(
+            filter(lambda x: x not in meta_columns, download_columns)
+        )
+        self.assertEqual(list(columns).sort(), list(questions).sort())
+
+        self.assertCountEqual(
+            columns,
+            [
+                'uuid',
+                'name',
+                'upload_screenshot_proof',
+                'upload_work',
+                'letter_of_application',
+                'signature',
+                'testimonial_1',
+                'testimonial_2',
+                'testimonial_3'
+            ]
+        )
 
     def test_data_download_list_of_columns(self):
         form = Forms.objects.get(pk=1)

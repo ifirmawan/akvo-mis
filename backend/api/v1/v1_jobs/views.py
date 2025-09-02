@@ -30,7 +30,7 @@ from rest_framework.response import Response
 from rest_framework.fields import ChoiceField
 
 from api.v1.v1_forms.models import Forms
-from api.v1.v1_jobs.constants import JobStatus, JobTypes, DataDownloadTypes
+from api.v1.v1_jobs.constants import JobStatus, JobTypes
 from api.v1.v1_jobs.models import Jobs
 from api.v1.v1_jobs.serializers import (
     DownloadDataRequestSerializer,
@@ -58,17 +58,10 @@ from utils.custom_serializer_fields import validate_serializers_message
             location=OpenApiParameter.QUERY,
         ),
         OpenApiParameter(
-            name="type",
+            name="child_form_ids",
             required=False,
-            type=OpenApiTypes.STR,
-            enum=DataDownloadTypes.FieldStr.values(),
-            default=DataDownloadTypes.all,
-        ),
-        OpenApiParameter(
-            name="use_label",
-            required=False,
-            type=OpenApiTypes.BOOL,
-            default=False,
+            type={"type": "array", "items": {"type": "number"}},
+            location=OpenApiParameter.QUERY,
         ),
     ],
     responses={
@@ -93,16 +86,18 @@ def download_generate(request, version):
             status=status.HTTP_400_BAD_REQUEST,
         )
     administration = serializer.validated_data.get("administration_id")
+    child_forms = [
+        child.id
+        for child in serializer.validated_data.get("child_form_ids", [])
+    ]
     result = call_command(
         "job_download",
         serializer.validated_data.get("form_id").id,
         request.user.id,
         "-a",
         administration.id if administration else 0,
-        "-t",
-        serializer.validated_data.get("type"),
-        "-l",
-        1 if serializer.validated_data.get("use_label") else 0,
+        "-c",
+        *child_forms,
     )
     job = Jobs.objects.get(pk=result)
     data = {

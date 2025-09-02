@@ -87,7 +87,7 @@ class FormData(SoftDeletes, Draft):
             ),
         }
         for a in self.data_answer.order_by(
-            "question__question_group_id", "question__order"
+            "question__question_group_id", "question__order", "index"
         ).all():
             data.update(a.to_data_frame)
         return data
@@ -209,6 +209,10 @@ class Answers(models.Model):
                 answer = answer.administration_column
         else:
             answer = self.value
+        if self.index:
+            return {f"{qname}_{self.index + 1}": answer}
+        if not self.index and q.question_group.repeatable:
+            return {f"{qname}_1": answer}
         return {qname: answer}
 
     @property

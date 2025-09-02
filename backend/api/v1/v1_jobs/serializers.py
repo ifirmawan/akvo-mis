@@ -47,7 +47,6 @@ class DownloadListSerializer(serializers.ModelSerializer):
     )
     form = serializers.SerializerMethodField()
     attributes = serializers.SerializerMethodField()
-    download_type = serializers.SerializerMethodField()
 
     @extend_schema_field(
         CustomChoiceField(
@@ -116,11 +115,16 @@ class DownloadListSerializer(serializers.ModelSerializer):
                     "id", "name", "form_id",
                 )
                 return list(fd)
-        return instance.info.get("attributes")
+        if instance.type == JobTypes.download:
+            child_form_ids = instance.info.get("child_form_ids")
+            if child_form_ids:
+                forms = Forms.objects.filter(pk__in=child_form_ids).values(
+                    "id", "name"
+                )
+                forms = [f for f in forms]
+                return forms
 
-    @extend_schema_field(OpenApiTypes.STR)
-    def get_download_type(self, instance):
-        return instance.info.get("download_type")
+        return instance.info.get("attributes")
 
     class Meta:
         model = Jobs
@@ -135,7 +139,6 @@ class DownloadListSerializer(serializers.ModelSerializer):
             "date",
             "result",
             "attributes",
-            "download_type",
         ]
 
 

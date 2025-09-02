@@ -105,6 +105,7 @@ class Questions(models.Model):
             "fn": self.fn,
             "pre": self.pre,
             "display_only": self.display_only,
+            "form_name": self.form.name,
         }
 
     class Meta:

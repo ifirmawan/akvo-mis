@@ -6,7 +6,6 @@ from django_q.models import Task
 import pandas as pd
 from django.utils import timezone
 from django_q.tasks import async_task
-from django.db.models import Subquery, Max
 from api.v1.v1_jobs.administrations_bulk_upload import (
     seed_administration_data,
     validate_administrations_bulk_upload,
@@ -44,19 +43,32 @@ from utils.report_generator import generate_datapoint_report
 logger = logging.getLogger(__name__)
 
 
-def download_data(form: Forms, administration_ids, download_type="all"):
-    filter_data = {}
+def download_data(
+    form: Forms,
+    administration_ids: list = None,
+    child_form_ids: list = []
+) -> list:
+    filter_data = {
+        "is_pending": False,
+        "is_draft": False,
+    }
     if administration_ids:
         filter_data["administration_id__in"] = administration_ids
-    data = form.form_form_data.filter(**filter_data)
-    if download_type == "recent":
-        latest_per_uuid = (
-            data.values("uuid")
-            .annotate(latest_created=Max("created"))
-            .values("latest_created")
-        )
-        data = data.filter(created__in=Subquery(latest_per_uuid))
-    return [d.to_data_frame for d in data.order_by("id")]
+    data = form.form_form_data.filter(**filter_data).order_by("id").all()
+    data_items = []
+    for d in data:
+        item = d.to_data_frame
+        for child_form in child_form_ids:
+            dl = d.children.filter(
+                form_id=child_form,
+                is_pending=False,
+                is_draft=False,
+            ).last()
+            if dl:
+                # merge parent and child data
+                item = {**item, **dl.to_data_frame}
+        data_items.append(item)
+    return data_items
 
 
 def get_answer_label(answer_values, question_id):
@@ -76,15 +88,19 @@ def get_answer_label(answer_values, question_id):
 def generate_data_sheet(
     writer: pd.ExcelWriter,
     form: Forms,
-    administration_ids=None,
-    download_type: str = "all",
-    use_label: bool = False,
+    administration_ids: list = None,
+    use_label: bool = True,
+    child_form_ids: list = [],
 ) -> None:
     questions = get_question_names(form=form)
+    if len(child_form_ids):
+        child_forms = form.children.filter(id__in=child_form_ids).all()
+        for child_form in child_forms:
+            questions.extend(get_question_names(form=child_form))
     data = download_data(
         form=form,
         administration_ids=administration_ids,
-        download_type=download_type,
+        child_form_ids=child_form_ids,
     )
     if len(data):
         df = pd.DataFrame(data)
@@ -144,15 +160,14 @@ def job_generate_data_download(job_id, **kwargs):
             ).values_list("name", flat=True)
         )
     form = Forms.objects.get(pk=job.info.get("form_id"))
-    download_type = kwargs.get("download_type")
+    child_form_ids = job.info.get("child_form_ids", [])
     writer = pd.ExcelWriter(file_path, engine="xlsxwriter")
 
     generate_data_sheet(
         writer=writer,
         form=form,
         administration_ids=administration_ids,
-        download_type=download_type,
-        use_label=job.info.get("use_label"),
+        child_form_ids=child_form_ids,
     )
 
     context = [

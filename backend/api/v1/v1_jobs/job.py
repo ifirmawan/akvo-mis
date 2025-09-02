@@ -125,7 +125,11 @@ def generate_data_sheet(
         # Reorder columns
         df = df[meta_columns + question_names]
         df.to_excel(writer, sheet_name="data", index=False)
-        generate_definition_sheet(form=form, writer=writer)
+        generate_definition_sheet(
+            writer=writer,
+            form=form,
+            child_form_ids=child_form_ids,
+        )
     else:
         blank_data_template(form=form, writer=writer)
 
@@ -170,8 +174,16 @@ def job_generate_data_download(job_id, **kwargs):
         child_form_ids=child_form_ids,
     )
 
+    monitoring_forms = form.children.filter(pk__in=child_form_ids).all()
+
     context = [
         {"context": "Form Name", "value": form.name},
+        {
+            "context": "Monitoring Form(s)",
+            "value": ", ".join(
+                [f.name for f in monitoring_forms]
+            ) if len(monitoring_forms) else "None"
+        },
         {
             "context": "Download Date",
             "value": update_date_time_format(job.created),

@@ -96,7 +96,7 @@ class TestJobsFunctions(TestCase, ProfileTestHelperMixin):
 
             # Call the function with job ID and kwargs
             result_url = job_generate_data_download(
-                job_id=job.id, download_type="all"
+                job_id=job.id
             )
 
             # Verify the result
@@ -149,7 +149,7 @@ class TestJobsFunctions(TestCase, ProfileTestHelperMixin):
 
             # Call the function with administration
             result_url = job_generate_data_download(
-                job_id=job.id, administration=1, download_type="recent"
+                job_id=job.id, administration=1
             )
 
             # Verify the result

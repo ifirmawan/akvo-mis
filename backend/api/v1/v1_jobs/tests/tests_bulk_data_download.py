@@ -7,6 +7,7 @@ from django.test.utils import override_settings
 from api.v1.v1_forms.models import Questions, Forms
 from api.v1.v1_jobs.job import download_data, generate_definition_sheet
 from api.v1.v1_profile.management.commands import administration_seeder
+from utils.export_form import blank_data_template
 
 
 @override_settings(USE_TZ=False)
@@ -138,7 +139,36 @@ class BulkUnitTestCase(TestCase):
     def test_generate_definition_sheet(self):
         form = Forms.objects.first()
         writer = pd.ExcelWriter("test.xlsx", engine='xlsxwriter')
-        generate_definition_sheet(form=form, writer=writer)
+        generate_definition_sheet(
+            writer=writer,
+            form=form
+        )
+        writer.save()
+        # test if excel has been created
+        self.assertTrue(os.path.exists("test.xlsx"))
+        os.remove("test.xlsx")
+
+    def test_generate_definition_sheet_with_child_forms(self):
+        form = Forms.objects.get(pk=1)
+        child_forms = form.children.filter(pk=10002)
+        writer = pd.ExcelWriter("test.xlsx", engine='xlsxwriter')
+        generate_definition_sheet(
+            writer=writer,
+            form=form,
+            child_form_ids=list(child_forms.values_list("id", flat=True)),
+        )
+        writer.save()
+        # test if excel has been created
+        self.assertTrue(os.path.exists("test.xlsx"))
+        os.remove("test.xlsx")
+
+    def test_blank_data_template(self):
+        form = Forms.objects.first()
+        writer = pd.ExcelWriter("test.xlsx", engine='xlsxwriter')
+        blank_data_template(
+            writer=writer,
+            form=form
+        )
         writer.save()
         # test if excel has been created
         self.assertTrue(os.path.exists("test.xlsx"))

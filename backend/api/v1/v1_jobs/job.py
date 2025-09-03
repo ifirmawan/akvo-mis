@@ -227,7 +227,7 @@ def job_generate_data_download(job_id, **kwargs):
             "context": "Monitoring Form(s)",
             "value": ", ".join(
                 [f.name for f in monitoring_forms]
-            ) if len(monitoring_forms) else "None"
+            ) if len(monitoring_forms) else "-"
         },
         {
             "context": "Download Date",

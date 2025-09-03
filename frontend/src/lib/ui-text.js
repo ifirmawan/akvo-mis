@@ -1,5 +1,9 @@
 import React, { Fragment } from "react";
 
+const downloadAppText = (
+  <Fragment>Download {window.appConfig.apkName} App</Fragment>
+);
+
 const uiText = {
   en: {
     // Sidebar Menu Labels
@@ -746,7 +750,11 @@ const uiText = {
       { text: "Privacy Policy", href: "/privacy-policy", isPage: true },
       { text: "Terms & Conditions", href: "/terms-n-conditions", isPage: true },
       { text: "Cookie Policy", href: "/cookie-policy", isPage: true },
-      { text: "Download DWS DataPro App", href: "/app", isPage: false },
+      {
+        text: downloadAppText,
+        href: "/app",
+        isPage: false,
+      },
     ],
     homeJumbotronTitle: <Fragment>{window.appConfig.name}</Fragment>,
     homeJumbotronSubtitle: (
@@ -958,6 +966,7 @@ const uiText = {
     showPendingUsers: "Show Pending Users",
     export2ExcelSuccess: "Data exported to Excel successfully",
     export2ExcelError: "Unable to export data to Excel",
+    downloadAppText,
   },
 
   de: {},

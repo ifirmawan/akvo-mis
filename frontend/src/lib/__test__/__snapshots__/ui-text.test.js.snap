@@ -232,6 +232,10 @@ Object {
     "deleteUserHint": "Deleting this user will not delete the data association(s)",
     "deleteUserTitle": "You are about to delete the user",
     "download": "Download",
+    "downloadAppText": <React.Fragment>
+      Download 
+       App
+    </React.Fragment>,
     "downloadHere": "download here",
     "downloadReport": "Download Report",
     "downloadReportError": "Unable to download report",
@@ -451,7 +455,10 @@ Object {
       Object {
         "href": "/app",
         "isPage": false,
-        "text": "Download DWS DataPro App",
+        "text": <React.Fragment>
+          Download 
+           App
+        </React.Fragment>,
       },
     ],
     "homeStructureImage": Object {

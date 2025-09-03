@@ -34,6 +34,11 @@ class Command(BaseCommand):
         administration = options.get("administration")
         use_label = options.get("use_label", 1)
         download_type = options.get("type", DataDownloadTypes.recent)
+        if download_type not in [
+            DataDownloadTypes.all,
+            DataDownloadTypes.recent,
+        ]:
+            download_type = DataDownloadTypes.recent
         form_id = options.get("form")[0]
         form = Forms.objects.get(pk=form_id)
         # validate form should have parent is null

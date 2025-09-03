@@ -13,11 +13,11 @@ from utils import storage
 from mis.settings import STORAGE_PATH
 
 
-def generate_file(filename: str):
+def generate_file(filename: str, folder: str = "download"):
     f = open(filename, "a")
     f.write("This is a test file!")
     f.close()
-    storage.upload(file=filename, folder="download")
+    storage.upload(file=filename, folder=folder)
     return filename
 
 
@@ -73,3 +73,41 @@ class DownloadFileAPITestCase(TestCase, ProfileTestHelperMixin):
         # Remove the file after test
         os.remove(file)
         storage.delete(url=f"download/{filename}")
+
+        # Create a Job with result is download-report-test-form-123.docx
+        filename = "download-report-test-form-123.docx"
+        file = generate_file(
+            filename=filename,
+            folder="download_datapoint_report"
+        )
+        job = Jobs.objects.create(
+            type=JobTypes.download_datapoint_report,
+            user=self.user,
+            status=JobStatus.done,
+            info={
+                "form_id": self.form.id,
+                "administration_id": self.administration.id,
+                "selection_ids": [1, 2, 3]
+            },
+            result=filename
+        )
+        response = self.client.get(
+            (
+                f"{self.url}{job.result}"
+                "?type={0}".format(
+                    JobTypes.FieldStr.get(JobTypes.download_datapoint_report)
+                )
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.token}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertTrue(
+            os.path.exists(
+                f"{STORAGE_PATH}/download_datapoint_report/{filename}"
+            ),
+            "File not exists"
+        )
+        # Remove the file after test
+        os.remove(file)
+        storage.delete(url=f"download_datapoint_report/{filename}")

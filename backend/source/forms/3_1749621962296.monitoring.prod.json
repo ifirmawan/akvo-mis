@@ -605,7 +605,7 @@
       "label": "Raw Water Main Inspection",
       "description": null,
       "order": 4,
-      "repeatable": true,
+      "repeatable": false,
       "questions": [
         {
           "id": 1723459200017,
@@ -765,7 +765,7 @@
       "label": "Reservoir Inspection",
       "description": null,
       "order": 6,
-      "repeatable": true,
+      "repeatable": false,
       "questions": [
         {
           "id": 1723459233022,
@@ -988,7 +988,7 @@
       "label": "Distribution Main Inspection",
       "description": null,
       "order": 8,
-      "repeatable": true,
+      "repeatable": false,
       "questions": [
         {
           "id": 1723459210029,
@@ -1163,7 +1163,7 @@
       "label": "Reticulation Inspection",
       "description": null,
       "order": 10,
-      "repeatable": true,
+      "repeatable": false,
       "questions": [
         {
           "id": 1723459200035,

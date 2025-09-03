@@ -328,6 +328,8 @@ Object {
     "eventTitle": "News & Events",
     "existingApproverDescription": "Please update the setup in manage validation tree or remove these forms for the current user",
     "existingApproverTitle": "There are existing approvers for:",
+    "export2ExcelError": "Unable to export data to Excel",
+    "export2ExcelSuccess": "Data exported to Excel successfully",
     "exportButton": "Export",
     "exportEntityError": "Unable to export entities",
     "exportPanelText": <React.Fragment>

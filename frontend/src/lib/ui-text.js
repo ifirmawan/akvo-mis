@@ -956,6 +956,8 @@ const uiText = {
     rolesLabel: "Role(s)",
     isSuperAdminLabel: "Is Superadmin?",
     showPendingUsers: "Show Pending Users",
+    export2ExcelSuccess: "Data exported to Excel successfully",
+    export2ExcelError: "Unable to export data to Excel",
   },
 
   de: {},

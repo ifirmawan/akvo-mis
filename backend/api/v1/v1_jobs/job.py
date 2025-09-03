@@ -73,6 +73,8 @@ def download_data(
                     # keep datapoint_name and created_at from parent
                     item["datapoint_name"] = d.name
                     item["created_at"] = d.to_data_frame.get("created_at")
+                    item["created_by"] = d.created_by.get_full_name()
+                    item["updated_by"] = dl.created_by.get_full_name()
             data_items.append(item)
         if download_type == DataDownloadTypes.all:
             for child_form in child_form_ids:
@@ -86,6 +88,8 @@ def download_data(
                         **dl.to_data_frame,
                         "datapoint_name": d.name,
                         "created_at": d.to_data_frame.get("created_at"),
+                        "created_by": d.created_by.get_full_name(),
+                        "updated_by": dl.created_by.get_full_name(),
                     })
     return data_items
 

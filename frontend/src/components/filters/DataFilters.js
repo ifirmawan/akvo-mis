@@ -9,6 +9,7 @@ import {
   Checkbox,
   Badge,
   Tooltip,
+  Radio,
 } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdministrationDropdown from "./AdministrationDropdown";
@@ -48,6 +49,7 @@ const DataFilters = ({
   const [selectedChildForms, setSelectedChildForms] = useState([]);
   const [openDocx, setOpenDocx] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
+  const [downloadType, setDownloadType] = useState("recent");
   const isUserHasForms = authUser?.is_superuser || authUser?.forms?.length || 0;
   const language = store.useState((s) => s.language);
   const { active: activeLang } = language;
@@ -76,6 +78,9 @@ const DataFilters = ({
       if (selectedChildForms.length) {
         urls.push(childFormIds);
       }
+      if (["all", "recent"].includes(downloadType)) {
+        urls.push(`type=${downloadType}`);
+      }
       const apiURL = `/${urls.join("&")}`;
       await api.get(apiURL);
       notify({
@@ -97,6 +102,7 @@ const DataFilters = ({
     selectedForm,
     selectedChildForms,
     notify,
+    downloadType,
     text.export2ExcelSuccess,
     text.export2ExcelError,
     navigate,
@@ -153,23 +159,6 @@ const DataFilters = ({
     navigate(`/control-center/form/${selectedForm}`);
   };
 
-  // const downloadTypes = [
-  //   {
-  //     key: "all",
-  //     label: text.allData,
-  //     onClick: (param) => {
-  //       exportGenerate(param);
-  //     },
-  //   },
-  //   {
-  //     key: "recent",
-  //     label: text.latestData,
-  //     onClick: (param) => {
-  //       exportGenerate(param);
-  //     },
-  //   },
-  // ];
-
   const childFormMenuItems = useMemo(() => {
     const formItems = childForms.map((form) => ({
       key: form.id,
@@ -215,40 +204,58 @@ const DataFilters = ({
       );
     }
 
-    // Add footer menu with download button
-    menuItems.push({
-      key: "download-footer",
-      label: (
-        <Button
-          type="primary"
-          icon={<FileWordOutlined />}
-          loading={downloading}
-          onClick={() => {
-            if (openExcel) {
-              export2Excel();
-            } else {
-              export2Docx();
-            }
-          }}
-          disabled={openDocx && !selectedRowKeys?.length}
-          style={{ width: "100%" }}
-        >
-          {text.downloadReport}
-        </Button>
-      ),
-      disabled: true,
-    });
+    if (openExcel) {
+      menuItems.push({
+        key: "download-type",
+        label: (
+          <Radio.Group
+            onChange={(e) => setDownloadType(e.target.value)}
+            value={downloadType}
+          >
+            <Radio value="all">{text.allData}</Radio>
+            <Radio value="recent">{text.latestData}</Radio>
+          </Radio.Group>
+        ),
+      });
+    }
 
-    return menuItems;
+    return [
+      ...menuItems,
+      {
+        key: "download-footer",
+        label: (
+          <Button
+            type="primary"
+            icon={<FileWordOutlined />}
+            loading={downloading}
+            onClick={() => {
+              if (openExcel) {
+                export2Excel();
+              } else {
+                export2Docx();
+              }
+            }}
+            disabled={openDocx && !selectedRowKeys?.length}
+            style={{ width: "100%" }}
+          >
+            {text.downloadReport}
+          </Button>
+        ),
+        disabled: true,
+      },
+    ];
   }, [
     childForms,
     selectedChildForms,
     downloading,
+    openExcel,
+    openDocx,
+    downloadType,
     selectedRowKeys,
     text.downloadReport,
     text.selectChildForms,
-    openExcel,
-    openDocx,
+    text.allData,
+    text.latestData,
     export2Docx,
     export2Excel,
   ]);

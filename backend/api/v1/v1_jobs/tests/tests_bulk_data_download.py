@@ -7,6 +7,7 @@ from django.test.utils import override_settings
 from rest_framework import status
 from api.v1.v1_forms.models import Questions, Forms
 from api.v1.v1_jobs.job import download_data, generate_definition_sheet
+from api.v1.v1_jobs.constants import DataDownloadTypes
 from api.v1.v1_profile.management.commands import administration_seeder
 from api.v1.v1_profile.models import Administration
 from api.v1.v1_users.models import SystemUser
@@ -150,6 +151,28 @@ class BulkUnitTestCase(TestCase, ProfileTestHelperMixin):
             **{"HTTP_AUTHORIZATION": f"Bearer {self.token}"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_data_download_with_download_type_all(self):
+        form = Forms.objects.get(pk=1)
+        child_forms = form.children.filter(pk=10001)
+        download_response = download_data(
+            form=form,
+            download_type=DataDownloadTypes.all,
+            child_form_ids=list(child_forms.values_list("id", flat=True))
+        )
+        # 2 registrations with 2 monitoring data each
+        self.assertEqual(len(download_response), 4)
+
+    def test_data_download_with_download_type_recent(self):
+        form = Forms.objects.get(pk=1)
+        child_forms = form.children.filter(pk=10001)
+        download_response = download_data(
+            form=form,
+            download_type=DataDownloadTypes.recent,
+            child_form_ids=list(child_forms.values_list("id", flat=True))
+        )
+        # 2 registration with the latest data
+        self.assertEqual(len(download_response), 2)
 
     def test_data_download_repeatable_questions(self):
         # Remove existing form data to avoid interference

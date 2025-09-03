@@ -41,6 +41,7 @@ class JobGenerateExcelDataCommand(TestCase):
         call_command(
             "generate_excel_data",
             form.id,
+            latest=False,
             stdout=output,
             stderr=StringIO(),
         )
@@ -50,6 +51,39 @@ class JobGenerateExcelDataCommand(TestCase):
         result_file = f"{CRONJOB_RESULT_DIR}/{form_name}.xlsx"
         self.assertTrue(storage.check(result_file))
         storage.delete(result_file)
+
+    def test_download_latest_data(self):
+        form = Forms.objects.get(pk=1)
+
+        output = StringIO()
+        # Test download latest data
+        call_command(
+            "generate_excel_data",
+            form.id,
+            latest=True,
+            stdout=output,
+            stderr=StringIO(),
+        )
+        self.assertIn("File uploaded to", output.getvalue())
+
+        form_name = form.name.replace(" ", "_").lower()
+        result_file = f"{CRONJOB_RESULT_DIR}/{form_name}-latest.xlsx"
+        self.assertTrue(storage.check(result_file))
+        storage.delete(result_file)
+
+    def test_download_no_use_label(self):
+        form = Forms.objects.get(pk=1)
+
+        output = StringIO()
+        # Test download with no use_label
+        call_command(
+            "generate_excel_data",
+            form.id,
+            use_label=False,
+            stdout=output,
+            stderr=StringIO(),
+        )
+        self.assertIn("File uploaded to", output.getvalue())
 
     def test_download_with_child_form(self):
         form = Forms.objects.get(pk=1)

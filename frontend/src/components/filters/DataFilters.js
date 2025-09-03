@@ -15,12 +15,12 @@ import AdministrationDropdown from "./AdministrationDropdown";
 import FormDropdown from "./FormDropdown.js";
 import { useNotification } from "../../util/hooks";
 import { api, store, uiText } from "../../lib";
-// import { takeRight } from "lodash";
+import { takeRight } from "lodash";
 import RemoveFiltersButton from "./RemoveFiltersButton";
 import AdvancedFilters from "./AdvancedFilters";
 import {
   PlusOutlined,
-  // DownloadOutlined,
+  DownloadOutlined,
   // UploadOutlined,
   FileWordOutlined,
   DownOutlined,
@@ -37,16 +37,17 @@ const DataFilters = ({
     user: authUser,
     selectedForm,
     loadingForm,
-    // administration,
+    administration,
     showAdvancedFilters,
   } = store.useState((s) => s);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { notify } = useNotification();
-  // const [exporting, setExporting] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [selectedChildForms, setSelectedChildForms] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [openDocx, setOpenDocx] = useState(false);
+  const [openExcel, setOpenExcel] = useState(false);
   const isUserHasForms = authUser?.is_superuser || authUser?.forms?.length || 0;
   const language = store.useState((s) => s.language);
   const { active: activeLang } = language;
@@ -59,31 +60,49 @@ const DataFilters = ({
     return window.forms?.filter((f) => f?.content?.parent === selectedForm);
   }, [selectedForm]);
 
-  // const exportGenerate = ({ key }) => {
-  //   setExporting(true);
-  //   const adm_id = takeRight(administration, 1)[0]?.id;
-  //   api
-  //     .get(
-  //       `download/generate?form_id=${selectedForm}&administration_id=${adm_id}&type=${key}`
-  //     )
-  //     .then(() => {
-  //       notify({
-  //         type: "success",
-  //         message: `Data exported successfully`,
-  //       });
-  //       setExporting(false);
-  //       navigate("/downloads");
-  //     })
-  //     .catch(() => {
-  //       notify({
-  //         type: "error",
-  //         message: "Export failed",
-  //       });
-  //       setExporting(false);
-  //     });
-  // };
+  const selectedAdm = takeRight(administration, 1)[0];
 
-  const exportDataReport = useCallback(async () => {
+  const export2Excel = useCallback(async () => {
+    setExporting(true);
+    try {
+      const adm_id = selectedAdm?.id;
+      const childFormIds = selectedChildForms
+        .map((id) => `child_form_ids=${id}`)
+        .join("&");
+      const urls = [`download/generate?form_id=${selectedForm}`];
+      if (adm_id && selectedAdm?.parent) {
+        urls.push(`administration_id=${adm_id}`);
+      }
+      if (selectedChildForms.length) {
+        urls.push(childFormIds);
+      }
+      const apiURL = `/${urls.join("&")}`;
+      await api.get(apiURL);
+      notify({
+        type: "success",
+        message: text.export2ExcelSuccess,
+      });
+      setExporting(false);
+      setOpenExcel(false); // Close dropdown after successful export
+      navigate("/downloads");
+    } catch (error) {
+      setExporting(false);
+      notify({
+        type: "error",
+        message: text.export2ExcelError,
+      });
+    }
+  }, [
+    selectedAdm,
+    selectedForm,
+    selectedChildForms,
+    notify,
+    text.export2ExcelSuccess,
+    text.export2ExcelError,
+    navigate,
+  ]);
+
+  const export2Docx = useCallback(async () => {
     setDownloading(true);
     try {
       // Create parameters list URL for selection_ids based on selectedRowKeys
@@ -100,7 +119,7 @@ const DataFilters = ({
       }
       await api.get(apiURL);
       setDownloading(false);
-      setDropdownOpen(false); // Close dropdown after successful download
+      setOpenDocx(false); // Close dropdown after successful download
       notify({
         type: "success",
         message: text.downloadReportSuccess,
@@ -108,7 +127,7 @@ const DataFilters = ({
       navigate("/downloads");
     } catch (error) {
       setDownloading(false);
-      setDropdownOpen(false); // Close dropdown even on error
+      setOpenDocx(false); // Close dropdown even on error
       notify({
         type: "error",
         message: text.downloadReportError,
@@ -204,8 +223,14 @@ const DataFilters = ({
           type="primary"
           icon={<FileWordOutlined />}
           loading={downloading}
-          onClick={exportDataReport}
-          disabled={!selectedRowKeys?.length}
+          onClick={() => {
+            if (openExcel) {
+              export2Excel();
+            } else {
+              export2Docx();
+            }
+          }}
+          disabled={openDocx && !selectedRowKeys?.length}
           style={{ width: "100%" }}
         >
           {text.downloadReport}
@@ -222,7 +247,10 @@ const DataFilters = ({
     selectedRowKeys,
     text.downloadReport,
     text.selectChildForms,
-    exportDataReport,
+    openExcel,
+    openDocx,
+    export2Docx,
+    export2Excel,
   ]);
 
   return (
@@ -263,8 +291,8 @@ const DataFilters = ({
                   <Dropdown
                     trigger={["click"]}
                     placement="bottomLeft"
-                    open={dropdownOpen}
-                    onOpenChange={setDropdownOpen}
+                    open={openDocx}
+                    onOpenChange={setOpenDocx}
                     menu={{
                       items: childFormMenuItems,
                       style: { minWidth: "200px" },
@@ -285,10 +313,16 @@ const DataFilters = ({
                 )}
               </Space>
             )}
-            {/* {pathname === "/control-center/data" && (
+            {pathname === "/control-center/data" && (
               <Can I="create" a="downloads">
                 <Dropdown
-                  menu={{ items: downloadTypes }}
+                  trigger={["click"]}
+                  open={openExcel}
+                  onOpenChange={setOpenExcel}
+                  menu={{
+                    items: childFormMenuItems,
+                    style: { minWidth: "200px" },
+                  }}
                   placement="bottomRight"
                 >
                   <Button
@@ -300,7 +334,7 @@ const DataFilters = ({
                   </Button>
                 </Dropdown>
               </Can>
-            )} */}
+            )}
             <Can I="manage" a="submissions">
               <Button
                 shape="round"

@@ -11,6 +11,7 @@ services:
       - APP_NAME=$APP_NAME
       - APP_SHORT_NAME=$APP_SHORT_NAME
       - APK_SHORT_NAME=$APK_SHORT_NAME
+      - APK_NAME=$APK_NAME
       - DB_SCHEMA=mis
       - DB_USER=akvo
       - DB_PASSWORD=password

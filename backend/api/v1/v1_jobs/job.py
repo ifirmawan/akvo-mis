@@ -70,6 +70,9 @@ def download_data(
                 if dl:
                     # merge parent and child data
                     item = {**item, **dl.to_data_frame}
+                    # keep datapoint_name and created_at from parent
+                    item["datapoint_name"] = d.name
+                    item["created_at"] = d.to_data_frame.get("created_at")
             data_items.append(item)
         if download_type == DataDownloadTypes.all:
             for child_form in child_form_ids:
@@ -81,6 +84,8 @@ def download_data(
                     data_items.append({
                         **d.to_data_frame,
                         **dl.to_data_frame,
+                        "datapoint_name": d.name,
+                        "created_at": d.to_data_frame.get("created_at"),
                     })
     return data_items
 

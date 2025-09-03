@@ -30,7 +30,7 @@ from rest_framework.response import Response
 from rest_framework.fields import ChoiceField
 
 from api.v1.v1_forms.models import Forms
-from api.v1.v1_jobs.constants import JobStatus, JobTypes
+from api.v1.v1_jobs.constants import JobStatus, JobTypes, DataDownloadTypes
 from api.v1.v1_jobs.models import Jobs
 from api.v1.v1_jobs.serializers import (
     DownloadDataRequestSerializer,
@@ -56,6 +56,19 @@ from utils.custom_serializer_fields import validate_serializers_message
             required=True,
             type=OpenApiTypes.NUMBER,
             location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="type",
+            required=False,
+            type=OpenApiTypes.STR,
+            enum=DataDownloadTypes.FieldStr.values(),
+            default=DataDownloadTypes.recent,
+        ),
+        OpenApiParameter(
+            name="use_label",
+            required=False,
+            type=OpenApiTypes.BOOL,
+            default=False,
         ),
         OpenApiParameter(
             name="child_form_ids",
@@ -96,6 +109,10 @@ def download_generate(request, version):
         request.user.id,
         "-a",
         administration.id if administration else 0,
+        "-t",
+        serializer.validated_data.get("type"),
+        "-l",
+        1 if serializer.validated_data.get("use_label") else 0,
         "-c",
         *child_forms,
     )

@@ -5,7 +5,7 @@ from django.utils import timezone
 from django_q.tasks import async_task
 
 from api.v1.v1_forms.models import Forms
-from api.v1.v1_jobs.constants import JobTypes, JobStatus
+from api.v1.v1_jobs.constants import JobTypes, JobStatus, DataDownloadTypes
 from api.v1.v1_jobs.models import Jobs
 
 
@@ -17,11 +17,23 @@ class Command(BaseCommand):
             "-a", "--administration", nargs="?", default=0, type=int
         )
         parser.add_argument(
+            "-t",
+            "--type",
+            nargs="?",
+            default=DataDownloadTypes.recent,
+            type=str,
+        )
+        parser.add_argument(
+            "-l", "--use_label", nargs="?", default=1, type=int
+        )
+        parser.add_argument(
             "-c", "--child_form_ids", nargs="*", default=[], type=int
         )
 
     def handle(self, *args, **options):
         administration = options.get("administration")
+        use_label = options.get("use_label", 1)
+        download_type = options.get("type", DataDownloadTypes.recent)
         form_id = options.get("form")[0]
         form = Forms.objects.get(pk=form_id)
         # validate form should have parent is null
@@ -50,6 +62,8 @@ class Command(BaseCommand):
         info = {
             "form_id": form_id,
             "administration": administration if administration > 0 else None,
+            "download_type": download_type,
+            "use_label": use_label == 1,
             "child_form_ids": child_form_ids,
         }
         form_name = form.name.replace(" ", "_").lower()

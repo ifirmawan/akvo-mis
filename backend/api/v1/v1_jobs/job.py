@@ -25,6 +25,7 @@ from api.v1.v1_jobs.constants import JobStatus, JobTypes
 from api.v1.v1_jobs.models import Jobs
 from api.v1.v1_jobs.seed_data import seed_excel_data
 from api.v1.v1_jobs.validate_upload import validate
+from api.v1.v1_jobs.constants import DataDownloadTypes
 from api.v1.v1_profile.models import Administration, EntityData
 from api.v1.v1_users.models import SystemUser
 from utils import storage
@@ -46,6 +47,7 @@ logger = logging.getLogger(__name__)
 def download_data(
     form: Forms,
     administration_ids: list = None,
+    download_type: str = DataDownloadTypes.recent,
     child_form_ids: list = []
 ) -> list:
     filter_data = {
@@ -57,17 +59,29 @@ def download_data(
     data = form.form_form_data.filter(**filter_data).order_by("id").all()
     data_items = []
     for d in data:
-        item = d.to_data_frame
-        for child_form in child_form_ids:
-            dl = d.children.filter(
-                form_id=child_form,
-                is_pending=False,
-                is_draft=False,
-            ).last()
-            if dl:
-                # merge parent and child data
-                item = {**item, **dl.to_data_frame}
-        data_items.append(item)
+        if download_type == DataDownloadTypes.recent:
+            item = d.to_data_frame
+            for child_form in child_form_ids:
+                dl = d.children.filter(
+                    form_id=child_form,
+                    is_pending=False,
+                    is_draft=False,
+                ).last()
+                if dl:
+                    # merge parent and child data
+                    item = {**item, **dl.to_data_frame}
+            data_items.append(item)
+        if download_type == DataDownloadTypes.all:
+            for child_form in child_form_ids:
+                for dl in d.children.filter(
+                    form_id=child_form,
+                    is_pending=False,
+                    is_draft=False,
+                ).all():
+                    data_items.append({
+                        **d.to_data_frame,
+                        **dl.to_data_frame,
+                    })
     return data_items
 
 
@@ -89,6 +103,7 @@ def generate_data_sheet(
     writer: pd.ExcelWriter,
     form: Forms,
     administration_ids: list = None,
+    download_type: str = DataDownloadTypes.recent,
     use_label: bool = True,
     child_form_ids: list = [],
 ) -> None:
@@ -100,6 +115,7 @@ def generate_data_sheet(
     data = download_data(
         form=form,
         administration_ids=administration_ids,
+        download_type=download_type,
         child_form_ids=child_form_ids,
     )
     if len(data):
@@ -189,13 +205,17 @@ def job_generate_data_download(job_id, **kwargs):
             ).values_list("name", flat=True)
         )
     form = Forms.objects.get(pk=job.info.get("form_id"))
+    download_type = kwargs.get("download_type", DataDownloadTypes.recent)
+    use_label = kwargs.get("use_label", True)
     child_form_ids = job.info.get("child_form_ids", [])
-    writer = pd.ExcelWriter(file_path, engine="xlsxwriter")
 
+    writer = pd.ExcelWriter(file_path, engine="xlsxwriter")
     generate_data_sheet(
         writer=writer,
         form=form,
         administration_ids=administration_ids,
+        download_type=download_type,
+        use_label=use_label,
         child_form_ids=child_form_ids,
     )
 

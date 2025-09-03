@@ -16,6 +16,7 @@ from pathlib import Path
 APP_NAME = environ.get("APP_NAME", "mis")
 APP_SHORT_NAME = environ.get("APP_SHORT_NAME", "mis")
 APK_SHORT_NAME = environ.get("APK_SHORT_NAME", "mis-mobile")
+APK_NAME = environ.get("APK_NAME", "MIS mobile")
 
 if 'SENTRY_DSN' in environ:
     import sentry_sdk

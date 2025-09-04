@@ -91,7 +91,10 @@ def download_data(
                         "created_by": d.created_by.get_full_name(),
                         "updated_by": dl.created_by.get_full_name(),
                     })
-        if d.children.count() == 0 and download_type == DataDownloadTypes.all:
+        if d.children.filter(
+            is_pending=False,
+            is_draft=False,
+        ).count() == 0 and download_type == DataDownloadTypes.all:
             data_items.append(d.to_data_frame)
     return data_items
 

@@ -163,6 +163,22 @@ class BulkUnitTestCase(TestCase, ProfileTestHelperMixin):
         # 2 registrations with 2 monitoring data each
         self.assertEqual(len(download_response), 4)
 
+    def test_data_download_with_download_type_all_no_children(self):
+        form = Forms.objects.get(pk=1)
+        for d in form.form_form_data.all():
+            for child in d.children.all():
+                # Mark all children as pending
+                # to simulate no completed children
+                child.is_pending = True
+                child.save()
+        download_response = download_data(
+            form=form,
+            download_type=DataDownloadTypes.all,
+            child_form_ids=[]
+        )
+        # 2 registrations with no children
+        self.assertEqual(len(download_response), 2)
+
     def test_data_download_with_download_type_recent(self):
         form = Forms.objects.get(pk=1)
         child_forms = form.children.filter(pk=10001)

@@ -11,6 +11,7 @@ services:
       - APP_NAME=akvo-mis
       - APP_SHORT_NAME=akvo-mis
       - APK_SHORT_NAME=mis-mobile
+      - APK_NAME=mis-mobile
       - DB_SCHEMA=mis
       - DB_USER=akvo
       - DB_PASSWORD=password

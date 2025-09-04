@@ -62,6 +62,7 @@ def get_definition(form: Forms):
             for o in q["options"]:
                 framed.append(
                     {
+                        "form_name": q["form_name"],
                         "qg_id": q["qg_id"],
                         "order": q["order"],
                         "id": q["id"],
@@ -79,6 +80,7 @@ def get_definition(form: Forms):
         else:
             framed.append(
                 {
+                    "form_name": q["form_name"],
                     "qg_id": q["qg_id"],
                     "order": q["order"],
                     "id": q["id"],
@@ -96,10 +98,19 @@ def get_definition(form: Forms):
     return framed
 
 
-def generate_definition_sheet(form: Forms, writer: pd.ExcelWriter):
+def generate_definition_sheet(
+    writer: pd.ExcelWriter,
+    form: Forms,
+    child_form_ids: list = [],
+):
     definitions = get_definition(form=form)
+    if len(child_form_ids):
+        child_forms = form.children.filter(pk__in=child_form_ids).all()
+        for child_form in child_forms:
+            definitions.extend(get_definition(form=child_form))
     df = pd.DataFrame(definitions)
     question_columns = [
+        "form_name",
         "name",
         "label",
         "type",

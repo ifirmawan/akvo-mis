@@ -232,6 +232,10 @@ Object {
     "deleteUserHint": "Deleting this user will not delete the data association(s)",
     "deleteUserTitle": "You are about to delete the user",
     "download": "Download",
+    "downloadAppText": <React.Fragment>
+      Download 
+       App
+    </React.Fragment>,
     "downloadHere": "download here",
     "downloadReport": "Download Report",
     "downloadReportError": "Unable to download report",
@@ -328,6 +332,8 @@ Object {
     "eventTitle": "News & Events",
     "existingApproverDescription": "Please update the setup in manage validation tree or remove these forms for the current user",
     "existingApproverTitle": "There are existing approvers for:",
+    "export2ExcelError": "Unable to export data to Excel",
+    "export2ExcelSuccess": "Data exported to Excel successfully",
     "exportButton": "Export",
     "exportEntityError": "Unable to export entities",
     "exportPanelText": <React.Fragment>
@@ -449,7 +455,10 @@ Object {
       Object {
         "href": "/app",
         "isPage": false,
-        "text": "Download DWS DataPro App",
+        "text": <React.Fragment>
+          Download 
+           App
+        </React.Fragment>,
       },
     ],
     "homeStructureImage": Object {

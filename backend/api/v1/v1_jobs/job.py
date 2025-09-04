@@ -6,7 +6,6 @@ from django_q.models import Task
 import pandas as pd
 from django.utils import timezone
 from django_q.tasks import async_task
-from django.db.models import Subquery, Max
 from api.v1.v1_jobs.administrations_bulk_upload import (
     seed_administration_data,
     validate_administrations_bulk_upload,
@@ -26,6 +25,7 @@ from api.v1.v1_jobs.constants import JobStatus, JobTypes
 from api.v1.v1_jobs.models import Jobs
 from api.v1.v1_jobs.seed_data import seed_excel_data
 from api.v1.v1_jobs.validate_upload import validate
+from api.v1.v1_jobs.constants import DataDownloadTypes
 from api.v1.v1_profile.models import Administration, EntityData
 from api.v1.v1_users.models import SystemUser
 from utils import storage
@@ -44,19 +44,54 @@ from utils.report_generator import generate_datapoint_report
 logger = logging.getLogger(__name__)
 
 
-def download_data(form: Forms, administration_ids, download_type="all"):
-    filter_data = {}
+def download_data(
+    form: Forms,
+    administration_ids: list = None,
+    download_type: str = DataDownloadTypes.recent,
+    child_form_ids: list = []
+) -> list:
+    filter_data = {
+        "is_pending": False,
+        "is_draft": False,
+    }
     if administration_ids:
         filter_data["administration_id__in"] = administration_ids
-    data = form.form_form_data.filter(**filter_data)
-    if download_type == "recent":
-        latest_per_uuid = (
-            data.values("uuid")
-            .annotate(latest_created=Max("created"))
-            .values("latest_created")
-        )
-        data = data.filter(created__in=Subquery(latest_per_uuid))
-    return [d.to_data_frame for d in data.order_by("id")]
+    data = form.form_form_data.filter(**filter_data).order_by("id").all()
+    data_items = []
+    for d in data:
+        if download_type == DataDownloadTypes.recent:
+            item = d.to_data_frame
+            for child_form in child_form_ids:
+                dl = d.children.filter(
+                    form_id=child_form,
+                    is_pending=False,
+                    is_draft=False,
+                ).last()
+                if dl:
+                    # merge parent and child data
+                    item = {**item, **dl.to_data_frame}
+                    # keep datapoint_name and created_at from parent
+                    item["datapoint_name"] = d.name
+                    item["created_at"] = d.to_data_frame.get("created_at")
+                    item["created_by"] = d.created_by.get_full_name()
+                    item["updated_by"] = dl.created_by.get_full_name()
+            data_items.append(item)
+        if download_type == DataDownloadTypes.all:
+            for child_form in child_form_ids:
+                for dl in d.children.filter(
+                    form_id=child_form,
+                    is_pending=False,
+                    is_draft=False,
+                ).all():
+                    data_items.append({
+                        **d.to_data_frame,
+                        **dl.to_data_frame,
+                        "datapoint_name": d.name,
+                        "created_at": d.to_data_frame.get("created_at"),
+                        "created_by": d.created_by.get_full_name(),
+                        "updated_by": dl.created_by.get_full_name(),
+                    })
+    return data_items
 
 
 def get_answer_label(answer_values, question_id):
@@ -76,40 +111,75 @@ def get_answer_label(answer_values, question_id):
 def generate_data_sheet(
     writer: pd.ExcelWriter,
     form: Forms,
-    administration_ids=None,
-    download_type: str = "all",
-    use_label: bool = False,
+    administration_ids: list = None,
+    download_type: str = DataDownloadTypes.recent,
+    use_label: bool = True,
+    child_form_ids: list = [],
 ) -> None:
     questions = get_question_names(form=form)
+    if len(child_form_ids):
+        child_forms = form.children.filter(id__in=child_form_ids).all()
+        for child_form in child_forms:
+            questions.extend(get_question_names(form=child_form))
     data = download_data(
         form=form,
         administration_ids=administration_ids,
         download_type=download_type,
+        child_form_ids=child_form_ids,
     )
     if len(data):
         df = pd.DataFrame(data)
-        new_columns = {}
+        # Create a mapping of base question names to question info for lookup
+        question_map = {}
+        for question in questions:
+            question_id, question_name, question_type = question
+            question_map[question_name] = {
+                'id': question_id,
+                'type': question_type,
+                'name': question_name
+            }
+        # Get all actual column names from the dataframe (including indexed)
+        actual_columns = [col for col in df.columns if col not in meta_columns]
+        # Ensure all question columns exist in dataframe (base and indexed)
         for question in questions:
             question_id, question_name, question_type = question
             if question_name not in df:
                 df[question_name] = None
-            if use_label:
-                if question_type in [
-                    QuestionTypes.option,
-                    QuestionTypes.multiple_option,
-                ]:
-                    new_columns[question_name] = df[question_name].apply(
-                        lambda x: get_answer_label(x, question_id)
-                    )
-        question_names = [question[1] for question in questions]
+
+        # Process labels for option-type questions (including indexed columns)
+        new_columns = {}
         if use_label:
+            for col_name in actual_columns:
+                # Check if this is an indexed column (contains underscore)
+                base_question_name = (
+                    col_name.split('_')[0] if '_' in col_name else col_name
+                )
+                if base_question_name in question_map:
+                    question_info = question_map[base_question_name]
+                    if question_info['type'] in [
+                        QuestionTypes.option,
+                        QuestionTypes.multiple_option,
+                    ]:
+                        new_columns[col_name] = df[col_name].apply(
+                            lambda x: get_answer_label(x, question_info['id'])
+                        )
+        # Apply label transformations
+        if use_label and new_columns:
             new_df = pd.DataFrame(new_columns)
-            df.drop(columns=list(new_df), inplace=True)
+            df.drop(columns=list(new_columns.keys()), inplace=True)
             df = pd.concat([df, new_df], axis=1)
-        # Reorder columns
-        df = df[meta_columns + question_names]
+        # Reorder columns: meta columns first, then all question columns
+        available_question_columns = [
+            col for col in df.columns if col not in meta_columns
+        ]
+        final_columns = meta_columns + available_question_columns
+        df = df[final_columns]
         df.to_excel(writer, sheet_name="data", index=False)
-        generate_definition_sheet(form=form, writer=writer)
+        generate_definition_sheet(
+            writer=writer,
+            form=form,
+            child_form_ids=child_form_ids,
+        )
     else:
         blank_data_template(form=form, writer=writer)
 
@@ -144,19 +214,30 @@ def job_generate_data_download(job_id, **kwargs):
             ).values_list("name", flat=True)
         )
     form = Forms.objects.get(pk=job.info.get("form_id"))
-    download_type = kwargs.get("download_type")
-    writer = pd.ExcelWriter(file_path, engine="xlsxwriter")
+    download_type = kwargs.get("download_type", DataDownloadTypes.recent)
+    use_label = kwargs.get("use_label", True)
+    child_form_ids = job.info.get("child_form_ids", [])
 
+    writer = pd.ExcelWriter(file_path, engine="xlsxwriter")
     generate_data_sheet(
         writer=writer,
         form=form,
         administration_ids=administration_ids,
         download_type=download_type,
-        use_label=job.info.get("use_label"),
+        use_label=use_label,
+        child_form_ids=child_form_ids,
     )
+
+    monitoring_forms = form.children.filter(pk__in=child_form_ids).all()
 
     context = [
         {"context": "Form Name", "value": form.name},
+        {
+            "context": "Monitoring Form(s)",
+            "value": ", ".join(
+                [f.name for f in monitoring_forms]
+            ) if len(monitoring_forms) else "-"
+        },
         {
             "context": "Download Date",
             "value": update_date_time_format(job.created),

@@ -49,7 +49,6 @@ class DownloadListTestCase(TestCase, ProfileTestHelperMixin):
             status=JobStatus.done,
             info={
                 "form_id": self.form.id,
-                "download_type": "all",
                 "user_id": self.submitter.id,
                 "file_name": f"download-{self.form.name}.csv",
             },
@@ -62,7 +61,6 @@ class DownloadListTestCase(TestCase, ProfileTestHelperMixin):
             status=JobStatus.done,
             info={
                 "form_id": self.form.id,
-                "download_type": "recent",
                 "user_id": self.submitter.id,
                 "file_name": f"datapoint-report-{self.form.name}.csv",
                 "selection_ids": self.selection_ids,

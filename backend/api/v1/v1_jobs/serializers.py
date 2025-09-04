@@ -21,12 +21,19 @@ class DownloadDataRequestSerializer(serializers.Serializer):
     administration_id = CustomPrimaryKeyRelatedField(
         queryset=Administration.objects.none(), required=False
     )
-    type = serializers.ChoiceField(
+    type = CustomChoiceField(
         choices=[
             DataDownloadTypes.FieldStr[d] for d in DataDownloadTypes.FieldStr
-        ]
+        ],
+        required=False,
     )
     use_label = serializers.BooleanField(required=False)
+    child_form_ids = CustomListField(
+        child=CustomPrimaryKeyRelatedField(
+            queryset=Forms.objects.none()
+        ),
+        required=False,
+    )
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -34,6 +41,7 @@ class DownloadDataRequestSerializer(serializers.Serializer):
         self.fields.get(
             "administration_id"
         ).queryset = Administration.objects.all()
+        self.fields.get("child_form_ids").child.queryset = Forms.objects.all()
 
 
 class DownloadListSerializer(serializers.ModelSerializer):
@@ -115,6 +123,15 @@ class DownloadListSerializer(serializers.ModelSerializer):
                     "id", "name", "form_id",
                 )
                 return list(fd)
+        if instance.type == JobTypes.download:
+            child_form_ids = instance.info.get("child_form_ids")
+            if child_form_ids:
+                forms = Forms.objects.filter(pk__in=child_form_ids).values(
+                    "id", "name"
+                )
+                forms = [f for f in forms]
+                return forms
+
         return instance.info.get("attributes")
 
     @extend_schema_field(OpenApiTypes.STR)

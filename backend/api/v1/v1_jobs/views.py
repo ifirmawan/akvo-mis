@@ -62,13 +62,19 @@ from utils.custom_serializer_fields import validate_serializers_message
             required=False,
             type=OpenApiTypes.STR,
             enum=DataDownloadTypes.FieldStr.values(),
-            default=DataDownloadTypes.all,
+            default=DataDownloadTypes.recent,
         ),
         OpenApiParameter(
             name="use_label",
             required=False,
             type=OpenApiTypes.BOOL,
             default=False,
+        ),
+        OpenApiParameter(
+            name="child_form_ids",
+            required=False,
+            type={"type": "array", "items": {"type": "number"}},
+            location=OpenApiParameter.QUERY,
         ),
     ],
     responses={
@@ -93,6 +99,10 @@ def download_generate(request, version):
             status=status.HTTP_400_BAD_REQUEST,
         )
     administration = serializer.validated_data.get("administration_id")
+    child_forms = [
+        child.id
+        for child in serializer.validated_data.get("child_form_ids", [])
+    ]
     result = call_command(
         "job_download",
         serializer.validated_data.get("form_id").id,
@@ -103,6 +113,8 @@ def download_generate(request, version):
         serializer.validated_data.get("type"),
         "-l",
         1 if serializer.validated_data.get("use_label") else 0,
+        "-c",
+        *child_forms,
     )
     job = Jobs.objects.get(pk=result)
     data = {

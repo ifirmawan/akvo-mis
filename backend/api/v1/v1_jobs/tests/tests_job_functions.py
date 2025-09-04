@@ -10,23 +10,26 @@ from api.v1.v1_jobs.job import (
 )
 from api.v1.v1_jobs.models import Jobs
 from api.v1.v1_jobs.constants import JobStatus, JobTypes
-from api.v1.v1_users.models import SystemUser
+from api.v1.v1_profile.models import Administration
+from api.v1.v1_profile.tests.mixins import ProfileTestHelperMixin
 
 
 @override_settings(USE_TZ=False)
-class TestJobsFunctions(TestCase):
+class TestJobsFunctions(TestCase, ProfileTestHelperMixin):
     def setUp(self):
         self.test_folder = "api/v1/v1_jobs/tests/fixtures"
         call_command("form_seeder", "--test", 1)
         call_command("administration_seeder", "--test")
         call_command("default_roles_seeder", "--test", 1)
         self.form = Forms.objects.get(pk=1)
-        self.user = SystemUser.objects.first()
-        if not self.user:
-            # Create a test user if none exists
-            self.user = SystemUser.objects.create_user(
-                email="test@test.com", first_name="Test", last_name="User"
-            )
+        self.administration = Administration.objects\
+            .filter(level__level=3).order_by('?').first()
+        self.user = self.create_user(
+            email="user@example.com",
+            role_level=self.IS_ADMIN,
+            administration=self.administration,
+            form=self.form,
+        )
 
     def test_get_answer_label(self):
         option_q = self.form.form_questions.filter(
@@ -69,14 +72,16 @@ class TestJobsFunctions(TestCase):
     def test_job_generate_data_download(self):
         """Test job_generate_data_download function with proper job setup"""
         # Create a job first
+        child_forms = self.form.children.all()[:1]
         job = Jobs.objects.create(
             type=JobTypes.download,
             status=JobStatus.on_progress,
             user=self.user,
             info={
                 "form_id": self.form.id,
-                "download_type": "all",
-                "use_label": False,
+                "child_form_ids": list(
+                    child_forms.values_list("id", flat=True)
+                ),
             },
             result="test-download.xlsx",
         )
@@ -91,7 +96,7 @@ class TestJobsFunctions(TestCase):
 
             # Call the function with job ID and kwargs
             result_url = job_generate_data_download(
-                job_id=job.id, download_type="all"
+                job_id=job.id
             )
 
             # Verify the result
@@ -102,14 +107,17 @@ class TestJobsFunctions(TestCase):
     def test_job_generate_data_download_with_administration(self):
         """Test job_generate_data_download with administration filter"""
         # Create a job with administration filter
+        child_forms = self.form.children.all()[:1]
         job = Jobs.objects.create(
             type=JobTypes.download,
             status=JobStatus.on_progress,
             user=self.user,
             info={
                 "form_id": self.form.id,
-                "download_type": "recent",
-                "use_label": True,
+                "administration": self.administration.id,
+                "child_form_ids": list(
+                    child_forms.values_list("id", flat=True)
+                ),
             },
             result="test-download-admin.xlsx",
         )
@@ -141,7 +149,7 @@ class TestJobsFunctions(TestCase):
 
             # Call the function with administration
             result_url = job_generate_data_download(
-                job_id=job.id, administration=1, download_type="recent"
+                job_id=job.id, administration=1
             )
 
             # Verify the result

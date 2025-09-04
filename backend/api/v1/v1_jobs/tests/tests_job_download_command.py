@@ -1,3 +1,5 @@
+from io import StringIO
+
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -18,53 +20,129 @@ class JobDownloadUnitTestCase(TestCase):
         call_command("administration_seeder", "--test")
         call_command("default_roles_seeder", "--test", 1)
         user = {"email": "admin@akvo.org", "password": "Test105*"}
-        user = self.client.post('/api/v1/login',
-                                user,
-                                content_type='application/json')
+        user = self.client.post(
+            '/api/v1/login',
+            user,
+            content_type='application/json'
+        )
 
-    def test_download_all_data(self):
-        form = Forms.objects.get(pk=1)
-        admin = SystemUser.objects.first()
-        result = call_command(
+    def call_command(self, *args, **kwargs):
+        out = StringIO()
+        call_command(
             "job_download",
+            *args,
+            stdout=out,
+            stderr=StringIO(),
+            **kwargs,
+        )
+        return out.getvalue()
+
+    def test_download_data_with_monitoring_forms(self):
+        form = Forms.objects.get(pk=1)
+        child_forms = form.children.all()[:1]
+        admin = SystemUser.objects.first()
+        result = self.call_command(
             form.id,
             admin.id,
             "-a",
             0,
-            "-t",
-            "all",
+            "-c",
+            *child_forms.values_list("id", flat=True),
         )
         self.assertTrue(result)
 
         job = Jobs.objects.get(pk=result)
-        self.assertEqual(job.info.get("download_type"), "all")
+        self.assertEqual(
+            job.info.get("child_form_ids"),
+            list(child_forms.values_list("id", flat=True))
+        )
 
         url = job_generate_data_download(job_id=job.id, **job.info)
         self.assertTrue("download-test_form" in url)
 
-    def test_download_recent_data_with_administration(self):
+    def test_download_data_with_invalid_child_form(self):
         form = Forms.objects.get(pk=1)
+        invalid_child_form_id = 9999
         admin = SystemUser.objects.first()
-
-        max_level = get_max_administration_level()
-        ward = Administration.objects.filter(
-            level__level=max_level - 1,
-        ).order_by("?").first()
-
-        result = call_command(
-            "job_download",
+        result = self.call_command(
             form.id,
             admin.id,
             "-a",
-            ward.id,
-            "-t",
-            "recent",
+            0,
+            "-c",
+            invalid_child_form_id,
+        )
+        self.assertIn("9999 is not a child of form id 1", result)
+
+    def test_download_data_with_no_child_form(self):
+        form = Forms.objects.get(pk=1)
+        admin = SystemUser.objects.first()
+        result = self.call_command(
+            form.id,
+            admin.id,
+            "-a",
+            0,
         )
         self.assertTrue(result)
 
         job = Jobs.objects.get(pk=result)
-        self.assertEqual(job.info.get("download_type"), "recent")
-        self.assertEqual(job.info.get("administration"), ward.id)
+        self.assertEqual(
+            job.info.get("child_form_ids"),
+            []
+        )
 
         url = job_generate_data_download(job_id=job.id, **job.info)
         self.assertTrue("download-test_form" in url)
+
+    def test_download_data_with_administration(self):
+        form = Forms.objects.get(pk=1)
+        admin = SystemUser.objects.first()
+        max_level = get_max_administration_level()
+        administration = Administration.objects \
+            .filter(level=max_level).order_by("?").first()
+        result = self.call_command(
+            form.id,
+            admin.id,
+            "-a",
+            administration.id,
+        )
+        self.assertTrue(result)
+
+        job = Jobs.objects.get(pk=result)
+        self.assertEqual(
+            job.info.get("administration"),
+            administration.id
+        )
+
+        url = job_generate_data_download(job_id=job.id, **job.info)
+        self.assertTrue("download-test_form" in url)
+
+    def test_download_data_with_invalid_registration_form(self):
+        form = Forms.objects.get(pk=10001)  # child form
+        admin = SystemUser.objects.first()
+        result = self.call_command(
+            form.id,
+            admin.id,
+            "-a",
+            0,
+        )
+        self.assertIn("Form id 10001 is not a registration form", result)
+        # should not create job
+        self.assertEqual(Jobs.objects.count(), 0)
+
+    def test_download_data_with_invalid_form_id(self):
+        with self.assertRaisesMessage(
+            Forms.DoesNotExist,
+            "Forms matching query does not exist"
+        ):
+            invalid_form_id = 9999
+            admin = SystemUser.objects.first()
+            result = self.call_command(
+                invalid_form_id,
+                admin.id,
+                "-a",
+                0,
+            )
+            self.assertIn("Forms matching query does not exist", result)
+            # should not create job
+            self.assertEqual(Jobs.objects.count(), 0)

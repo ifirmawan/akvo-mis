@@ -423,7 +423,7 @@
         {
           "id": 1849633500001,
           "name": "concrete_base_construction_photo",
-          "label": "Take Photo",
+          "label": "Take Photo of Concrete Base Construction",
           "order": 3,
           "type": "photo",
           "required": true,
@@ -537,7 +537,7 @@
         {
           "id": 1849633800001,
           "name": "urf_tank_photo",
-          "label": "Take Photo",
+          "label": "Take Photo of URF Tank",
           "order": 6,
           "type": "photo",
           "required": true,
@@ -651,7 +651,7 @@
         {
           "id": 1849634100001,
           "name": "eps_tank_photo",
-          "label": "Take Photo",
+          "label": "Take Photo of EPS Tank",
           "order": 9,
           "type": "photo",
           "required": true,
@@ -729,7 +729,7 @@
         {
           "id": 1849634400001,
           "name": "balance_tank_photo",
-          "label": "Take Photo",
+          "label": "Take Photo of Balance Tank",
           "order": 12,
           "type": "photo",
           "required": true,
@@ -813,7 +813,7 @@
         {
           "id": 1849634700001,
           "name": "storage_tank_photo",
-          "label": "Take Photo",
+          "label": "Take Photo of Storage Tank",
           "order": 15,
           "type": "photo",
           "required": true,
@@ -885,7 +885,7 @@
         {
           "id": 1849635000001,
           "name": "standpipes_photo",
-          "label": "Take Photo",
+          "label": "Take Photo of Standpipes",
           "order": 18,
           "type": "photo",
           "required": true,
@@ -916,7 +916,7 @@
         {
           "id": 1849635300001,
           "name": "drainage_photo",
-          "label": "Take Photo",
+          "label": "Take Photo of Drainage",
           "order": 20,
           "type": "photo",
           "required": true,
@@ -982,7 +982,7 @@
         {
           "id": 1849635600001,
           "name": "site_security_photo",
-          "label": "Take Photo",
+          "label": "Take Photo of Site Security and Perimeter",
           "order": 23,
           "type": "photo",
           "required": true,

@@ -319,131 +319,709 @@
       ]
     },
     {
-      "id": 1749624505914,
-      "name": "project_scope",
-      "label": "Project Scope",
+      "id": 1849633445678,
+      "name": "project_details",
+      "label": "Project Details",
       "description": null,
       "order": 4,
       "repeatable": false,
       "questions": [
         {
           "id": 1749624505915,
-          "name": "concrete_base_construction",
-          "label": "Concrete Base Construction",
+          "name": "project_scope",
+          "label": "Project Scope",
           "order": 1,
-          "type": "text",
+          "type": "multiple_option",
           "required": true,
-          "meta": false
+          "meta": false,
+          "options": [
+            {
+              "value": "concrete_base_construction",
+              "label": "Concrete Base Construction",
+              "id": 1749624505916,
+              "order": 1
+            },
+            {
+              "value": "urf_tank_implementation",
+              "label": "URF Tank Implementation",
+              "id": 1749624505917,
+              "order": 2
+            },
+            {
+              "value": "eps_tank_implementation",
+              "label": "EPS Tank Implementation",
+              "id": 1749624505918,
+              "order": 3
+            },
+            {
+              "value": "balance_tank_implementation",
+              "label": "Balance Tank Implementation",
+              "id": 1749624505919,
+              "order": 4
+            },
+            {
+              "value": "storage_tank_implementation",
+              "label": "Storage Tank Implementation",
+              "id": 1749624505920,
+              "order": 5
+            },
+            {
+              "value": "standpipes",
+              "label": "Standpipes",
+              "id": 1749624505921,
+              "order": 6
+            },
+            {
+              "value": "drainage",
+              "label": "Drainage",
+              "id": 1749624505922,
+              "order": 7
+            },
+            {
+              "value": "site_security_and_perimeter",
+              "label": "Site Security and Perimeter",
+              "id": 1749624505923,
+              "order": 8
+            }
+          ]
         },
         {
-          "id": 1749631364527,
-          "name": "tank_installation",
-          "label": "Tank Installation",
+          "id": 1849633456789,
+          "name": "concrete_base_construction_details",
+          "label": "Concrete Base Construction",
           "order": 2,
-          "type": "text",
+          "type": "multiple_option",
           "required": true,
-          "meta": false
+          "meta": false,
+          "options": [
+            {
+              "value": "2m_x_2m_square_base",
+              "label": "2m x 2m square base",
+              "id": 1849633467890,
+              "order": 1
+            },
+            {
+              "value": "constructed_within_300mm_vertical_offset_between_urf_and_eps",
+              "label": "Constructed within a 300mm vertical offset between URF and EPS",
+              "id": 1849633467891,
+              "order": 2
+            },
+            {
+              "value": "constructed_within_300mm_vertical_offset_between_eps_and_storage",
+              "label": "Constructed within a 300mm vertical offset between EPS and Storage",
+              "id": 1849633467892,
+              "order": 3
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["concrete_base_construction"]
+            }
+          ]
         },
         {
-          "id": 1749631384046,
-          "name": "washout_installation",
-          "label": "Washout Installation",
+          "id": 1849633500001,
+          "name": "concrete_base_construction_photo",
+          "label": "Take Photo",
           "order": 3,
-          "type": "text",
+          "type": "photo",
           "required": true,
-          "meta": false
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["concrete_base_construction"]
+            }
+          ]
         },
         {
-          "id": 1749631403208,
-          "name": "pipework_installation",
-          "label": "Pipework Installation",
+          "id": 1849633600001,
+          "name": "concrete_base_construction_photo_desc",
+          "label": "Description of Photo taken",
           "order": 4,
           "type": "text",
           "required": true,
-          "meta": false
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["concrete_base_construction"]
+            }
+          ]
         },
         {
-          "id": 1749631425183,
-          "name": "media_placing",
-          "label": "Media Placing",
+          "id": 1849633700001,
+          "name": "urf_tank_implementation_details",
+          "label": "URF Tank Implementation",
           "order": 5,
-          "type": "text",
+          "type": "multiple_option",
           "required": true,
-          "meta": false
+          "meta": false,
+          "options": [
+            {
+              "value": "size_of_tank_is_2700l",
+              "label": "Size of tank is 2,700L",
+              "id": 1849633712345,
+              "order": 1
+            },
+            {
+              "value": "thickness_of_tank_is_12mm",
+              "label": "Thickness of tank is 12mm",
+              "id": 1849633712346,
+              "order": 2
+            },
+            {
+              "value": "25mm_inflow_pipe",
+              "label": "25mm Inflow pipe",
+              "id": 1849633712347,
+              "order": 3
+            },
+            {
+              "value": "inflow_gate_valve_positioned_near_tank_openings_pegler_brand",
+              "label": "Inflow gate valve positioned near tank openings- pegler brand",
+              "id": 1849633712348,
+              "order": 4
+            },
+            {
+              "value": "inner_pipe_100mm_pressure_pipe",
+              "label": "Inner pipe- 100mm pressure pipe",
+              "id": 1849633712349,
+              "order": 5
+            },
+            {
+              "value": "50mm_pressure_pipe_for_drainage_washout",
+              "label": "50mm pressure pipe for drainage/ washout",
+              "id": 1849633712350,
+              "order": 6
+            },
+            {
+              "value": "washout_gate_valves_pegler_brand",
+              "label": "Washout gate valves- pegler brand",
+              "id": 1849633712351,
+              "order": 7
+            },
+            {
+              "value": "outlet_pipe_to_eps_tank_should_be_above_lowest_opening",
+              "label": "Outlet pipe to EPS tank should be above lowest opening",
+              "id": 1849633712352,
+              "order": 8
+            },
+            {
+              "value": "50mm_overflow_pipe_placed_above_outlet_pipe",
+              "label": "50 mm overflow pipe placed above outlet pipe",
+              "id": 1849633712353,
+              "order": 9
+            },
+            {
+              "value": "10_15_cm_buffer_zone_between_the_filtration_media_and_the_outlet_pipe",
+              "label": "10-15 cm buffer zone between the filtration media and the outlet pipe",
+              "id": 1849633712354,
+              "order": 10
+            },
+            {
+              "value": "media_30_50cm_size_gravel",
+              "label": "Media: 30-50cm size gravel",
+              "id": 1849633712355,
+              "order": 11
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["urf_tank_implementation"]
+            }
+          ]
         },
         {
-          "id": 1749631446184,
-          "name": "netting_installation",
-          "label": "Netting Installation",
+          "id": 1849633800001,
+          "name": "urf_tank_photo",
+          "label": "Take Photo",
           "order": 6,
-          "type": "text",
+          "type": "photo",
           "required": true,
-          "meta": false
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["urf_tank_implementation"]
+            }
+          ]
         },
         {
-          "id": 1749631467230,
-          "name": "balance_tank_installation",
-          "label": "Balance Tank Installation",
+          "id": 1849633900001,
+          "name": "urf_photo_description",
+          "label": "Description of Photo taken",
           "order": 7,
           "type": "text",
           "required": true,
-          "meta": false
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["urf_tank_implementation"]
+            }
+          ]
         },
         {
-          "id": 1749631484915,
-          "name": "storage_tank_installation",
-          "label": "Storage Tank Installation",
+          "id": 1849634000001,
+          "name": "eps_tank_implementation_details",
+          "label": "EPS Tank Implementation",
           "order": 8,
-          "type": "text",
-          "required": false,
-          "meta": false
-        },
-        {
-          "id": 1749624505913,
-          "name": "stand_pipes_installation",
-          "label": "Number of Stand Pipes Installation",
-          "order": 9,
-          "type": "number",
+          "type": "multiple_option",
           "required": true,
-          "meta": false
+          "meta": false,
+          "options": [
+            {
+              "value": "size_of_tank_is_2700l",
+              "label": "Size of tank is 2,700L",
+              "id": 1849634012345,
+              "order": 1
+            },
+            {
+              "value": "thickness_of_tank_is_12mm",
+              "label": "Thickness of tank is 12mm",
+              "id": 1849634012346,
+              "order": 2
+            },
+            {
+              "value": "50mm_inflow_pipe",
+              "label": "50mm Inflow pipe",
+              "id": 1849634012347,
+              "order": 3
+            },
+            {
+              "value": "50mm_pressure_pipe_for_drainage_washout",
+              "label": "50mm pressure pipe for drainage/ washout",
+              "id": 1849634012348,
+              "order": 4
+            },
+            {
+              "value": "washout_gate_valves_pegler_brand",
+              "label": "Washout gate valves- pegler brand",
+              "id": 1849634012349,
+              "order": 5
+            },
+            {
+              "value": "50mm_overflow_scm_out_pipe",
+              "label": "50mm overflow/ Scum out pipe",
+              "id": 1849634012350,
+              "order": 6
+            },
+            {
+              "value": "10_15_cm_buffer_zone_between_the_filtration_media_and_the_overflow_pipe",
+              "label": "10–15 cm buffer zone between the filtration media and the overflow pipe",
+              "id": 1849634012351,
+              "order": 7
+            },
+            {
+              "value": "media_1_3mm_size_sand",
+              "label": "Media: 1-3mm size sand",
+              "id": 1849634012352,
+              "order": 8
+            },
+            {
+              "value": "50mm_siphon_pipe",
+              "label": "50mm siphon pipe",
+              "id": 1849634012353,
+              "order": 9
+            },
+            {
+              "value": "emergency_valve_pegler_brand",
+              "label": "Emergency valve- pegler brand",
+              "id": 1849634012354,
+              "order": 10
+            },
+            {
+              "value": "gate_valve_at_outflow_pipe_pegler_brand",
+              "label": "Gate valve at outflow pipe- pegler brand",
+              "id": 1849634012355,
+              "order": 11
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["eps_tank_implementation"]
+            }
+          ]
         },
         {
-          "id": 1749631501922,
-          "name": "fencing_installation",
-          "label": "Fencing Installation",
+          "id": 1849634100001,
+          "name": "eps_tank_photo",
+          "label": "Take Photo",
+          "order": 9,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["eps_tank_implementation"]
+            }
+          ]
+        },
+        {
+          "id": 1849634200001,
+          "name": "eps_photo_description",
+          "label": "Description of Photo taken",
           "order": 10,
           "type": "text",
           "required": true,
-          "meta": false
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["eps_tank_implementation"]
+            }
+          ]
         },
         {
-          "id": 1749631520451,
-          "name": "lock_installation",
-          "label": "Lock Installation",
+          "id": 1849634300001,
+          "name": "balance_tank_implementation_details",
+          "label": "Balance Tank Implementation",
           "order": 11,
-          "type": "text",
+          "type": "multiple_option",
           "required": true,
-          "meta": false
+          "meta": false,
+          "options": [
+            {
+              "value": "50mm_siphon_pipe",
+              "label": "50mm siphon pipe",
+              "id": 1849634312345,
+              "order": 1
+            },
+            {
+              "value": "50mm_s_trap_overflow_pipe",
+              "label": "50mm s-trap overflow pipe",
+              "id": 1849634312346,
+              "order": 2
+            },
+            {
+              "value": "50mm_pressure_pipe_for_drainage_washout",
+              "label": "50mm pressure pipe for drainage/ washout",
+              "id": 1849634312347,
+              "order": 3
+            },
+            {
+              "value": "washout_gate_valves",
+              "label": "Washout gate valves",
+              "id": 1849634312348,
+              "order": 4
+            },
+            {
+              "value": "tank_lid_cover",
+              "label": "Tank Lid/ Cover",
+              "id": 1849634312349,
+              "order": 5
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["balance_tank_implementation"]
+            }
+          ]
         },
         {
-          "id": 1749631539652,
-          "name": "sign_board_installation",
-          "label": "Sign Board Installation",
+          "id": 1849634400001,
+          "name": "balance_tank_photo",
+          "label": "Take Photo",
           "order": 12,
-          "type": "text",
+          "type": "photo",
           "required": true,
-          "meta": false
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["balance_tank_implementation"]
+            }
+          ]
         },
         {
-          "id": 1749631574376,
-          "name": "project_completion_percent",
-          "label": "What percentage of project is complete?",
+          "id": 1849634500001,
+          "name": "balance_tank_photo_description",
+          "label": "Description of Photo taken",
           "order": 13,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["balance_tank_implementation"]
+            }
+          ]
+        },
+        {
+          "id": 1849634600001,
+          "name": "storage_tank_implementation_details",
+          "label": "Storage Tank Implementation",
+          "order": 14,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "50mm_siphon_pipe",
+              "label": "50mm siphon pipe",
+              "id": 1849634612345,
+              "order": 1
+            },
+            {
+              "value": "50mm_s_trap_overflow_pipe",
+              "label": "50mm s-trap overflow pipe",
+              "id": 1849634612346,
+              "order": 2
+            },
+            {
+              "value": "50mm_pressure_pipe_for_drainage_washout",
+              "label": "50mm pressure pipe for drainage/ washout",
+              "id": 1849634612347,
+              "order": 3
+            },
+            {
+              "value": "washout_gate_valves",
+              "label": "Washout gate valves",
+              "id": 1849634612348,
+              "order": 4
+            },
+            {
+              "value": "25mm_vent",
+              "label": "25mm vent",
+              "id": 1849634612349,
+              "order": 5
+            },
+            {
+              "value": "tank_lid_cover",
+              "label": "Tank Lid/ Cover",
+              "id": 1849634612350,
+              "order": 6
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["storage_tank_implementation"]
+            }
+          ]
+        },
+        {
+          "id": 1849634700001,
+          "name": "storage_tank_photo",
+          "label": "Take Photo",
+          "order": 15,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["storage_tank_implementation"]
+            }
+          ]
+        },
+        {
+          "id": 1849634800001,
+          "name": "storage_tank_photo_description",
+          "label": "Description of Photo taken",
+          "order": 16,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["storage_tank_implementation"]
+            }
+          ]
+        },
+        {
+          "id": 1849634900001,
+          "name": "standpipes_details",
+          "label": "Standpipes",
+          "order": 17,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "number_of_standpipes_to_be_implemented",
+              "label": "Number of standpipes to be implemented",
+              "id": 1849634912345,
+              "order": 1
+            },
+            {
+              "value": "existing_number_of_implemented_standpipes",
+              "label": "Existing number of implemented standpipes",
+              "id": 1849634912346,
+              "order": 2
+            },
+            {
+              "value": "concrete_slab",
+              "label": "Concrete slab",
+              "id": 1849634912347,
+              "order": 3
+            },
+            {
+              "value": "drainage",
+              "label": "Drainage",
+              "id": 1849634912348,
+              "order": 4
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["standpipes"]
+            }
+          ]
+        },
+        {
+          "id": 1849635000001,
+          "name": "standpipes_photo",
+          "label": "Take Photo",
+          "order": 18,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["standpipes"]
+            }
+          ]
+        },
+        {
+          "id": 1849635100001,
+          "name": "standpipes_photo_description",
+          "label": "Description of Photo taken",
+          "order": 19,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["standpipes"]
+            }
+          ]
+        },
+        {
+          "id": 1849635300001,
+          "name": "drainage_photo",
+          "label": "Take Photo",
+          "order": 20,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["drainage"]
+            }
+          ]
+        },
+        {
+          "id": 1849635400001,
+          "name": "drainage_photo_description",
+          "label": "Description of Photo taken",
+          "order": 21,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["drainage"]
+            }
+          ]
+        },
+        {
+          "id": 1849635500001,
+          "name": "site_security_and_perimeter_details",
+          "label": "Site Security and Perimeter",
+          "order": 22,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "fencing",
+              "label": "Fencing",
+              "id": 1849635512345,
+              "order": 1
+            },
+            {
+              "value": "lock",
+              "label": "Lock",
+              "id": 1849635512346,
+              "order": 2
+            },
+            {
+              "value": "signboard",
+              "label": "Signboard",
+              "id": 1849635512347,
+              "order": 3
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["site_security_and_perimeter"]
+            }
+          ]
+        },
+        {
+          "id": 1849635600001,
+          "name": "site_security_photo",
+          "label": "Take Photo",
+          "order": 23,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["site_security_and_perimeter"]
+            }
+          ]
+        },
+        {
+          "id": 1849635700001,
+          "name": "site_security_photo_description",
+          "label": "Description of Photo taken",
+          "order": 24,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["site_security_and_perimeter"]
+            }
+          ]
+        },
+        {
+          "id": 1849635800001,
+          "name": "percentage_of_project_completion",
+          "label": "Percentage of Project Completion",
+          "order": 25,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": {
-            "allowDecimal": true
+            "allowDecimal": true,
+            "min": 0,
+            "max": 100
           }
         }
       ],

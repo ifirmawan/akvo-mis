@@ -883,10 +883,56 @@
           ]
         },
         {
+          "id": 1849634950001,
+          "name": "number_of_standpipes_to_be_implemented",
+          "label": "Number of standpipes to be implemented",
+          "order": 18,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["standpipes"]
+            },
+            {
+              "id": 1849634900001,
+              "options": ["number_of_standpipes_to_be_implemented"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          }
+        },
+        {
+          "id": 1849635200001,
+          "name": "existing_number_of_implemented_standpipes",
+          "label": "Existing number of implemented standpipes",
+          "order": 19,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749624505915,
+              "options": ["standpipes"]
+            },
+            {
+              "id": 1849634900001,
+              "options": ["existing_number_of_implemented_standpipes"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          }
+        },
+        {
           "id": 1849635000001,
           "name": "standpipes_photo",
           "label": "Take Photo of Standpipes",
-          "order": 18,
+          "order": 20,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -902,7 +948,7 @@
           "id": 1849635100001,
           "name": "standpipes_photo_description",
           "label": "Description of Photo taken",
-          "order": 19,
+          "order": 21,
           "type": "text",
           "required": true,
           "meta": false,
@@ -917,7 +963,7 @@
           "id": 1849635300001,
           "name": "drainage_photo",
           "label": "Take Photo of Drainage",
-          "order": 20,
+          "order": 22,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -933,7 +979,7 @@
           "id": 1849635400001,
           "name": "drainage_photo_description",
           "label": "Description of Photo taken",
-          "order": 21,
+          "order": 23,
           "type": "text",
           "required": true,
           "meta": false,
@@ -948,7 +994,7 @@
           "id": 1849635500001,
           "name": "site_security_and_perimeter_details",
           "label": "Site Security and Perimeter",
-          "order": 22,
+          "order": 24,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -983,7 +1029,7 @@
           "id": 1849635600001,
           "name": "site_security_photo",
           "label": "Take Photo of Site Security and Perimeter",
-          "order": 23,
+          "order": 25,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -999,7 +1045,7 @@
           "id": 1849635700001,
           "name": "site_security_photo_description",
           "label": "Description of Photo taken",
-          "order": 24,
+          "order": 26,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1014,7 +1060,7 @@
           "id": 1849635800001,
           "name": "percentage_of_project_completion",
           "label": "Percentage of Project Completion",
-          "order": 25,
+          "order": 27,
           "type": "number",
           "required": true,
           "meta": false,

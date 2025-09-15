@@ -386,6 +386,31 @@
           ]
         },
         {
+          "id": 1849635800001,
+          "name": "percentage_of_project_completion",
+          "label": "Percentage of Project Completion",
+          "order": 2,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true,
+            "min": 0,
+            "max": 100
+          }
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1749624600001,
+      "name": "concrete_base_construction_group",
+      "label": "Concrete Base Construction",
+      "description": null,
+      "order": 5,
+      "repeatable": false,
+      "questions": [
+        {
           "id": 1849633456789,
           "name": "concrete_base_construction_details",
           "label": "Concrete Base Construction",
@@ -450,7 +475,18 @@
               "options": ["concrete_base_construction"]
             }
           ]
-        },
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1749624700001,
+      "name": "urf_tank_implementation_group",
+      "label": "URF Tank Implementation",
+      "description": null,
+      "order": 6,
+      "repeatable": false,
+      "questions": [
         {
           "id": 1849633700001,
           "name": "urf_tank_implementation_details",
@@ -579,7 +615,18 @@
               "options": ["urf_tank_implementation"]
             }
           ]
-        },
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1749624800001,
+      "name": "eps_tank_implementation_group",
+      "label": "EPS Tank Implementation",
+      "description": null,
+      "order": 7,
+      "repeatable": false,
+      "questions": [
         {
           "id": 1849634000001,
           "name": "eps_tank_implementation_details",
@@ -708,7 +755,18 @@
               "options": ["eps_tank_implementation"]
             }
           ]
-        },
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1749624900001,
+      "name": "balance_tank_implementation_group",
+      "label": "Balance Tank Implementation",
+      "description": null,
+      "order": 8,
+      "repeatable": false,
+      "questions": [
         {
           "id": 1849634300001,
           "name": "balance_tank_implementation_details",
@@ -786,7 +844,18 @@
               "options": ["balance_tank_implementation"]
             }
           ]
-        },
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1749625000001,
+      "name": "storage_tank_implementation_group",
+      "label": "Storage Tank Implementation",
+      "description": null,
+      "order": 9,
+      "repeatable": false,
+      "questions": [
         {
           "id": 1849634600001,
           "name": "storage_tank_implementation_details",
@@ -870,7 +939,18 @@
               "options": ["storage_tank_implementation"]
             }
           ]
-        },
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1749625100001,
+      "name": "standpipes_group",
+      "label": "Standpipes",
+      "description": null,
+      "order": 10,
+      "repeatable": false,
+      "questions": [
         {
           "id": 1849634900001,
           "name": "standpipes_details",
@@ -988,7 +1068,18 @@
               "options": ["standpipes"]
             }
           ]
-        },
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1749625200001,
+      "name": "drainage_group",
+      "label": "Drainage",
+      "description": null,
+      "order": 11,
+      "repeatable": false,
+      "questions": [
         {
           "id": 1849635300001,
           "name": "drainage_photo",
@@ -1019,7 +1110,18 @@
               "options": ["drainage"]
             }
           ]
-        },
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1749625300001,
+      "name": "site_security_and_perimeter_group",
+      "label": "Site Security and Perimeter",
+      "description": null,
+      "order": 12,
+      "repeatable": false,
+      "questions": [
         {
           "id": 1849635500001,
           "name": "site_security_and_perimeter_details",
@@ -1085,20 +1187,6 @@
               "options": ["site_security_and_perimeter"]
             }
           ]
-        },
-        {
-          "id": 1849635800001,
-          "name": "percentage_of_project_completion",
-          "label": "Percentage of Project Completion",
-          "order": 29,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": {
-            "allowDecimal": true,
-            "min": 0,
-            "max": 100
-          }
         }
       ],
       "repeat_text": null
@@ -1108,7 +1196,7 @@
       "name": "project_photos",
       "label": "Project Photos",
       "description": null,
-      "order": 5,
+      "order": 13,
       "repeatable": true,
       "questions": [
         {
@@ -1138,7 +1226,7 @@
       "name": "final_remarks",
       "label": "Final Remarks",
       "description": null,
-      "order": 6,
+      "order": 14,
       "repeatable": false,
       "questions": [
         {

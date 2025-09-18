@@ -21,16 +21,16 @@
           "name": "contact_person_name",
           "label": "Name of Contact Person",
           "order": 1,
-          "type": "text",
+          "type": "input",
           "required": true,
-          "meta": true
+          "meta": false
         },
         {
           "id": 1749652384103,
           "name": "contact_person_number",
           "label": "Contact number for contact person",
           "order": 2,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": false
         },
@@ -1024,7 +1024,7 @@
               "order": 1
             },
             {
-              "value": "pumps/rising_main",
+              "value": "pumps_rising_main",
               "label": "Pumps/Rising Main",
               "id": 1749693828861,
               "order": 2
@@ -1056,10 +1056,25 @@
           ]
         },
         {
+          "id": 1749693885123,
+          "name": "raw_water_transport_method_other",
+          "label": "Please specify other method of raw water transport",
+          "order": 10,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749693821961,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
           "id": 1749693904912,
           "name": "raw_water_pump_count",
           "label": "How many raw water pumps are there?",
-          "order": 10,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1067,7 +1082,7 @@
             {
               "id": 1749693821961,
               "options": [
-                "pumps/rising_main",
+                "pumps_rising_main",
                 "borehole_pump",
                 "borehole_gallery_pumps"
               ]
@@ -1078,7 +1093,7 @@
           "id": 1749693978189,
           "name": "standby_pump_count",
           "label": "How many pumps are operational and on standby?",
-          "order": 11,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1086,7 +1101,7 @@
             {
               "id": 1749693821961,
               "options": [
-                "pumps/rising_main",
+                "pumps_rising_main",
                 "borehole_pump",
                 "borehole_gallery_pumps"
               ]
@@ -1097,7 +1112,7 @@
           "id": 1749694016524,
           "name": "risks_associated_with_the_pumps",
           "label": "Are there any risks associated with the pumps?",
-          "order": 12,
+          "order": 13,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1119,7 +1134,7 @@
             {
               "id": 1749693821961,
               "options": [
-                "pumps/rising_main",
+                "pumps_rising_main",
                 "borehole_pump",
                 "borehole_gallery_pumps"
               ]
@@ -1130,7 +1145,7 @@
           "id": 1749694060099,
           "name": "pump_risk_details",
           "label": "Please provide details of the risks",
-          "order": 13,
+          "order": 14,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1171,7 +1186,7 @@
           "id": 1749694146460,
           "name": "pump_risk_details_other",
           "label": "Please provide details of the risks (Other)",
-          "order": 14,
+          "order": 15,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1186,7 +1201,7 @@
           "id": 1749694138975,
           "name": "take_photo_of_risks",
           "label": "Are you able to take photo of risks?",
-          "order": 15,
+          "order": 16,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1216,7 +1231,7 @@
           "id": 1749694172836,
           "name": "photo_of_the_risks",
           "label": "Take photo of the risks",
-          "order": 16,
+          "order": 17,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -1232,7 +1247,7 @@
           "id": 1749694260130,
           "name": "risks_associated_with_the_raw_water_gravity_system",
           "label": "Are there any risks associated with the raw water gravity system?",
-          "order": 17,
+          "order": 18,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1261,7 +1276,7 @@
           "id": 1749694347720,
           "name": "gravity_system_issue_details",
           "label": "Please Provide details of the issues / risks for Raw Water Gravity System:",
-          "order": 18,
+          "order": 19,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1302,7 +1317,7 @@
           "id": 1749694410980,
           "name": "gravity_system_issue_details_other",
           "label": "Please provide details of the issues / risks (Other)",
-          "order": 19,
+          "order": 20,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1317,7 +1332,7 @@
           "id": 1749694427341,
           "name": "take_photo_of_the_issue_risks",
           "label": "Are you able to take photo of the issue / risks?",
-          "order": 20,
+          "order": 21,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1346,7 +1361,7 @@
           "id": 1749694490283,
           "name": "photo_of_the_risks_associated_with_the_raw_water_gravity_system",
           "label": "Take photo of the risks associated with the raw water gravity system",
-          "order": 21,
+          "order": 22,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -1362,7 +1377,7 @@
           "id": 1749694662387,
           "name": "physically_visit_the_raw_water_source",
           "label": "Are you able to physically visit the raw water source?",
-          "order": 22,
+          "order": 23,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1391,7 +1406,7 @@
           "id": 1749694731204,
           "name": "geolocation_of_the_raw_water_source",
           "label": "Take Geolocation of the raw water source",
-          "order": 23,
+          "order": 24,
           "type": "geo",
           "required": true,
           "meta": false,
@@ -1429,7 +1444,7 @@
               "order": 1
             },
             {
-              "value": "potassium_aluminium_sulphate_(alum)",
+              "value": "potassium_aluminium_sulphate",
               "label": "Potassium Aluminium Sulphate (Alum)",
               "id": 1749695586583,
               "order": 2
@@ -1447,7 +1462,7 @@
               "order": 5
             },
             {
-              "value": "sodium_carbonate(soda_ash)",
+              "value": "sodium_carbonate",
               "label": "Sodium Carbonate(Soda Ash)",
               "id": 1749695608565,
               "order": 3
@@ -1642,7 +1657,7 @@
           "dependency": [
             {
               "id": 1749652997590,
-              "options": ["potassium_aluminium_sulphate_(alum)"]
+              "options": ["potassium_aluminium_sulphate"]
             }
           ],
           "rule": {
@@ -1674,7 +1689,7 @@
           "dependency": [
             {
               "id": 1749652997590,
-              "options": ["potassium_aluminium_sulphate_(alum)"]
+              "options": ["potassium_aluminium_sulphate"]
             }
           ]
         },
@@ -1703,7 +1718,7 @@
           "dependency": [
             {
               "id": 1749652997590,
-              "options": ["potassium_aluminium_sulphate_(alum)"]
+              "options": ["potassium_aluminium_sulphate"]
             }
           ]
         },
@@ -1790,7 +1805,7 @@
           "dependency": [
             {
               "id": 1749652997590,
-              "options": ["sodium_carbonate(soda_ash)"]
+              "options": ["sodium_carbonate"]
             }
           ],
           "rule": {
@@ -1822,7 +1837,7 @@
           "dependency": [
             {
               "id": 1749652997590,
-              "options": ["sodium_carbonate(soda_ash)"]
+              "options": ["sodium_carbonate"]
             }
           ]
         },
@@ -1851,7 +1866,7 @@
           "dependency": [
             {
               "id": 1749652997590,
-              "options": ["sodium_carbonate(soda_ash)"]
+              "options": ["sodium_carbonate"]
             }
           ]
         },

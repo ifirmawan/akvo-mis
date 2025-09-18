@@ -9,9 +9,9 @@
   "parent_id": 1749611049520,
   "question_groups": [
     {
-      "id": 1749611905373,
-      "name": "pump_station_inspection",
-      "label": "Pump Station Inspection",
+      "id": 1749611990752,
+      "name": "general_info_pump_station",
+      "label": "General Information on Pump Station",
       "description": null,
       "order": 1,
       "repeatable": false,
@@ -26,31 +26,10 @@
           "meta": true
         },
         {
-          "id": 1749612064689,
-          "name": "pump_station_photo",
-          "label": "Take photo of Pump Station",
-          "order": 2,
-          "type": "photo",
-          "required": true,
-          "meta": false,
-          "limit": 5.0
-        }
-      ],
-      "repeat_text": null
-    },
-    {
-      "id": 1749611990752,
-      "name": "general_info_pump_station",
-      "label": "General Information on Pump Station",
-      "description": null,
-      "order": 2,
-      "repeatable": false,
-      "questions": [
-        {
           "id": 1749611990753,
           "name": "log_book_updated",
           "label": "Log Book available and updated?",
-          "order": 1,
+          "order": 2,
           "type": "option",
           "required": true,
           "meta": false,
@@ -73,7 +52,7 @@
           "id": 1749612149744,
           "name": "ground_condition",
           "label": "Ground Conditions",
-          "order": 2,
+          "order": 3,
           "type": "option",
           "required": true,
           "meta": false,
@@ -110,9 +89,9 @@
         },
         {
           "id": 1749612390514,
-          "name": "building_condition",
-          "label": "Building Conditions",
-          "order": 3,
+          "name": "facility_condition",
+          "label": "Facility Condition",
+          "order": 4,
           "type": "option",
           "required": true,
           "meta": false,
@@ -151,7 +130,7 @@
           "id": 1749612437237,
           "name": "security_gate_fencing",
           "label": "Security gate and Fencing",
-          "order": 4,
+          "order": 5,
           "type": "option",
           "required": true,
           "meta": false,
@@ -183,7 +162,7 @@
           "id": 1749612781881,
           "name": "non_return_valve",
           "label": "Non return Valve",
-          "order": 5,
+          "order": 6,
           "type": "option",
           "required": true,
           "meta": false,
@@ -212,7 +191,7 @@
           "id": 1749612827907,
           "name": "sluice_valve",
           "label": "Sluice valve",
-          "order": 6,
+          "order": 7,
           "type": "option",
           "required": true,
           "meta": false,
@@ -235,7 +214,7 @@
           "id": 1749612881122,
           "name": "ventilation",
           "label": "Ventilation",
-          "order": 7,
+          "order": 8,
           "type": "option",
           "required": true,
           "meta": false,
@@ -253,8 +232,8 @@
               "order": 2
             },
             {
-              "value": "n.a",
-              "label": "N.A",
+              "value": "not_available",
+              "label": "Not available",
               "id": 1749612905891,
               "order": 3
             }
@@ -264,7 +243,7 @@
           "id": 1749612965593,
           "name": "electrical_panel",
           "label": "Electrical Panel",
-          "order": 8,
+          "order": 9,
           "type": "option",
           "required": true,
           "meta": false,
@@ -286,6 +265,12 @@
               "label": "Electrical hazard",
               "id": 1749613003862,
               "order": 3
+            },
+            {
+              "value": "satisfactory",
+              "label": "Satisfactory",
+              "id": 1749613011530,
+              "order": 4
             }
           ]
         },
@@ -293,7 +278,7 @@
           "id": 1749613029710,
           "name": "pump_station_lid",
           "label": "Pump Station Lid",
-          "order": 9,
+          "order": 10,
           "type": "option",
           "required": true,
           "meta": false,
@@ -322,7 +307,7 @@
           "id": 1749613073320,
           "name": "gantry",
           "label": "Gantry",
-          "order": 10,
+          "order": 11,
           "type": "option",
           "required": true,
           "meta": false,
@@ -357,7 +342,7 @@
           "id": 1749613144170,
           "name": "hour_run_meter",
           "label": "Hour Run Meter",
-          "order": 11,
+          "order": 12,
           "type": "option",
           "required": true,
           "meta": false,
@@ -380,7 +365,7 @@
           "id": 1749613187910,
           "name": "amp_meter",
           "label": "Amp Meter",
-          "order": 12,
+          "order": 13,
           "type": "option",
           "required": true,
           "meta": false,
@@ -403,7 +388,7 @@
           "id": 1749613395029,
           "name": "volt_meter",
           "label": "Volt Meter",
-          "order": 13,
+          "order": 14,
           "type": "option",
           "required": true,
           "meta": false,
@@ -425,8 +410,8 @@
         {
           "id": 1749613433763,
           "name": "guardrails_pump_station",
-          "label": "Guardrails for Pump Sation",
-          "order": 14,
+          "label": "Guardrails for Pump Station",
+          "order": 15,
           "type": "option",
           "required": true,
           "meta": false,
@@ -448,6 +433,12 @@
               "label": "Maintenance in progress",
               "id": 1749613466726,
               "order": 3
+            },
+            {
+              "value": "needs_upgrade",
+              "label": "Needs Upgrade",
+              "id": 1749613474866,
+              "order": 4
             }
           ]
         },
@@ -455,7 +446,7 @@
           "id": 1749613489958,
           "name": "num_pumps_operational",
           "label": "Number of pumps in operation",
-          "order": 15,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false
@@ -464,7 +455,7 @@
           "id": 1749613513292,
           "name": "num_pumps_standby",
           "label": "Number of pumps standby",
-          "order": 16,
+          "order": 17,
           "type": "number",
           "required": true,
           "meta": false
@@ -473,7 +464,7 @@
           "id": 1749613534231,
           "name": "power_backup_system",
           "label": "Power Backup System",
-          "order": 17,
+          "order": 18,
           "type": "option",
           "required": true,
           "meta": false,
@@ -496,7 +487,7 @@
           "id": 1749613625174,
           "name": "odour",
           "label": "Odour",
-          "order": 18,
+          "order": 19,
           "type": "option",
           "required": true,
           "meta": false,
@@ -525,22 +516,28 @@
           "id": 1749613671183,
           "name": "fats_grease_balls",
           "label": "Fats/Grease Balls",
-          "order": 19,
+          "order": 20,
           "type": "option",
           "required": true,
           "meta": false,
           "options": [
             {
+              "value": "plenty",
+              "label": "Plenty",
+              "id": 1749613687453,
+              "order": 1
+            },
+            {
               "value": "some",
               "label": "Some",
               "id": 1749613679337,
-              "order": 1
+              "order": 2
             },
             {
               "value": "none",
               "label": "None",
               "id": 1749613679338,
-              "order": 2
+              "order": 3
             }
           ]
         },
@@ -548,7 +545,7 @@
           "id": 1749613710063,
           "name": "station_status",
           "label": "Pump Station Status",
-          "order": 20,
+          "order": 21,
           "type": "option",
           "required": true,
           "meta": false,
@@ -583,7 +580,7 @@
           "id": 1749613769968,
           "name": "pump_status",
           "label": "Pump Status",
-          "order": 21,
+          "order": 22,
           "type": "option",
           "required": true,
           "meta": false,
@@ -618,7 +615,7 @@
           "id": 1749613872416,
           "name": "lights",
           "label": "Lights",
-          "order": 22,
+          "order": 23,
           "type": "option",
           "required": true,
           "meta": false,
@@ -634,6 +631,12 @@
               "label": "Faulty",
               "id": 1749613883664,
               "order": 2
+            },
+            {
+              "value": "not_available",
+              "label": "Not available",
+              "id": 1749613907566,
+              "order": 3
             }
           ]
         },
@@ -641,7 +644,7 @@
           "id": 1749613907567,
           "name": "water_supply",
           "label": "Water Supply",
-          "order": 23,
+          "order": 24,
           "type": "option",
           "required": true,
           "meta": false,
@@ -670,7 +673,7 @@
           "id": 1749613958725,
           "name": "ohs_equipment",
           "label": "OHS equipment",
-          "order": 24,
+          "order": 25,
           "type": "option",
           "required": true,
           "meta": false,
@@ -697,6 +700,40 @@
         }
       ],
       "repeat_text": null
+    },
+    {
+      "id": 1749614077931,
+      "name": "photos_of_inspection",
+      "label": "Photos of Inspection",
+      "description": null,
+      "order": 2,
+      "repeatable": true,
+      "questions": [
+        {
+          "id": 1749614077932,
+          "name": "inspection_photo",
+          "label": "Take Photo",
+          "order": 1,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": null,
+          "limit": 5.0
+        },
+        {
+          "id": 1749614105763,
+          "name": "inspection_photo_comment",
+          "label": "Comment on Photo Taken",
+          "order": 2,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "options": null,
+          "dependency": null
+        }
+      ],
+      "repeat_text": "Add another"
     },
     {
       "id": 1749612019054,

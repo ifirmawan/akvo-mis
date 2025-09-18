@@ -26,8 +26,8 @@
         },
         {
           "id": 1749611049541,
-          "name": "division_province",
-          "label": "Which Division - Province are you in?",
+          "name": "division",
+          "label": "Which Division are you in?",
           "order": 2,
           "type": "administration",
           "required": true,
@@ -41,6 +41,18 @@
           "type": "geo",
           "required": true,
           "meta": true
+        },
+        {
+          "id": 1749611796141,
+          "name": "pump_station_photo",
+          "label": "Take Photo of Pump Station",
+          "order": 4,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": null,
+          "limit": 5.0
         }
       ],
       "repeat_text": null

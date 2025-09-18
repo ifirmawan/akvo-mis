@@ -127,11 +127,41 @@
       "repeat_text": null
     },
     {
+      "id": 1749627752043,
+      "name": "photos_of_inspection",
+      "label": "Photos of Inspection",
+      "description": null,
+      "order": 2,
+      "repeatable": true,
+      "questions": [
+        {
+          "id": 1749627760683,
+          "name": "inspection_photo",
+          "label": "Take Photo",
+          "order": 1,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5.0
+        },
+        {
+          "id": 1749627775126,
+          "name": "inspection_photo_comment",
+          "label": "Comment on Photo Taken",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false
+        }
+      ],
+      "repeat_text": "Add another photo of inspection"
+    },
+    {
       "id": 1749627686321,
       "name": "comments_recommendations",
       "label": "Comments and Recommendations",
       "description": null,
-      "order": 2,
+      "order": 3,
       "repeatable": false,
       "questions": [
         {

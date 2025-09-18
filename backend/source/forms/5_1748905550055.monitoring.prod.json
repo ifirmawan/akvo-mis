@@ -19,7 +19,7 @@
       "questions": [
         {
           "id": 1748913763000,
-          "name": "different_treatment_processes_available_at_the_plant",
+          "name": "treatment_processes",
           "label": "What are the different treatment processes available at the plant?",
           "order": 1,
           "type": "multiple_option",
@@ -161,15 +161,204 @@
           "required_double_entry": false
         },
         {
-          "id": 1748905778961,
-          "name": "total_population_connected_to_this_plant",
-          "label": "What is the total population connected to this plant?",
+          "id": 1748904054931,
+          "name": "has_pump_station",
+          "label": "Are there any pump station at the treatment plant?",
           "order": 3,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "rule": null,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1748904066576,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1748904066578,
+              "order": 2
+            }
+          ],
+          "dependency": null
+        },
+        {
+          "id": 1748904102151,
+          "name": "num_pump_stations",
+          "label": "Total number of pump stations",
+          "order": 4,
           "type": "number",
           "required": true,
           "meta": false,
+          "rule": null,
           "options": null,
-          "required_double_entry": false
+          "dependency": [
+            {
+              "id": 1748904054931,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1748904158071,
+          "name": "pump_station_types",
+          "label": "What are types of pump stations?",
+          "order": 5,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "rule": null,
+          "options": [
+            {
+              "value": "raw_sewage_pump_station",
+              "label": "Raw Sewage Pump Station",
+              "id": 1748904166065,
+              "order": 1
+            },
+            {
+              "value": "re_circulation_pump_station",
+              "label": "Re circulation Pump Station",
+              "id": 1748904166066,
+              "order": 2
+            },
+            {
+              "value": "sludge_pump_station",
+              "label": "Sludge Pump Station",
+              "id": 1748904374311,
+              "order": 3
+            },
+            {
+              "value": "supernatant_pump_station",
+              "label": "Supernatant Pump Station",
+              "id": 1748904382155,
+              "order": 4
+            },
+            {
+              "value": "influent_pump_station",
+              "label": "Influent Pump Station",
+              "id": 1748904395053,
+              "order": 5
+            },
+            {
+              "value": "effluent_pump_station",
+              "label": "Effluent Pump Station",
+              "id": 1748904411459,
+              "order": 6
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1748904054931,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1748904470602,
+          "name": "num_raw_sewage_pump_stations",
+          "label": "How many raw sewage pump stations?",
+          "order": 6,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": null,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748904158071,
+              "options": ["raw_sewage_pump_station"]
+            }
+          ]
+        },
+        {
+          "id": 1748904517975,
+          "name": "num_recirculation_pump_stations",
+          "label": "How many re-circulation pump stations?",
+          "order": 7,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": null,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748904158071,
+              "options": ["re_circulation_pump_station"]
+            }
+          ]
+        },
+        {
+          "id": 1748904551256,
+          "name": "num_sludge_pump_stations",
+          "label": "How many sludge pump stations?",
+          "order": 8,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": null,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748904158071,
+              "options": ["sludge_pump_station"]
+            }
+          ]
+        },
+        {
+          "id": 1748904618481,
+          "name": "num_supernatant_pump_stations",
+          "label": "How many supernatant pump stations?",
+          "order": 9,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": false
+          },
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748904158071,
+              "options": ["supernatant_pump_station"]
+            }
+          ]
+        },
+        {
+          "id": 1748904692704,
+          "name": "num_influent_pump_stations",
+          "label": "How many influent pump station",
+          "order": 10,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": null,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748904158071,
+              "options": ["influent_pump_station"]
+            }
+          ]
+        },
+        {
+          "id": 1748904732921,
+          "name": "num_effluent_pump_stations",
+          "label": "How many Effluent Pump Stations?",
+          "order": 11,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": null,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748904158071,
+              "options": ["effluent_pump_station"]
+            }
+          ]
         }
       ],
       "repeat_text": null
@@ -525,6 +714,13 @@
               "id": 1748910737500,
               "order": 4,
               "color": "#efc050"
+            },
+            {
+              "value": "not_available",
+              "label": "Not Available",
+              "id": 1748910737400,
+              "order": 3,
+              "color": "#dd4124"
             }
           ],
           "dependency": null
@@ -788,16 +984,38 @@
               "label": "Flow from unknown source",
               "id": 1748911443978,
               "order": 6
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748911458613,
+              "order": 7
             }
           ],
           "dependency": null,
           "rule": null
         },
         {
+          "id": 1748911458614,
+          "name": "other_inflow_description",
+          "label": "Please specify other inflow description",
+          "order": 3,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748911325583,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
           "id": 1748911325349,
           "name": "inflow_rate_in_cubic_meters_per_day",
           "label": "What is the inflow rate in cubic meters per day?",
-          "order": 3,
+          "order": 4,
           "type": "number",
           "required": true,
           "meta": false,
@@ -816,7 +1034,7 @@
           "id": 1748911562813,
           "name": "photo_of_the_inlet",
           "label": "Take photo of the inlet",
-          "order": 4,
+          "order": 5,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -892,6 +1110,28 @@
               "label": "Excessive odors",
               "id": 1748913681440,
               "order": 6
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748913690123,
+              "order": 7
+            }
+          ]
+        },
+        {
+          "id": 1748913690124,
+          "name": "other_screening_description",
+          "label": "Please specify other screening description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748906571911,
+              "options": ["other"]
             }
           ]
         },
@@ -899,7 +1139,7 @@
           "id": 1748914126410,
           "name": "photo_of_the_screens",
           "label": "Take photo of the screens",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -916,7 +1156,7 @@
           "id": 1748914436150,
           "name": "comment_on_the_operation_of_the_grit_removal_system",
           "label": "Comment on the operation of the grit removal system",
-          "order": 3,
+          "order": 4,
           "type": "multiple_option",
           "required": true,
           "dependency": [
@@ -968,6 +1208,28 @@
               "label": "Excessive ordor in grit removal system",
               "id": 1748914676093,
               "order": 7
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748914684397,
+              "order": 8
+            }
+          ]
+        },
+        {
+          "id": 1748914684398,
+          "name": "other_grit_removal_description",
+          "label": "Please specify other grit removal description",
+          "order": 5,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748914436150,
+              "options": ["other"]
             }
           ]
         },
@@ -975,7 +1237,7 @@
           "id": 1748914701750,
           "name": "photo_of_the_grit_removal_system",
           "label": "Take photo of  the grit removal system",
-          "order": 4,
+          "order": 6,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -1080,6 +1342,12 @@
               "label": "No influent Pump Station in the plant",
               "id": 1748914881430,
               "order": 8
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748914890123,
+              "order": 9
             }
           ],
           "dependency": [
@@ -1090,10 +1358,26 @@
           ]
         },
         {
+          "id": 1748914890124,
+          "name": "other_influent_pumping_description",
+          "label": "Please specify other influent pumping description",
+          "order": 3,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748914793745,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
           "id": 1748914939216,
           "name": "take_photo_of_the_influent_pump_station",
           "label": "Are you able to take photo of the Influent Pump Station?",
-          "order": 3,
+          "order": 4,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1122,7 +1406,7 @@
           "id": 1748914980064,
           "name": "photo_of_the_influent_pumping_station",
           "label": "Take photo of the influent pumping station",
-          "order": 4,
+          "order": 5,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -1239,6 +1523,28 @@
               "label": "Normal",
               "id": 1748915335780,
               "order": 13
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748915344084,
+              "order": 14
+            }
+          ]
+        },
+        {
+          "id": 1748915344085,
+          "name": "other_primary_clarifier_description",
+          "label": "Please specify other primary clarifier description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748906604803,
+              "options": ["other"]
             }
           ]
         },
@@ -1246,7 +1552,7 @@
           "id": 1748915357111,
           "name": "photo_of_primary_clarifier",
           "label": "Take photo of primary clarifier",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -1339,6 +1645,28 @@
               "label": "Restricted rotation of distribution arms",
               "id": 1748915488509,
               "order": 9
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748915497013,
+              "order": 10
+            }
+          ]
+        },
+        {
+          "id": 1748915497014,
+          "name": "other_trickling_filter_description",
+          "label": "Please specify other trickling filter description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748906632114,
+              "options": ["other"]
             }
           ]
         },
@@ -1346,7 +1674,7 @@
           "id": 1748915551626,
           "name": "photo_of_trickling_filter",
           "label": "Take photo of Trickling Filter",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -1433,6 +1761,28 @@
               "label": "Auto Mode",
               "id": 1748915798701,
               "order": 12
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748915807173,
+              "order": 13
+            }
+          ]
+        },
+        {
+          "id": 1748915807174,
+          "name": "other_activated_sludge_description",
+          "label": "Please specify other activated sludge description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748915642008,
+              "options": ["other"]
             }
           ]
         },
@@ -1440,7 +1790,7 @@
           "id": 1748915652986,
           "name": "photo_of_activated_sludge_system",
           "label": "Take photo of Activated Sludge System",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -1527,6 +1877,28 @@
               "label": "Bad ordor",
               "id": 1748915939166,
               "order": 8
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748915947550,
+              "order": 9
+            }
+          ]
+        },
+        {
+          "id": 1748915947551,
+          "name": "other_stabilization_lagoon_description",
+          "label": "Please specify other stabilization lagoon description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748906806971,
+              "options": ["other"]
             }
           ]
         },
@@ -1534,7 +1906,7 @@
           "id": 1748915991888,
           "name": "photo_of_the_stabilization_lagoon",
           "label": "Take photo of the stabilization lagoon",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -1621,6 +1993,28 @@
               "label": "Supernatant removal",
               "id": 1748916148974,
               "order": 8
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748916157342,
+              "order": 9
+            }
+          ]
+        },
+        {
+          "id": 1748916157343,
+          "name": "other_anaerobic_lagoon_description",
+          "label": "Please specify other anaerobic lagoon description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748906938999,
+              "options": ["other"]
             }
           ]
         },
@@ -1628,7 +2022,7 @@
           "id": 1748916203269,
           "name": "photo_of_anaerobic_lagoon",
           "label": "Take photo of anaerobic lagoon",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -1825,6 +2219,28 @@
               "label": "Normal Operation",
               "id": 1748916585705,
               "order": 12
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748916593701,
+              "order": 13
+            }
+          ]
+        },
+        {
+          "id": 1748916593702,
+          "name": "other_secondary_clarifier_description",
+          "label": "Please specify other secondary clarifier description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748907057799,
+              "options": ["other"]
             }
           ]
         },
@@ -1832,7 +2248,7 @@
           "id": 1748916617834,
           "name": "photo_of_the_secondary_clarifier",
           "label": "Take photo of the secondary clarifier",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -1913,6 +2329,28 @@
               "label": "Inadequate supernatant removal",
               "id": 1748917100884,
               "order": 7
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748917109372,
+              "order": 8
+            }
+          ]
+        },
+        {
+          "id": 1748917109373,
+          "name": "other_sludge_aerobic_digestion_description",
+          "label": "Please specify other sludge aerobic digestion description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748907110680,
+              "options": ["other"]
             }
           ]
         },
@@ -1920,7 +2358,7 @@
           "id": 1748917136204,
           "name": "photo_of_sludge_aerobic_digestion",
           "label": "Take photo of Sludge Aerobic Digestion",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -2001,6 +2439,28 @@
               "label": "Recirculation pump operations",
               "id": 1748917261454,
               "order": 7
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748917270510,
+              "order": 8
+            }
+          ]
+        },
+        {
+          "id": 1748917270511,
+          "name": "other_sludge_handling_description",
+          "label": "Please specify other sludge handling description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748907110308,
+              "options": ["other"]
             }
           ]
         },
@@ -2008,7 +2468,7 @@
           "id": 1748917296607,
           "name": "photo_of_sludge_handling_system",
           "label": "Take photo of sludge handling system",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -2083,6 +2543,28 @@
               "label": "Filtrate  overflowing to surrounding environment",
               "id": 1748917413480,
               "order": 6
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748917423213,
+              "order": 7
+            }
+          ]
+        },
+        {
+          "id": 1748917423215,
+          "name": "other_drying_bed_description",
+          "label": "Please specify other drying bed description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748907173282,
+              "options": ["other"]
             }
           ]
         },
@@ -2090,7 +2572,7 @@
           "id": 1748917423214,
           "name": "photo_of_drying_beds",
           "label": "Take photo of drying beds",
-          "order": 2,
+          "order": 3,
           "type": "photo",
           "required": true,
           "dependency": [
@@ -2245,16 +2727,39 @@
               "label": "Excessive suspended solids,turbidity,foam,grease,scum and colour",
               "id": 1748917726828,
               "order": 4
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748917735243,
+              "order": 5
             }
           ],
           "dependency": null,
           "rule": null
         },
         {
+          "id": 1748917735244,
+          "name": "other_plant_effluent_description",
+          "label": "Please specify other plant effluent description",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748907201859,
+              "options": ["other"]
+            }
+          ],
+          "rule": null
+        },
+        {
           "id": 1748917751257,
           "name": "take_the_sample",
           "label": "Are you able to take the sample?",
-          "order": 2,
+          "order": 3,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2279,7 +2784,7 @@
           "id": 1748917751258,
           "name": "method_of_testing_for_plant_effluent",
           "label": "Method of Testing for plant effluent",
-          "order": 3,
+          "order": 4,
           "type": "option",
           "required": true,
           "meta": true,
@@ -2309,7 +2814,7 @@
           "id": 1748917775963,
           "name": "photo_of_effluent_sampling_point",
           "label": "Take photo of effluent sampling point",
-          "order": 4,
+          "order": 5,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -2864,6 +3369,12 @@
               "label": "Plant Augmentation",
               "id": 1748918647636,
               "order": 7
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748918662083,
+              "order": 8
             }
           ],
           "dependency": [
@@ -2875,10 +3386,26 @@
           "short_label": null
         },
         {
+          "id": 1748918679465,
+          "name": "other_final_recommendations",
+          "label": "Please specify other final recommendations",
+          "order": 5,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748918550536,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
           "id": 1748918679466,
           "name": "final_recommendations_from_dws_staff",
           "label": "What are the final recommendations from the DWS staff on the overall operations and remedial actions for the plant?",
-          "order": 5,
+          "order": 6,
           "type": "text",
           "required": true,
           "meta": false,
@@ -2895,7 +3422,7 @@
           "id": 1748918835968,
           "name": "signature_of_dws_staff",
           "label": "Signature of DWS Staff",
-          "order": 6,
+          "order": 7,
           "type": "signature",
           "required": true,
           "meta": false,
@@ -2907,7 +3434,7 @@
           "id": 1748918851234,
           "name": "dws_staff_name",
           "label": "Name of DWS Staff",
-          "order": 7,
+          "order": 8,
           "type": "input",
           "required": true,
           "meta": true,

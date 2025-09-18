@@ -134,10 +134,69 @@
           }
         },
         {
+          "id": 1749621050010,
+          "name": "parameters_tested",
+          "label": "Which parameters were you able to test?",
+          "order": 7,
+          "type": "multiple_option",
+          "required": false,
+          "meta": false,
+          "options": [
+            {
+              "value": "turbidity_ntu",
+              "label": "Turbidity in NTU",
+              "id": 1749621100015,
+              "order": 1
+            },
+            {
+              "value": "temperature_c",
+              "label": "Temperature in °C",
+              "id": 1749621060011,
+              "order": 2
+            },
+            {
+              "value": "ph",
+              "label": "pH",
+              "id": 1749621070012,
+              "order": 3
+            },
+            {
+              "value": "conductivity",
+              "label": "Conductivity in µS/cm",
+              "id": 1749621080013,
+              "order": 4
+            },
+            {
+              "value": "salinity",
+              "label": "Salinity PPT",
+              "id": 1749621090014,
+              "order": 5
+            },
+            {
+              "value": "total_coliform",
+              "label": "Total Coliform count",
+              "id": 1749621110016,
+              "order": 6
+            },
+            {
+              "value": "fecal_coliform",
+              "label": "Fecal Coliform count",
+              "id": 1749621120017,
+              "order": 7
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
           "id": 1749623024122,
           "name": "total_coliform_count",
           "label": "What is the Total Coliform count?",
-          "order": 7,
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false,
@@ -145,6 +204,10 @@
             {
               "id": 1749622849604,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["total_coliform"]
             }
           ],
           "rule": {
@@ -155,7 +218,7 @@
           "id": 1749623074194,
           "name": "fecal_coliform_count",
           "label": "What is the Fecal Coliform Count?",
-          "order": 8,
+          "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
@@ -163,6 +226,10 @@
             {
               "id": 1749622849604,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["fecal_coliform"]
             }
           ],
           "rule": {
@@ -173,7 +240,7 @@
           "id": 1749623109418,
           "name": "turbidity_ntu",
           "label": "What is the Turbidity in NTU?",
-          "order": 9,
+          "order": 10,
           "type": "number",
           "required": true,
           "meta": false,
@@ -181,6 +248,10 @@
             {
               "id": 1749622849604,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["turbidity_ntu"]
             }
           ],
           "rule": {
@@ -191,7 +262,7 @@
           "id": 1749621374500,
           "name": "water_source_type",
           "label": "Type of Water Source?",
-          "order": 10,
+          "order": 11,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -226,7 +297,7 @@
           "id": 1749621461754,
           "name": "has_new_catchment_dam",
           "label": "Construction of New Water Catchment/Dam?",
-          "order": 11,
+          "order": 12,
           "type": "option",
           "required": true,
           "meta": false,
@@ -255,7 +326,7 @@
           "id": 1749621494567,
           "name": "catchment_dam_photo",
           "label": "Photo of the Catchment/Dam",
-          "order": 12,
+          "order": 13,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -270,7 +341,7 @@
           "id": 1749621517282,
           "name": "has_borehole",
           "label": "Construction of borehole?",
-          "order": 13,
+          "order": 14,
           "type": "option",
           "required": true,
           "meta": false,
@@ -299,7 +370,7 @@
           "id": 1749621541234,
           "name": "borehole_photo",
           "label": "Photo of the Borehole",
-          "order": 14,
+          "order": 15,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -314,7 +385,7 @@
           "id": 1749621557442,
           "name": "has_pump_system",
           "label": "Installation of Pump system?",
-          "order": 15,
+          "order": 16,
           "type": "option",
           "required": true,
           "meta": false,
@@ -343,7 +414,7 @@
           "id": 1749621581234,
           "name": "pump_system_photo",
           "label": "Photo of the Pump System",
-          "order": 16,
+          "order": 17,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -358,7 +429,7 @@
           "id": 1749621611527,
           "name": "has_rainwater_harvesting",
           "label": "Installation of Rainwater Harvesting System?",
-          "order": 17,
+          "order": 18,
           "type": "option",
           "required": true,
           "meta": false,
@@ -387,7 +458,7 @@
           "id": 1749621711234,
           "name": "rainwater_harvesting_photo",
           "label": "Photo of the Rainwater Harvesting System",
-          "order": 18,
+          "order": 19,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -402,7 +473,7 @@
           "id": 1749621624567,
           "name": "number_of_rainwater_harvesting_systems",
           "label": "Please Identify the number of Rainwater harvesting system installed.",
-          "order": 19,
+          "order": 20,
           "type": "number",
           "required": true,
           "meta": false,
@@ -417,7 +488,7 @@
           "id": 1749621690983,
           "name": "has_desalination_plant",
           "label": "Installation of Desalination Plant?",
-          "order": 20,
+          "order": 21,
           "type": "option",
           "required": true,
           "meta": false,
@@ -446,7 +517,7 @@
           "id": 1749621634567,
           "name": "desalination_plant_photo",
           "label": "Photo of the Desalination Plant",
-          "order": 21,
+          "order": 22,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -461,7 +532,7 @@
           "id": 1749622726347,
           "name": "accessible_construction_site",
           "label": "Which part of the construction sites you can visit?",
-          "order": 22,
+          "order": 23,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1388,7 +1459,13 @@
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749622849604, "options": ["lab_test"] }]
+          "dependency": [
+            { "id": 1749622849604, "options": ["lab_test"] },
+            {
+              "id": 1749621050010,
+              "options": ["temperature_c"]
+            }
+          ]
         },
         {
           "id": 1723459200024,
@@ -1399,7 +1476,13 @@
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true, "min": 0, "max": 14 },
-          "dependency": [{ "id": 1749622849604, "options": ["lab_test"] }]
+          "dependency": [
+            { "id": 1749622849604, "options": ["lab_test"] },
+            {
+              "id": 1749621050010,
+              "options": ["ph"]
+            }
+          ]
         },
         {
           "id": 1723459200025,
@@ -1410,7 +1493,13 @@
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749622849604, "options": ["lab_test"] }]
+          "dependency": [
+            { "id": 1749622849604, "options": ["lab_test"] },
+            {
+              "id": 1749621050010,
+              "options": ["conductivity"]
+            }
+          ]
         },
         {
           "id": 1723459200026,
@@ -1421,7 +1510,13 @@
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749622849604, "options": ["lab_test"] }]
+          "dependency": [
+            { "id": 1749622849604, "options": ["lab_test"] },
+            {
+              "id": 1749621050010,
+              "options": ["salinity"]
+            }
+          ]
         }
       ]
     },

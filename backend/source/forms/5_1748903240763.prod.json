@@ -33,8 +33,9 @@
           "type": "administration",
           "required": true,
           "meta": true,
-          "rule": null,
-          "dependency": null
+          "api": {
+            "max_level": 1
+          }
         },
         {
           "id": 1748903539202,

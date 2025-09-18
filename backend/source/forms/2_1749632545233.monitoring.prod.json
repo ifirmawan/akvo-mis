@@ -195,7 +195,7 @@
           "id": 1749633001462,
           "name": "water_testing_method",
           "label": "Method of Water Testing Used?",
-          "order": 4,
+          "order": 5,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -224,7 +224,7 @@
           "id": 1749633073911,
           "name": "sampling_point_photo",
           "label": "Take Photo of Sampling Point",
-          "order": 5,
+          "order": 6,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -240,7 +240,7 @@
           "id": 1749633110662,
           "name": "sampling_point_description",
           "label": "Description of Sampling Point",
-          "order": 6,
+          "order": 7,
           "type": "text",
           "required": true,
           "meta": false,
@@ -252,10 +252,69 @@
           ]
         },
         {
+          "id": 1749631050010,
+          "name": "parameters_tested",
+          "label": "Which parameters were you able to test?",
+          "order": 8,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "turbidity_ntu",
+              "label": "Turbidity in NTU",
+              "id": 1749633127963,
+              "order": 1
+            },
+            {
+              "value": "total_coliform",
+              "label": "Total Coliform in 1cfu/100ml",
+              "id": 1749633145122,
+              "order": 2
+            },
+            {
+              "value": "fecal_coliform",
+              "label": "Faecal Coliform in 1cfu/100ml",
+              "id": 1749633162046,
+              "order": 3
+            },
+            {
+              "value": "temperature_c",
+              "label": "Temperature in °C",
+              "id": 1749633178123,
+              "order": 4
+            },
+            {
+              "value": "ph",
+              "label": "pH",
+              "id": 1749633193921,
+              "order": 5
+            },
+            {
+              "value": "conductivity",
+              "label": "Conductivity in µS/cm",
+              "id": 1749633209784,
+              "order": 6
+            },
+            {
+              "value": "salinity",
+              "label": "Salinity PPT",
+              "id": 1749633219784,
+              "order": 7
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749633001462,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
           "id": 1749633220745,
           "name": "turbidity_ntu",
           "label": "What is the Turbidity in NTU?",
-          "order": 8,
+          "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
@@ -263,6 +322,10 @@
             {
               "id": 1749633001462,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749631050010,
+              "options": ["turbidity_ntu"]
             }
           ],
           "rule": {
@@ -273,7 +336,7 @@
           "id": 1749633259392,
           "name": "total_coliform_cfu_100ml",
           "label": "What is the Total Coliform count in 1cfu/100ml?",
-          "order": 9,
+          "order": 10,
           "type": "number",
           "required": true,
           "meta": false,
@@ -281,6 +344,10 @@
             {
               "id": 1749633001462,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749631050010,
+              "options": ["total_coliform"]
             }
           ],
           "rule": {
@@ -291,7 +358,7 @@
           "id": 1749633295165,
           "name": "fecal_coliform_cfu_100ml",
           "label": "What is the Faecal Coliform count in 1cfu/100ml?",
-          "order": 10,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
@@ -299,6 +366,10 @@
             {
               "id": 1749633001462,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749631050010,
+              "options": ["fecal_coliform"]
             }
           ],
           "rule": {
@@ -309,7 +380,7 @@
           "id": 1749633325456,
           "name": "e_coli_count_cbt",
           "label": "What is the E.Coli Count using CBT Bags?",
-          "order": 11,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
@@ -349,6 +420,10 @@
             {
               "id": 1749633001462,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749631050010,
+              "options": ["temperature_c"]
             }
           ]
         },
@@ -369,6 +444,10 @@
             {
               "id": 1749633001462,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749631050010,
+              "options": ["ph"]
             }
           ]
         },
@@ -387,6 +466,10 @@
             {
               "id": 1749633001462,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749631050010,
+              "options": ["conductivity"]
             }
           ]
         },
@@ -405,6 +488,10 @@
             {
               "id": 1749633001462,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749631050010,
+              "options": ["salinity"]
             }
           ]
         }

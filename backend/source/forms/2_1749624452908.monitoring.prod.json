@@ -1201,7 +1201,7 @@
       "questions": [
         {
           "id": 1749624521442,
-          "name": "photo",
+          "name": "inspection_photo",
           "label": "Take Photo",
           "order": 1,
           "type": "photo",
@@ -1211,8 +1211,8 @@
         },
         {
           "id": 1749631662652,
-          "name": "photo_comment",
-          "label": "Comment on Photo taken",
+          "name": "inspection_photo_comment",
+          "label": "Comment on Photo Taken",
           "order": 2,
           "type": "text",
           "required": false,

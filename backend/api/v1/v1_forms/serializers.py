@@ -93,16 +93,17 @@ class ListQuestionSerializer(serializers.ModelSerializer):
             if user_role:
                 administration = user_role.administration
             # max depth for cascade question in national form
-            max_level = False
+            max_level = instance.api.get("max_level") \
+                if instance.api else None
             extra_objects = {}
             if max_level:
                 extra_objects = {
-                    "query_params": "?max_level=1",
+                    "query_params": f"?max_level={max_level}",
                 }
             if not user.is_superuser:
                 if max_level:
                     extra_objects = {
-                        "query_params": "&max_level=1",
+                        "query_params": f"&max_level={max_level}",
                     }
                 initial = administration.id
                 if administration.parent:

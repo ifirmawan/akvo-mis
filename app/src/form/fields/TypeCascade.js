@@ -15,6 +15,7 @@ const TypeCascade = ({
   label,
   required,
   source,
+  api,
   requiredSign = '*',
   disabled = false,
   tooltip = null,
@@ -32,6 +33,10 @@ const TypeCascade = ({
     cascade_type: cascadeType,
     parent_id: parentId,
   } = source || {};
+  const queryParams = api?.query_params || '';
+  // extract max_level from queryParams if present
+  const maxLevelMatch = queryParams.match(/max_level=(\d+)/);
+  const maxLevel = maxLevelMatch ? parseInt(maxLevelMatch[1], 10) : null;
 
   const groupBy = (array, property) => {
     const gd = array
@@ -51,7 +56,7 @@ const TypeCascade = ({
     return groupedData;
   };
 
-  const handleOnChange = (index, val) => {
+  const handleOnChange = (index, val, admLevel) => {
     const nextIndex = index + 1;
     const updatedItems = dropdownItems
       .slice(0, nextIndex)
@@ -59,7 +64,7 @@ const TypeCascade = ({
 
     const options = dataSource?.filter((d) => d?.parent === val);
 
-    if (options.length) {
+    if (options.length && (maxLevel ? admLevel - 1 < maxLevel : true)) {
       updatedItems.push({
         options,
         value: null,
@@ -279,7 +284,7 @@ const TypeCascade = ({
               data={item?.options}
               search={hasSearch}
               searchPlaceholder={trans.searchPlaceholder}
-              onChange={({ id: selectedID }) => handleOnChange(index, selectedID)}
+              onChange={({ id: selectedID, level }) => handleOnChange(index, selectedID, level)}
               value={item.value}
               style={style}
               placeholder={trans.selectItem}

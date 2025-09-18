@@ -213,10 +213,75 @@
           }
         },
         {
+          "id": 1749641129390,
+          "name": "parameters_tested",
+          "label": "Which parameters were you able to test?",
+          "order": 8,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "turbidity_ntu",
+              "label": "Turbidity in NTU",
+              "id": 1749641135122,
+              "order": 1
+            },
+            {
+              "value": "residual_chlorine_mg_l",
+              "label": "Residual Chlorine in mg/L",
+              "id": 1749641150609,
+              "order": 2
+            },
+            {
+              "value": "temperature_c",
+              "label": "Temperature °C - 2550B (APHA Method Code)",
+              "id": 1796405550520,
+              "order": 3
+            },
+            {
+              "value": "ph",
+              "label": "pH - 4500-H+B (APHA Method Code)",
+              "id": 1796405661521,
+              "order": 4
+            },
+            {
+              "value": "conductivity",
+              "label": "Conductivity µS/cm - 2510B (APHA Method Code)",
+              "id": 1796405662522,
+              "order": 5
+            },
+            {
+              "value": "salinity",
+              "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
+              "id": 1796405662523,
+              "order": 6
+            },
+            {
+              "value": "total_coliform",
+              "label": "Total Coliform in cfu/100ml",
+              "id": 1749641401103,
+              "order": 7
+            },
+            {
+              "value": "fecal_coliform",
+              "label": "Fecal Coliform in cfu/100ml",
+              "id": 1749641436781,
+              "order": 8
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749640821051,
+              "options": ["lab_test"]
+            }
+          ]
+        },
+        {
           "id": 1749641129391,
           "name": "turbidity_ntu",
           "label": "What is the Turbidity in NTU?",
-          "order": 8,
+          "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
@@ -224,6 +289,10 @@
             {
               "id": 1749640821051,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749641129390,
+              "options": ["turbidity_ntu"]
             }
           ],
           "rule": {
@@ -234,7 +303,7 @@
           "id": 1749641225922,
           "name": "residual_chlorine_mg_l",
           "label": "What is the Residual Chlorine in mg/L?",
-          "order": 9,
+          "order": 10,
           "type": "number",
           "required": true,
           "meta": false,
@@ -242,6 +311,10 @@
             {
               "id": 1749640821051,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749641129390,
+              "options": ["residual_chlorine_mg_l"]
             }
           ],
           "rule": {
@@ -252,7 +325,7 @@
           "id": 1796405550521,
           "name": "temperature_c",
           "label": "Temperature °C - 2550B (APHA Method Code)",
-          "order": 10,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
@@ -263,6 +336,10 @@
             {
               "id": 1749640821051,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749641129390,
+              "options": ["temperature_c"]
             }
           ]
         },
@@ -270,7 +347,7 @@
           "id": 1796405550522,
           "name": "ph",
           "label": "pH - 4500-H+B (APHA Method Code)",
-          "order": 11,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
@@ -283,6 +360,10 @@
             {
               "id": 1749640821051,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749641129390,
+              "options": ["ph"]
             }
           ]
         },
@@ -290,24 +371,6 @@
           "id": 1796405550523,
           "name": "conductivity",
           "label": "Conductivity µS/cm - 2510B (APHA Method Code)",
-          "order": 12,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1749640821051,
-              "options": ["lab_test"]
-            }
-          ]
-        },
-        {
-          "id": 1796405550524,
-          "name": "salinity",
-          "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
           "order": 13,
           "type": "number",
           "required": true,
@@ -319,6 +382,32 @@
             {
               "id": 1749640821051,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749641129390,
+              "options": ["conductivity"]
+            }
+          ]
+        },
+        {
+          "id": 1796405550524,
+          "name": "salinity",
+          "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
+          "order": 14,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "allowDecimal": true
+          },
+          "dependency": [
+            {
+              "id": 1749640821051,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749641129390,
+              "options": ["salinity"]
             }
           ]
         },
@@ -326,7 +415,7 @@
           "id": 1749641401104,
           "name": "total_coliform_cfu_100ml",
           "label": "What is the Total Coliform in cfu/100ml?",
-          "order": 14,
+          "order": 15,
           "type": "number",
           "required": true,
           "meta": false,
@@ -334,6 +423,10 @@
             {
               "id": 1749640821051,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749641129390,
+              "options": ["total_coliform"]
             }
           ],
           "rule": {
@@ -344,7 +437,7 @@
           "id": 1749641436782,
           "name": "fecal_coliform_cfu_100ml",
           "label": "What is the Fecal Coliform in cfu/100ml?",
-          "order": 15,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false,
@@ -352,6 +445,10 @@
             {
               "id": 1749640821051,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1749641129390,
+              "options": ["fecal_coliform"]
             }
           ],
           "rule": {

@@ -62,9 +62,9 @@
         },
         {
           "id": 1748919298813,
-          "name": "inlet_photo",
-          "label": "Take photo of the inlet",
-          "order": 4,
+          "name": "plant_photo",
+          "label": "Take Photo of the Treatment Plant",
+          "order": 5,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -77,7 +77,7 @@
     {
       "id": 1748919315350,
       "name": "plant_effluent",
-      "label": "Plant Effluent",
+      "label": "Plant Influent and Effluent",
       "description": null,
       "order": 2,
       "repeatable": false,
@@ -85,8 +85,8 @@
       "questions": [
         {
           "id": 1748919315351,
-          "name": "effluent_comment",
-          "label": "Comment on the plant effluent",
+          "name": "influent_comment",
+          "label": "Comment on the plant influent",
           "order": 1,
           "type": "multiple_option",
           "required": true,
@@ -115,6 +115,42 @@
               "label": "Excessive suspended solids,turbidity,foam,grease,scum and colour",
               "id": 1748919445619,
               "order": 4
+            },
+            {
+              "value": "normal",
+              "label": "Normal",
+              "id": 1748919454860,
+              "order": 5
+            },
+            {
+              "value": "surcharging_of_influent_line",
+              "label": "Surcharging of influent line",
+              "id": 1748919454861,
+              "order": 6
+            },
+            {
+              "value": "overflow_weir",
+              "label": "Overflow weir",
+              "id": 1748919454862,
+              "order": 7
+            },
+            {
+              "value": "hydraulically_overloaded",
+              "label": "Hydraulically overloaded",
+              "id": 1748919454863,
+              "order": 8
+            },
+            {
+              "value": "flow_through_bypass_channels",
+              "label": "Flow through bypass channels",
+              "id": 1748919454864,
+              "order": 9
+            },
+            {
+              "value": "flow_from_unknown_sources",
+              "label": "Flow from unknown sources",
+              "id": 1748919454865,
+              "order": 10
             }
           ],
           "dependency": null,
@@ -146,10 +182,28 @@
           "rule": null
         },
         {
+          "id": 1748919559845,
+          "name": "influent_photo",
+          "label": "Take photo",
+          "order": 3,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748919463685,
+              "options": ["yes"]
+            }
+          ],
+          "limit": 5.0,
+          "rule": null
+        },
+        {
           "id": 1748919506489,
           "name": "effluent_test_method",
           "label": "Method of Testing for plant effluent",
-          "order": 3,
+          "order": 4,
           "type": "option",
           "required": true,
           "meta": true,
@@ -165,6 +219,12 @@
               "label": "Testing Kits",
               "id": 1748919521913,
               "order": 2
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748919521914,
+              "order": 3
             }
           ],
           "dependency": [
@@ -176,21 +236,20 @@
           "rule": null
         },
         {
-          "id": 1748919559845,
-          "name": "effluent_sampling_photo",
-          "label": "Take photo of effluent sampling point",
-          "order": 4,
-          "type": "photo",
+          "id": 1748919601234,
+          "name": "other_effluent_test_method",
+          "label": "Please specify other method of testing for plant effluent",
+          "order": 5,
+          "type": "text",
           "required": true,
           "meta": false,
           "options": null,
           "dependency": [
             {
-              "id": 1748919463685,
-              "options": ["yes"]
+              "id": 1748919506489,
+              "options": ["other"]
             }
           ],
-          "limit": 5.0,
           "rule": null
         }
       ],
@@ -609,11 +668,46 @@
       ]
     },
     {
+      "id": 1748920178901,
+      "name": "photos_of_inspection",
+      "label": "Photos of Inspection",
+      "description": null,
+      "order": 8,
+      "repeatable": true,
+      "translations": null,
+      "questions": [
+        {
+          "id": 1748920178902,
+          "name": "inspection_photo",
+          "label": "Take Photo",
+          "order": 1,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": null,
+          "limit": 5.0
+        },
+        {
+          "id": 1748920251234,
+          "name": "inspection_photo_comment",
+          "label": "Comment on Photo Taken",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": null
+        }
+      ],
+      "repeat_text": "Add another"
+    },
+    {
       "id": 1748919341458,
       "name": "constraints_recommendations",
       "label": "Constraints and Recommendations",
       "description": null,
-      "order": 8,
+      "order": 9,
       "repeatable": false,
       "translations": null,
       "questions": [
@@ -734,6 +828,12 @@
               "label": "Plant Augmentation",
               "id": 1748920056926,
               "order": 7
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "id": 1748920065243,
+              "order": 8
             }
           ],
           "dependency": [
@@ -745,10 +845,27 @@
           "short_label": null
         },
         {
+          "id": 1748920071234,
+          "name": "other_final_recommendation",
+          "label": "Please specify other final recommendation",
+          "order": 5,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "options": null,
+          "dependency": [
+            {
+              "id": 1748919992109,
+              "options": ["other"]
+            }
+          ],
+          "short_label": null
+        },
+        {
           "id": 1748920085643,
           "name": "dws_staff_final_recommendations",
           "label": "What are the final recommendations from the DWS staff  on the overall operations and remedial actions for the plant?",
-          "order": 5,
+          "order": 6,
           "type": "text",
           "required": true,
           "meta": false,
@@ -765,7 +882,7 @@
           "id": 1748920135334,
           "name": "dws_staff_signature",
           "label": "Signature of DWS Staff",
-          "order": 6,
+          "order": 7,
           "type": "signature",
           "required": true,
           "meta": false,
@@ -777,7 +894,7 @@
           "id": 1748920151234,
           "name": "dws_staff_name",
           "label": "Name of DWS Staff",
-          "order": 7,
+          "order": 8,
           "type": "input",
           "required": true,
           "meta": true,

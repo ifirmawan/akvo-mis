@@ -60,7 +60,10 @@
           "order": 3,
           "type": "administration",
           "required": true,
-          "meta": true
+          "meta": true,
+          "api": {
+            "max_level": 1
+          }
         },
         {
           "id": 1749635227708,

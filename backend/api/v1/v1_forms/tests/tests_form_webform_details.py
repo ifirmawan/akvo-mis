@@ -14,9 +14,7 @@ class WebFormDetailsTestCase(TestCase, ProfileTestHelperMixin):
         call_command("default_roles_seeder", "--test", 1)
         call_command("form_seeder", "--test", 1)
 
-        self.form = Forms.objects.filter(
-            parent__isnull=True
-        ).order_by("?").first()
+        self.form = Forms.objects.get(pk=1)
 
         self.adm = Administration.objects.filter(
             level__level__gt=2,
@@ -86,9 +84,38 @@ class WebFormDetailsTestCase(TestCase, ProfileTestHelperMixin):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_get_web_form_details_with_max_level_administration(self):
+        q = self.form.form_questions.filter(
+            id=104
+        ).first()
+        q.api = {
+            "max_level": 1
+        }
+        q.save()
+
+        response = self.client.get(
+            f"/api/v1/form/web/{self.form.id}/",
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+        )
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        question_group = data["question_group"][0]
+        question = next(
+            filter(lambda x: x["id"] == 104, question_group["question"]),
+            None
+        )
+
+        self.assertIn("query_params", question["api"])
+        self.assertEqual(question["api"]["query_params"], "&max_level=1")
+
     def test_get_web_form_details_with_invalid_form_id(self):
         response = self.client.get(
             "/api/v1/form/web/9999/",
             HTTP_AUTHORIZATION=f"Bearer {self.token}",
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_get_web_form_details_without_authentication(self):
+        response = self.client.get(f"/api/v1/form/web/{self.form.id}/")
+        self.assertEqual(response.status_code, 401)

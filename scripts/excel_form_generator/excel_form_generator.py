@@ -2,7 +2,7 @@ import pandas as pd
 import json
 import os
 
-dir_path = "../../../backend/source/forms"
+dir_path = "../../backend/source/forms"
 files = [f for f in os.listdir(dir_path) if "prod.json" in f]
 
 for file in files:
@@ -17,9 +17,9 @@ for file in files:
         for question in group['questions']:
             entry = {
                 'Group': group_index + 1,
-                'Group Name': group['question_group'],
+                'Group Name': group['label'],
                 'ID': question['id'],
-                'Question': question['question'],
+                'Question': question['label'],
                 'Datapoint': "Yes" if question.get("meta") else "No",
                 'Type': question['type'],
                 'Required': "Yes" if question.get("required") else "No"
@@ -43,10 +43,10 @@ for file in files:
                         for dependency in question['dependency']:
                             dep_id = dependency['id']
                             dep_option = ','.join(dependency['options'])
-                            append_entry(entry, option['name'], dep_id,
+                            append_entry(entry, option['label'], dep_id,
                                          dep_option)
                     else:
-                        append_entry(entry, option['name'])
+                        append_entry(entry, option['label'])
             else:
                 # If there's a dependency but no options
                 if question.get('dependency'):
@@ -66,9 +66,9 @@ for file in files:
         'Type',
         'Question',
         'Datapoint',
-        'Dependency',
-        'Dependency Option',
-        'Option',
+        # 'Dependency',
+        # 'Dependency Option',
+        # 'Option',
     ])
 
     multi_indexed_df.to_excel(f"./excel_forms/{form_name}.xlsx")

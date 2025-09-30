@@ -274,7 +274,7 @@
             },
             {
               "value": "fecal_coliform",
-              "label": "Faecal Coliform in 1cfu/100ml",
+              "label": "Fecal Coliform in 1cfu/100ml",
               "id": 1749633162046,
               "order": 3
             },
@@ -357,7 +357,7 @@
         {
           "id": 1749633295165,
           "name": "fecal_coliform_cfu_100ml",
-          "label": "What is the Faecal Coliform count in 1cfu/100ml?",
+          "label": "What is the Fecal Coliform count in 1cfu/100ml?",
           "order": 11,
           "type": "number",
           "required": true,

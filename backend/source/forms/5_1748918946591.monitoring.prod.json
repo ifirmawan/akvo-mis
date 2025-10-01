@@ -391,6 +391,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["temperature"]
             }
           ]
         },
@@ -411,6 +415,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["ph"]
             }
           ]
         },
@@ -429,6 +437,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["conductivity"]
             }
           ]
         },
@@ -447,6 +459,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["salinity"]
             }
           ]
         }
@@ -475,6 +491,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["total_dissolved_solids"]
             }
           ]
         },
@@ -493,6 +513,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["total_suspended_solids"]
             }
           ]
         },
@@ -511,6 +535,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["total_suspended_solids","total_dissolved_solids"]
             }
           ]
         },
@@ -529,6 +557,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["settleable_solids_imhoff"]
             }
           ]
         }
@@ -557,6 +589,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["ammonia"]
             }
           ]
         },
@@ -575,6 +611,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["total_kjeldhal_nitrogen"]
             }
           ]
         },
@@ -593,6 +633,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["nitrate"]
             }
           ]
         },
@@ -611,6 +655,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["nitrite"]
             }
           ]
         },
@@ -629,6 +677,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["total_phosphate"]
             }
           ]
         }
@@ -657,6 +709,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["chemical_oxygen_demand"]
             }
           ]
         },
@@ -675,6 +731,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["dissolved_oxygen"]
             }
           ]
         },
@@ -693,6 +753,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["total_alkalinity"]
             }
           ]
         },
@@ -711,6 +775,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["chloride"]
             }
           ]
         },
@@ -775,6 +843,10 @@
             {
               "id": 1748919506489,
               "options": ["lab_test"]
+            },
+            {
+              "id": 1789193153535,
+              "options": ["bod"]
             }
           ]
         }

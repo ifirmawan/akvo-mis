@@ -251,6 +251,119 @@
             }
           ],
           "rule": null
+        },
+        {
+          "id": 1789193153535,
+          "name": "parameters_able_to_analyse",
+          "label": "Which parameters were you able to analyse?",
+          "order": 6,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "temperature",
+              "label": "Temperature",
+              "id": 1789193153536,
+              "order": 1
+            },
+            {
+              "value": "ph",
+              "label": "pH",
+              "id": 1789193153537,
+              "order": 2
+            },
+            {
+              "value": "conductivity",
+              "label": "Conductivity",
+              "id": 1789193153538,
+              "order": 3
+            },
+            {
+              "value": "salinity",
+              "label": "Salinity",
+              "id": 1789193153539,
+              "order": 4
+            },
+            {
+              "value": "total_suspended_solids",
+              "label": "Total Suspended Solids",
+              "id": 1789193153540,
+              "order": 5
+            },
+            {
+              "value": "total_dissolved_solids",
+              "label": "Total Dissolved Solids",
+              "id": 1789193153541,
+              "order": 6
+            },
+            {
+              "value": "settleable_solids_imhoff",
+              "label": "Settleable Solids (Imhoff)",
+              "id": 1789193153542,
+              "order": 7
+            },
+            {
+              "value": "ammonia",
+              "label": "Ammonia",
+              "id": 1789193153543,
+              "order": 8
+            },
+            {
+              "value": "total_kjeldhal_nitrogen",
+              "label": "Total Kjeldhal Nitrogen",
+              "id": 1789193153544,
+              "order": 9
+            },
+            {
+              "value": "nitrate",
+              "label": "Nitrate",
+              "id": 1789193153545,
+              "order": 10
+            },
+            {
+              "value": "nitrite",
+              "label": "Nitrite",
+              "id": 1789193153546,
+              "order": 11
+            },
+            {
+              "value": "total_phosphate",
+              "label": "Total Phosphate",
+              "id": 1789193153547,
+              "order": 12
+            },
+            {
+              "value": "chemical_oxygen_demand",
+              "label": "Chemical Oxygen Demand",
+              "id": 1789193153548,
+              "order": 13
+            },
+            {
+              "value": "dissolved_oxygen",
+              "label": "Dissolved Oxygen",
+              "id": 1789193153549,
+              "order": 14
+            },
+            {
+              "value": "bod",
+              "label": "Bio-Chemical Oxygen Demand",
+              "id": 1789193153550,
+              "order": 15
+            },
+            {
+              "value": "total_alkalinity",
+              "label": "Total Alkalinity",
+              "id": 1789193153551,
+              "order": 16
+            },
+            {
+              "value": "chloride",
+              "label": "Chloride",
+              "id": 1789193153552,
+              "order": 17
+            }
+          ]
         }
       ],
       "repeat_text": null

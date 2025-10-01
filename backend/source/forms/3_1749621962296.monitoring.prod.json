@@ -116,28 +116,10 @@
 					]
 				},
 				{
-					"id": 1749622982588,
-					"name": "ecoli_level_cbt",
-					"label": "E.coli Level using CBT?",
-					"order": 6,
-					"type": "number",
-					"required": true,
-					"meta": false,
-					"dependency": [
-						{
-							"id": 1749622849604,
-							"options": ["cbt_test"]
-						}
-					],
-					"rule": {
-						"allowDecimal": true
-					}
-				},
-				{
 					"id": 1749621050010,
 					"name": "parameters_tested",
 					"label": "Which parameters were you able to test?",
-					"order": 7,
+					"order": 6,
 					"type": "multiple_option",
 					"required": false,
 					"meta": false,
@@ -183,6 +165,12 @@
 							"label": "Fecal Coliform count",
 							"id": 1749621120017,
 							"order": 7
+						},
+						{
+							"value": "ecoli",
+							"label": "E.coli",
+							"id": 1749621130018,
+							"order": 8
 						}
 					],
 					"dependency": [
@@ -193,10 +181,65 @@
 					]
 				},
 				{
+					"id": 1749622982588,
+					"name": "cbt_ecoli",
+					"label": "E.coli Level using CBT?",
+					"order": 7,
+					"type": "number",
+					"required": true,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749622849604,
+							"options": ["cbt_test"]
+						}
+					],
+					"rule": {
+						"allowDecimal": true
+					}
+				},
+				{
+					"id": 1749622991234,
+					"name": "lab_ecoli",
+					"label": "E.coli Level using Lab Test?",
+					"order": 8,
+					"type": "number",
+					"required": true,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749622849604,
+							"options": ["lab_test"]
+						},
+						{
+							"id": 1749621050010,
+							"options": ["ecoli"]
+						}
+					],
+					"rule": {
+						"allowDecimal": true
+					}
+				},
+				{
+					"id": 1749623001234,
+					"name": "cbt_photo",
+					"label": "Take photo of CBT Bag",
+					"order": 9,
+					"type": "photo",
+					"required": false,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749622849604,
+							"options": ["cbt_test"]
+						}
+					]
+				},
+				{
 					"id": 1749623024122,
 					"name": "total_coliform_count",
 					"label": "What is the Total Coliform count?",
-					"order": 8,
+					"order": 10,
 					"type": "number",
 					"required": true,
 					"meta": false,
@@ -218,7 +261,7 @@
 					"id": 1749623074194,
 					"name": "fecal_coliform_count",
 					"label": "What is the Fecal Coliform Count?",
-					"order": 9,
+					"order": 11,
 					"type": "number",
 					"required": true,
 					"meta": false,
@@ -240,7 +283,7 @@
 					"id": 1749623109418,
 					"name": "turbidity_ntu",
 					"label": "What is the Turbidity in NTU?",
-					"order": 10,
+					"order": 12,
 					"type": "number",
 					"required": true,
 					"meta": false,
@@ -262,269 +305,46 @@
 					"id": 1749621374500,
 					"name": "water_source_type",
 					"label": "Type of Water Source?",
-					"order": 11,
+					"order": 13,
 					"type": "multiple_option",
 					"required": true,
 					"meta": false,
 					"options": [
 						{
-							"value": "surface_water",
-							"label": "Surface Water",
-							"id": 1749621384994,
+							"value": "surface_water_river",
+							"label": "Surface Water (River)",
+							"id": 1749621384996,
 							"order": 1
+						},
+						{
+							"value": "surface_water_creek",
+							"label": "Surface Water (Creek)",
+							"id": 1749621384997,
+							"order": 2
+						},
+						{
+							"value": "surface_water_stream_spring",
+							"label": "Surface Water (Stream Spring)",
+							"id": 1749621384998,
+							"order": 3
 						},
 						{
 							"value": "ground_water",
 							"label": "Ground Water",
 							"id": 1749621384995,
-							"order": 2
+							"order": 4
 						},
 						{
 							"value": "rainwater",
 							"label": "Rainwater",
 							"id": 1749621403460,
-							"order": 3
+							"order": 5
 						},
 						{
 							"value": "sea_water",
 							"label": "Sea Water",
 							"id": 1749621419610,
-							"order": 4
-						}
-					]
-				},
-				{
-					"id": 1749621461754,
-					"name": "has_new_catchment_dam",
-					"label": "Construction of New Water Catchment/Dam?",
-					"order": 12,
-					"type": "option",
-					"required": true,
-					"meta": false,
-					"options": [
-						{
-							"value": "yes",
-							"label": "Yes",
-							"id": 1749621471837,
-							"order": 1
-						},
-						{
-							"value": "no",
-							"label": "No",
-							"id": 1749621471838,
-							"order": 2
-						}
-					],
-					"dependency": [
-						{
-							"id": 1749621374500,
-							"options": ["surface_water"]
-						}
-					]
-				},
-				{
-					"id": 1749621494567,
-					"name": "catchment_dam_photo",
-					"label": "Photo of the Catchment/Dam",
-					"order": 13,
-					"type": "photo",
-					"required": false,
-					"meta": false,
-					"dependency": [
-						{
-							"id": 1749621461754,
-							"options": ["yes"]
-						}
-					]
-				},
-				{
-					"id": 1749621517282,
-					"name": "has_borehole",
-					"label": "Construction of borehole?",
-					"order": 14,
-					"type": "option",
-					"required": true,
-					"meta": false,
-					"options": [
-						{
-							"value": "yes",
-							"label": "Yes",
-							"id": 1749621523401,
-							"order": 1
-						},
-						{
-							"value": "no",
-							"label": "No",
-							"id": 1749621523402,
-							"order": 2
-						}
-					],
-					"dependency": [
-						{
-							"id": 1749621374500,
-							"options": ["ground_water"]
-						}
-					]
-				},
-				{
-					"id": 1749621541234,
-					"name": "borehole_photo",
-					"label": "Photo of the Borehole",
-					"order": 15,
-					"type": "photo",
-					"required": false,
-					"meta": false,
-					"dependency": [
-						{
-							"id": 1749621517282,
-							"options": ["yes"]
-						}
-					]
-				},
-				{
-					"id": 1749621557442,
-					"name": "has_pump_system",
-					"label": "Installation of Pump system?",
-					"order": 16,
-					"type": "option",
-					"required": true,
-					"meta": false,
-					"options": [
-						{
-							"value": "yes",
-							"label": "Yes",
-							"id": 1749621564288,
-							"order": 1
-						},
-						{
-							"value": "no",
-							"label": "No",
-							"id": 1749621564289,
-							"order": 2
-						}
-					],
-					"dependency": [
-						{
-							"id": 1749621374500,
-							"options": ["ground_water", "sea_water"]
-						}
-					]
-				},
-				{
-					"id": 1749621581234,
-					"name": "pump_system_photo",
-					"label": "Photo of the Pump System",
-					"order": 17,
-					"type": "photo",
-					"required": false,
-					"meta": false,
-					"dependency": [
-						{
-							"id": 1749621557442,
-							"options": ["yes"]
-						}
-					]
-				},
-				{
-					"id": 1749621611527,
-					"name": "has_rainwater_harvesting",
-					"label": "Installation of Rainwater Harvesting System?",
-					"order": 18,
-					"type": "option",
-					"required": true,
-					"meta": false,
-					"options": [
-						{
-							"value": "yes",
-							"label": "Yes",
-							"id": 1749621619301,
-							"order": 1
-						},
-						{
-							"value": "no",
-							"label": "No",
-							"id": 1749621619302,
-							"order": 2
-						}
-					],
-					"dependency": [
-						{
-							"id": 1749621374500,
-							"options": ["rainwater"]
-						}
-					]
-				},
-				{
-					"id": 1749621711234,
-					"name": "rainwater_harvesting_photo",
-					"label": "Photo of the Rainwater Harvesting System",
-					"order": 19,
-					"type": "photo",
-					"required": false,
-					"meta": false,
-					"dependency": [
-						{
-							"id": 1749621611527,
-							"options": ["yes"]
-						}
-					]
-				},
-				{
-					"id": 1749621624567,
-					"name": "number_of_rainwater_harvesting_systems",
-					"label": "Please Identify the number of Rainwater harvesting system installed.",
-					"order": 20,
-					"type": "number",
-					"required": true,
-					"meta": false,
-					"dependency": [
-						{
-							"id": 1749621611527,
-							"options": ["yes"]
-						}
-					]
-				},
-				{
-					"id": 1749621690983,
-					"name": "has_desalination_plant",
-					"label": "Installation of Desalination Plant?",
-					"order": 21,
-					"type": "option",
-					"required": true,
-					"meta": false,
-					"options": [
-						{
-							"value": "yes",
-							"label": "Yes",
-							"id": 1749621697642,
-							"order": 1
-						},
-						{
-							"value": "no",
-							"label": "No",
-							"id": 1749621697643,
-							"order": 2
-						}
-					],
-					"dependency": [
-						{
-							"id": 1749621374500,
-							"options": ["sea_water"]
-						}
-					]
-				},
-				{
-					"id": 1749621634567,
-					"name": "desalination_plant_photo",
-					"label": "Photo of the Desalination Plant",
-					"order": 22,
-					"type": "photo",
-					"required": false,
-					"meta": false,
-					"dependency": [
-						{
-							"id": 1749621690983,
-							"options": ["yes"]
+							"order": 6
 						}
 					]
 				},
@@ -532,7 +352,7 @@
 					"id": 1749622726347,
 					"name": "accessible_construction_site",
 					"label": "Which part of the construction sites you can visit?",
-					"order": 23,
+					"order": 14,
 					"type": "multiple_option",
 					"required": true,
 					"meta": false,
@@ -566,6 +386,259 @@
 							"label": "Reticulation",
 							"id": 1749622733005,
 							"order": 5
+						},
+						{
+							"value": "borehole",
+							"label": "Borehole",
+							"id": 1749622733006,
+							"order": 6
+						},
+						{
+							"value": "rainwater",
+							"label": "Rainwater",
+							"id": 1749622733007,
+							"order": 7
+						},
+						{
+							"value": "desalination",
+							"label": "Desalination",
+							"id": 1749622733008,
+							"order": 8
+						}
+					]
+				},
+				{
+					"id": 1749621461754,
+					"name": "has_new_catchment_dam",
+					"label": "Construction of New Water Catchment/Dam?",
+					"order": 15,
+					"type": "option",
+					"required": true,
+					"meta": false,
+					"options": [
+						{
+							"value": "yes",
+							"label": "Yes",
+							"id": 1749621471837,
+							"order": 1
+						},
+						{
+							"value": "no",
+							"label": "No",
+							"id": 1749621471838,
+							"order": 2
+						}
+					],
+					"dependency": [
+						{
+							"id": 1749622726347,
+							"options": ["dam"]
+						}
+					]
+				},
+				{
+					"id": 1749621494567,
+					"name": "catchment_dam_photo",
+					"label": "Photo of the Catchment/Dam",
+					"order": 16,
+					"type": "photo",
+					"required": false,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749621461754,
+							"options": ["yes"]
+						}
+					]
+				},
+				{
+					"id": 1749621517282,
+					"name": "has_borehole",
+					"label": "Construction of borehole?",
+					"order": 17,
+					"type": "option",
+					"required": true,
+					"meta": false,
+					"options": [
+						{
+							"value": "yes",
+							"label": "Yes",
+							"id": 1749621523401,
+							"order": 1
+						},
+						{
+							"value": "no",
+							"label": "No",
+							"id": 1749621523402,
+							"order": 2
+						}
+					],
+					"dependency": [
+						{
+							"id": 1749622726347,
+							"options": ["borehole"]
+						}
+					]
+				},
+				{
+					"id": 1749621541234,
+					"name": "borehole_photo",
+					"label": "Photo of the Borehole",
+					"order": 18,
+					"type": "photo",
+					"required": false,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749621517282,
+							"options": ["yes"]
+						}
+					]
+				},
+				{
+					"id": 1749621557442,
+					"name": "has_pump_system",
+					"label": "Installation of Pump system?",
+					"order": 19,
+					"type": "option",
+					"required": true,
+					"meta": false,
+					"options": [
+						{
+							"value": "yes",
+							"label": "Yes",
+							"id": 1749621564288,
+							"order": 1
+						},
+						{
+							"value": "no",
+							"label": "No",
+							"id": 1749621564289,
+							"order": 2
+						}
+					],
+					"dependency": [
+						{
+							"id": 1749622726347,
+							"options": ["borehole"]
+						}
+					]
+				},
+				{
+					"id": 1749621581234,
+					"name": "pump_system_photo",
+					"label": "Photo of the Pump System",
+					"order": 20,
+					"type": "photo",
+					"required": false,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749621557442,
+							"options": ["yes"]
+						}
+					]
+				},
+				{
+					"id": 1749621611527,
+					"name": "has_rainwater_harvesting",
+					"label": "Installation of Rainwater Harvesting System?",
+					"order": 21,
+					"type": "option",
+					"required": true,
+					"meta": false,
+					"options": [
+						{
+							"value": "yes",
+							"label": "Yes",
+							"id": 1749621619301,
+							"order": 1
+						},
+						{
+							"value": "no",
+							"label": "No",
+							"id": 1749621619302,
+							"order": 2
+						}
+					],
+					"dependency": [
+						{
+							"id": 1749622726347,
+							"options": ["rainwater"]
+						}
+					]
+				},
+				{
+					"id": 1749621711234,
+					"name": "rainwater_harvesting_photo",
+					"label": "Photo of the Rainwater Harvesting System",
+					"order": 22,
+					"type": "photo",
+					"required": false,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749621611527,
+							"options": ["yes"]
+						}
+					]
+				},
+				{
+					"id": 1749621624567,
+					"name": "number_of_rainwater_harvesting_systems",
+					"label": "Please Identify the number of Rainwater harvesting system installed.",
+					"order": 23,
+					"type": "number",
+					"required": true,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749621611527,
+							"options": ["yes"]
+						}
+					]
+				},
+				{
+					"id": 1749621690983,
+					"name": "has_desalination",
+					"label": "Installation of Desalination Plant?",
+					"order": 24,
+					"type": "option",
+					"required": true,
+					"meta": false,
+					"options": [
+						{
+							"value": "yes",
+							"label": "Yes",
+							"id": 1749621697642,
+							"order": 1
+						},
+						{
+							"value": "no",
+							"label": "No",
+							"id": 1749621697643,
+							"order": 2
+						}
+					],
+					"dependency": [
+						{
+							"id": 1749622726347,
+							"options": ["desalination"]
+						}
+					]
+				},
+				{
+					"id": 1749621634567,
+					"name": "desalination_plant_photo",
+					"label": "Photo of the Desalination Plant",
+					"order": 25,
+					"type": "photo",
+					"required": false,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749621690983,
+							"options": ["yes"]
 						}
 					]
 				}
@@ -1697,103 +1770,83 @@
 			]
 		},
 		{
-			"id": 1723459200038,
-			"name": "chemical_analysis",
-			"label": "Chemical Analysis",
+			"id": 1749622183226,
+			"name": "project_scope",
+			"label": "Project Scope",
 			"description": null,
 			"order": 13,
 			"repeatable": false,
 			"questions": [
 				{
-					"id": 1723459200039,
-					"name": "chemical_oxygen_demand",
-					"label": "Chemical Oxygen Demand mg/L - 5220B (APHA Method Code)",
+					"id": 1749623601234,
+					"name": "components_in_scope",
+					"label": "Which of the following components are part of the project scope?",
 					"order": 1,
-					"type": "number",
+					"type": "multiple_option",
 					"required": true,
 					"meta": false,
-					"rule": {
-						"allowDecimal": true
-					},
-					"dependency": [
+					"options": [
 						{
-							"id": 1749622849604,
-							"options": ["lab_test"]
+							"value": "dam",
+							"label": "Dam",
+							"id": 1749623607890,
+							"order": 1
+						},
+						{
+							"value": "raw_water_main",
+							"label": "Raw Water Main",
+							"id": 1749623607891,
+							"order": 2
+						},
+						{
+							"value": "reservoir",
+							"label": "Reservoir",
+							"id": 1749623607892,
+							"order": 3
+						},
+						{
+							"value": "distribution_main",
+							"label": "Distribution Main",
+							"id": 1749623607893,
+							"order": 4
+						},
+						{
+							"value": "reticulation",
+							"label": "Reticulation",
+							"id": 1749623607894,
+							"order": 5
+						},
+						{
+							"value": "borehole",
+							"label": "Borehole",
+							"id": 1749623607895,
+							"order": 6
+						},
+						{
+							"value": "rainwater_harvesting",
+							"label": "Rainwater Harvesting",
+							"id": 1749623607896,
+							"order": 7
+						},
+						{
+							"value": "desalination",
+							"label": "Desalination",
+							"id": 1749623607897,
+							"order": 8
+						},
+						{
+							"value": "taps",
+							"label": "Taps",
+							"id": 1749623607898,
+							"order": 9
+						},
+						{
+							"value": "showers",
+							"label": "Showers",
+							"id": 1749623607899,
+							"order": 10
 						}
 					]
-				},
-				{
-					"id": 1723459200040,
-					"name": "dissolved_oxygen",
-					"label": "Dissolved Oxygen mg/L - 4500-O-C (APHA Method Code)",
-					"order": 2,
-					"type": "number",
-					"required": true,
-					"meta": false,
-					"rule": {
-						"allowDecimal": true
-					},
-					"dependency": [
-						{
-							"id": 1749622849604,
-							"options": ["lab_test"]
-						}
-					]
-				},
-				{
-					"id": 1723459200043,
-					"name": "oil_and_grease",
-					"label": "Oil & Grease mg/L - 5520D (APHA Method Code)",
-					"order": 3,
-					"type": "number",
-					"required": true,
-					"meta": false,
-					"rule": {
-						"allowDecimal": true
-					},
-					"dependency": [
-						{
-							"id": 1749622849604,
-							"options": ["lab_test"]
-						}
-					]
-				},
-				{
-					"id": 1723459200044,
-					"name": "total_sulphides",
-					"label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
-					"order": 4,
-					"type": "number",
-					"required": true,
-					"meta": false,
-					"rule": {
-						"allowDecimal": true
-					},
-					"dependency": [
-						{
-							"id": 1749622849604,
-							"options": ["lab_test"]
-						}
-					]
-				}
-			]
-		},
-		{
-			"id": 1749622183226,
-			"name": "project_scope",
-			"label": "Project Scope",
-			"description": null,
-			"order": 14,
-			"repeatable": false,
-			"questions": [
-				{
-					"id": 1749623423010,
-					"name": "new_reservoir_construction",
-					"label": "Construction of New Reservoir",
-					"order": 1,
-					"type": "text",
-					"required": true,
-					"meta": false
 				},
 				{
 					"id": 1749623471120,
@@ -1802,7 +1855,13 @@
 					"order": 2,
 					"type": "number",
 					"required": false,
-					"meta": false
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749623601234,
+							"options": ["distribution_main", "reticulation", "raw_water_main"]
+						}
+					]
 				},
 				{
 					"id": 1749623487441,
@@ -1811,7 +1870,13 @@
 					"order": 3,
 					"type": "number",
 					"required": false,
-					"meta": false
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749623601234,
+							"options": ["distribution_main", "reticulation", "raw_water_main", "reservoir"]
+						}
+					]
 				},
 				{
 					"id": 1749623525590,
@@ -1820,7 +1885,13 @@
 					"order": 4,
 					"type": "number",
 					"required": false,
-					"meta": false
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749623601234,
+							"options": ["showers"]
+						}
+					]
 				},
 				{
 					"id": 1749623541877,
@@ -1829,13 +1900,34 @@
 					"order": 5,
 					"type": "number",
 					"required": false,
-					"meta": false
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749623601234,
+							"options": ["taps"]
+						}
+					]
+				},
+				{
+					"id": 1749623591278,
+					"name": "num_outlet_works",
+					"label": "Number of Outlet Works/Control Gates",
+					"order": 6,
+					"type": "number",
+					"required": false,
+					"meta": false,
+					"dependency": [
+						{
+							"id": 1749623601234,
+							"options": ["dam"]
+						}
+					]
 				},
 				{
 					"id": 1749623590078,
 					"name": "project_completion_percent",
 					"label": "What percentage of the project is complete?",
-					"order": 6,
+					"order": 7,
 					"type": "number",
 					"required": true,
 					"meta": false,
@@ -1853,7 +1945,7 @@
 			"name": "final_comments",
 			"label": "Final Comments",
 			"description": null,
-			"order": 15,
+			"order": 14,
 			"repeatable": false,
 			"questions": [
 				{
@@ -1891,7 +1983,7 @@
 				{
 					"id": 1749623674044,
 					"name": "improvement_action_details",
-					"label": "What are some issues highlighted to be actioned by Implementing Agencies?",
+					"label": "What are some required actions?",
 					"order": 3,
 					"type": "text",
 					"required": false,

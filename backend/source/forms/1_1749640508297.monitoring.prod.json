@@ -471,7 +471,7 @@
           "name": "disinfection_technique",
           "label": "What Disinfection Techniques are used at the Plant?",
           "order": 1,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [

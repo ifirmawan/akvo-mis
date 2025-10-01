@@ -859,10 +859,25 @@
           ]
         },
         {
+          "id": 1749694731204,
+          "name": "geolocation_of_the_raw_water_source",
+          "label": "Take Geolocation of the raw water source",
+          "order": 3,
+          "type": "geo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749693489743,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
           "id": 1749693516243,
           "name": "source_photo",
           "label": "Take Photo of source",
-          "order": 3,
+          "order": 4,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -877,7 +892,7 @@
           "id": 1749693552939,
           "name": "issues_risk_associated_with_the_source",
           "label": "Are there any issues / risk associated with the source?",
-          "order": 4,
+          "order": 5,
           "type": "option",
           "required": true,
           "meta": false,
@@ -906,7 +921,7 @@
           "id": 1749693588994,
           "name": "provide_details_of_the_risks_with_the_source",
           "label": "Please provide details of the risks",
-          "order": 5,
+          "order": 6,
           "type": "option",
           "required": true,
           "meta": false,
@@ -953,7 +968,7 @@
           "id": 1749693691980,
           "name": "provide_details_of_the_risks_with_the_source_other",
           "label": "Please provide details of the risks (Other)",
-          "order": 6,
+          "order": 7,
           "type": "text",
           "required": true,
           "meta": false,
@@ -968,7 +983,7 @@
           "id": 1749693712512,
           "name": "take_photo_of_risk",
           "label": "Are you able to take photo of risk?",
-          "order": 7,
+          "order": 8,
           "type": "option",
           "required": true,
           "meta": false,
@@ -997,7 +1012,7 @@
           "id": 1749693763655,
           "name": "photo_of_risks",
           "label": "Take Photo of risks",
-          "order": 8,
+          "order": 9,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -1012,7 +1027,7 @@
           "id": 1749693821961,
           "name": "raw_water_transport_method",
           "label": "How is the raw water transported to the plant?",
-          "order": 9,
+          "order": 10,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -1059,7 +1074,7 @@
           "id": 1749693885123,
           "name": "raw_water_transport_method_other",
           "label": "Please specify other method of raw water transport",
-          "order": 10,
+          "order": 11,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1074,7 +1089,7 @@
           "id": 1749693904912,
           "name": "raw_water_pump_count",
           "label": "How many raw water pumps are there?",
-          "order": 11,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1093,7 +1108,7 @@
           "id": 1749693978189,
           "name": "standby_pump_count",
           "label": "How many pumps are operational and on standby?",
-          "order": 12,
+          "order": 13,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1112,7 +1127,7 @@
           "id": 1749694016524,
           "name": "risks_associated_with_the_pumps",
           "label": "Are there any risks associated with the pumps?",
-          "order": 13,
+          "order": 14,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1145,7 +1160,7 @@
           "id": 1749694060099,
           "name": "pump_risk_details",
           "label": "Please provide details of the risks",
-          "order": 14,
+          "order": 15,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1186,7 +1201,7 @@
           "id": 1749694146460,
           "name": "pump_risk_details_other",
           "label": "Please provide details of the risks (Other)",
-          "order": 15,
+          "order": 16,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1201,7 +1216,7 @@
           "id": 1749694138975,
           "name": "take_photo_of_risks",
           "label": "Are you able to take photo of risks?",
-          "order": 16,
+          "order": 17,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1231,7 +1246,7 @@
           "id": 1749694172836,
           "name": "photo_of_the_risks",
           "label": "Take photo of the risks",
-          "order": 17,
+          "order": 18,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -1247,7 +1262,7 @@
           "id": 1749694260130,
           "name": "risks_associated_with_the_raw_water_gravity_system",
           "label": "Are there any risks associated with the raw water gravity system?",
-          "order": 18,
+          "order": 19,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1276,7 +1291,7 @@
           "id": 1749694347720,
           "name": "gravity_system_issue_details",
           "label": "Please Provide details of the issues / risks for Raw Water Gravity System:",
-          "order": 19,
+          "order": 20,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1317,7 +1332,7 @@
           "id": 1749694410980,
           "name": "gravity_system_issue_details_other",
           "label": "Please provide details of the issues / risks (Other)",
-          "order": 20,
+          "order": 21,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1332,7 +1347,7 @@
           "id": 1749694427341,
           "name": "take_photo_of_the_issue_risks",
           "label": "Are you able to take photo of the issue / risks?",
-          "order": 21,
+          "order": 22,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1372,50 +1387,6 @@
             }
           ],
           "limit": 5.0
-        },
-        {
-          "id": 1749694662387,
-          "name": "physically_visit_the_raw_water_source",
-          "label": "Are you able to physically visit the raw water source?",
-          "order": 23,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749694669036,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749694669037,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749693489743,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749694731204,
-          "name": "geolocation_of_the_raw_water_source",
-          "label": "Take Geolocation of the raw water source",
-          "order": 24,
-          "type": "geo",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749694662387,
-              "options": ["yes"]
-            }
-          ]
         }
       ],
       "repeat_text": null
@@ -1494,8 +1465,8 @@
         },
         {
           "id": 1749695682354,
-          "name": "dosage_rate_for_chlorine_in_gram_per_cubic_metre_for_prechlorination",
-          "label": "What is the dosage rate for Chlorine in (gram per cubic metre) for Prechlorination?",
+          "name": "dosage_rate_for_chlorine_kg_per_day",
+          "label": "What is the dosage rate for Chlorine (kg per day) for prechlorination?",
           "order": 3,
           "type": "number",
           "required": true,
@@ -1508,7 +1479,8 @@
           ],
           "rule": {
             "allowDecimal": true
-          }
+          },
+          "addonAfter": "kg/day"
         },
         {
           "id": 1749695714514,
@@ -1648,8 +1620,8 @@
         },
         {
           "id": 1749695997834,
-          "name": "dosage_rate_for_alum_in_gram_per_cubic_metre_on_a_daily_basis",
-          "label": "What is the dosage rate for Alum in (gram per cubic metre) on a daily basis?",
+          "name": "dosage_rate_for_alum_bags_kg_per_day",
+          "label": "What is the dosage rate for Alum (bags/kg per day) on a daily basis?",
           "order": 9,
           "type": "number",
           "required": true,
@@ -1662,7 +1634,8 @@
           ],
           "rule": {
             "allowDecimal": true
-          }
+          },
+          "addonAfter": "bags/kg per day"
         },
         {
           "id": 1749696061091,
@@ -1796,8 +1769,8 @@
         },
         {
           "id": 1749696353491,
-          "name": "dosage_rate_for_soda_ash_in_gram_per_cubic_metres_on_a_daily_basis",
-          "label": "What is the dosage rate for Soda Ash in (gram per cubic metres) on a daily basis?",
+          "name": "dosing_rate_for_soda_ash_bags_kg_per_day",
+          "label": "What is the dosage rate for Soda Ash (bags/kg per day) on a daily basis?",
           "order": 15,
           "type": "number",
           "required": true,
@@ -1810,7 +1783,8 @@
           ],
           "rule": {
             "allowDecimal": true
-          }
+          },
+          "addonAfter": "bags/kg per day"
         },
         {
           "id": 1749696386016,
@@ -1944,8 +1918,8 @@
         },
         {
           "id": 1749696582472,
-          "name": "dosage_rate_for_polymer_in_gram_per_cubic_metres",
-          "label": "What is the dosage rate for Polymer in gram per cubic metres?",
+          "name": "dosing_rate_for_polymer_bags_kg_per_day",
+          "label": "What is the dosage rate for Polymer (bags/kg per day) on a daily basis?",
           "order": 21,
           "type": "number",
           "required": true,
@@ -1958,7 +1932,8 @@
           ],
           "rule": {
             "allowDecimal": true
-          }
+          },
+          "addonAfter": "bags/kg per day"
         },
         {
           "id": 1749696610120,
@@ -2092,8 +2067,8 @@
         },
         {
           "id": 1749696884554,
-          "name": "dosage_rate_of_lime_in_grams_per_cubic_meter",
-          "label": "What is the dosage rate of Lime in grams per cubic meter?",
+          "name": "dosing_rate_for_lime_bags_kg_per_day",
+          "label": "What is the dosage rate for Lima (bags/kg per day) on a daily basis?",
           "order": 27,
           "type": "number",
           "required": true,
@@ -2106,7 +2081,8 @@
           ],
           "rule": {
             "allowDecimal": true
-          }
+          },
+          "addonAfter": "bags/kg per day"
         },
         {
           "id": 1749696913958,

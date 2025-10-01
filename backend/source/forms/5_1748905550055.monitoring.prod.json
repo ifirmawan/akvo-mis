@@ -1204,8 +1204,8 @@
               "order": 6
             },
             {
-              "value": "excessive_ordor_in_grit_removal_system",
-              "label": "Excessive ordor in grit removal system",
+              "value": "excessive_odor_in_grit_removal_system",
+              "label": "Excessive odor in grit removal system",
               "id": 1748914676093,
               "order": 7
             },
@@ -1715,58 +1715,64 @@
           "meta": false,
           "options": [
             {
+              "value": "normal",
+              "label": "Normal",
+              "id": 1748915716201,
+              "order": 1
+            },
+            {
               "value": "air_compressors_not_working",
               "label": "Air compressors not working",
               "id": 1748915728687,
-              "order": 5
+              "order": 2
             },
             {
               "value": "excessive_air_leaks_in_compressed_air_piping",
               "label": "Excessive air leaks in compressed air piping",
               "id": 1748915737887,
-              "order": 6
+              "order": 3
             },
             {
               "value": "dark_mixed_liquor_in_aeration_tank",
               "label": "Dark mixed liquor in aeration tank",
               "id": 1748915752463,
-              "order": 7
+              "order": 4
             },
             {
-              "value": "dark_foam_or_bad_ordor_in_aeration_tank",
-              "label": "Dark foam or bad ordor in aeration tank",
+              "value": "dark_foam_or_bad_odor_in_aeration_tank",
+              "label": "Dark foam or bad odor in aeration tank",
               "id": 1748915760945,
-              "order": 8
+              "order": 5
             },
             {
               "value": "thick_billows_of_white,sudsy_foam_in_aeration_tank",
               "label": "Thick billows of white,sudsy foam in aeration tank",
               "id": 1748915768321,
-              "order": 9
+              "order": 6
             },
             {
               "value": "low_dissolved_oxygen_(do_<1.0mg/l)",
               "label": "Low Dissolved Oxygen (DO <1.0mg/L)",
               "id": 1748915782836,
-              "order": 10
+              "order": 7
             },
             {
               "value": "inadequate_amount_of_return_activated_sludge_rates",
               "label": "Inadequate amount of return activated sludge rates",
               "id": 1748915785399,
-              "order": 11
+              "order": 8
             },
             {
               "value": "auto_mode",
               "label": "Auto Mode",
               "id": 1748915798701,
-              "order": 12
+              "order": 9
             },
             {
               "value": "other",
               "label": "Other",
               "id": 1748915807173,
-              "order": 13
+              "order": 10
             }
           ]
         },
@@ -1873,8 +1879,8 @@
               "order": 7
             },
             {
-              "value": "bad_ordor",
-              "label": "Bad ordor",
+              "value": "bad_odor",
+              "label": "Bad odor",
               "id": 1748915939166,
               "order": 8
             },
@@ -1971,8 +1977,8 @@
               "order": 4
             },
             {
-              "value": "bad_ordor",
-              "label": "Bad ordor",
+              "value": "bad_odor",
+              "label": "Bad odor",
               "id": 1748916111145,
               "order": 5
             },
@@ -2301,8 +2307,8 @@
               "order": 2
             },
             {
-              "value": "bad_ordor",
-              "label": "Bad ordor",
+              "value": "bad_odor",
+              "label": "Bad odor",
               "id": 1748917060776,
               "order": 3
             },
@@ -2399,52 +2405,58 @@
           "meta": false,
           "options": [
             {
+              "value": "normal",
+              "label": "Normal",
+              "id": 1748917194182,
+              "order": 1
+            },
+            {
               "value": "inadequate_sludge_removal_from_clarifiers_or_thickeners",
               "label": "Inadequate sludge removal from clarifiers or thickeners",
               "id": 1748917194183,
-              "order": 1
+              "order": 2
             },
             {
               "value": "fouling_of_overflow_weirs_on_gravity_thickeners",
               "label": "Fouling of overflow weirs on gravity thickeners",
               "id": 1748917194184,
-              "order": 2
+              "order": 3
             },
             {
               "value": "sludge_disposal_inadequate_to_keep_treatment_system_in_balance",
               "label": "Sludge disposal inadequate to keep treatment system in balance",
               "id": 1748917220089,
-              "order": 3
+              "order": 4
             },
             {
-              "value": "bad_ordor",
-              "label": "Bad ordor",
+              "value": "bad_odor",
+              "label": "Bad odor",
               "id": 1748917233559,
-              "order": 4
+              "order": 5
             },
             {
               "value": "mechanical_or_gas_mixers_not_operational",
               "label": "Mechanical or gas mixers not operational",
               "id": 1748917243749,
-              "order": 5
+              "order": 6
             },
             {
               "value": "excessive_suspended_solids_in_supernatant",
               "label": "Excessive suspended solids in supernatant",
               "id": 1748917253445,
-              "order": 6
+              "order": 7
             },
             {
               "value": "recirculation_pump_operations",
               "label": "Recirculation pump operations",
               "id": 1748917261454,
-              "order": 7
+              "order": 8
             },
             {
               "value": "other",
               "label": "Other",
               "id": 1748917270510,
-              "order": 8
+              "order": 9
             }
           ]
         },
@@ -2711,8 +2723,8 @@
               "order": 1
             },
             {
-              "value": "bad_ordor",
-              "label": "Bad Ordor",
+              "value": "bad_odor",
+              "label": "Bad odor",
               "id": 1748917695722,
               "order": 2
             },

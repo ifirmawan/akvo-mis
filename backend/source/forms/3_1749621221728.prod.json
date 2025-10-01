@@ -56,7 +56,7 @@
           "name": "project_target_group",
           "label": "The project is meant for?",
           "order": 5,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -144,6 +144,12 @@
           "meta": false,
           "options": [
             {
+              "value": "water_authority_of_fiji",
+              "label": "Water Authority of Fiji",
+              "id": 1749622577767,
+              "order": 1
+            },
+            {
               "value": "mineral_resources_department",
               "label": "Mineral Resources Department",
               "id": 1749622577768,
@@ -174,10 +180,25 @@
               "order": 6
             },
             {
-              "value": "water_authority_of_fiji",
-              "label": "Water Authority of Fiji",
-              "id": 1749622577767,
-              "order": 1
+              "value": "other",
+              "label": "Other",
+              "id": 1749622633456,
+              "order": 7
+            }
+          ]
+        },
+        {
+          "id": 1749622641234,
+          "name": "other_implementing_agency",
+          "label": "Please specify other implementing agency",
+          "order": 11,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622571775,
+              "options": ["other"]
             }
           ]
         },
@@ -185,7 +206,7 @@
           "id": 1749622652941,
           "name": "wsmp_submitted",
           "label": "Is the WSMP submitted?",
-          "order": 11,
+          "order": 12,
           "type": "option",
           "required": true,
           "meta": false,
@@ -208,7 +229,7 @@
           "id": 1749622675800,
           "name": "wsmp_approved",
           "label": "Is the WSMP approved?",
-          "order": 12,
+          "order": 13,
           "type": "option",
           "required": true,
           "meta": false,
@@ -231,7 +252,7 @@
           "id": 1749622701234,
           "name": "construction_start_date",
           "label": "Construction Start Date",
-          "order": 13,
+          "order": 14,
           "type": "date",
           "required": false,
           "meta": false,
@@ -246,7 +267,7 @@
           "id": 1749622715678,
           "name": "water_committee",
           "label": "Do you have Water Committee and Is it active?",
-          "order": 14,
+          "order": 15,
           "type": "option",
           "required": true,
           "meta": false,

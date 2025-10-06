@@ -404,6 +404,42 @@
               "label": "Desalination",
               "id": 1749622733008,
               "order": 8
+            },
+            {
+              "value": "power_supply",
+              "label": "Power Supply",
+              "id": 1749622733009,
+              "order": 9
+            },
+            {
+              "value": "pumps",
+              "label": "Pumps",
+              "id": 1749622733010,
+              "order": 10
+            },
+            {
+              "value": "gutters",
+              "label": "Gutters",
+              "id": 1749622733011,
+              "order": 11
+            },
+            {
+              "value": "tanks",
+              "label": "Tanks",
+              "id": 1749622733012,
+              "order": 12
+            },
+            {
+              "value": "base_construction",
+              "label": "Base Construction",
+              "id": 1749622733013,
+              "order": 13
+            },
+            {
+              "value": "piping_works",
+              "label": "Piping Works",
+              "id": 1749622733014,
+              "order": 14
             }
           ]
         },

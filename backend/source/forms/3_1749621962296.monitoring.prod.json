@@ -382,14 +382,8 @@
               "order": 4
             },
             {
-              "value": "reticulation_surface_water",
-              "label": "Reticulation (Surface Water)",
-              "id": 1749622733005,
-              "order": 5
-            },
-            {
-              "value": "reticulation_ground_water",
-              "label": "Reticulation (Ground Water)",
+              "value": "reticulation",
+              "label": "Reticulation",
               "id": 1749622733005,
               "order": 5
             },
@@ -1460,10 +1454,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             }
           ]
         },
@@ -1504,10 +1495,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             }
           ]
         },
@@ -1554,10 +1542,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             },
             {
               "id": 1723459200036,
@@ -1590,10 +1575,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             },
             {
               "id": 1723459200036,
@@ -1626,10 +1608,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             },
             {
               "id": 1723459200036,
@@ -1652,10 +1631,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             },
             {
               "id": 1723459277038,
@@ -1678,10 +1654,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             },
             {
               "id": 1723459277038,
@@ -1711,10 +1684,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             }
           ]
         },
@@ -1729,10 +1699,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             }
           ]
         }
@@ -1905,10 +1872,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             },
             {
               "id": 1723459200036,
@@ -1941,10 +1905,7 @@
           "dependency": [
             {
               "id": 1749622726347,
-              "options": [
-                "reticulation_surface_water",
-                "reticulation_groundwater"
-              ]
+              "options": ["reticulation"]
             },
             {
               "id": 1723459200036,

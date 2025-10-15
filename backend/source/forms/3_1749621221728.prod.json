@@ -180,10 +180,16 @@
               "order": 6
             },
             {
+              "value": "department_of_water_and_sewerage",
+              "label": "Department of Water and Sewerage",
+              "id": 1849622785213,
+              "order": 7
+            },
+            {
               "value": "other",
               "label": "Other",
               "id": 1749622633456,
-              "order": 7
+              "order": 8
             }
           ]
         },

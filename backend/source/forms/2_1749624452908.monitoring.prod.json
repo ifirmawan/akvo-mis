@@ -77,7 +77,7 @@
           "name": "water_test_type",
           "label": "Water test conducted?",
           "order": 5,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -103,15 +103,8 @@
           "type": "number",
           "required": false,
           "meta": false,
-          "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["cbt_bag"]
-            }
-          ],
-          "rule": {
-            "allowDecimal": true
-          }
+          "dependency": [{ "id": 1749630785253, "options": ["cbt_bag"] }],
+          "rule": { "allowDecimal": true }
         },
         {
           "id": 1749631050000,
@@ -142,19 +135,14 @@
             },
             {
               "value": "temperature_c",
-              "label": "Temperature (°C)",
+              "label": "Temperature (\u00b0C)",
               "id": 1754995200002,
               "order": 4
             },
-            {
-              "value": "ph",
-              "label": "pH",
-              "id": 1754995200003,
-              "order": 5
-            },
+            { "value": "ph", "label": "pH", "id": 1754995200003, "order": 5 },
             {
               "value": "physical_analysis_conductivity",
-              "label": "Conductivity (µS/cm)",
+              "label": "Conductivity (\u00b5S/cm)",
               "id": 1754995200004,
               "order": 6
             },
@@ -165,12 +153,7 @@
               "order": 7
             }
           ],
-          "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            }
-          ]
+          "dependency": [{ "id": 1749630785253, "options": ["lab_test"] }]
         },
         {
           "id": 1749631093126,
@@ -181,18 +164,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050000,
-              "options": ["total_coliform"]
-            }
+            { "id": 1749630785253, "options": ["lab_test"] },
+            { "id": 1749631050000, "options": ["total_coliform"] }
           ],
-          "rule": {
-            "allowDecimal": true
-          }
+          "rule": { "allowDecimal": true }
         },
         {
           "id": 1749631148928,
@@ -203,18 +178,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050000,
-              "options": ["fecal_coliform"]
-            }
+            { "id": 1749630785253, "options": ["lab_test"] },
+            { "id": 1749631050000, "options": ["fecal_coliform"] }
           ],
-          "rule": {
-            "allowDecimal": true
-          }
+          "rule": { "allowDecimal": true }
         },
         {
           "id": 1749631183056,
@@ -225,92 +192,50 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050000,
-              "options": ["turbidity_ntu"]
-            }
+            { "id": 1749630785253, "options": ["lab_test"] },
+            { "id": 1749631050000, "options": ["turbidity_ntu"] }
           ],
-          "rule": {
-            "allowDecimal": true
-          }
-        }
-      ],
-      "repeat_text": null
-    },
-    {
-      "id": 1754995200001,
-      "name": "physical_analysis",
-      "label": "Physical Analysis",
-      "description": null,
-      "order": 2,
-      "repeatable": false,
-      "questions": [
+          "rule": { "allowDecimal": true }
+        },
         {
           "id": 1754995200101,
           "name": "temperature_c",
-          "label": "Temperature °C - 2550B (APHA Method Code)",
-          "order": 1,
+          "label": "Temperature \u00b0C - 2550B (APHA Method Code)",
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050000,
-              "options": ["temperature_c"]
-            }
+            { "id": 1749630785253, "options": ["lab_test"] },
+            { "id": 1749631050000, "options": ["temperature_c"] }
           ]
         },
         {
           "id": 1754995200102,
           "name": "ph",
           "label": "pH - 4500-H+B (APHA Method Code)",
-          "order": 2,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true,
-            "min": 0,
-            "max": 14
-          },
+          "rule": { "allowDecimal": true, "min": 0, "max": 14 },
           "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050000,
-              "options": ["ph"]
-            }
+            { "id": 1749630785253, "options": ["lab_test"] },
+            { "id": 1749631050000, "options": ["ph"] }
           ]
         },
         {
           "id": 1754995200103,
           "name": "physical_analysis_conductivity",
-          "label": "Conductivity µS/cm - 2510B (APHA Method Code)",
-          "order": 3,
+          "label": "Conductivity \u00b5S/cm - 2510B (APHA Method Code)",
+          "order": 13,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            },
+            { "id": 1749630785253, "options": ["lab_test"] },
             {
               "id": 1749631050000,
               "options": ["physical_analysis_conductivity"]
@@ -321,96 +246,58 @@
           "id": 1754995200104,
           "name": "salinity",
           "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
-          "order": 4,
+          "order": 14,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050000,
-              "options": ["salinity"]
-            }
+            { "id": 1749630785253, "options": ["lab_test"] },
+            { "id": 1749631050000, "options": ["salinity"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1754995200601,
-      "name": "chemical_analysis",
-      "label": "Chemical Analysis",
-      "description": null,
-      "order": 3,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1754995200701,
           "name": "chemical_oxygen_demand",
           "label": "Chemical Oxygen Demand mg/L - 5220B (APHA Method Code)",
-          "order": 1,
+          "order": 15,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            }
-          ]
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1749630785253, "options": ["lab_test"] }]
         },
         {
           "id": 1754995200702,
           "name": "dissolved_oxygen",
           "label": "Dissolved Oxygen mg/L - 4500-O-C (APHA Method Code)",
-          "order": 2,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            }
-          ]
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1749630785253, "options": ["lab_test"] }]
         },
         {
           "id": 1754995200706,
           "name": "total_sulphides",
           "label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
-          "order": 3,
+          "order": 17,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1749630785253,
-              "options": ["lab_test"]
-            }
-          ]
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1749630785253, "options": ["lab_test"] }]
         }
-      ]
+      ],
+      "repeat_text": null
     },
     {
       "id": 1849633445678,
       "name": "project_details",
       "label": "Project Details",
       "description": null,
-      "order": 4,
+      "order": 2,
       "repeatable": false,
       "questions": [
         {
@@ -480,11 +367,7 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true,
-            "min": 0,
-            "max": 100
-          }
+          "rule": { "allowDecimal": true, "min": 0, "max": 100 }
         }
       ],
       "repeat_text": null
@@ -494,7 +377,7 @@
       "name": "concrete_base_construction_group",
       "label": "Concrete Base Construction",
       "description": null,
-      "order": 5,
+      "order": 3,
       "repeatable": false,
       "questions": [
         {
@@ -526,10 +409,7 @@
             }
           ],
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["concrete_base_construction"]
-            }
+            { "id": 1749624505915, "options": ["concrete_base_construction"] }
           ]
         },
         {
@@ -542,10 +422,7 @@
           "meta": false,
           "limit": 5.0,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["concrete_base_construction"]
-            }
+            { "id": 1749624505915, "options": ["concrete_base_construction"] }
           ]
         },
         {
@@ -557,10 +434,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["concrete_base_construction"]
-            }
+            { "id": 1749624505915, "options": ["concrete_base_construction"] }
           ]
         }
       ],
@@ -571,7 +445,7 @@
       "name": "urf_tank_implementation_group",
       "label": "URF Tank Implementation",
       "description": null,
-      "order": 6,
+      "order": 4,
       "repeatable": false,
       "questions": [
         {
@@ -651,10 +525,7 @@
             }
           ],
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["urf_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["urf_tank_implementation"] }
           ]
         },
         {
@@ -666,10 +537,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["urf_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["urf_tank_implementation"] }
           ]
         },
         {
@@ -682,10 +550,7 @@
           "meta": false,
           "limit": 5.0,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["urf_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["urf_tank_implementation"] }
           ]
         },
         {
@@ -697,10 +562,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["urf_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["urf_tank_implementation"] }
           ]
         }
       ],
@@ -711,7 +573,7 @@
       "name": "eps_tank_implementation_group",
       "label": "EPS Tank Implementation",
       "description": null,
-      "order": 7,
+      "order": 5,
       "repeatable": false,
       "questions": [
         {
@@ -761,7 +623,7 @@
             },
             {
               "value": "10_15_cm_buffer_zone_between_the_filtration_media_and_the_overflow_pipe",
-              "label": "10–15 cm buffer zone between the filtration media and the overflow pipe",
+              "label": "10\u201315 cm buffer zone between the filtration media and the overflow pipe",
               "id": 1849634012351,
               "order": 7
             },
@@ -791,10 +653,7 @@
             }
           ],
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["eps_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["eps_tank_implementation"] }
           ]
         },
         {
@@ -806,10 +665,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["eps_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["eps_tank_implementation"] }
           ]
         },
         {
@@ -822,10 +678,7 @@
           "meta": false,
           "limit": 5.0,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["eps_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["eps_tank_implementation"] }
           ]
         },
         {
@@ -837,10 +690,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["eps_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["eps_tank_implementation"] }
           ]
         }
       ],
@@ -851,7 +701,7 @@
       "name": "balance_tank_implementation_group",
       "label": "Balance Tank Implementation",
       "description": null,
-      "order": 8,
+      "order": 6,
       "repeatable": false,
       "questions": [
         {
@@ -895,10 +745,7 @@
             }
           ],
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["balance_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["balance_tank_implementation"] }
           ]
         },
         {
@@ -911,10 +758,7 @@
           "meta": false,
           "limit": 5.0,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["balance_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["balance_tank_implementation"] }
           ]
         },
         {
@@ -926,10 +770,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["balance_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["balance_tank_implementation"] }
           ]
         }
       ],
@@ -940,7 +781,7 @@
       "name": "storage_tank_implementation_group",
       "label": "Storage Tank Implementation",
       "description": null,
-      "order": 9,
+      "order": 7,
       "repeatable": false,
       "questions": [
         {
@@ -990,10 +831,7 @@
             }
           ],
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["storage_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["storage_tank_implementation"] }
           ]
         },
         {
@@ -1006,10 +844,7 @@
           "meta": false,
           "limit": 5.0,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["storage_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["storage_tank_implementation"] }
           ]
         },
         {
@@ -1021,10 +856,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["storage_tank_implementation"]
-            }
+            { "id": 1749624505915, "options": ["storage_tank_implementation"] }
           ]
         }
       ],
@@ -1035,7 +867,7 @@
       "name": "standpipes_group",
       "label": "Standpipes",
       "description": null,
-      "order": 10,
+      "order": 8,
       "repeatable": false,
       "questions": [
         {
@@ -1072,12 +904,7 @@
               "order": 4
             }
           ],
-          "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["standpipes"]
-            }
-          ]
+          "dependency": [{ "id": 1749624505915, "options": ["standpipes"] }]
         },
         {
           "id": 1849634950001,
@@ -1088,19 +915,13 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["standpipes"]
-            },
+            { "id": 1749624505915, "options": ["standpipes"] },
             {
               "id": 1849634900001,
               "options": ["number_of_standpipes_to_be_implemented"]
             }
           ],
-          "rule": {
-            "allowDecimal": false,
-            "min": 0
-          }
+          "rule": { "allowDecimal": false, "min": 0 }
         },
         {
           "id": 1849635200001,
@@ -1111,19 +932,13 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["standpipes"]
-            },
+            { "id": 1749624505915, "options": ["standpipes"] },
             {
               "id": 1849634900001,
               "options": ["existing_number_of_implemented_standpipes"]
             }
           ],
-          "rule": {
-            "allowDecimal": false,
-            "min": 0
-          }
+          "rule": { "allowDecimal": false, "min": 0 }
         },
         {
           "id": 1849635000001,
@@ -1134,12 +949,7 @@
           "required": true,
           "meta": false,
           "limit": 5.0,
-          "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["standpipes"]
-            }
-          ]
+          "dependency": [{ "id": 1749624505915, "options": ["standpipes"] }]
         },
         {
           "id": 1849635100001,
@@ -1149,12 +959,7 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["standpipes"]
-            }
-          ]
+          "dependency": [{ "id": 1749624505915, "options": ["standpipes"] }]
         }
       ],
       "repeat_text": null
@@ -1164,7 +969,7 @@
       "name": "drainage_group",
       "label": "Drainage",
       "description": null,
-      "order": 11,
+      "order": 9,
       "repeatable": false,
       "questions": [
         {
@@ -1176,12 +981,7 @@
           "required": true,
           "meta": false,
           "limit": 5.0,
-          "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["drainage"]
-            }
-          ]
+          "dependency": [{ "id": 1749624505915, "options": ["drainage"] }]
         },
         {
           "id": 1849635400001,
@@ -1191,12 +991,7 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["drainage"]
-            }
-          ]
+          "dependency": [{ "id": 1749624505915, "options": ["drainage"] }]
         }
       ],
       "repeat_text": null
@@ -1206,7 +1001,7 @@
       "name": "site_security_and_perimeter_group",
       "label": "Site Security and Perimeter",
       "description": null,
-      "order": 12,
+      "order": 10,
       "repeatable": false,
       "questions": [
         {
@@ -1238,10 +1033,7 @@
             }
           ],
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["site_security_and_perimeter"]
-            }
+            { "id": 1749624505915, "options": ["site_security_and_perimeter"] }
           ]
         },
         {
@@ -1254,10 +1046,7 @@
           "meta": false,
           "limit": 5.0,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["site_security_and_perimeter"]
-            }
+            { "id": 1749624505915, "options": ["site_security_and_perimeter"] }
           ]
         },
         {
@@ -1269,10 +1058,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749624505915,
-              "options": ["site_security_and_perimeter"]
-            }
+            { "id": 1749624505915, "options": ["site_security_and_perimeter"] }
           ]
         }
       ],
@@ -1283,7 +1069,7 @@
       "name": "project_photos",
       "label": "Project Photos",
       "description": null,
-      "order": 13,
+      "order": 11,
       "repeatable": true,
       "questions": [
         {
@@ -1313,7 +1099,7 @@
       "name": "final_remarks",
       "label": "Final Remarks",
       "description": null,
-      "order": 14,
+      "order": 12,
       "repeatable": false,
       "questions": [
         {

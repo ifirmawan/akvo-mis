@@ -709,7 +709,7 @@
           "name": "dam_name",
           "label": "Name of component",
           "order": 2,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -827,7 +827,7 @@
           "name": "raw_water_main_name",
           "label": "Name of component",
           "order": 3,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -1256,7 +1256,7 @@
           "name": "distribution_main_name",
           "label": "Name of component",
           "order": 2,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -1463,7 +1463,7 @@
           "name": "reticulation_name",
           "label": "Name of component",
           "order": 2,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [

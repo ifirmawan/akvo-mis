@@ -207,6 +207,12 @@
               "label": "Maintenance in progress",
               "id": 1749612844278,
               "order": 2
+            },
+            {
+              "value": "faulty",
+              "label": "Faulty",
+              "id": 1749612865769,
+              "order": 3
             }
           ]
         },
@@ -354,10 +360,16 @@
               "order": 1
             },
             {
+              "value": "maintenance_in_progress",
+              "label": "Maintenance in progress",
+              "id": 1749613157598,
+              "order": 2
+            },
+            {
               "value": "faulty",
               "label": "Faulty",
               "id": 1749613150598,
-              "order": 2
+              "order": 3
             }
           ]
         },
@@ -377,10 +389,16 @@
               "order": 1
             },
             {
+              "value": "maintenance_in_progress",
+              "label": "Maintenance in progress",
+              "id": 1749613193819,
+              "order": 2
+            },
+            {
               "value": "faulty",
               "label": "Faulty",
               "id": 1749613193818,
-              "order": 2
+              "order": 3
             }
           ]
         },
@@ -400,10 +418,16 @@
               "order": 1
             },
             {
+              "value": "maintenance_in_progress",
+              "label": "Maintenance in progress",
+              "id": 1749613403884,
+              "order": 2
+            },
+            {
               "value": "faulty",
               "label": "Faulty",
               "id": 1749613403883,
-              "order": 2
+              "order": 3
             }
           ]
         },
@@ -758,6 +782,42 @@
           "label": "Comments from DWS Staff",
           "order": 2,
           "type": "text",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749614058465,
+          "name": "supervisor_signature",
+          "label": "Signature of Supervisor",
+          "order": 3,
+          "type": "signature",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749614058466,
+          "name": "supervisor_name",
+          "label": "Name of Supervisor",
+          "order": 4,
+          "type": "input",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749614058467,
+          "name": "dws_staff_signature",
+          "label": "Signature of DWS Staff",
+          "order": 5,
+          "type": "signature",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749614058468,
+          "name": "dws_staff_name",
+          "label": "Name of DWS Staff",
+          "order": 6,
+          "type": "input",
           "required": true,
           "meta": false
         }

@@ -52,18 +52,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749632842043,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749632842044,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1749632842043, "order": 1 },
+            { "value": "no", "label": "No", "id": 1749632842044, "order": 2 }
           ]
         }
       ],
@@ -115,18 +105,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749632860507,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749632860508,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1749632860507, "order": 1 },
+            { "value": "no", "label": "No", "id": 1749632860508, "order": 2 }
           ]
         },
         {
@@ -169,12 +149,7 @@
               "order": 5
             }
           ],
-          "dependency": [
-            {
-              "id": 1749632647507,
-              "options": ["no"]
-            }
-          ]
+          "dependency": [{ "id": 1749632647507, "options": ["no"] }]
         },
         {
           "id": 1749632991459,
@@ -184,12 +159,7 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [
-            {
-              "id": 1749632887312,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1749632887312, "options": ["other"] }]
         },
         {
           "id": 1749633001462,
@@ -213,12 +183,7 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 1749632647507,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1749632647507, "options": ["yes"] }]
         },
         {
           "id": 1749633073911,
@@ -228,12 +193,7 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [
-            {
-              "id": 1749632647507,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1749632647507, "options": ["yes"] }],
           "limit": 5
         },
         {
@@ -244,12 +204,7 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [
-            {
-              "id": 1749632647507,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1749632647507, "options": ["yes"] }]
         },
         {
           "id": 1749631050010,
@@ -280,19 +235,14 @@
             },
             {
               "value": "temperature_c",
-              "label": "Temperature in °C",
+              "label": "Temperature in \u00b0C",
               "id": 1749633178123,
               "order": 4
             },
-            {
-              "value": "ph",
-              "label": "pH",
-              "id": 1749633193921,
-              "order": 5
-            },
+            { "value": "ph", "label": "pH", "id": 1749633193921, "order": 5 },
             {
               "value": "conductivity",
-              "label": "Conductivity in µS/cm",
+              "label": "Conductivity in \u00b5S/cm",
               "id": 1749633209784,
               "order": 6
             },
@@ -303,12 +253,7 @@
               "order": 7
             }
           ],
-          "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            }
-          ]
+          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
         },
         {
           "id": 1749633220745,
@@ -319,18 +264,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050010,
-              "options": ["turbidity_ntu"]
-            }
+            { "id": 1749633001462, "options": ["lab_test"] },
+            { "id": 1749631050010, "options": ["turbidity_ntu"] }
           ],
-          "rule": {
-            "allowDecimal": true
-          }
+          "rule": { "allowDecimal": true }
         },
         {
           "id": 1749633259392,
@@ -341,18 +278,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050010,
-              "options": ["total_coliform"]
-            }
+            { "id": 1749633001462, "options": ["lab_test"] },
+            { "id": 1749631050010, "options": ["total_coliform"] }
           ],
-          "rule": {
-            "allowDecimal": true
-          }
+          "rule": { "allowDecimal": true }
         },
         {
           "id": 1749633295165,
@@ -363,18 +292,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050010,
-              "options": ["fecal_coliform"]
-            }
+            { "id": 1749633001462, "options": ["lab_test"] },
+            { "id": 1749631050010, "options": ["fecal_coliform"] }
           ],
-          "rule": {
-            "allowDecimal": true
-          }
+          "rule": { "allowDecimal": true }
         },
         {
           "id": 1749633325456,
@@ -384,207 +305,118 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["cbt_test"]
-            }
-          ],
-          "rule": {
-            "allowDecimal": true
-          }
-        }
-      ],
-      "repeat_text": null
-    },
-    {
-      "id": 1749730785253,
-      "name": "physical_analysis",
-      "label": "Physical Analysis",
-      "description": null,
-      "order": 3,
-      "repeatable": false,
-      "questions": [
+          "dependency": [{ "id": 1749633001462, "options": ["cbt_test"] }],
+          "rule": { "allowDecimal": true }
+        },
         {
           "id": 1797307852531,
           "name": "temperature_c",
-          "label": "Temperature °C - 2550B (APHA Method Code)",
-          "order": 1,
+          "label": "Temperature \u00b0C - 2550B (APHA Method Code)",
+          "order": 13,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050010,
-              "options": ["temperature_c"]
-            }
+            { "id": 1749633001462, "options": ["lab_test"] },
+            { "id": 1749631050010, "options": ["temperature_c"] }
           ]
         },
         {
           "id": 1797307852532,
           "name": "ph",
           "label": "pH - 4500-H+B (APHA Method Code)",
-          "order": 2,
+          "order": 14,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true,
-            "min": 0,
-            "max": 14
-          },
+          "rule": { "allowDecimal": true, "min": 0, "max": 14 },
           "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050010,
-              "options": ["ph"]
-            }
+            { "id": 1749633001462, "options": ["lab_test"] },
+            { "id": 1749631050010, "options": ["ph"] }
           ]
         },
         {
           "id": 1797307852533,
           "name": "physical_analysis_conductivity",
-          "label": "Conductivity µS/cm - 2510B (APHA Method Code)",
-          "order": 3,
+          "label": "Conductivity \u00b5S/cm - 2510B (APHA Method Code)",
+          "order": 15,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050010,
-              "options": ["conductivity"]
-            }
+            { "id": 1749633001462, "options": ["lab_test"] },
+            { "id": 1749631050010, "options": ["conductivity"] }
           ]
         },
         {
           "id": 1797307852534,
           "name": "salinity",
           "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
-          "order": 4,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1749631050010,
-              "options": ["salinity"]
-            }
+            { "id": 1749633001462, "options": ["lab_test"] },
+            { "id": 1749631050010, "options": ["salinity"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1749730785256,
-      "name": "chemical_analysis",
-      "label": "Chemical Analysis",
-      "description": null,
-      "order": 4,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1797307850701,
           "name": "chemical_oxygen_demand",
           "label": "Chemical Oxygen Demand mg/L - 5220B (APHA Method Code)",
-          "order": 1,
+          "order": 17,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            }
-          ]
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
         },
         {
           "id": 1797307850702,
           "name": "dissolved_oxygen",
           "label": "Dissolved Oxygen mg/L - 4500-O-C (APHA Method Code)",
-          "order": 2,
+          "order": 18,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            }
-          ]
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
         },
         {
           "id": 1797307850705,
           "name": "oil_and_grease",
           "label": "Oil & Grease mg/L - 5520D (APHA Method Code)",
-          "order": 3,
+          "order": 19,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            }
-          ]
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
         },
         {
           "id": 1797307850706,
           "name": "total_sulphides",
           "label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
-          "order": 4,
+          "order": 20,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1749633001462,
-              "options": ["lab_test"]
-            }
-          ]
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
         }
-      ]
+      ],
+      "repeat_text": null
     },
     {
       "id": 1749730785258,
       "name": "general_remarks_group",
       "label": "General Remarks",
       "description": null,
-      "order": 5,
+      "order": 3,
       "repeatable": false,
       "questions": [
         {
@@ -619,10 +451,7 @@
           "required": true,
           "meta": false,
           "dependency": [
-            {
-              "id": 1749633373968,
-              "options": ["issue_with_system"]
-            }
+            { "id": 1749633373968, "options": ["issue_with_system"] }
           ]
         },
         {

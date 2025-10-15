@@ -10,8 +10,8 @@
   "question_groups": [
     {
       "id": 1748918946592,
-      "name": "quick_inspection_info",
-      "label": "WAF Quick Inspection Info",
+      "name": "plant_general_information",
+      "label": "Plant General Information",
       "description": null,
       "order": 1,
       "repeatable": false,

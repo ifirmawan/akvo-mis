@@ -279,10 +279,66 @@
           "rule": { "allowDecimal": true }
         },
         {
+          "id": 1723459200023,
+          "name": "temperature_c",
+          "label": "Temperature \u00b0C - 2550B (APHA Method Code)",
+          "order": 15,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": { "allowDecimal": true },
+          "dependency": [
+            { "id": 1749622849604, "options": ["lab_test"] },
+            { "id": 1749621050010, "options": ["temperature_c"] }
+          ]
+        },
+        {
+          "id": 1723459200024,
+          "name": "ph",
+          "label": "pH - 4500-H+B (APHA Method Code)",
+          "order": 16,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": { "allowDecimal": true, "min": 0, "max": 14 },
+          "dependency": [
+            { "id": 1749622849604, "options": ["lab_test"] },
+            { "id": 1749621050010, "options": ["ph"] }
+          ]
+        },
+        {
+          "id": 1723459200025,
+          "name": "physical_analysis_conductivity",
+          "label": "Conductivity \u00b5S/cm - 2510B (APHA Method Code)",
+          "order": 17,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": { "allowDecimal": true },
+          "dependency": [
+            { "id": 1749622849604, "options": ["lab_test"] },
+            { "id": 1749621050010, "options": ["conductivity"] }
+          ]
+        },
+        {
+          "id": 1723459200026,
+          "name": "salinity",
+          "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
+          "order": 18,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": { "allowDecimal": true },
+          "dependency": [
+            { "id": 1749622849604, "options": ["lab_test"] },
+            { "id": 1749621050010, "options": ["salinity"] }
+          ]
+        },
+        {
           "id": 1749621374500,
           "name": "water_source_type",
           "label": "Type of Water Source?",
-          "order": 15,
+          "order": 19,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -329,7 +385,7 @@
           "id": 1749622726347,
           "name": "accessible_construction_site",
           "label": "Which part of the construction sites you can visit?",
-          "order": 16,
+          "order": 20,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -419,7 +475,7 @@
           "id": 1749621461754,
           "name": "has_new_catchment_dam",
           "label": "Construction of New Water Catchment/Dam?",
-          "order": 17,
+          "order": 21,
           "type": "option",
           "required": true,
           "meta": false,
@@ -433,7 +489,7 @@
           "id": 1749621494567,
           "name": "catchment_dam_photo",
           "label": "Photo of the Catchment/Dam",
-          "order": 18,
+          "order": 22,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -443,7 +499,7 @@
           "id": 1749621517282,
           "name": "has_borehole",
           "label": "Construction of borehole?",
-          "order": 19,
+          "order": 23,
           "type": "option",
           "required": true,
           "meta": false,
@@ -457,7 +513,7 @@
           "id": 1749621541234,
           "name": "borehole_construction_photo",
           "label": "Photo of the Borehole",
-          "order": 20,
+          "order": 24,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -467,7 +523,7 @@
           "id": 1749621557442,
           "name": "has_pump_system",
           "label": "Installation of Pump system?",
-          "order": 21,
+          "order": 25,
           "type": "option",
           "required": true,
           "meta": false,
@@ -481,7 +537,7 @@
           "id": 1749621581234,
           "name": "pump_system_photo",
           "label": "Photo of the Pump System",
-          "order": 22,
+          "order": 26,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -491,7 +547,7 @@
           "id": 1749621611527,
           "name": "has_rainwater_harvesting",
           "label": "Installation of Rainwater Harvesting System?",
-          "order": 23,
+          "order": 27,
           "type": "option",
           "required": true,
           "meta": false,
@@ -505,7 +561,7 @@
           "id": 1749621711234,
           "name": "rainwater_harvesting_photo",
           "label": "Photo of the Rainwater Harvesting System",
-          "order": 24,
+          "order": 28,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -515,7 +571,7 @@
           "id": 1749621624567,
           "name": "number_of_rainwater_harvesting_systems",
           "label": "Please Identify the number of Rainwater harvesting system installed.",
-          "order": 25,
+          "order": 29,
           "type": "number",
           "required": true,
           "meta": false,
@@ -525,7 +581,7 @@
           "id": 1749621690983,
           "name": "has_desalination",
           "label": "Installation of Desalination Plant?",
-          "order": 26,
+          "order": 30,
           "type": "option",
           "required": true,
           "meta": false,
@@ -539,7 +595,7 @@
           "id": 1749621634567,
           "name": "desalination_plant_photo",
           "label": "Photo of the Desalination Plant",
-          "order": 27,
+          "order": 31,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -2210,77 +2266,11 @@
       "repeat_text": "Add another"
     },
     {
-      "id": 1723459244022,
-      "name": "physical_analysis",
-      "label": "Physical Analysis",
-      "description": null,
-      "order": 28,
-      "repeatable": false,
-      "questions": [
-        {
-          "id": 1723459200023,
-          "name": "temperature_c",
-          "label": "Temperature \u00b0C - 2550B (APHA Method Code)",
-          "order": 1,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["temperature_c"] }
-          ]
-        },
-        {
-          "id": 1723459200024,
-          "name": "ph",
-          "label": "pH - 4500-H+B (APHA Method Code)",
-          "order": 2,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true, "min": 0, "max": 14 },
-          "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["ph"] }
-          ]
-        },
-        {
-          "id": 1723459200025,
-          "name": "physical_analysis_conductivity",
-          "label": "Conductivity \u00b5S/cm - 2510B (APHA Method Code)",
-          "order": 3,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["conductivity"] }
-          ]
-        },
-        {
-          "id": 1723459200026,
-          "name": "salinity",
-          "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
-          "order": 4,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["salinity"] }
-          ]
-        }
-      ]
-    },
-    {
       "id": 1749623648242,
       "name": "final_comments",
       "label": "Final Comments",
       "description": null,
-      "order": 29,
+      "order": 28,
       "repeatable": false,
       "questions": [
         {

@@ -286,6 +286,7 @@ const FormContainer = ({
       </BaseLayout.Content>
       <FormNavigation
         currentGroup={currentGroup}
+        formDefinition={formDefinition}
         onSubmit={handleOnSubmitForm}
         activeGroup={activeGroup}
         setActiveGroup={handleOnActiveGroup}

@@ -8,6 +8,7 @@ import { generateValidationSchemaFieldLevel, onFilterDependency } from '../lib';
 
 const FormNavigation = ({
   currentGroup,
+  formDefinition,
   onSubmit,
   activeGroup,
   setActiveGroup,
@@ -32,6 +33,46 @@ const FormNavigation = ({
     const [questionID, errorMessage] = Object.entries(feedback).find(([, value]) => value !== true);
     const question = currentGroup.question.find((q) => q?.id === parseInt(questionID, 10));
     return errorMessage.replace('this', question?.label);
+  };
+
+  const validateAllGroups = async () => {
+    if (!formDefinition?.question_group) {
+      return true;
+    }
+
+    const allGroups = formDefinition.question_group;
+
+    const validationPromises = allGroups.map(async (group) => {
+      const validateSync = group.question
+        ?.filter((q) => onFilterDependency(group, currentValues, q))
+        ?.filter(
+          (q) =>
+            (q?.extra?.type === 'entity' && currentValues?.[q?.id] !== undefined) || !q?.extra?.type,
+        )
+        ?.map((q) => {
+          const defaultVal = ['cascade', 'multiple_option', 'option', 'geo'].includes(q?.type)
+            ? null
+            : '';
+          const fieldValue = currentValues?.[q?.id] === undefined ? defaultVal : currentValues[q.id];
+          return generateValidationSchemaFieldLevel(fieldValue, q);
+        });
+
+      if (!validateSync || validateSync.length === 0) {
+        return true;
+      }
+
+      const validations = await Promise.allSettled(validateSync);
+      const errors = validations
+        ?.filter(({ status }) => status === 'fulfilled')
+        .map(({ value }) => Object.values(value))
+        .flat()
+        .filter((val) => val !== true);
+
+      return errors.length === 0;
+    });
+
+    const results = await Promise.all(validationPromises);
+    return results.every((valid) => valid);
   };
 
   const handleFormNavigation = async (index) => {
@@ -68,20 +109,19 @@ const FormNavigation = ({
       return acc;
     }, {});
     const errors = Object.values(feedbackValues).filter((val) => val !== true);
-    if (errors.length > 0 && index === 2) {
+    // Show warning but allow navigation to next group
+    if (errors.length > 0 && index === 2 && activeGroup < totalGroup - 1) {
       const isRequired = errors.find((e) => e.includes('required'));
       const errorMessage = isRequired
-        ? trans.mandatoryQuestions
+        ? trans.mandatoryQuestionsWarning || trans.mandatoryQuestions
         : getFirstErrorMessage(feedbackValues);
-      ToastAndroid.show(errorMessage, ToastAndroid.LONG);
+      ToastAndroid.show(errorMessage, ToastAndroid.SHORT);
     }
     FormState.update((s) => {
       s.feedback = feedbackValues;
     });
 
-    if (index === 2 && errors.length) {
-      return;
-    }
+    // No longer block navigation - allow moving to next group even with errors
     if (!visitedQuestionGroup.includes(currentGroup?.id)) {
       FormState.update((s) => {
         s.visitedQuestionGroup = [...visitedQuestionGroup, currentGroup.id];
@@ -108,8 +148,17 @@ const FormNavigation = ({
     if (index === 2 && activeGroup < totalGroup - 1) {
       setActiveGroup(activeGroup + 1);
     }
-    if (index === 2 && !errors.length && activeGroup === totalGroup - 1) {
-      onSubmit();
+    if (index === 2 && activeGroup === totalGroup - 1) {
+      // Validate all groups before submitting
+      const allGroupsValid = await validateAllGroups();
+      if (allGroupsValid) {
+        onSubmit();
+      } else {
+        ToastAndroid.show(
+          trans.completeAllRequiredFields || 'Please complete all required fields in all sections before submitting',
+          ToastAndroid.LONG,
+        );
+      }
     }
   };
 

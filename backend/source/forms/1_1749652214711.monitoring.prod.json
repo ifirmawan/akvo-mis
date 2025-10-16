@@ -630,7 +630,7 @@
       "name": "raw_water_source",
       "label": "Raw Water Source",
       "description": null,
-      "order": 9,
+      "order": 4,
       "repeatable": false,
       "questions": [
         {
@@ -708,7 +708,7 @@
           "name": "provide_details_of_the_risks_with_the_source",
           "label": "Please provide details of the risks",
           "order": 6,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -881,7 +881,7 @@
           "name": "pumps_rising_main_risk_details",
           "label": "Please provide details of the risks associated with Pumps/Rising Main",
           "order": 15,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -986,7 +986,7 @@
           "name": "borehole_pump_risk_details",
           "label": "Please provide details of the risks associated with Borehole Pump",
           "order": 22,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -1097,7 +1097,7 @@
           "name": "borehole_gallery_pumps_risk_details",
           "label": "Please provide details of the risks associated with Borehole Gallery Pumps",
           "order": 29,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -1182,7 +1182,7 @@
           "name": "gravity_system_issue_details",
           "label": "Please Provide details of the issues / risks for Raw Water Gravity System:",
           "order": 34,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -1256,7 +1256,7 @@
       "name": "chemicals",
       "label": "Chemicals",
       "description": null,
-      "order": 10,
+      "order": 5,
       "repeatable": false,
       "questions": [
         {
@@ -1958,7 +1958,7 @@
       "name": "sedimentation",
       "label": "Sedimentation",
       "description": null,
-      "order": 11,
+      "order": 6,
       "repeatable": false,
       "questions": [
         {
@@ -2537,7 +2537,7 @@
       "name": "disinfection",
       "label": "Disinfection",
       "description": null,
-      "order": 12,
+      "order": 7,
       "repeatable": false,
       "questions": [
         {
@@ -3421,7 +3421,7 @@
       "name": "plant_mag_flow_meters",
       "label": "Plant Mag Flow Meters",
       "description": null,
-      "order": 13,
+      "order": 8,
       "repeatable": false,
       "questions": [
         {
@@ -3652,7 +3652,7 @@
       "name": "reservoirs",
       "label": "Reservoirs",
       "description": null,
-      "order": 14,
+      "order": 9,
       "repeatable": false,
       "questions": [
         {
@@ -3729,7 +3729,7 @@
       "name": "backup_power_supply",
       "label": "Backup Power Supply",
       "description": null,
-      "order": 15,
+      "order": 10,
       "repeatable": false,
       "questions": [
         {
@@ -3777,7 +3777,8 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "limit": 5.0
+          "limit": 5.0,
+          "dependency": [{ "id": 1749653134928, "options": ["yes"] }]
         }
       ],
       "repeat_text": null
@@ -3787,7 +3788,7 @@
       "name": "constraints_and_recommendation",
       "label": "Constraints and Recommendation",
       "description": null,
-      "order": 16,
+      "order": 11,
       "repeatable": false,
       "questions": [
         {

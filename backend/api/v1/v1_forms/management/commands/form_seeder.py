@@ -191,7 +191,7 @@ class Command(BaseCommand):
                                     o["label"]
                                 ),
                                 question=question,
-                                order=io + 1,
+                                order=o["order"] if o.get("order") else io + 1,
                                 color=o.get("color")
                             ) for io, o in enumerate(q.get("options"))
                         ])

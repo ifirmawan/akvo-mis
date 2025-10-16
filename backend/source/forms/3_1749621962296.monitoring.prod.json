@@ -935,33 +935,31 @@
           "dependency": [{ "id": 1749622726347, "options": ["reservoir"] }]
         },
         {
-          "id": 1723459210025,
-          "name": "reservoir_type_of_pipe",
-          "label": "Type of Pipe",
+          "id": 1849622785213,
+          "name": "reservoir_inlet_type_of_pipe",
+          "label": "Type of Reservoir Inlet Pipe",
           "order": 3,
           "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
-            { "value": "pvc", "label": "PVC", "id": 1723459200042, "order": 1 },
+            { "value": "pvc", "label": "PVC", "id": 1849622785219, "order": 1 },
             {
               "value": "polyethelene",
               "label": "Polyethelene",
-              "id": 1723459276043,
+              "id": 1849622785220,
               "order": 2
             }
           ],
           "dependency": [
             { "id": 1749622726347, "options": ["reservoir"] },
-            { "id": 1723459210023, "options": ["reservoir_inlet"] },
-            { "id": 1723459210023, "options": ["reservoir_outlet"] },
-            { "id": 1723459210023, "options": ["reservoir_overflow"] }
+            { "id": 1723459210023, "options": ["reservoir_inlet"] }
           ]
         },
         {
-          "id": 1723459210024,
-          "name": "reservoir_pipe_size",
-          "label": "Size of Pipe",
+          "id": 1849622785214,
+          "name": "reservoir_inlet_pipe_size",
+          "label": "Size of Reservoir Inlet Pipe",
           "order": 4,
           "type": "multiple_option",
           "required": true,
@@ -971,44 +969,173 @@
               "value": "200mm",
               "label": "200mm",
               "order": 1,
-              "id": 1773459210241
+              "id": 1849622785221
             },
             {
               "value": "150mm",
               "label": "150mm",
               "order": 2,
-              "id": 1773459210242
+              "id": 1849622785222
             },
             {
               "value": "100mm",
               "label": "100mm",
               "order": 3,
-              "id": 1773459210243
+              "id": 1849622785223
             },
             {
               "value": "80mm",
               "label": "80mm",
               "order": 4,
-              "id": 1773459210244
+              "id": 1849622785224
             },
             {
               "value": "50mm",
               "label": "50mm",
               "order": 5,
-              "id": 1773459210245
+              "id": 1849622785225
             }
           ],
           "dependency": [
             { "id": 1749622726347, "options": ["reservoir"] },
+            { "id": 1723459210023, "options": ["reservoir_inlet"] },
+            { "id": 1849622785213, "options": ["pvc", "polyethelene"] }
+          ]
+        },
+        {
+          "id": 1849622785215,
+          "name": "reservoir_outlet_type_of_pipe",
+          "label": "Type of Reservoir Outlet Pipe",
+          "order": 5,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            { "value": "pvc", "label": "PVC", "id": 1849622785226, "order": 1 },
             {
-              "id": 1723459210023,
-              "options": [
-                "reservoir_inlet",
-                "reservoir_outlet",
-                "reservoir_overflow"
-              ]
+              "value": "polyethelene",
+              "label": "Polyethelene",
+              "id": 1849622785227,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            { "id": 1749622726347, "options": ["reservoir"] },
+            { "id": 1723459210023, "options": ["reservoir_outlet"] }
+          ]
+        },
+        {
+          "id": 1849622785216,
+          "name": "reservoir_outlet_pipe_size",
+          "label": "Size of Reservoir Outlet Pipe",
+          "order": 6,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1,
+              "id": 1849622785228
             },
-            { "id": 1723459210025, "options": ["pvc", "polyethelene"] }
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2,
+              "id": 1849622785229
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3,
+              "id": 1849622785230
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4,
+              "id": 1849622785231
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5,
+              "id": 1849622785232
+            }
+          ],
+          "dependency": [
+            { "id": 1749622726347, "options": ["reservoir"] },
+            { "id": 1723459210023, "options": ["reservoir_outlet"] },
+            { "id": 1849622785215, "options": ["pvc", "polyethelene"] }
+          ]
+        },
+        {
+          "id": 1849622785217,
+          "name": "reservoir_overflow_type_of_pipe",
+          "label": "Type of Reservoir Overflow Pipe",
+          "order": 7,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            { "value": "pvc", "label": "PVC", "id": 1849622785233, "order": 1 },
+            {
+              "value": "polyethelene",
+              "label": "Polyethelene",
+              "id": 1849622785234,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            { "id": 1749622726347, "options": ["reservoir"] },
+            { "id": 1723459210023, "options": ["reservoir_overflow"] }
+          ]
+        },
+        {
+          "id": 1849622785218,
+          "name": "reservoir_overflow_pipe_size",
+          "label": "Size of Reservoir Overflow Pipe",
+          "order": 8,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1,
+              "id": 1849622785235
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2,
+              "id": 1849622785236
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3,
+              "id": 1849622785237
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4,
+              "id": 1849622785238
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5,
+              "id": 1849622785239
+            }
+          ],
+          "dependency": [
+            { "id": 1749622726347, "options": ["reservoir"] },
+            { "id": 1723459210023, "options": ["reservoir_overflow"] },
+            { "id": 1849622785217, "options": ["pvc", "polyethelene"] }
           ]
         }
       ],
@@ -1674,24 +1801,36 @@
         },
         {
           "id": 1749622041234,
-          "name": "power_supply",
-          "label": "Power Supply",
+          "name": "desalination_power_supply",
+          "label": "Type of Power Supply",
           "order": 8,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
             {
-              "value": "operational",
-              "label": "Operational",
+              "value": "generator",
+              "label": "Generator",
               "id": 1749622047890,
               "order": 1
             },
             {
-              "value": "non_operational",
-              "label": "Non Operational",
+              "value": "solar_powered",
+              "label": "Solar Powered",
               "id": 1749622047891,
               "order": 2
+            },
+            {
+              "value": "hybrid",
+              "label": "Hybrid",
+              "id": 1749622047892,
+              "order": 3
+            },
+            {
+              "value": "electricity",
+              "label": "Electricity",
+              "id": 1749622047893,
+              "order": 4
             }
           ],
           "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
@@ -1718,7 +1857,9 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            { "id": 1749622041234, "options": ["generator", "hybrid"] }
+          ]
         },
         {
           "id": 1749622061234,
@@ -1742,7 +1883,33 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            { "id": 1749622041234, "options": ["solar_powered", "hybrid"] }
+          ]
+        },
+        {
+          "id": 1749622062234,
+          "name": "electricity",
+          "label": "Electricity",
+          "order": 11,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "operational",
+              "label": "Operational",
+              "id": 1749622067892,
+              "order": 1
+            },
+            {
+              "value": "non_operational",
+              "label": "Non Operational",
+              "id": 1749622067893,
+              "order": 2
+            }
+          ],
+          "dependency": [{ "id": 1749622041234, "options": ["electricity"] }]
         }
       ],
       "repeat_text": null
@@ -1843,6 +2010,118 @@
             }
           ],
           "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
+        },
+        {
+          "id": 1749622111235,
+          "name": "borehole_power_supply",
+          "label": "Type of Power Supply",
+          "order": 3,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "generator",
+              "label": "Generator",
+              "id": 1749622117891,
+              "order": 1
+            },
+            {
+              "value": "solar_powered",
+              "label": "Solar Powered",
+              "id": 1749622117892,
+              "order": 2
+            },
+            {
+              "value": "hybrid",
+              "label": "Hybrid",
+              "id": 1749622117893,
+              "order": 3
+            },
+            {
+              "value": "electricity",
+              "label": "Electricity",
+              "id": 1749622117894,
+              "order": 4
+            }
+          ],
+          "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
+        },
+        {
+          "id": 1749622111236,
+          "name": "borehole_generator",
+          "label": "Generator",
+          "order": 4,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "operational",
+              "label": "Operational",
+              "id": 1749622117895,
+              "order": 1
+            },
+            {
+              "value": "non_operational",
+              "label": "Non Operational",
+              "id": 1749622117896,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            { "id": 1749622111235, "options": ["generator", "hybrid"] }
+          ]
+        },
+        {
+          "id": 1749622111237,
+          "name": "borehole_solar_powered",
+          "label": "Solar Powered",
+          "order": 5,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "operational",
+              "label": "Operational",
+              "id": 1749622117897,
+              "order": 1
+            },
+            {
+              "value": "non_operational",
+              "label": "Non Operational",
+              "id": 1749622117898,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            { "id": 1749622111235, "options": ["solar_powered", "hybrid"] }
+          ]
+        },
+        {
+          "id": 1749622111238,
+          "name": "borehole_electricity",
+          "label": "Electricity",
+          "order": 6,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "operational",
+              "label": "Operational",
+              "id": 1749622117899,
+              "order": 1
+            },
+            {
+              "value": "non_operational",
+              "label": "Non Operational",
+              "id": 1749622117900,
+              "order": 2
+            }
+          ],
+          "dependency": [{ "id": 1749622111235, "options": ["electricity"] }]
         }
       ]
     },
@@ -1965,7 +2244,7 @@
       "description": null,
       "order": 18,
       "repeatable": true,
-      "repeat_text":"Add another",
+      "repeat_text": "Add another",
       "questions": [
         {
           "id": 1749622177890,

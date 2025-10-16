@@ -337,7 +337,7 @@
           "name": "name_of_plant_supervisor",
           "label": "Name of Plant Supervisor",
           "order": 1,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true,
           "options": null
@@ -347,7 +347,7 @@
           "name": "contact_number_of_plant_supervisor",
           "label": "Contact number of plant supervisor",
           "order": 2,
-          "type": "text",
+          "type": "number",
           "required": true,
           "meta": false,
           "options": null
@@ -2390,7 +2390,7 @@
           "name": "method_of_testing_for_plant_effluent",
           "label": "Method of Testing for plant effluent",
           "order": 4,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": true,
           "options": [
@@ -2529,6 +2529,10 @@
               "id": 1748917801456,
               "order": 17
             }
+          ],
+          "dependency": [
+            { "id": 1748917751257, "options": ["yes"] },
+            { "id": 1748917751258, "options": ["lab_test", "testing_kits"] }
           ]
         },
         {
@@ -2832,6 +2836,9 @@
               "label": "Not Operational",
               "order": 2
             }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["oxidation_ponds"] }
           ]
         },
         {
@@ -2843,7 +2850,8 @@
           "order": 2,
           "meta": false,
           "dependency": [
-            { "id": 1754995400903, "options": ["not_operational"] }
+            { "id": 1754995400903, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["oxidation_ponds"] }
           ]
         },
         {
@@ -2853,7 +2861,10 @@
           "type": "photo",
           "required": true,
           "order": 3,
-          "meta": false
+          "meta": false,
+          "dependency": [
+            { "id": 1748913763000, "options": ["oxidation_ponds"] }
+          ]
         }
       ]
     },
@@ -2878,6 +2889,9 @@
               "label": "Not Operational",
               "order": 2
             }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["pasveer_ditches"] }
           ]
         },
         {
@@ -2889,7 +2903,8 @@
           "meta": false,
           "order": 2,
           "dependency": [
-            { "id": 1754995400913, "options": ["not_operational"] }
+            { "id": 1754995400913, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["pasveer_ditches"] }
           ]
         },
         {
@@ -2899,7 +2914,10 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "order": 3
+          "order": 3,
+          "dependency": [
+            { "id": 1748913763000, "options": ["pasveer_ditches"] }
+          ]
         }
       ]
     },
@@ -2924,7 +2942,8 @@
               "label": "Not Operational",
               "order": 2
             }
-          ]
+          ],
+          "dependency": [{ "id": 1748913763000, "options": ["idea_lagoons"] }]
         },
         {
           "id": 1754995400924,
@@ -2935,7 +2954,8 @@
           "meta": false,
           "order": 2,
           "dependency": [
-            { "id": 1754995400923, "options": ["not_operational"] }
+            { "id": 1754995400923, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["idea_lagoons"] }
           ]
         },
         {
@@ -2945,7 +2965,8 @@
           "type": "photo",
           "required": true,
           "order": 3,
-          "meta": false
+          "meta": false,
+          "dependency": [{ "id": 1748913763000, "options": ["idea_lagoons"] }]
         }
       ]
     },
@@ -2970,6 +2991,9 @@
               "label": "Not Operational",
               "order": 2
             }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["polishing_ponds"] }
           ]
         },
         {
@@ -2981,7 +3005,8 @@
           "meta": false,
           "order": 2,
           "dependency": [
-            { "id": 1754995400933, "options": ["not_operational"] }
+            { "id": 1754995400933, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["polishing_ponds"] }
           ]
         },
         {
@@ -2991,7 +3016,10 @@
           "type": "photo",
           "required": true,
           "order": 3,
-          "meta": false
+          "meta": false,
+          "dependency": [
+            { "id": 1748913763000, "options": ["polishing_ponds"] }
+          ]
         }
       ]
     },
@@ -3016,6 +3044,9 @@
               "label": "Not Operational",
               "order": 2
             }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["aerobic_lagoons"] }
           ]
         },
         {
@@ -3027,7 +3058,8 @@
           "meta": false,
           "order": 2,
           "dependency": [
-            { "id": 1754995400943, "options": ["not_operational"] }
+            { "id": 1754995400943, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["aerobic_lagoons"] }
           ]
         },
         {
@@ -3037,7 +3069,10 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "order": 3
+          "order": 3,
+          "dependency": [
+            { "id": 1748913763000, "options": ["aerobic_lagoons"] }
+          ]
         }
       ]
     },
@@ -3062,6 +3097,9 @@
               "label": "Not Operational",
               "order": 2
             }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["sludge_digester"] }
           ]
         },
         {
@@ -3073,7 +3111,8 @@
           "meta": false,
           "order": 2,
           "dependency": [
-            { "id": 1754995400953, "options": ["not_operational"] }
+            { "id": 1754995400953, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["sludge_digester"] }
           ]
         },
         {
@@ -3083,7 +3122,10 @@
           "type": "photo",
           "required": true,
           "order": 3,
-          "meta": false
+          "meta": false,
+          "dependency": [
+            { "id": 1748913763000, "options": ["sludge_digester"] }
+          ]
         }
       ]
     },
@@ -3108,7 +3150,8 @@
               "label": "Not Operational",
               "order": 2
             }
-          ]
+          ],
+          "dependency": [{ "id": 1748913763000, "options": ["imhoff"] }]
         },
         {
           "id": 1754995400964,
@@ -3119,7 +3162,8 @@
           "meta": false,
           "order": 2,
           "dependency": [
-            { "id": 1754995400963, "options": ["not_operational"] }
+            { "id": 1754995400963, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["imhoff"] }
           ]
         },
         {
@@ -3129,7 +3173,8 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "order": 3
+          "order": 3,
+          "dependency": [{ "id": 1748913763000, "options": ["imhoff"] }]
         }
       ]
     },

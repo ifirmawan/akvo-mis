@@ -10,8 +10,8 @@
   "question_groups": [
     {
       "id": 1748918946592,
-      "name": "quick_inspection_info",
-      "label": "WAF Quick Inspection Info",
+      "name": "plant_general_information",
+      "label": "Plant General Information",
       "description": null,
       "order": 1,
       "repeatable": false,
@@ -43,7 +43,7 @@
           "name": "plant_supervisor_name",
           "label": "Name of Plant Supervisor",
           "order": 3,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true,
           "rule": null
@@ -56,9 +56,7 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": false
-          }
+          "rule": { "allowDecimal": false }
         },
         {
           "id": 1748919298813,
@@ -165,18 +163,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748919489322,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748919489323,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748919489322, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748919489323, "order": 2 }
           ],
           "dependency": null,
           "rule": null
@@ -190,12 +178,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748919463685,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748919463685, "options": ["yes"] }],
           "limit": 5.0,
           "rule": null
         },
@@ -204,7 +187,7 @@
           "name": "effluent_test_method",
           "label": "Method of Testing for plant effluent",
           "order": 4,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": true,
           "options": [
@@ -227,12 +210,7 @@
               "order": 3
             }
           ],
-          "dependency": [
-            {
-              "id": 1748919463685,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748919463685, "options": ["yes"] }],
           "rule": null
         },
         {
@@ -244,12 +222,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["other"]
-            }
-          ],
+          "dependency": [{ "id": 1748919506489, "options": ["other"] }],
           "rule": null
         },
         {
@@ -267,12 +240,7 @@
               "id": 1789193153536,
               "order": 1
             },
-            {
-              "value": "ph",
-              "label": "pH",
-              "id": 1789193153537,
-              "order": 2
-            },
+            { "value": "ph", "label": "pH", "id": 1789193153537, "order": 2 },
             {
               "value": "conductivity",
               "label": "Conductivity",
@@ -362,180 +330,123 @@
               "label": "Chloride",
               "id": 1789193153552,
               "order": 17
+            },
+            {
+              "value": "oil_and_grease",
+              "label": "Oil and Grease",
+              "id": 1789193153553,
+              "order": 18
+            },
+            {
+              "value": "total_sulphides",
+              "label": "Total Sulphides",
+              "id": 1789193153554,
+              "order": 19
+            }
+          ],
+          "dependency": [
+            { "id": 1748919463685, "options": ["yes"] },
+            {
+              "id": 1748919506489,
+              "options": ["lab_test", "testing_kits"]
             }
           ]
-        }
-      ],
-      "repeat_text": null
-    },
-    {
-      "id": 1748919315352,
-      "name": "physical_analysis",
-      "label": "Physical Analysis",
-      "description": null,
-      "order": 3,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1749193153521,
           "name": "temperature_c",
-          "label": "Temperature °C - 2550B (APHA Method Code)",
-          "order": 1,
+          "label": "Temperature \u00b0C - 2550B (APHA Method Code)",
+          "order": 7,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["temperature"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["temperature"] }
           ]
         },
         {
           "id": 1749193153522,
           "name": "ph",
           "label": "pH - 4500-H+B (APHA Method Code)",
-          "order": 2,
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true,
-            "min": 0,
-            "max": 14
-          },
+          "rule": { "allowDecimal": true, "min": 0, "max": 14 },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["ph"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["ph"] }
           ]
         },
         {
           "id": 1749193153523,
           "name": "conductivity",
-          "label": "Conductivity µS/cm - 2510B (APHA Method Code)",
-          "order": 3,
+          "label": "Conductivity \u00b5S/cm - 2510B (APHA Method Code)",
+          "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["conductivity"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["conductivity"] }
           ]
         },
         {
           "id": 1749193153524,
           "name": "salinity",
           "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
-          "order": 4,
+          "order": 10,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["salinity"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["salinity"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1748919315353,
-      "name": "solids_analysis",
-      "label": "Solids Analysis",
-      "description": null,
-      "order": 4,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1789193153531,
           "name": "total_dissolved_solids",
           "label": "Total Dissolved Solids mg/L - 2540C (APHA Method Code)",
-          "order": 1,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["total_dissolved_solids"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["total_dissolved_solids"] }
           ]
         },
         {
           "id": 1789193153532,
           "name": "total_suspended_solids",
           "label": "Total Suspended Solids mg/L - 2540D (APHA Method Code)",
-          "order": 2,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["total_suspended_solids"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["total_suspended_solids"] }
           ]
         },
         {
           "id": 1789193153533,
           "name": "total_solids",
           "label": "Total Solids mg/L - 2540B (APHA Method Code)",
-          "order": 3,
+          "order": 13,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
+            { "id": 1748919506489, "options": ["lab_test"] },
             {
               "id": 1789193153535,
               "options": ["total_suspended_solids", "total_dissolved_solids"]
@@ -546,318 +457,193 @@
           "id": 1789193153534,
           "name": "settleable_solids",
           "label": "Settleable Solids mls - 2540F (APHA Method Code)",
-          "order": 4,
+          "order": 14,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["settleable_solids_imhoff"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["settleable_solids_imhoff"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1748919315356,
-      "name": "nutrients_analysis",
-      "label": "Nutrients Analysis",
-      "description": null,
-      "order": 5,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1749193153561,
           "name": "ammonia",
           "label": "Ammonia mg/L - 4500-NH3 H (APHA Method Code)",
-          "order": 1,
+          "order": 15,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["ammonia"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["ammonia"] }
           ]
         },
         {
           "id": 1749193153562,
           "name": "total_kjeldhal_nitrogen",
           "label": "Total Kjeldhal Nitrogen mg/L - 4500-NorgB (APHA Method Code)",
-          "order": 2,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["total_kjeldhal_nitrogen"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["total_kjeldhal_nitrogen"] }
           ]
         },
         {
           "id": 1749193153563,
           "name": "nitrate",
           "label": "Nitrate mg/L - 4500-NO-3- I (APHA Method Code)",
-          "order": 3,
+          "order": 17,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["nitrate"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["nitrate"] }
           ]
         },
         {
           "id": 1749193153564,
           "name": "nitrite",
           "label": "Nitrite mg/L - 4500-NO-3- I (APHA Method Code)",
-          "order": 4,
+          "order": 18,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["nitrite"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["nitrite"] }
           ]
         },
         {
           "id": 1749193153565,
           "name": "total_phosphorus",
           "label": "Total Phosphorus mg/L - 4500-P E (APHA Method Code)",
-          "order": 5,
+          "order": 19,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["total_phosphate"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["total_phosphate"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1748919315357,
-      "name": "chemical_analysis",
-      "label": "Chemical Analysis",
-      "description": null,
-      "order": 6,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1748193153571,
           "name": "chemical_oxygen_demand",
           "label": "Chemical Oxygen Demand mg/L - 5220B (APHA Method Code)",
-          "order": 1,
+          "order": 20,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["chemical_oxygen_demand"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["chemical_oxygen_demand"] }
           ]
         },
         {
           "id": 1748193153572,
           "name": "dissolved_oxygen",
           "label": "Dissolved Oxygen mg/L - 4500-O-C (APHA Method Code)",
-          "order": 2,
+          "order": 21,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["dissolved_oxygen"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["dissolved_oxygen"] }
           ]
         },
         {
           "id": 1748193153573,
           "name": "total_alkalinity",
           "label": "Total Alkalinity mg/L - 2320B (APHA Method Code)",
-          "order": 3,
+          "order": 22,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["total_alkalinity"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["total_alkalinity"] }
           ]
         },
         {
           "id": 1748193153574,
           "name": "chloride",
           "label": "Chloride mg/L - 4500-Cl-C (APHA Method Code)",
-          "order": 4,
+          "order": 23,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["chloride"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["chloride"] }
           ]
         },
         {
           "id": 1748193153575,
           "name": "oil_and_grease",
           "label": "Oil & Grease mg/L - 5520D (APHA Method Code)",
-          "order": 5,
+          "order": 24,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["oil_and_grease"] }
           ]
         },
         {
           "id": 1748193153576,
           "name": "total_sulphides",
           "label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
-          "order": 6,
+          "order": 25,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["total_sulphides"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1748919315358,
-      "name": "biological_analysis",
-      "label": "Biological Analysis",
-      "description": null,
-      "order": 7,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1489193153581,
           "name": "bod",
           "label": "BOD mg/L - 5210B (APHA Method Code)",
-          "order": 1,
+          "order": 26,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748919506489,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1789193153535,
-              "options": ["bod"]
-            }
+            { "id": 1748919506489, "options": ["lab_test"] },
+            { "id": 1789193153535, "options": ["bod"] }
           ]
         }
-      ]
+      ],
+      "repeat_text": null
     },
     {
       "id": 1748920178901,
       "name": "photos_of_inspection",
       "label": "Photos of Inspection",
       "description": null,
-      "order": 8,
+      "order": 3,
       "repeatable": true,
       "translations": null,
       "questions": [
@@ -892,7 +678,7 @@
       "name": "constraints_recommendations",
       "label": "Constraints and Recommendations",
       "description": null,
-      "order": 9,
+      "order": 4,
       "repeatable": false,
       "translations": null,
       "questions": [
@@ -905,18 +691,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748919376458,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748919376459,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748919376458, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748919376459, "order": 2 }
           ],
           "dependency": null,
           "short_label": null
@@ -930,12 +706,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748919341459,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748919341459, "options": ["yes"] }],
           "short_label": null
         },
         {
@@ -947,18 +718,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748919969100,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748919969102,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748919969100, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748919969102, "order": 2 }
           ],
           "dependency": null,
           "short_label": null
@@ -1021,12 +782,7 @@
               "order": 8
             }
           ],
-          "dependency": [
-            {
-              "id": 1748919962161,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748919962161, "options": ["yes"] }],
           "short_label": null
         },
         {
@@ -1038,12 +794,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748919992109,
-              "options": ["other"]
-            }
-          ],
+          "dependency": [{ "id": 1748919992109, "options": ["other"] }],
           "short_label": null
         },
         {
@@ -1055,12 +806,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748919962161,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748919962161, "options": ["yes"] }],
           "short_label": "Final recommendations from the DWS staff"
         },
         {

@@ -10,8 +10,8 @@
   "question_groups": [
     {
       "id": 1748905550056,
-      "name": "waf_inspection_info",
-      "label": "WAF Inspection Info",
+      "name": "plant_general_information",
+      "label": "Plant General Information",
       "description": null,
       "order": 1,
       "repeatable": false,
@@ -170,18 +170,8 @@
           "meta": false,
           "rule": null,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748904066576,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748904066578,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748904066576, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748904066578, "order": 2 }
           ],
           "dependency": null
         },
@@ -195,12 +185,7 @@
           "meta": false,
           "rule": null,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748904054931,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748904054931, "options": ["yes"] }]
         },
         {
           "id": 1748904158071,
@@ -249,12 +234,7 @@
               "order": 6
             }
           ],
-          "dependency": [
-            {
-              "id": 1748904054931,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748904054931, "options": ["yes"] }]
         },
         {
           "id": 1748904470602,
@@ -267,10 +247,7 @@
           "rule": null,
           "options": null,
           "dependency": [
-            {
-              "id": 1748904158071,
-              "options": ["raw_sewage_pump_station"]
-            }
+            { "id": 1748904158071, "options": ["raw_sewage_pump_station"] }
           ]
         },
         {
@@ -284,10 +261,7 @@
           "rule": null,
           "options": null,
           "dependency": [
-            {
-              "id": 1748904158071,
-              "options": ["re_circulation_pump_station"]
-            }
+            { "id": 1748904158071, "options": ["re_circulation_pump_station"] }
           ]
         },
         {
@@ -301,10 +275,7 @@
           "rule": null,
           "options": null,
           "dependency": [
-            {
-              "id": 1748904158071,
-              "options": ["sludge_pump_station"]
-            }
+            { "id": 1748904158071, "options": ["sludge_pump_station"] }
           ]
         },
         {
@@ -315,15 +286,10 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": false
-          },
+          "rule": { "allowDecimal": false },
           "options": null,
           "dependency": [
-            {
-              "id": 1748904158071,
-              "options": ["supernatant_pump_station"]
-            }
+            { "id": 1748904158071, "options": ["supernatant_pump_station"] }
           ]
         },
         {
@@ -337,10 +303,7 @@
           "rule": null,
           "options": null,
           "dependency": [
-            {
-              "id": 1748904158071,
-              "options": ["influent_pump_station"]
-            }
+            { "id": 1748904158071, "options": ["influent_pump_station"] }
           ]
         },
         {
@@ -354,10 +317,7 @@
           "rule": null,
           "options": null,
           "dependency": [
-            {
-              "id": 1748904158071,
-              "options": ["effluent_pump_station"]
-            }
+            { "id": 1748904158071, "options": ["effluent_pump_station"] }
           ]
         }
       ],
@@ -377,7 +337,7 @@
           "name": "name_of_plant_supervisor",
           "label": "Name of Plant Supervisor",
           "order": 1,
-          "type": "text",
+          "type": "input",
           "required": true,
           "meta": true,
           "options": null
@@ -387,7 +347,7 @@
           "name": "contact_number_of_plant_supervisor",
           "label": "Contact number of plant supervisor",
           "order": 2,
-          "type": "text",
+          "type": "number",
           "required": true,
           "meta": false,
           "options": null
@@ -411,18 +371,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748910199905,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748910199906,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748910199905, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748910199906, "order": 2 }
           ]
         },
         {
@@ -434,18 +384,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748910229123,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748910229124,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748910229123, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748910229124, "order": 2 }
           ]
         },
         {
@@ -457,18 +397,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748910286351,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748910286352,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748910286351, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748910286352, "order": 2 }
           ]
         }
       ],
@@ -476,8 +406,8 @@
     },
     {
       "id": 1748906497861,
-      "name": "general_information_on_plant_conditions",
-      "label": "General Information on Plant Conditions",
+      "name": "plant_conditions",
+      "label": "Plant Conditions",
       "description": null,
       "order": 3,
       "repeatable": false,
@@ -734,18 +664,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748910784910,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748910784911,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748910784910, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748910784911, "order": 2 }
           ],
           "dependency": null
         },
@@ -758,18 +678,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748910836260,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748910836261,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748910836260, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748910836261, "order": 2 }
           ],
           "dependency": null
         },
@@ -782,18 +692,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748910872640,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748910872641,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748910872640, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748910872641, "order": 2 }
           ],
           "dependency": null
         },
@@ -806,12 +706,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748910860630,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748910860630, "options": ["yes"] }]
         },
         {
           "id": 1748910968346,
@@ -822,41 +717,21 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748910987339,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748910987340,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748910987339, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748910987340, "order": 2 }
           ],
-          "dependency": [
-            {
-              "id": 1748910860630,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748910860630, "options": ["yes"] }]
         },
         {
           "id": 1748911015414,
           "name": "provide_details_of_these_preventative",
-          "label": "Please provide details of these programs?",
+          "label": "Please provide details of ppm programs?",
           "order": 14,
           "type": "text",
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748910968346,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748910968346, "options": ["yes"] }]
         },
         {
           "id": 1748911109721,
@@ -867,41 +742,21 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748911121191,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748911121192,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748911121191, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748911121192, "order": 2 }
           ],
-          "dependency": [
-            {
-              "id": 1748910968346,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748910968346, "options": ["yes"] }]
         },
         {
           "id": 1748911146330,
           "name": "provide_details_of_these_upgrading",
-          "label": "Please provide details of these programs?",
+          "label": "Please provide details of upgrading programs?",
           "order": 16,
           "type": "text",
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748911109721,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748911109721, "options": ["yes"] }]
         }
       ],
       "repeat_text": null
@@ -924,18 +779,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748911273988,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748911273989,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748911273988, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748911273989, "order": 2 }
           ],
           "dependency": null,
           "rule": null
@@ -1004,12 +849,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748911325583,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748911325583, "options": ["other"] }]
         },
         {
           "id": 1748911325349,
@@ -1020,15 +860,8 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748906535935,
-              "options": ["yes"]
-            }
-          ],
-          "rule": {
-            "allowDecimal": true
-          }
+          "dependency": [{ "id": 1748906535935, "options": ["yes"] }],
+          "rule": { "allowDecimal": true }
         },
         {
           "id": 1748911562813,
@@ -1039,12 +872,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748906535935,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748906535935, "options": ["yes"] }],
           "rule": null,
           "limit": 5.0
         }
@@ -1067,12 +895,7 @@
           "order": 1,
           "type": "multiple_option",
           "required": true,
-          "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["screening"]
-            }
-          ],
+          "dependency": [{ "id": 1748913763000, "options": ["screening"] }],
           "meta": false,
           "options": [
             {
@@ -1128,12 +951,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748906571911,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748906571911, "options": ["other"] }]
         },
         {
           "id": 1748914126410,
@@ -1142,12 +960,7 @@
           "order": 3,
           "type": "photo",
           "required": true,
-          "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["screening"]
-            }
-          ],
+          "dependency": [{ "id": 1748913763000, "options": ["screening"] }],
           "meta": false,
           "options": null,
           "limit": 5.0
@@ -1159,12 +972,7 @@
           "order": 4,
           "type": "multiple_option",
           "required": true,
-          "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["grit_removal"]
-            }
-          ],
+          "dependency": [{ "id": 1748913763000, "options": ["grit_removal"] }],
           "meta": false,
           "options": [
             {
@@ -1226,12 +1034,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748914436150,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748914436150, "options": ["other"] }]
         },
         {
           "id": 1748914701750,
@@ -1240,12 +1043,7 @@
           "order": 6,
           "type": "photo",
           "required": true,
-          "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["grit_removal"]
-            }
-          ],
+          "dependency": [{ "id": 1748913763000, "options": ["grit_removal"] }],
           "meta": false,
           "options": null,
           "limit": 5.0
@@ -1271,18 +1069,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748914782031,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748914782032,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748914782031, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748914782032, "order": 2 }
           ],
           "dependency": null
         },
@@ -1350,12 +1138,7 @@
               "order": 9
             }
           ],
-          "dependency": [
-            {
-              "id": 1748906592858,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748906592858, "options": ["yes"] }]
         },
         {
           "id": 1748914890124,
@@ -1366,12 +1149,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748914793745,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748914793745, "options": ["other"] }]
         },
         {
           "id": 1748914939216,
@@ -1382,25 +1160,10 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748914945664,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748914945665,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748914945664, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748914945665, "order": 2 }
           ],
-          "dependency": [
-            {
-              "id": 1748906592858,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748906592858, "options": ["yes"] }]
         },
         {
           "id": 1748914980064,
@@ -1411,12 +1174,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748914939216,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748914939216, "options": ["yes"] }],
           "limit": 5.0
         }
       ],
@@ -1439,10 +1197,7 @@
           "type": "multiple_option",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["primary_clarifier"]
-            }
+            { "id": 1748913763000, "options": ["primary_clarifier"] }
           ],
           "meta": false,
           "options": [
@@ -1541,12 +1296,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748906604803,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748906604803, "options": ["other"] }]
         },
         {
           "id": 1748915357111,
@@ -1556,10 +1306,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["primary_clarifier"]
-            }
+            { "id": 1748913763000, "options": ["primary_clarifier"] }
           ],
           "meta": false,
           "options": null,
@@ -1585,10 +1332,7 @@
           "type": "multiple_option",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["trickling_filters"]
-            }
+            { "id": 1748913763000, "options": ["trickling_filters"] }
           ],
           "meta": false,
           "options": [
@@ -1663,12 +1407,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748906632114,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748906632114, "options": ["other"] }]
         },
         {
           "id": 1748915551626,
@@ -1678,10 +1417,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["trickling_filters"]
-            }
+            { "id": 1748913763000, "options": ["trickling_filters"] }
           ],
           "meta": false,
           "options": null,
@@ -1707,10 +1443,7 @@
           "type": "multiple_option",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["activated_sludge_system"]
-            }
+            { "id": 1748913763000, "options": ["activated_sludge_system"] }
           ],
           "meta": false,
           "options": [
@@ -1785,12 +1518,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748915642008,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748915642008, "options": ["other"] }]
         },
         {
           "id": 1748915652986,
@@ -1800,10 +1528,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["activated_sludge_system"]
-            }
+            { "id": 1748913763000, "options": ["activated_sludge_system"] }
           ],
           "meta": false,
           "options": null,
@@ -1829,10 +1554,7 @@
           "type": "multiple_option",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["stabilization_lagoons"]
-            }
+            { "id": 1748913763000, "options": ["stabilization_lagoons"] }
           ],
           "meta": false,
           "options": [
@@ -1901,12 +1623,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748906806971,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748906806971, "options": ["other"] }]
         },
         {
           "id": 1748915991888,
@@ -1916,10 +1633,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["stabilization_lagoons"]
-            }
+            { "id": 1748913763000, "options": ["stabilization_lagoons"] }
           ],
           "meta": false,
           "options": null,
@@ -1945,10 +1659,7 @@
           "type": "multiple_option",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["anaerobic_lagoons"]
-            }
+            { "id": 1748913763000, "options": ["anaerobic_lagoons"] }
           ],
           "meta": false,
           "options": [
@@ -2017,12 +1728,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748906938999,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748906938999, "options": ["other"] }]
         },
         {
           "id": 1748916203269,
@@ -2032,10 +1738,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["anaerobic_lagoons"]
-            }
+            { "id": 1748913763000, "options": ["anaerobic_lagoons"] }
           ],
           "meta": false,
           "options": null,
@@ -2061,10 +1764,7 @@
           "type": "text",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["facultative_ponds"]
-            }
+            { "id": 1748913763000, "options": ["facultative_ponds"] }
           ],
           "meta": false
         },
@@ -2076,10 +1776,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["facultative_ponds"]
-            }
+            { "id": 1748913763000, "options": ["facultative_ponds"] }
           ],
           "meta": false,
           "limit": 5.0
@@ -2104,10 +1801,7 @@
           "type": "text",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["maturation_ponds"]
-            }
+            { "id": 1748913763000, "options": ["maturation_ponds"] }
           ],
           "meta": false
         },
@@ -2119,10 +1813,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["maturation_ponds"]
-            }
+            { "id": 1748913763000, "options": ["maturation_ponds"] }
           ],
           "meta": false,
           "limit": 5.0
@@ -2147,10 +1838,7 @@
           "type": "multiple_option",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["secondary_clarifiers"]
-            }
+            { "id": 1748913763000, "options": ["secondary_clarifiers"] }
           ],
           "meta": false,
           "options": [
@@ -2243,12 +1931,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748907057799,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748907057799, "options": ["other"] }]
         },
         {
           "id": 1748916617834,
@@ -2258,10 +1941,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["secondary_clarifiers"]
-            }
+            { "id": 1748913763000, "options": ["secondary_clarifiers"] }
           ],
           "meta": false,
           "options": null,
@@ -2287,10 +1967,7 @@
           "type": "multiple_option",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["sludge_aerobic_digestion"]
-            }
+            { "id": 1748913763000, "options": ["sludge_aerobic_digestion"] }
           ],
           "meta": false,
           "options": [
@@ -2353,12 +2030,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748907110680,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748907110680, "options": ["other"] }]
         },
         {
           "id": 1748917136204,
@@ -2368,10 +2040,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["sludge_aerobic_digestion"]
-            }
+            { "id": 1748913763000, "options": ["sludge_aerobic_digestion"] }
           ],
           "meta": false,
           "options": null,
@@ -2397,10 +2066,7 @@
           "type": "multiple_option",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["sludge_handling_system"]
-            }
+            { "id": 1748913763000, "options": ["sludge_handling_system"] }
           ],
           "meta": false,
           "options": [
@@ -2469,12 +2135,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748907110308,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748907110308, "options": ["other"] }]
         },
         {
           "id": 1748917296607,
@@ -2484,10 +2145,7 @@
           "type": "photo",
           "required": true,
           "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["sludge_handling_system"]
-            }
+            { "id": 1748913763000, "options": ["sludge_handling_system"] }
           ],
           "meta": false,
           "options": null,
@@ -2512,12 +2170,7 @@
           "order": 1,
           "type": "multiple_option",
           "required": true,
-          "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["drying_beds"]
-            }
-          ],
+          "dependency": [{ "id": 1748913763000, "options": ["drying_beds"] }],
           "meta": false,
           "options": [
             {
@@ -2573,12 +2226,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748907173282,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748907173282, "options": ["other"] }]
         },
         {
           "id": 1748917423214,
@@ -2587,12 +2235,7 @@
           "order": 3,
           "type": "photo",
           "required": true,
-          "dependency": [
-            {
-              "id": 1748913763000,
-              "options": ["drying_beds"]
-            }
-          ],
+          "dependency": [{ "id": 1748913763000, "options": ["drying_beds"] }],
           "meta": false,
           "options": null,
           "limit": 5.0
@@ -2618,18 +2261,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748917481483,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748917481484,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748917481483, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748917481484, "order": 2 }
           ],
           "dependency": null
         },
@@ -2642,12 +2275,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748907188132,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748907188132, "options": ["yes"] }]
         },
         {
           "id": 1748917546718,
@@ -2658,25 +2286,10 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748917556017,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748917556018,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748917556017, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748917556018, "order": 2 }
           ],
-          "dependency": [
-            {
-              "id": 1748907188132,
-              "options": ["yes"]
-            }
-          ]
+          "dependency": [{ "id": 1748907188132, "options": ["yes"] }]
         },
         {
           "id": 1748917597057,
@@ -2687,12 +2300,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748917546718,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748917546718, "options": ["yes"] }],
           "limit": 5.0
         }
       ],
@@ -2759,12 +2367,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748907201859,
-              "options": ["other"]
-            }
-          ],
+          "dependency": [{ "id": 1748907201859, "options": ["other"] }],
           "rule": null
         },
         {
@@ -2776,18 +2379,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748917759663,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748917759664,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748917759663, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748917759664, "order": 2 }
           ],
           "dependency": null,
           "rule": null
@@ -2797,7 +2390,7 @@
           "name": "method_of_testing_for_plant_effluent",
           "label": "Method of Testing for plant effluent",
           "order": 4,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": true,
           "options": [
@@ -2814,12 +2407,7 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 1748917751257,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748917751257, "options": ["yes"] }],
           "rule": null
         },
         {
@@ -2831,12 +2419,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748917751257,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748917751257, "options": ["yes"] }],
           "limit": 5.0,
           "rule": null
         },
@@ -2855,12 +2438,7 @@
               "id": 1748917801440,
               "order": 1
             },
-            {
-              "value": "ph",
-              "label": "pH",
-              "id": 1748917801441,
-              "order": 2
-            },
+            { "value": "ph", "label": "pH", "id": 1748917801441, "order": 2 },
             {
               "value": "conductivity",
               "label": "Conductivity",
@@ -2951,179 +2529,107 @@
               "id": 1748917801456,
               "order": 17
             }
+          ],
+          "dependency": [
+            { "id": 1748917751257, "options": ["yes"] },
+            { "id": 1748917751258, "options": ["lab_test", "testing_kits"] }
           ]
-        }
-      ],
-      "repeat_text": null
-    },
-    {
-      "id": 1754995400001,
-      "name": "physical_analysis",
-      "label": "Physical Analysis",
-      "description": null,
-      "order": 20,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1754995400101,
           "name": "temperature_c",
-          "label": "Temperature °C - 2550B (APHA Method Code)",
-          "order": 1,
+          "label": "Temperature \u00b0C - 2550B (APHA Method Code)",
+          "order": 7,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["temperature"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["temperature"] }
           ]
         },
         {
           "id": 1754995400102,
           "name": "ph",
           "label": "pH - 4500-H+B (APHA Method Code)",
-          "order": 2,
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true,
-            "min": 0,
-            "max": 14
-          },
+          "rule": { "allowDecimal": true, "min": 0, "max": 14 },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["ph"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["ph"] }
           ]
         },
         {
           "id": 1754995400103,
           "name": "conductivity",
-          "label": "Conductivity µS/cm - 2510B (APHA Method Code)",
-          "order": 3,
+          "label": "Conductivity \u00b5S/cm - 2510B (APHA Method Code)",
+          "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["conductivity"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["conductivity"] }
           ]
         },
         {
           "id": 1754995400104,
           "name": "salinity",
           "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
-          "order": 4,
+          "order": 10,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["salinity"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["salinity"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1754995400201,
-      "name": "solids_analysis",
-      "label": "Solids Analysis",
-      "description": null,
-      "order": 21,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1754995400301,
           "name": "total_dissolved_solids",
           "label": "Total Dissolved Solids mg/L - 2540C (APHA Method Code)",
-          "order": 1,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["total_dissolved_solids"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["total_dissolved_solids"] }
           ]
         },
         {
           "id": 1754995400302,
           "name": "total_suspended_solids",
           "label": "Total Suspended Solids mg/L - 2540D (APHA Method Code)",
-          "order": 2,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["total_suspended_solids"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["total_suspended_solids"] }
           ]
         },
         {
           "id": 1754995400303,
           "name": "total_solids",
           "label": "Total Solids mg/L - 2540B (APHA Method Code)",
-          "order": 3,
+          "order": 13,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
+            { "id": 1748917751258, "options": ["lab_test"] },
             {
               "id": 1748917792041,
               "options": ["total_suspended_solids", "total_dissolved_solids"]
@@ -3134,309 +2640,541 @@
           "id": 1754995400304,
           "name": "settleable_solids",
           "label": "Settleable Solids mls - 2540F (APHA Method Code)",
-          "order": 4,
+          "order": 14,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["settleable_solids_imhoff"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["settleable_solids_imhoff"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1754995400401,
-      "name": "nutrients_analysis",
-      "label": "Nutrients Analysis",
-      "description": null,
-      "order": 22,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1754995400501,
           "name": "ammonia",
           "label": "Ammonia mg/L - 4500-NH3 H (APHA Method Code)",
-          "order": 1,
+          "order": 15,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["ammonia"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["ammonia"] }
           ]
         },
         {
           "id": 1754995400502,
           "name": "total_kjeldhal_nitrogen",
           "label": "Total Kjeldhal Nitrogen mg/L - 4500-NorgB (APHA Method Code)",
-          "order": 2,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["total_kjeldhal_nitrogen"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["total_kjeldhal_nitrogen"] }
           ]
         },
         {
           "id": 1754995400503,
           "name": "nitrate",
           "label": "Nitrate mg/L - 4500-NO-3- I (APHA Method Code)",
-          "order": 3,
+          "order": 17,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["nitrate"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["nitrate"] }
           ]
         },
         {
           "id": 1754995400504,
           "name": "nitrite",
           "label": "Nitrite mg/L - 4500-NO-3- I (APHA Method Code)",
-          "order": 4,
+          "order": 18,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["nitrite"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["nitrite"] }
           ]
         },
         {
           "id": 1754995400505,
           "name": "total_phosphorus",
           "label": "Total Phosphorus mg/L - 4500-P E (APHA Method Code)",
-          "order": 5,
+          "order": 19,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["total_phospate"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["total_phosphate"] }
           ]
-        }
-      ]
-    },
-    {
-      "id": 1754995400601,
-      "name": "chemical_analysis",
-      "label": "Chemical Analysis",
-      "description": null,
-      "order": 23,
-      "repeatable": false,
-      "questions": [
+        },
         {
           "id": 1754995400701,
           "name": "chemical_oxygen_demand",
           "label": "Chemical Oxygen Demand mg/L - 5220B (APHA Method Code)",
-          "order": 1,
+          "order": 20,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["chemical_oxygen_demand"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["chemical_oxygen_demand"] }
           ]
         },
         {
           "id": 1754995400702,
           "name": "dissolved_oxygen",
           "label": "Dissolved Oxygen mg/L - 4500-O-C (APHA Method Code)",
-          "order": 2,
+          "order": 21,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["dissolved_oxygen"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["dissolved_oxygen"] }
           ]
         },
         {
           "id": 1754995400703,
           "name": "total_alkalinity",
           "label": "Total Alkalinity mg/L - 2320B (APHA Method Code)",
-          "order": 3,
+          "order": 22,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["total_alkalinity"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["total_alkalinity"] }
           ]
         },
         {
           "id": 1754995400704,
           "name": "chloride",
           "label": "Chloride mg/L - 4500-Cl-C (APHA Method Code)",
-          "order": 4,
+          "order": 23,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
           "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["chloride"]
-            }
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["chloride"] }
           ]
         },
         {
           "id": 1754995400705,
           "name": "oil_and_grease",
           "label": "Oil & Grease mg/L - 5520D (APHA Method Code)",
-          "order": 5,
+          "order": 24,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
-            {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            }
-          ]
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1748917751258, "options": ["lab_test"] }]
         },
         {
           "id": 1754995400706,
           "name": "total_sulphides",
           "label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
-          "order": 6,
+          "order": 25,
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
+          "rule": { "allowDecimal": true },
+          "dependency": [{ "id": 1748917751258, "options": ["lab_test"] }]
+        },
+        {
+          "id": 1754995400901,
+          "name": "bod",
+          "label": "BOD mg/L - 5210B (APHA Method Code)",
+          "order": 26,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": { "allowDecimal": true },
           "dependency": [
+            { "id": 1748917751258, "options": ["lab_test"] },
+            { "id": 1748917792041, "options": ["bod"] }
+          ]
+        }
+      ],
+      "repeat_text": null
+    },
+    {
+      "id": 1754995400902,
+      "name": "oxidation_ponds",
+      "label": "Oxidation Ponds",
+      "order": 20,
+      "questions": [
+        {
+          "id": 1754995400903,
+          "name": "comment_on_operation_of_oxidation_ponds",
+          "label": "Comment on the operation of Oxidation Ponds",
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "order": 1,
+          "options": [
+            { "value": "operational", "label": "Operational", "order": 1 },
             {
-              "id": 1748917751258,
-              "options": ["lab_test"]
+              "value": "not_operational",
+              "label": "Not Operational",
+              "order": 2
             }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["oxidation_ponds"] }
+          ]
+        },
+        {
+          "id": 1754995400904,
+          "name": "reason_oxidation_ponds_not_operational",
+          "label": "If not operational, please specify why",
+          "type": "text",
+          "required": true,
+          "order": 2,
+          "meta": false,
+          "dependency": [
+            { "id": 1754995400903, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["oxidation_ponds"] }
+          ]
+        },
+        {
+          "id": 1754995400905,
+          "name": "photo_of_oxidation_ponds",
+          "label": "Take a photo of Oxidation Ponds",
+          "type": "photo",
+          "required": true,
+          "order": 3,
+          "meta": false,
+          "dependency": [
+            { "id": 1748913763000, "options": ["oxidation_ponds"] }
           ]
         }
       ]
     },
     {
-      "id": 1754995400801,
-      "name": "biological_analysis",
-      "label": "Biological Analysis",
-      "description": null,
-      "order": 24,
-      "repeatable": false,
+      "id": 1754995400912,
+      "name": "pasveer_ditches",
+      "label": "Pasveer Ditches",
+      "order": 21,
       "questions": [
         {
-          "id": 1754995400901,
-          "name": "bod",
-          "label": "BOD mg/L - 5210B (APHA Method Code)",
-          "order": 1,
-          "type": "number",
+          "id": 1754995400913,
+          "name": "comment_on_operation_of_pasveer_ditches",
+          "label": "Comment on the operation of Pasveer Ditches",
+          "type": "option",
           "required": true,
           "meta": false,
-          "rule": {
-            "allowDecimal": true
-          },
-          "dependency": [
+          "order": 1,
+          "options": [
+            { "value": "operational", "label": "Operational", "order": 1 },
             {
-              "id": 1748917751258,
-              "options": ["lab_test"]
-            },
-            {
-              "id": 1748917792041,
-              "options": ["bod"]
+              "value": "not_operational",
+              "label": "Not Operational",
+              "order": 2
             }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["pasveer_ditches"] }
           ]
+        },
+        {
+          "id": 1754995400914,
+          "name": "reason_pasveer_ditches_not_operational",
+          "label": "If not operational, please specify why",
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "order": 2,
+          "dependency": [
+            { "id": 1754995400913, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["pasveer_ditches"] }
+          ]
+        },
+        {
+          "id": 1754995400915,
+          "name": "photo_of_pasveer_ditches",
+          "label": "Take a photo of Pasveer Ditches",
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "order": 3,
+          "dependency": [
+            { "id": 1748913763000, "options": ["pasveer_ditches"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1754995400922,
+      "name": "idea_lagoons",
+      "label": "IDEA Lagoons",
+      "order": 22,
+      "questions": [
+        {
+          "id": 1754995400923,
+          "name": "comment_on_operation_of_idea_lagoons",
+          "label": "Comment on the operation of IDEA Lagoons",
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "order": 1,
+          "options": [
+            { "value": "operational", "label": "Operational", "order": 1 },
+            {
+              "value": "not_operational",
+              "label": "Not Operational",
+              "order": 2
+            }
+          ],
+          "dependency": [{ "id": 1748913763000, "options": ["idea_lagoons"] }]
+        },
+        {
+          "id": 1754995400924,
+          "name": "reason_idea_lagoons_not_operational",
+          "label": "If not operational, please specify why",
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "order": 2,
+          "dependency": [
+            { "id": 1754995400923, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["idea_lagoons"] }
+          ]
+        },
+        {
+          "id": 1754995400925,
+          "name": "photo_of_idea_lagoons",
+          "label": "Take a photo of IDEA Lagoons",
+          "type": "photo",
+          "required": true,
+          "order": 3,
+          "meta": false,
+          "dependency": [{ "id": 1748913763000, "options": ["idea_lagoons"] }]
+        }
+      ]
+    },
+    {
+      "id": 1754995400932,
+      "name": "polishing_ponds",
+      "label": "Polishing Ponds",
+      "order": 23,
+      "questions": [
+        {
+          "id": 1754995400933,
+          "name": "comment_on_operation_of_polishing_ponds",
+          "label": "Comment on the operation of Polishing Ponds",
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "order": 1,
+          "options": [
+            { "value": "operational", "label": "Operational", "order": 1 },
+            {
+              "value": "not_operational",
+              "label": "Not Operational",
+              "order": 2
+            }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["polishing_ponds"] }
+          ]
+        },
+        {
+          "id": 1754995400934,
+          "name": "reason_polishing_ponds_not_operational",
+          "label": "If not operational, please specify why",
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "order": 2,
+          "dependency": [
+            { "id": 1754995400933, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["polishing_ponds"] }
+          ]
+        },
+        {
+          "id": 1754995400935,
+          "name": "photo_of_polishing_ponds",
+          "label": "Take a photo of Polishing Ponds",
+          "type": "photo",
+          "required": true,
+          "order": 3,
+          "meta": false,
+          "dependency": [
+            { "id": 1748913763000, "options": ["polishing_ponds"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1754995400942,
+      "name": "aerobic_lagoons",
+      "label": "Aerobic Lagoons",
+      "order": 24,
+      "questions": [
+        {
+          "id": 1754995400943,
+          "name": "comment_on_operation_of_aerobic_lagoons",
+          "label": "Comment on the operation of Aerobic Lagoons",
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "order": 1,
+          "options": [
+            { "value": "operational", "label": "Operational", "order": 1 },
+            {
+              "value": "not_operational",
+              "label": "Not Operational",
+              "order": 2
+            }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["aerobic_lagoons"] }
+          ]
+        },
+        {
+          "id": 1754995400944,
+          "name": "reason_aerobic_lagoons_not_operational",
+          "label": "If not operational, please specify why",
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "order": 2,
+          "dependency": [
+            { "id": 1754995400943, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["aerobic_lagoons"] }
+          ]
+        },
+        {
+          "id": 1754995400945,
+          "name": "photo_of_aerobic_lagoons",
+          "label": "Take a photo of Aerobic Lagoons",
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "order": 3,
+          "dependency": [
+            { "id": 1748913763000, "options": ["aerobic_lagoons"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1754995400952,
+      "name": "sludge_digester",
+      "label": "Sludge Digester",
+      "order": 25,
+      "questions": [
+        {
+          "id": 1754995400953,
+          "name": "comment_on_operation_of_sludge_digester",
+          "label": "Comment on the operation of Sludge Digester",
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "order": 1,
+          "options": [
+            { "value": "operational", "label": "Operational", "order": 1 },
+            {
+              "value": "not_operational",
+              "label": "Not Operational",
+              "order": 2
+            }
+          ],
+          "dependency": [
+            { "id": 1748913763000, "options": ["sludge_digester"] }
+          ]
+        },
+        {
+          "id": 1754995400954,
+          "name": "reason_sludge_digester_not_operational",
+          "label": "If not operational, please specify why",
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "order": 2,
+          "dependency": [
+            { "id": 1754995400953, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["sludge_digester"] }
+          ]
+        },
+        {
+          "id": 1754995400955,
+          "name": "photo_of_sludge_digester",
+          "label": "Take a photo of Sludge Digester",
+          "type": "photo",
+          "required": true,
+          "order": 3,
+          "meta": false,
+          "dependency": [
+            { "id": 1748913763000, "options": ["sludge_digester"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1754995400962,
+      "name": "imhoff",
+      "label": "IMHOFF",
+      "order": 26,
+      "questions": [
+        {
+          "id": 1754995400963,
+          "name": "comment_on_operation_of_imhoff",
+          "label": "Comment on the operation of IMHOFF",
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "order": 1,
+          "options": [
+            { "value": "operational", "label": "Operational", "order": 1 },
+            {
+              "value": "not_operational",
+              "label": "Not Operational",
+              "order": 2
+            }
+          ],
+          "dependency": [{ "id": 1748913763000, "options": ["imhoff"] }]
+        },
+        {
+          "id": 1754995400964,
+          "name": "reason_imhoff_not_operational",
+          "label": "If not operational, please specify why",
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "order": 2,
+          "dependency": [
+            { "id": 1754995400963, "options": ["not_operational"] },
+            { "id": 1748913763000, "options": ["imhoff"] }
+          ]
+        },
+        {
+          "id": 1754995400965,
+          "name": "photo_of_imhoff",
+          "label": "Take a photo of IMHOFF",
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "order": 3,
+          "dependency": [{ "id": 1748913763000, "options": ["imhoff"] }]
         }
       ]
     },
@@ -3445,7 +3183,7 @@
       "name": "constraints_and_recommendations",
       "label": "Constraints and Recommendations",
       "description": null,
-      "order": 25,
+      "order": 27,
       "repeatable": false,
       "translations": null,
       "questions": [
@@ -3458,18 +3196,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748918425239,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748918425240,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748918425239, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748918425240, "order": 2 }
           ],
           "dependency": null,
           "short_label": null
@@ -3483,12 +3211,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748918417541,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748918417541, "options": ["yes"] }],
           "short_label": null
         },
         {
@@ -3500,18 +3223,8 @@
           "required": true,
           "meta": false,
           "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1748918507612,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1748918507613,
-              "order": 2
-            }
+            { "value": "yes", "label": "Yes", "id": 1748918507612, "order": 1 },
+            { "value": "no", "label": "No", "id": 1748918507613, "order": 2 }
           ],
           "dependency": null,
           "short_label": null
@@ -3574,12 +3287,7 @@
               "order": 8
             }
           ],
-          "dependency": [
-            {
-              "id": 1748918485299,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748918485299, "options": ["yes"] }],
           "short_label": null
         },
         {
@@ -3591,12 +3299,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748918550536,
-              "options": ["other"]
-            }
-          ]
+          "dependency": [{ "id": 1748918550536, "options": ["other"] }]
         },
         {
           "id": 1748918679466,
@@ -3607,12 +3310,7 @@
           "required": true,
           "meta": false,
           "options": null,
-          "dependency": [
-            {
-              "id": 1748918485299,
-              "options": ["yes"]
-            }
-          ],
+          "dependency": [{ "id": 1748918485299, "options": ["yes"] }],
           "short_label": "Final recommendations from the DWS staff"
         },
         {

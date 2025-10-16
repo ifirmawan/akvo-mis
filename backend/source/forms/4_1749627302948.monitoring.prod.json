@@ -181,6 +181,42 @@
           "type": "text",
           "required": false,
           "meta": false
+        },
+        {
+          "id": 1749627742386,
+          "name": "supervisor_signature",
+          "label": "Signature of Supervisor",
+          "order": 3,
+          "type": "signature",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749627749383,
+          "name": "supervisor_name",
+          "label": "Name of Supervisor",
+          "order": 4,
+          "type": "input",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749627756123,
+          "name": "dws_staff_signature",
+          "label": "Signature of DWS Staff",
+          "order": 5,
+          "type": "signature",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749627762561,
+          "name": "dws_staff_name",
+          "label": "Name of DWS Staff",
+          "order": 6,
+          "type": "input",
+          "required": true,
+          "meta": false
         }
       ],
       "repeat_text": null

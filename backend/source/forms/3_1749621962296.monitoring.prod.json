@@ -1890,10 +1890,30 @@
           "name": "power_supply_name",
           "label": "Name of component",
           "order": 2,
-          "type": "input",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["power_supply"] }]
+          "dependency": [{ "id": 1749622726347, "options": ["power_supply"] }],
+          "options": [
+            {
+              "value": "generator",
+              "label": "Generator",
+              "id": 1749622147890,
+              "order": 1
+            },
+            {
+              "value": "solar_powered",
+              "label": "Solar Powered",
+              "id": 1749622147891,
+              "order": 2
+            },
+            {
+              "value": "electricity",
+              "label": "Electricity",
+              "id": 1749622147892,
+              "order": 3
+            }
+          ]
         }
       ]
     },

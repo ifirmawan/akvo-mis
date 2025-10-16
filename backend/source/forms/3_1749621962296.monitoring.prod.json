@@ -544,10 +544,20 @@
           "dependency": [{ "id": 1749621611527, "options": ["yes"] }]
         },
         {
+          "id": 1749621624568,
+          "name": "number_of_communial_rainwater_harvesting_systems",
+          "label": "Number of Communal rainwater harvesting system installed",
+          "order": 27,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [{ "id": 1749622726347, "options": ["rainwater"] }]
+        },
+        {
           "id": 1749621624567,
           "name": "number_of_rainwater_harvesting_systems",
-          "label": "Please Identify the number of Rainwater harvesting system installed.",
-          "order": 27,
+          "label": "Number of household rainwater harvesting system installed",
+          "order": 28,
           "type": "number",
           "required": true,
           "meta": false,
@@ -557,7 +567,7 @@
           "id": 1749621690983,
           "name": "has_desalination",
           "label": "Installation of Desalination Plant?",
-          "order": 28,
+          "order": 29,
           "type": "option",
           "required": true,
           "meta": false,
@@ -571,7 +581,7 @@
           "id": 1749621634567,
           "name": "desalination_plant_photo",
           "label": "Photo of the Desalination Plant",
-          "order": 29,
+          "order": 30,
           "type": "photo",
           "required": false,
           "meta": false,
@@ -1954,7 +1964,8 @@
       "label": "Pumps Inspection",
       "description": null,
       "order": 18,
-      "repeatable": false,
+      "repeatable": true,
+      "repeat_text":"Add another",
       "questions": [
         {
           "id": 1749622177890,
@@ -1975,22 +1986,12 @@
           "required": true,
           "meta": false,
           "dependency": [{ "id": 1749622726347, "options": ["pumps"] }]
-        }
-      ]
-    },
-    {
-      "id": 1749622191234,
-      "name": "pumps_photos",
-      "label": "Pumps Photos",
-      "description": null,
-      "order": 19,
-      "repeatable": true,
-      "questions": [
+        },
         {
           "id": 1749622197890,
           "name": "pumps_photo",
           "label": "Photo",
-          "order": 1,
+          "order": 3,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -2000,21 +2001,20 @@
           "id": 1749622201234,
           "name": "pumps_description",
           "label": "Description",
-          "order": 2,
+          "order": 4,
           "type": "text",
           "required": true,
           "meta": false,
           "dependency": [{ "id": 1749622726347, "options": ["pumps"] }]
         }
-      ],
-      "repeat_text": "Add another"
+      ]
     },
     {
       "id": 1749622211234,
       "name": "gutters_inspection",
       "label": "Gutters Inspection",
       "description": null,
-      "order": 20,
+      "order": 19,
       "repeatable": false,
       "questions": [
         {
@@ -2044,7 +2044,7 @@
       "name": "gutters_photos",
       "label": "Gutters Photos",
       "description": null,
-      "order": 21,
+      "order": 20,
       "repeatable": true,
       "questions": [
         {
@@ -2075,7 +2075,7 @@
       "name": "tanks_inspection",
       "label": "Tanks Inspection",
       "description": null,
-      "order": 22,
+      "order": 21,
       "repeatable": false,
       "questions": [
         {
@@ -2105,7 +2105,7 @@
       "name": "tanks_photos",
       "label": "Tanks Photos",
       "description": null,
-      "order": 23,
+      "order": 22,
       "repeatable": true,
       "questions": [
         {
@@ -2136,7 +2136,7 @@
       "name": "base_construction_inspection",
       "label": "Base Construction Inspection",
       "description": null,
-      "order": 24,
+      "order": 23,
       "repeatable": false,
       "questions": [
         {
@@ -2170,7 +2170,7 @@
       "name": "base_construction_photos",
       "label": "Base Construction Photos",
       "description": null,
-      "order": 25,
+      "order": 24,
       "repeatable": true,
       "questions": [
         {
@@ -2205,7 +2205,7 @@
       "name": "piping_works_inspection",
       "label": "Piping Works Inspection",
       "description": null,
-      "order": 26,
+      "order": 25,
       "repeatable": false,
       "questions": [
         {
@@ -2235,7 +2235,7 @@
       "name": "piping_works_photos",
       "label": "Piping Works Photos",
       "description": null,
-      "order": 27,
+      "order": 26,
       "repeatable": true,
       "questions": [
         {

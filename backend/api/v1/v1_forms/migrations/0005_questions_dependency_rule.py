@@ -18,8 +18,7 @@ class Migration(migrations.Migration):
                 max_length=3,
                 null=True,
                 blank=True,
-                help_text='Dependency evaluation rule: AND (all must be satisfied) or OR (any must be satisfied). '
-                          'If not specified, defaults to AND in client application logic.'
+                help_text='Dependency evaluation rule: AND or OR.'
             ),
         ),
     ]

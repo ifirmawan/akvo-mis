@@ -445,3 +445,44 @@ Key variables in `.env`:
 - `./release.sh`: Release preparation script
 - `./update-mobile-version.sh`: Mobile version management
 - `./generate_config.sh`: Generate config files
+
+## Git Workflow
+
+### Branch Naming Convention
+
+Feature branches follow the pattern: `feature/<issue-number>-<description>`
+
+Example: `feature/136-allow-moving-between-question-groups`
+
+**Important**: The issue number after the slash should be used in commit messages when closing issues.
+
+### Commit Message Format
+
+Commit messages follow this format:
+
+```bash
+git commit -m "[#<issue-number>] <Subject line>
+
+<body with bullet points describing changes>
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**Example**:
+```bash
+git commit -m "[#136] Allow free navigation between form groups with visual indicators
+
+- Remove navigation blocking when required fields are unanswered
+- Allow users to freely move between question groups using Next/Back buttons
+- Add validation for all groups before final submission
+- Implement color-coded visual indicators in question group list
+
+This improves UX by giving users flexibility to complete forms in any order
+while maintaining data integrity through comprehensive validation on submit.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```

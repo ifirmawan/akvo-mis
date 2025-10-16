@@ -72,8 +72,18 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "yes", "label": "Yes", "id": 1749622796300, "order": 1 },
-            { "value": "no", "label": "No", "id": 1749622796301, "order": 2 }
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622796300,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622796301,
+              "order": 2
+            }
           ]
         },
         {
@@ -84,7 +94,12 @@
           "type": "photo",
           "required": false,
           "meta": false,
-          "dependency": [{ "id": 1749622785185, "options": ["yes"] }]
+          "dependency": [
+            {
+              "id": 1749622785185,
+              "options": ["yes"]
+            }
+          ]
         },
         {
           "id": 1749622849604,
@@ -108,7 +123,12 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622785185, "options": ["yes"] }]
+          "dependency": [
+            {
+              "id": 1749622785185,
+              "options": ["yes"]
+            }
+          ]
         },
         {
           "id": 1749621050010,
@@ -131,7 +151,12 @@
               "id": 1749621060011,
               "order": 2
             },
-            { "value": "ph", "label": "pH", "id": 1749621070012, "order": 3 },
+            {
+              "value": "ph",
+              "label": "pH",
+              "id": 1749621070012,
+              "order": 3
+            },
             {
               "value": "conductivity",
               "label": "Conductivity in \u00b5S/cm",
@@ -163,7 +188,12 @@
               "order": 8
             }
           ],
-          "dependency": [{ "id": 1749622849604, "options": ["lab_test"] }]
+          "dependency": [
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            }
+          ]
         },
         {
           "id": 1749622982588,
@@ -173,8 +203,15 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622849604, "options": ["cbt_test"] }],
-          "rule": { "allowDecimal": true }
+          "dependency": [
+            {
+              "id": 1749622849604,
+              "options": ["cbt_test"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": true
+          }
         },
         {
           "id": 1849622785201,
@@ -210,7 +247,12 @@
               "order": 4
             }
           ],
-          "dependency": [{ "id": 1749622849604, "options": ["cbt_test"] }]
+          "dependency": [
+            {
+              "id": 1749622849604,
+              "options": ["cbt_test"]
+            }
+          ]
         },
         {
           "id": 1749622991234,
@@ -221,10 +263,18 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["ecoli"] }
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["ecoli"]
+            }
           ],
-          "rule": { "allowDecimal": true }
+          "rule": {
+            "allowDecimal": true
+          }
         },
         {
           "id": 1749623001234,
@@ -234,7 +284,12 @@
           "type": "photo",
           "required": false,
           "meta": false,
-          "dependency": [{ "id": 1749622849604, "options": ["cbt_test"] }]
+          "dependency": [
+            {
+              "id": 1749622849604,
+              "options": ["cbt_test"]
+            }
+          ]
         },
         {
           "id": 1749623024122,
@@ -245,10 +300,18 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["total_coliform"] }
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["total_coliform"]
+            }
           ],
-          "rule": { "allowDecimal": true }
+          "rule": {
+            "allowDecimal": true
+          }
         },
         {
           "id": 1749623074194,
@@ -259,10 +322,18 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["fecal_coliform"] }
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["fecal_coliform"]
+            }
           ],
-          "rule": { "allowDecimal": true }
+          "rule": {
+            "allowDecimal": true
+          }
         },
         {
           "id": 1749623109418,
@@ -273,10 +344,18 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["turbidity_ntu"] }
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["turbidity_ntu"]
+            }
           ],
-          "rule": { "allowDecimal": true }
+          "rule": {
+            "allowDecimal": true
+          }
         },
         {
           "id": 1723459200023,
@@ -286,10 +365,18 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": { "allowDecimal": true },
+          "rule": {
+            "allowDecimal": true
+          },
           "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["temperature_c"] }
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["temperature_c"]
+            }
           ]
         },
         {
@@ -300,10 +387,20 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": { "allowDecimal": true, "min": 0, "max": 14 },
+          "rule": {
+            "allowDecimal": true,
+            "min": 0,
+            "max": 14
+          },
           "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["ph"] }
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["ph"]
+            }
           ]
         },
         {
@@ -314,10 +411,18 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": { "allowDecimal": true },
+          "rule": {
+            "allowDecimal": true
+          },
           "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["conductivity"] }
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["conductivity"]
+            }
           ]
         },
         {
@@ -328,10 +433,18 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": { "allowDecimal": true },
+          "rule": {
+            "allowDecimal": true
+          },
           "dependency": [
-            { "id": 1749622849604, "options": ["lab_test"] },
-            { "id": 1749621050010, "options": ["salinity"] }
+            {
+              "id": 1749622849604,
+              "options": ["lab_test"]
+            },
+            {
+              "id": 1749621050010,
+              "options": ["salinity"]
+            }
           ]
         },
         {
@@ -382,92 +495,279 @@
           ]
         },
         {
-          "id": 1749622726347,
-          "name": "accessible_construction_site",
-          "label": "Which part of the construction sites you can visit?",
+          "id": 1749621851234,
+          "name": "type_of_project",
+          "label": "Type of Project?",
           "order": 20,
-          "type": "multiple_option",
+          "type": "option",
           "required": true,
           "meta": false,
           "options": [
-            { "value": "dam", "label": "Dam", "id": 1749622733001, "order": 1 },
+            {
+              "value": "surface_water_project",
+              "label": "Surface Water Project",
+              "id": 1749621858123,
+              "order": 1
+            },
+            {
+              "value": "borehole",
+              "label": "Borehole",
+              "id": 1749621868124,
+              "order": 2
+            },
+            {
+              "value": "desalination",
+              "label": "Desalination",
+              "id": 1749621878125,
+              "order": 3
+            },
+            {
+              "value": "rainwater_harvesting",
+              "label": "Rainwater Harvesting",
+              "id": 1749621888126,
+              "order": 4
+            }
+          ]
+        },
+        {
+          "id": 1749622726348,
+          "name": "accessible_surface_water_construction_site",
+          "label": "Which part of the Surface Water Project construction sites you can visit?",
+          "order": 21,
+          "type": "multiple_option",
+          "required": false,
+          "meta": false,
+          "options": [
+            {
+              "value": "dam",
+              "label": "Dam",
+              "id": 17496227330011,
+              "order": 1
+            },
             {
               "value": "raw_water_main",
               "label": "Raw Water Main",
-              "id": 1749622733002,
+              "id": 17496227330021,
               "order": 2
             },
             {
               "value": "reservoir",
               "label": "Reservoir",
-              "id": 1749622733003,
+              "id": 17496227330031,
               "order": 3
             },
             {
               "value": "distribution_main",
               "label": "Distribution Main",
-              "id": 1749622733004,
+              "id": 17496227330041,
               "order": 4
             },
             {
               "value": "reticulation",
               "label": "Reticulation",
-              "id": 1749622733005,
+              "id": 17496227330051,
+              "order": 5
+            },
+            {
+              "value": "pumps",
+              "label": "Pumps",
+              "id": 17496227330101,
+              "order": 10
+            },
+            {
+              "value": "piping_works",
+              "label": "Piping Works",
+              "id": 17496227330141,
+              "order": 14
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749621851234,
+              "options": ["surface_water_project"]
+            }
+          ]
+        },
+        {
+          "id": 1749622726349,
+          "name": "accessible_borehole_construction_site",
+          "label": "Which part of the Borehole construction sites you can visit?",
+          "order": 22,
+          "type": "multiple_option",
+          "required": false,
+          "meta": false,
+          "options": [
+            {
+              "value": "raw_water_main",
+              "label": "Raw Water Main",
+              "id": 17496227330022,
+              "order": 2
+            },
+            {
+              "value": "reservoir",
+              "label": "Reservoir",
+              "id": 17496227330032,
+              "order": 3
+            },
+            {
+              "value": "distribution_main",
+              "label": "Distribution Main",
+              "id": 17496227330042,
+              "order": 4
+            },
+            {
+              "value": "reticulation",
+              "label": "Reticulation",
+              "id": 17496227330052,
               "order": 5
             },
             {
               "value": "borehole",
               "label": "Borehole",
-              "id": 1749622733006,
+              "id": 17496227330062,
               "order": 6
-            },
-            {
-              "value": "rainwater",
-              "label": "Rainwater",
-              "id": 1749622733007,
-              "order": 7
-            },
-            {
-              "value": "desalination",
-              "label": "Desalination",
-              "id": 1749622733008,
-              "order": 8
             },
             {
               "value": "power_supply",
               "label": "Power Supply",
-              "id": 1749622733009,
+              "id": 17496227330092,
               "order": 9
             },
             {
               "value": "pumps",
               "label": "Pumps",
-              "id": 1749622733010,
+              "id": 17496227330102,
               "order": 10
-            },
-            {
-              "value": "gutters",
-              "label": "Gutters",
-              "id": 1749622733011,
-              "order": 11
             },
             {
               "value": "tanks",
               "label": "Tanks",
-              "id": 1749622733012,
+              "id": 17496227330122,
               "order": 12
+            },
+            {
+              "value": "piping_works",
+              "label": "Piping Works",
+              "id": 17496227330142,
+              "order": 14
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749621851234,
+              "options": ["borehole"]
+            }
+          ]
+        },
+        {
+          "id": 1749622726350,
+          "name": "accessible_desalination_construction_site",
+          "label": "Which part of the Desalination construction sites you can visit?",
+          "order": 23,
+          "type": "multiple_option",
+          "required": false,
+          "meta": false,
+          "options": [
+            {
+              "value": "raw_water_main",
+              "label": "Raw Water Main",
+              "id": 17496227330023,
+              "order": 2
+            },
+            {
+              "value": "reservoir",
+              "label": "Reservoir",
+              "id": 17496227330033,
+              "order": 3
+            },
+            {
+              "value": "distribution_main",
+              "label": "Distribution Main",
+              "id": 17496227330043,
+              "order": 4
+            },
+            {
+              "value": "reticulation",
+              "label": "Reticulation",
+              "id": 17496227330053,
+              "order": 5
+            },
+            {
+              "value": "desalination",
+              "label": "Desalination Unit",
+              "id": 17496227330083,
+              "order": 8
+            },
+            {
+              "value": "power_supply",
+              "label": "Power Supply",
+              "id": 17496227330093,
+              "order": 9
+            },
+            {
+              "value": "pumps",
+              "label": "Pumps",
+              "id": 17496227330103,
+              "order": 10
+            },
+            {
+              "value": "tanks",
+              "label": "Tanks",
+              "id": 17496227330123,
+              "order": 12
+            },
+            {
+              "value": "piping_works",
+              "label": "Piping Works",
+              "id": 17496227330143,
+              "order": 14
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749621851234,
+              "options": ["desalination"]
+            }
+          ]
+        },
+        {
+          "id": 1749622726351,
+          "name": "accessible_rainwater_harvesting_construction_site",
+          "label": "Which part of the Rainwater Harvesting construction sites you can visit?",
+          "order": 24,
+          "type": "multiple_option",
+          "required": false,
+          "meta": false,
+          "options": [
+            {
+              "value": "rainwater",
+              "label": "Rainwater",
+              "id": 17496227330074,
+              "order": 7
+            },
+            {
+              "value": "gutters",
+              "label": "Gutters",
+              "id": 17496227330114,
+              "order": 11
             },
             {
               "value": "base_construction",
               "label": "Base Construction",
-              "id": 1749622733013,
+              "id": 17496227330134,
               "order": 13
             },
             {
               "value": "piping_works",
               "label": "Piping Works",
-              "id": 1749622733014,
+              "id": 17496227330144,
               "order": 14
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749621851234,
+              "options": ["rainwater_harvesting"]
             }
           ]
         },
@@ -475,117 +775,207 @@
           "id": 1749621517282,
           "name": "has_borehole",
           "label": "Construction of borehole?",
-          "order": 21,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            { "value": "yes", "label": "Yes", "id": 1749621523401, "order": 1 },
-            { "value": "no", "label": "No", "id": 1749621523402, "order": 2 }
-          ],
-          "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
-        },
-        {
-          "id": 1749621541234,
-          "name": "borehole_construction_photo",
-          "label": "Photo of the Borehole",
-          "order": 22,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [{ "id": 1749621517282, "options": ["yes"] }]
-        },
-        {
-          "id": 1749621557442,
-          "name": "has_pump_system",
-          "label": "Installation of Pump system?",
-          "order": 23,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            { "value": "yes", "label": "Yes", "id": 1749621564288, "order": 1 },
-            { "value": "no", "label": "No", "id": 1749621564289, "order": 2 }
-          ],
-          "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
-        },
-        {
-          "id": 1749621581234,
-          "name": "pump_system_photo",
-          "label": "Photo of the Pump System",
-          "order": 24,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [{ "id": 1749621557442, "options": ["yes"] }]
-        },
-        {
-          "id": 1749621611527,
-          "name": "has_rainwater_harvesting",
-          "label": "Installation of Rainwater Harvesting System?",
           "order": 25,
           "type": "option",
           "required": true,
           "meta": false,
           "options": [
-            { "value": "yes", "label": "Yes", "id": 1749621619301, "order": 1 },
-            { "value": "no", "label": "No", "id": 1749621619302, "order": 2 }
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749621523401,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749621523402,
+              "order": 2
+            }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["rainwater"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
         },
         {
-          "id": 1749621711234,
-          "name": "rainwater_harvesting_photo",
-          "label": "Photo of the Rainwater Harvesting System",
+          "id": 1749621541234,
+          "name": "borehole_construction_photo",
+          "label": "Photo of the Borehole",
           "order": 26,
           "type": "photo",
           "required": false,
           "meta": false,
-          "dependency": [{ "id": 1749621611527, "options": ["yes"] }]
+          "dependency": [
+            {
+              "id": 1749621517282,
+              "options": ["yes"]
+            }
+          ]
         },
         {
-          "id": 1749621624568,
-          "name": "number_of_communial_rainwater_harvesting_systems",
-          "label": "Number of Communal rainwater harvesting system installed",
+          "id": 1749621557442,
+          "name": "has_pump_system",
+          "label": "Installation of Pump system?",
           "order": 27,
-          "type": "number",
+          "type": "option",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["rainwater"] }]
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749621564288,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749621564289,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
         },
         {
-          "id": 1749621624567,
-          "name": "number_of_rainwater_harvesting_systems",
-          "label": "Number of household rainwater harvesting system installed",
+          "id": 1749621581234,
+          "name": "pump_system_photo",
+          "label": "Photo of the Pump System",
           "order": 28,
-          "type": "number",
-          "required": true,
+          "type": "photo",
+          "required": false,
           "meta": false,
-          "dependency": [{ "id": 1749621611527, "options": ["yes"] }]
+          "dependency": [
+            {
+              "id": 1749621557442,
+              "options": ["yes"]
+            }
+          ]
         },
         {
-          "id": 1749621690983,
-          "name": "has_desalination",
-          "label": "Installation of Desalination Plant?",
+          "id": 1749621611527,
+          "name": "has_rainwater_harvesting",
+          "label": "Installation of Rainwater Harvesting System?",
           "order": 29,
           "type": "option",
           "required": true,
           "meta": false,
           "options": [
-            { "value": "yes", "label": "Yes", "id": 1749621697642, "order": 1 },
-            { "value": "no", "label": "No", "id": 1749621697643, "order": 2 }
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749621619301,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749621619302,
+              "order": 2
+            }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["rainwater"]
+            }
+          ]
+        },
+        {
+          "id": 1749621711234,
+          "name": "rainwater_harvesting_photo",
+          "label": "Photo of the Rainwater Harvesting System",
+          "order": 30,
+          "type": "photo",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621611527,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749621624568,
+          "name": "number_of_communial_rainwater_harvesting_systems",
+          "label": "Number of Communal rainwater harvesting system installed",
+          "order": 31,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["rainwater"]
+            }
+          ]
+        },
+        {
+          "id": 1749621624567,
+          "name": "number_of_rainwater_harvesting_systems",
+          "label": "Number of household rainwater harvesting system installed",
+          "order": 32,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621611527,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749621690983,
+          "name": "has_desalination",
+          "label": "Installation of Desalination Plant?",
+          "order": 33,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749621697642,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749621697643,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         },
         {
           "id": 1749621634567,
           "name": "desalination_plant_photo",
           "label": "Photo of the Desalination Plant",
-          "order": 30,
+          "order": 34,
           "type": "photo",
           "required": false,
           "meta": false,
-          "dependency": [{ "id": 1749621690983, "options": ["yes"] }]
+          "dependency": [
+            {
+              "id": 1749621690983,
+              "options": ["yes"]
+            }
+          ]
         }
       ],
       "repeat_text": null
@@ -606,7 +996,12 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["dam"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["dam"]
+            }
+          ]
         },
         {
           "id": 1723459200013,
@@ -654,7 +1049,12 @@
               "order": 6
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["dam"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["dam"]
+            }
+          ]
         }
       ]
     },
@@ -674,7 +1074,12 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["dam"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["dam"]
+            }
+          ]
         },
         {
           "id": 1723459200012,
@@ -684,7 +1089,12 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["dam"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["dam"]
+            }
+          ]
         }
       ]
     },
@@ -704,7 +1114,21 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["raw_water_main"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459200018,
@@ -734,7 +1158,21 @@
               "order": 3
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["raw_water_main"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459210020,
@@ -745,7 +1183,12 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "pvc", "label": "PVC", "id": 1723459200021, "order": 1 },
+            {
+              "value": "pvc",
+              "label": "PVC",
+              "id": 1723459200021,
+              "order": 1
+            },
             {
               "value": "polyethelene",
               "label": "Polyethelene",
@@ -754,9 +1197,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["raw_water_main"] },
-            { "id": 1723459200018, "options": ["raw_water_pipeline"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1723459200018,
+              "options": ["raw_water_pipeline"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459222019,
@@ -767,17 +1225,55 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "200mm", "label": "200mm", "order": 1 },
-            { "value": "150mm", "label": "150mm", "order": 2 },
-            { "value": "100mm", "label": "100mm", "order": 3 },
-            { "value": "80mm", "label": "80mm", "order": 4 },
-            { "value": "50mm", "label": "50mm", "order": 5 }
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5
+            }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["raw_water_main"] },
-            { "id": 1723459200018, "options": ["raw_water_pipeline"] },
-            { "id": 1723459210020, "options": ["pvc", "polyethelene"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1723459200018,
+              "options": ["raw_water_pipeline"]
+            },
+            {
+              "id": 1723459210020,
+              "options": ["pvc", "polyethelene"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785206,
@@ -788,9 +1284,24 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["raw_water_main"] },
-            { "id": 1723459200018, "options": ["air_valve"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1723459200018,
+              "options": ["air_valve"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785207,
@@ -801,9 +1312,24 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["raw_water_main"] },
-            { "id": 1723459200018, "options": ["washout"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1723459200018,
+              "options": ["washout"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -824,7 +1350,21 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["raw_water_main"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459210021,
@@ -834,7 +1374,21 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["raw_water_main"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ]
     },
@@ -854,7 +1408,21 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["reservoir"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459210023,
@@ -932,7 +1500,21 @@
               "order": 11
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["reservoir"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785213,
@@ -943,7 +1525,12 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "pvc", "label": "PVC", "id": 1849622785219, "order": 1 },
+            {
+              "value": "pvc",
+              "label": "PVC",
+              "id": 1849622785219,
+              "order": 1
+            },
             {
               "value": "polyethelene",
               "label": "Polyethelene",
@@ -952,9 +1539,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reservoir"] },
-            { "id": 1723459210023, "options": ["reservoir_inlet"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_inlet"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785214,
@@ -997,10 +1599,28 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reservoir"] },
-            { "id": 1723459210023, "options": ["reservoir_inlet"] },
-            { "id": 1849622785213, "options": ["pvc", "polyethelene"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_inlet"]
+            },
+            {
+              "id": 1849622785213,
+              "options": ["pvc", "polyethelene"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785215,
@@ -1011,7 +1631,12 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "pvc", "label": "PVC", "id": 1849622785226, "order": 1 },
+            {
+              "value": "pvc",
+              "label": "PVC",
+              "id": 1849622785226,
+              "order": 1
+            },
             {
               "value": "polyethelene",
               "label": "Polyethelene",
@@ -1020,9 +1645,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reservoir"] },
-            { "id": 1723459210023, "options": ["reservoir_outlet"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_outlet"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785216,
@@ -1065,10 +1705,28 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reservoir"] },
-            { "id": 1723459210023, "options": ["reservoir_outlet"] },
-            { "id": 1849622785215, "options": ["pvc", "polyethelene"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_outlet"]
+            },
+            {
+              "id": 1849622785215,
+              "options": ["pvc", "polyethelene"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785217,
@@ -1079,7 +1737,12 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "pvc", "label": "PVC", "id": 1849622785233, "order": 1 },
+            {
+              "value": "pvc",
+              "label": "PVC",
+              "id": 1849622785233,
+              "order": 1
+            },
             {
               "value": "polyethelene",
               "label": "Polyethelene",
@@ -1088,9 +1751,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reservoir"] },
-            { "id": 1723459210023, "options": ["reservoir_overflow"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_overflow"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785218,
@@ -1133,10 +1811,28 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reservoir"] },
-            { "id": 1723459210023, "options": ["reservoir_overflow"] },
-            { "id": 1849622785217, "options": ["pvc", "polyethelene"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1723459210023,
+              "options": ["reservoir_overflow"]
+            },
+            {
+              "id": 1849622785217,
+              "options": ["pvc", "polyethelene"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -1157,7 +1853,21 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["reservoir"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459220021,
@@ -1167,7 +1877,21 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["reservoir"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ]
     },
@@ -1188,8 +1912,20 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459200030,
@@ -1220,8 +1956,20 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459290032,
@@ -1232,7 +1980,12 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "pvc", "label": "PVC", "id": 1723459200052, "order": 1 },
+            {
+              "value": "pvc",
+              "label": "PVC",
+              "id": 1723459200052,
+              "order": 1
+            },
             {
               "value": "polyethelene",
               "label": "Polyethelene",
@@ -1241,9 +1994,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] },
-            { "id": 1723459200030, "options": ["distribution_pipeline"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1723459200030,
+              "options": ["distribution_pipeline"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459230031,
@@ -1286,10 +2054,28 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] },
-            { "id": 1723459200030, "options": ["distribution_pipeline"] },
-            { "id": 1723459290032, "options": ["pvc", "polyethelene"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1723459200030,
+              "options": ["distribution_pipeline"]
+            },
+            {
+              "id": 1723459290032,
+              "options": ["pvc", "polyethelene"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459200033,
@@ -1299,11 +2085,28 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": { "allowDecimal": true },
+          "rule": {
+            "allowDecimal": true
+          },
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] },
-            { "id": 1723459200030, "options": ["distribution_pipeline"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1723459200030,
+              "options": ["distribution_pipeline"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785208,
@@ -1314,9 +2117,24 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] },
-            { "id": 1723459200030, "options": ["air_valve"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1723459200030,
+              "options": ["air_valve"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785209,
@@ -1327,9 +2145,24 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] },
-            { "id": 1723459200030, "options": ["washout"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1723459200030,
+              "options": ["washout"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -1351,8 +2184,20 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459230034,
@@ -1363,8 +2208,20 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["distribution_main"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ]
     },
@@ -1384,7 +2241,21 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["reticulation"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459200036,
@@ -1420,7 +2291,21 @@
               "order": 4
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["reticulation"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459299038,
@@ -1431,7 +2316,12 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "pvc", "label": "PVC", "id": 1723459200063, "order": 1 },
+            {
+              "value": "pvc",
+              "label": "PVC",
+              "id": 1723459200063,
+              "order": 1
+            },
             {
               "value": "polyethelene",
               "label": "Polyethelene",
@@ -1440,9 +2330,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459200036, "options": ["reticulation_pipeline"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459200036,
+              "options": ["reticulation_pipeline"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459200037,
@@ -1485,10 +2390,28 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459200036, "options": ["reticulation_pipeline"] },
-            { "id": 1723459299038, "options": ["pvc", "polyethelene"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459200036,
+              "options": ["reticulation_pipeline"]
+            },
+            {
+              "id": 1723459299038,
+              "options": ["pvc", "polyethelene"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459277038,
@@ -1513,9 +2436,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459200036, "options": ["household_connection"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459200036,
+              "options": ["household_connection"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459277039,
@@ -1525,11 +2463,29 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": { "allowDecimal": false, "min": 0 },
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          },
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459277038, "options": ["household"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459277038,
+              "options": ["household"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459267040,
@@ -1539,11 +2495,29 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": { "allowDecimal": false, "min": 0 },
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          },
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459277038, "options": ["shared"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459277038,
+              "options": ["shared"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785210,
@@ -1554,9 +2528,24 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459200036, "options": ["air_valve"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459200036,
+              "options": ["air_valve"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1849622785211,
@@ -1567,9 +2556,24 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459200036, "options": ["washout"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459200036,
+              "options": ["washout"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -1590,7 +2594,21 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["reticulation"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1723459200034,
@@ -1600,7 +2618,21 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["reticulation"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ]
     },
@@ -1634,7 +2666,12 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         },
         {
           "id": 1749621981234,
@@ -1658,7 +2695,12 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         },
         {
           "id": 1749621991234,
@@ -1682,7 +2724,12 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         },
         {
           "id": 1749622001234,
@@ -1706,7 +2753,12 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         },
         {
           "id": 1749622011234,
@@ -1749,9 +2801,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459200036, "options": ["reticulation_pipeline"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459200036,
+              "options": ["reticulation_pipeline"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622021234,
@@ -1762,7 +2829,12 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "pvc", "label": "PVC", "id": 1749622027890, "order": 1 },
+            {
+              "value": "pvc",
+              "label": "PVC",
+              "id": 1749622027890,
+              "order": 1
+            },
             {
               "value": "polyethelene",
               "label": "Polyethelene",
@@ -1771,9 +2843,24 @@
             }
           ],
           "dependency": [
-            { "id": 1749622726347, "options": ["reticulation"] },
-            { "id": 1723459200036, "options": ["reticulation_pipeline"] }
-          ]
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1723459200036,
+              "options": ["reticulation_pipeline"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622031234,
@@ -1797,7 +2884,12 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         },
         {
           "id": 1749622041234,
@@ -1833,7 +2925,12 @@
               "order": 4
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         },
         {
           "id": 1749622051234,
@@ -1858,7 +2955,10 @@
             }
           ],
           "dependency": [
-            { "id": 1749622041234, "options": ["generator", "hybrid"] }
+            {
+              "id": 1749622041234,
+              "options": ["generator", "hybrid"]
+            }
           ]
         },
         {
@@ -1884,7 +2984,10 @@
             }
           ],
           "dependency": [
-            { "id": 1749622041234, "options": ["solar_powered", "hybrid"] }
+            {
+              "id": 1749622041234,
+              "options": ["solar_powered", "hybrid"]
+            }
           ]
         },
         {
@@ -1909,7 +3012,12 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622041234, "options": ["electricity"] }]
+          "dependency": [
+            {
+              "id": 1749622041234,
+              "options": ["electricity"]
+            }
+          ]
         }
       ],
       "repeat_text": null
@@ -1930,7 +3038,12 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         },
         {
           "id": 1749622081234,
@@ -1940,7 +3053,12 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["desalination"] }]
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
         }
       ],
       "repeat_text": "Add another"
@@ -1961,7 +3079,12 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
         },
         {
           "id": 1749622101234,
@@ -2009,7 +3132,12 @@
               "order": 6
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
         },
         {
           "id": 1749622111235,
@@ -2045,7 +3173,12 @@
               "order": 4
             }
           ],
-          "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
         },
         {
           "id": 1749622111236,
@@ -2070,7 +3203,10 @@
             }
           ],
           "dependency": [
-            { "id": 1749622111235, "options": ["generator", "hybrid"] }
+            {
+              "id": 1749622111235,
+              "options": ["generator", "hybrid"]
+            }
           ]
         },
         {
@@ -2096,7 +3232,10 @@
             }
           ],
           "dependency": [
-            { "id": 1749622111235, "options": ["solar_powered", "hybrid"] }
+            {
+              "id": 1749622111235,
+              "options": ["solar_powered", "hybrid"]
+            }
           ]
         },
         {
@@ -2121,7 +3260,12 @@
               "order": 2
             }
           ],
-          "dependency": [{ "id": 1749622111235, "options": ["electricity"] }]
+          "dependency": [
+            {
+              "id": 1749622111235,
+              "options": ["electricity"]
+            }
+          ]
         }
       ]
     },
@@ -2141,7 +3285,12 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
         },
         {
           "id": 1749622121234,
@@ -2151,7 +3300,12 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["borehole"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
         }
       ],
       "repeat_text": "Add another"
@@ -2172,7 +3326,17 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["power_supply"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["power_supply"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["power_supply"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622141234,
@@ -2182,7 +3346,16 @@
           "type": "multiple_option",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["power_supply"] }],
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["power_supply"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["power_supply"]
+            }
+          ],
           "options": [
             {
               "value": "generator",
@@ -2202,7 +3375,8 @@
               "id": 1749622147892,
               "order": 3
             }
-          ]
+          ],
+          "dependency_rule": "OR"
         }
       ]
     },
@@ -2222,7 +3396,17 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["power_supply"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["power_supply"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["power_supply"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622161234,
@@ -2232,7 +3416,17 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["power_supply"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["power_supply"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["power_supply"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -2254,7 +3448,21 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["pumps"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622181234,
@@ -2264,7 +3472,21 @@
           "type": "input",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["pumps"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622197890,
@@ -2274,7 +3496,21 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["pumps"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622201234,
@@ -2284,7 +3520,21 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["pumps"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ]
     },
@@ -2304,7 +3554,12 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["gutters"] }]
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
         },
         {
           "id": 1749622221234,
@@ -2314,7 +3569,12 @@
           "type": "input",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["gutters"] }]
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
         }
       ]
     },
@@ -2334,7 +3594,12 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["gutters"] }]
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
         },
         {
           "id": 1749622241234,
@@ -2344,7 +3609,12 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["gutters"] }]
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
         }
       ],
       "repeat_text": "Add another"
@@ -2365,7 +3635,17 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["tanks"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["tanks"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["tanks"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622261234,
@@ -2375,7 +3655,17 @@
           "type": "input",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["tanks"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["tanks"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["tanks"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ]
     },
@@ -2395,7 +3685,17 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["tanks"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["tanks"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["tanks"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622281234,
@@ -2405,7 +3705,17 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["tanks"] }]
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["tanks"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["tanks"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -2427,7 +3737,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["base_construction"] }
+            {
+              "id": 1749622726351,
+              "options": ["base_construction"]
+            }
           ]
         },
         {
@@ -2439,7 +3752,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["base_construction"] }
+            {
+              "id": 1749622726351,
+              "options": ["base_construction"]
+            }
           ]
         }
       ]
@@ -2461,7 +3777,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["base_construction"] }
+            {
+              "id": 1749622726351,
+              "options": ["base_construction"]
+            }
           ]
         },
         {
@@ -2473,7 +3792,10 @@
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749622726347, "options": ["base_construction"] }
+            {
+              "id": 1749622726351,
+              "options": ["base_construction"]
+            }
           ]
         }
       ],
@@ -2495,7 +3817,25 @@
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["piping_works"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726351,
+              "options": ["piping_works"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749623341234,
@@ -2505,7 +3845,25 @@
           "type": "input",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["piping_works"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726351,
+              "options": ["piping_works"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ]
     },
@@ -2525,7 +3883,25 @@
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["piping_works"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726351,
+              "options": ["piping_works"]
+            }
+          ],
+          "dependency_rule": "OR"
         },
         {
           "id": 1749622361234,
@@ -2535,7 +3911,25 @@
           "type": "text",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749622726347, "options": ["piping_works"] }]
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726351,
+              "options": ["piping_works"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -2566,8 +3960,18 @@
           "required": true,
           "meta": false,
           "options": [
-            { "value": "yes", "label": "Yes", "id": 1749623667890, "order": 1 },
-            { "value": "no", "label": "No", "id": 1749623667891, "order": 2 }
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749623667890,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749623667891,
+              "order": 2
+            }
           ]
         },
         {
@@ -2578,7 +3982,12 @@
           "type": "text",
           "required": false,
           "meta": false,
-          "dependency": [{ "id": 1749623661234, "options": ["yes"] }]
+          "dependency": [
+            {
+              "id": 1749623661234,
+              "options": ["yes"]
+            }
+          ]
         },
         {
           "id": 1849622785212,
@@ -2588,7 +3997,11 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "rule": { "allowDecimal": true, "min": 0, "max": 100 }
+          "rule": {
+            "allowDecimal": true,
+            "min": 0,
+            "max": 100
+          }
         },
         {
           "id": 1749623674045,

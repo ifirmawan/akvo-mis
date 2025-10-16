@@ -3,22 +3,49 @@ import { TouchableOpacity } from 'react-native';
 import { Text, Icon } from '@rneui/themed';
 import styles from '../styles';
 
-const QuestionGroupListItem = ({ label, active, completedQuestionGroup, onPress }) => {
-  // const icon = completedQuestionGroup ? 'check-circle' : 'circle';
-  const bgColor = completedQuestionGroup ? '#2884bd' : '#d4d4d4';
+const QuestionGroupListItem = ({
+  label,
+  active,
+  completedQuestionGroup,
+  hasErrors,
+  visited,
+  onPress,
+}) => {
+  // Determine icon and color based on state
+  let iconName = 'circle';
+  let iconType = 'font-awesome';
+  let bgColor = '#d4d4d4'; // Default gray for not visited
+
+  if (completedQuestionGroup) {
+    // Completed - green check
+    iconName = 'check-circle';
+    iconType = 'font-awesome';
+    bgColor = '#28a745'; // Green
+  } else if (visited && hasErrors) {
+    // Visited but has errors - orange/warning
+    iconName = 'alert-circle-outline';
+    iconType = 'ionicon';
+    bgColor = '#ff9800'; // Orange warning
+  } else if (visited) {
+    // Visited but not completed (no required fields or all filled)
+    iconName = 'circle';
+    iconType = 'font-awesome';
+    bgColor = '#2884bd'; // Blue
+  }
+
   const activeOpacity = active ? styles.questionGroupListItemActive : {};
   const activeName = active ? styles.questionGroupListItemNameActive : {};
+
   return (
     <TouchableOpacity
       style={{ ...styles.questionGroupListItemWrapper, ...activeOpacity }}
       testID="question-group-list-item-wrapper"
-      disabled={!completedQuestionGroup}
       onPress={onPress}
     >
       <Icon
         testID="icon-mark"
-        name="circle"
-        type="font-awesome"
+        name={iconName}
+        type={iconType}
         color={bgColor}
         style={styles.questionGroupListItemIcon}
       />

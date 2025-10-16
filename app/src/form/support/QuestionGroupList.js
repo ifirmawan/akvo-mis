@@ -27,6 +27,22 @@ export const checkCompleteQuestionGroup = (form, values) =>
     );
   });
 
+export const checkGroupHasErrors = (form, values) =>
+  form.question_group.map((questionGroup) => {
+    const requiredQuestions = questionGroup.question.filter((q) => q.required);
+    const hasUnanswered = requiredQuestions.some((question) => {
+      if (question?.dependency) {
+        if (!onFilterDependency(questionGroup, values, question)) {
+          return false; // Skip dependent questions that don't match
+        }
+      }
+      // Check if the question is unanswered
+      const value = values?.[question.id];
+      return !value && value !== 0;
+    });
+    return hasUnanswered;
+  });
+
 const QuestionGroupList = ({
   form,
   activeQuestionGroup,
@@ -41,6 +57,11 @@ const QuestionGroupList = ({
 
   const completedQuestionGroup = useMemo(
     () => checkCompleteQuestionGroup(form, currentValues),
+    [form, currentValues],
+  );
+
+  const groupHasErrors = useMemo(
+    () => checkGroupHasErrors(form, currentValues),
     [form, currentValues],
   );
 
@@ -73,6 +94,8 @@ const QuestionGroupList = ({
           completedQuestionGroup={
             completedQuestionGroup[qx] && visitedQuestionGroup.includes(questionGroup.id)
           }
+          hasErrors={groupHasErrors[qx]}
+          visited={visitedQuestionGroup.includes(questionGroup.id)}
           onPress={() => handleOnPress(questionGroup.id)}
         />
       ))}

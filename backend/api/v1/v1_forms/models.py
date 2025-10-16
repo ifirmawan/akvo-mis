@@ -79,7 +79,12 @@ class Questions(models.Model):
     dependency_rule = models.CharField(
         max_length=3,
         choices=[('AND', 'AND'), ('OR', 'OR')],
-        default='AND'
+        null=True,
+        blank=True,
+        help_text=(
+            'Dependency evaluation rule: AND or OR.'
+            ' Defaults to AND in client logic if not specified.'
+        )
     )
     api = models.JSONField(default=None, null=True)
     extra = models.JSONField(default=None, null=True)

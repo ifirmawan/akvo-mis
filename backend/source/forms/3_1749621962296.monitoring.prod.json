@@ -2761,112 +2761,10 @@
           ]
         },
         {
-          "id": 1749622011234,
-          "name": "desalination_size_of_pipe",
-          "label": "Size of Pipe",
-          "order": 5,
-          "type": "multiple_option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "200mm",
-              "label": "200mm",
-              "id": 1749622017890,
-              "order": 1
-            },
-            {
-              "value": "150mm",
-              "label": "150mm",
-              "id": 1749622017891,
-              "order": 2
-            },
-            {
-              "value": "100mm",
-              "label": "100mm",
-              "id": 1749622017892,
-              "order": 3
-            },
-            {
-              "value": "80mm",
-              "label": "80mm",
-              "id": 1749622017893,
-              "order": 4
-            },
-            {
-              "value": "50mm",
-              "label": "50mm",
-              "id": 1749622017894,
-              "order": 5
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1723459200036,
-              "options": ["reticulation_pipeline"]
-            }
-          ],
-          "dependency_rule": "OR"
-        },
-        {
-          "id": 1749622021234,
-          "name": "desalination_type_of_pipe",
-          "label": "Type of Pipe",
-          "order": 6,
-          "type": "multiple_option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "pvc",
-              "label": "PVC",
-              "id": 1749622027890,
-              "order": 1
-            },
-            {
-              "value": "polyethelene",
-              "label": "Polyethelene",
-              "id": 1749622027891,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1723459200036,
-              "options": ["reticulation_pipeline"]
-            }
-          ],
-          "dependency_rule": "OR"
-        },
-        {
           "id": 1749622031234,
           "name": "storage_tanks",
           "label": "Storage Tanks",
-          "order": 7,
+          "order": 5,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2895,7 +2793,7 @@
           "id": 1749622041234,
           "name": "desalination_power_supply",
           "label": "Type of Power Supply",
-          "order": 8,
+          "order": 6,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2936,7 +2834,7 @@
           "id": 1749622051234,
           "name": "generator",
           "label": "Generator",
-          "order": 9,
+          "order": 7,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2965,7 +2863,7 @@
           "id": 1749622061234,
           "name": "solar_powered",
           "label": "Solar Powered",
-          "order": 10,
+          "order": 8,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2994,7 +2892,7 @@
           "id": 1749622062234,
           "name": "electricity",
           "label": "Electricity",
-          "order": 11,
+          "order": 9,
           "type": "option",
           "required": true,
           "meta": false,

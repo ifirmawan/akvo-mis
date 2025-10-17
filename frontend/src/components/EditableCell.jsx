@@ -82,7 +82,7 @@ const EditableCell = ({
     if (
       record &&
       record.type === QUESTION_TYPES.cascade &&
-      !record?.api &&
+      !record?.api?.endpoint &&
       !locationName &&
       !lastValue
     ) {
@@ -105,7 +105,7 @@ const EditableCell = ({
     if (
       record &&
       record.type === QUESTION_TYPES.cascade &&
-      !record?.api &&
+      !record?.api?.endpoint &&
       !locationName &&
       lastValue
     ) {
@@ -236,7 +236,7 @@ const EditableCell = ({
         }}
       >
         <span className={lastValue ? null : "blue"}>
-          {record.type === QUESTION_TYPES.cascade && !record?.api ? (
+          {record.type === QUESTION_TYPES.cascade && !record?.api?.endpoint ? (
             locationName
           ) : isImageType && value && !lastValue ? (
             <Image src={value} width={100} />

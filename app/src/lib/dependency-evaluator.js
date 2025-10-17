@@ -11,14 +11,7 @@
  */
 export const intersection = (array1, array2) => {
   const set1 = new Set(array1);
-  const result = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const item of array2) {
-    if (set1.has(item)) {
-      result.push(item);
-    }
-  }
-  return result;
+  return array2.filter(item => set1.has(item));
 };
 
 /**

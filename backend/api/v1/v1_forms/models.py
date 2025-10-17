@@ -76,6 +76,16 @@ class Questions(models.Model):
     required = models.BooleanField(default=True)
     rule = models.JSONField(default=None, null=True)
     dependency = models.JSONField(default=None, null=True)
+    dependency_rule = models.CharField(
+        max_length=3,
+        choices=[('AND', 'AND'), ('OR', 'OR')],
+        null=True,
+        blank=True,
+        help_text=(
+            'Dependency evaluation rule: AND or OR.'
+            ' Defaults to AND in client logic if not specified.'
+        )
+    )
     api = models.JSONField(default=None, null=True)
     extra = models.JSONField(default=None, null=True)
     tooltip = models.JSONField(default=None, null=True)
@@ -99,6 +109,7 @@ class Questions(models.Model):
             "required": self.required,
             "rule": self.rule,
             "dependency": self.dependency,
+            "dependency_rule": (self.dependency_rule or "AND").upper(),
             "options": options,
             "extra": self.extra,
             "tooltip": self.tooltip,

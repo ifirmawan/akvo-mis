@@ -41,19 +41,23 @@ const FormNavigation = ({
     }
 
     const allGroups = formDefinition.question_group;
+    // Extract all questions for recursive dependency checking
+    const allQuestions = allGroups.flatMap((qg) => qg.question).filter((q) => q);
 
     const validationPromises = allGroups.map(async (group) => {
       const validateSync = group.question
-        ?.filter((q) => onFilterDependency(group, currentValues, q))
+        ?.filter((q) => onFilterDependency(group, currentValues, q, 0, allQuestions))
         ?.filter(
           (q) =>
-            (q?.extra?.type === 'entity' && currentValues?.[q?.id] !== undefined) || !q?.extra?.type,
+            (q?.extra?.type === 'entity' && currentValues?.[q?.id] !== undefined) ||
+            !q?.extra?.type,
         )
         ?.map((q) => {
           const defaultVal = ['cascade', 'multiple_option', 'option', 'geo'].includes(q?.type)
             ? null
             : '';
-          const fieldValue = currentValues?.[q?.id] === undefined ? defaultVal : currentValues[q.id];
+          const fieldValue =
+            currentValues?.[q?.id] === undefined ? defaultVal : currentValues[q.id];
           return generateValidationSchemaFieldLevel(fieldValue, q);
         });
 
@@ -79,25 +83,32 @@ const FormNavigation = ({
     // index 0 = prev group
     // index 1 = show question group list
     // index 2 = next group
-    const validateSync = currentGroup?.question
-      ?.filter((q) => onFilterDependency(currentGroup, currentValues, q))
-      ?.filter(
-        (q) =>
+    // Extract all questions for recursive dependency checking
+    const allQuestions =
+      formDefinition?.question_group?.flatMap((qg) => qg.question).filter((q) => q) || [];
+
+    const validateSync =
+      currentGroup?.question
+        ?.filter((q) => onFilterDependency(currentGroup, currentValues, q, 0, allQuestions))
+        ?.filter(
+          (q) =>
+            /**
+             * Only entity cascade should not be undefined due to depends on options and prevAdmAnswer
+             */
+            (q?.extra?.type === 'entity' && currentValues?.[q?.id] !== undefined) ||
+            !q?.extra?.type,
+        )
+        ?.map((q) => {
+          const defaultVal = ['cascade', 'multiple_option', 'option', 'geo'].includes(q?.type)
+            ? null
+            : '';
           /**
-           * Only entity cascade should not be undefined due to depends on options and prevAdmAnswer
+           * Set default value when the answer is undefined
            */
-          (q?.extra?.type === 'entity' && currentValues?.[q?.id] !== undefined) || !q?.extra?.type,
-      )
-      ?.map((q) => {
-        const defaultVal = ['cascade', 'multiple_option', 'option', 'geo'].includes(q?.type)
-          ? null
-          : '';
-        /**
-         * Set default value when the answer is undefined
-         */
-        const fieldValue = currentValues?.[q?.id] === undefined ? defaultVal : currentValues[q.id];
-        return generateValidationSchemaFieldLevel(fieldValue, q);
-      });
+          const fieldValue =
+            currentValues?.[q?.id] === undefined ? defaultVal : currentValues[q.id];
+          return generateValidationSchemaFieldLevel(fieldValue, q);
+        }) || [];
     const validations = await Promise.allSettled(validateSync);
     const feedbackList = validations
       ?.filter(({ status }) => status === 'fulfilled')
@@ -122,7 +133,7 @@ const FormNavigation = ({
     });
 
     // No longer block navigation - allow moving to next group even with errors
-    if (!visitedQuestionGroup.includes(currentGroup?.id)) {
+    if (currentGroup?.id && !visitedQuestionGroup.includes(currentGroup.id)) {
       FormState.update((s) => {
         s.visitedQuestionGroup = [...visitedQuestionGroup, currentGroup.id];
       });
@@ -155,7 +166,8 @@ const FormNavigation = ({
         onSubmit();
       } else {
         ToastAndroid.show(
-          trans.completeAllRequiredFields || 'Please complete all required fields in all sections before submitting',
+          trans.completeAllRequiredFields ||
+            'Please complete all required fields in all sections before submitting',
           ToastAndroid.LONG,
         );
       }

@@ -262,6 +262,7 @@ class ListQuestionSerializer(serializers.ModelSerializer):
             "type",
             "required",
             "dependency",
+            "dependency_rule",
             "option",
             "center",
             "api",
@@ -453,6 +454,7 @@ class FormDataListQuestionSerializer(serializers.ModelSerializer):
             "rule",
             "option",
             "dependency",
+            "dependency_rule",
             "display_only",
             "attributes",
         ]

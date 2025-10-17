@@ -66,7 +66,9 @@ const FormContainer = ({
       ?.map((q) => ({ id: q.id, dependency: q.dependency })) || [];
 
   const formDefinition = transformForm(forms, currentValues, activeLang, repeats, prevAdmAnswer);
-  const activeQuestions = formDefinition?.question_group?.flatMap((qg) => qg?.question);
+  const activeQuestions = formDefinition?.question_group
+    ?.flatMap((qg) => qg?.question)
+    .filter((q) => q); // Filter out null/undefined values
   const currentGroup = useMemo(
     () => formDefinition?.question_group?.[activeGroup],
     [activeGroup, formDefinition?.question_group],

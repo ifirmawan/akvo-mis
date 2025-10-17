@@ -154,6 +154,7 @@ class Command(BaseCommand):
                             rule=q.get("rule"),
                             required=q.get("required"),
                             dependency=q.get("dependency"),
+                            dependency_rule=q.get("dependency_rule"),
                             api=q.get("api"),
                             type=getattr(QuestionTypes, q["type"]),
                             tooltip=q.get("tooltip"),
@@ -172,6 +173,7 @@ class Command(BaseCommand):
                         question.rule = q.get("rule")
                         question.required = q.get("required")
                         question.dependency = q.get("dependency")
+                        question.dependency_rule = q.get("dependency_rule")
                         question.type = getattr(QuestionTypes, q["type"])
                         question.api = q.get("api")
                         question.extra = q.get("extra")

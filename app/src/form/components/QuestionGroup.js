@@ -41,7 +41,12 @@ const QuestionGroup = ({ index, group, activeQuestions, dependantQuestions = [] 
     }
 
     // For non-repeatable groups, just use the filtered questions
-    return activeQuestions.filter((q) => q.group_id === group.id || q.group_name === group.name);
+    // Filter out null/undefined before accessing properties
+    return (
+      activeQuestions?.filter(
+        (q) => q && (q.group_id === group?.id || q.group_name === group?.name),
+      ) || []
+    );
   }, [group, activeQuestions]);
 
   // Handle onChange for all questions
@@ -85,7 +90,7 @@ const QuestionGroup = ({ index, group, activeQuestions, dependantQuestions = [] 
         <KeyboardAwareFlatList
           ref={listRef}
           data={flatListData}
-          keyExtractor={(item) => `${item.type}-${item.id}`}
+          keyExtractor={(item) => `${item?.type || 'question'}-${item?.id || Math.random()}`}
           onContentSizeChange={handleContentSizeChange}
           contentContainerStyle={{ paddingBottom: group?.repeatable ? 124 : 48 }}
           renderItem={(itemProps) => renderItem(itemProps, group?.repeatable)}

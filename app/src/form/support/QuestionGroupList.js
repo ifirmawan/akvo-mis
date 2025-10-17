@@ -6,15 +6,18 @@ import { onFilterDependency, generateDataPointName } from '../lib';
 import styles from '../styles';
 import { FormState } from '../../store';
 
-export const checkCompleteQuestionGroup = (form, values) =>
-  form.question_group.map((questionGroup) => {
+export const checkCompleteQuestionGroup = (form, values) => {
+  // Extract all questions for recursive dependency checking
+  const allQuestions = form.question_group.flatMap((qg) => qg.question).filter((q) => q);
+
+  return form.question_group.map((questionGroup) => {
     const filteredQuestions = questionGroup.question.filter((q) => q.required);
     return (
       filteredQuestions
         .map((question) => {
           if (question?.dependency) {
-            // Use onFilterDependency instead of modifyDependency
-            if (!onFilterDependency(questionGroup, values, question)) {
+            // Use onFilterDependency with allQuestions for recursive ancestor checking
+            if (!onFilterDependency(questionGroup, values, question, 0, allQuestions)) {
               return true; // Skip this question for completion check
             }
           }
@@ -26,13 +29,18 @@ export const checkCompleteQuestionGroup = (form, values) =>
         .filter((x) => x).length === filteredQuestions.length
     );
   });
+};
 
-export const checkGroupHasErrors = (form, values) =>
-  form.question_group.map((questionGroup) => {
+export const checkGroupHasErrors = (form, values) => {
+  // Extract all questions for recursive dependency checking
+  const allQuestions = form.question_group.flatMap((qg) => qg.question).filter((q) => q);
+
+  return form.question_group.map((questionGroup) => {
     const requiredQuestions = questionGroup.question.filter((q) => q.required);
     const hasUnanswered = requiredQuestions.some((question) => {
       if (question?.dependency) {
-        if (!onFilterDependency(questionGroup, values, question)) {
+        // Use onFilterDependency with allQuestions for recursive ancestor checking
+        if (!onFilterDependency(questionGroup, values, question, 0, allQuestions)) {
           return false; // Skip dependent questions that don't match
         }
       }
@@ -42,6 +50,7 @@ export const checkGroupHasErrors = (form, values) =>
     });
     return hasUnanswered;
   });
+};
 
 const QuestionGroupList = ({
   form,
@@ -65,8 +74,8 @@ const QuestionGroupList = ({
     [form, currentValues],
   );
 
-  const handleOnPress = (questionGroupId) => {
-    setActiveQuestionGroup(questionGroupId);
+  const handleOnPress = (questionGroupIndex) => {
+    setActiveQuestionGroup(questionGroupIndex);
     setShowQuestionGroupList(false);
   };
 
@@ -90,13 +99,13 @@ const QuestionGroupList = ({
         <QuestionGroupListItem
           key={questionGroup.id}
           label={questionGroup.label}
-          active={activeQuestionGroup === questionGroup.id}
+          active={activeQuestionGroup === qx}
           completedQuestionGroup={
             completedQuestionGroup[qx] && visitedQuestionGroup.includes(questionGroup.id)
           }
           hasErrors={groupHasErrors[qx]}
           visited={visitedQuestionGroup.includes(questionGroup.id)}
-          onPress={() => handleOnPress(questionGroup.id)}
+          onPress={() => handleOnPress(qx)}
         />
       ))}
     </View>

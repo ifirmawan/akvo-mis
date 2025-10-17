@@ -1198,23 +1198,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["raw_water_main"]
-            },
-            {
               "id": 1723459200018,
               "options": ["raw_water_pipeline"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1723459222019,
@@ -1253,27 +1240,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1723459200018,
-              "options": ["raw_water_pipeline"]
-            },
-            {
               "id": 1723459210020,
               "options": ["pvc", "polyethelene"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785206,
@@ -1285,23 +1255,10 @@
           "meta": false,
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["raw_water_main"]
-            },
-            {
               "id": 1723459200018,
               "options": ["air_valve"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785207,
@@ -1313,23 +1270,10 @@
           "meta": false,
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["raw_water_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["raw_water_main"]
-            },
-            {
               "id": 1723459200018,
               "options": ["washout"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         }
       ],
       "repeat_text": "Add another"
@@ -1540,23 +1484,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reservoir"]
-            },
-            {
               "id": 1723459210023,
               "options": ["reservoir_inlet"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785214,
@@ -1600,27 +1531,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1723459210023,
-              "options": ["reservoir_inlet"]
-            },
-            {
               "id": 1849622785213,
               "options": ["pvc", "polyethelene"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785215,
@@ -1646,23 +1560,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reservoir"]
-            },
-            {
               "id": 1723459210023,
               "options": ["reservoir_outlet"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785216,
@@ -1706,27 +1607,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1723459210023,
-              "options": ["reservoir_outlet"]
-            },
-            {
               "id": 1849622785215,
               "options": ["pvc", "polyethelene"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785217,
@@ -1752,23 +1636,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reservoir"]
-            },
-            {
               "id": 1723459210023,
               "options": ["reservoir_overflow"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785218,
@@ -1812,27 +1683,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reservoir"]
-            },
-            {
-              "id": 1723459210023,
-              "options": ["reservoir_overflow"]
-            },
-            {
               "id": 1849622785217,
               "options": ["pvc", "polyethelene"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         }
       ],
       "repeat_text": "Add another"
@@ -1995,23 +1849,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["distribution_main"]
-            },
-            {
               "id": 1723459200030,
               "options": ["distribution_pipeline"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1723459230031,
@@ -2055,27 +1896,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1723459200030,
-              "options": ["distribution_pipeline"]
-            },
-            {
               "id": 1723459290032,
               "options": ["pvc", "polyethelene"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1723459200033,
@@ -2090,23 +1914,10 @@
           },
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["distribution_main"]
-            },
-            {
               "id": 1723459200030,
               "options": ["distribution_pipeline"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785208,
@@ -2118,23 +1929,10 @@
           "meta": false,
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["distribution_main"]
-            },
-            {
               "id": 1723459200030,
               "options": ["air_valve"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785209,
@@ -2146,23 +1944,10 @@
           "meta": false,
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["distribution_main"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["distribution_main"]
-            },
-            {
               "id": 1723459200030,
               "options": ["washout"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         }
       ],
       "repeat_text": "Add another"
@@ -2331,23 +2116,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
               "id": 1723459200036,
               "options": ["reticulation_pipeline"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1723459200037,
@@ -2391,27 +2163,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1723459200036,
-              "options": ["reticulation_pipeline"]
-            },
-            {
               "id": 1723459299038,
               "options": ["pvc", "polyethelene"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1723459277038,
@@ -2437,23 +2192,10 @@
           ],
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
               "id": 1723459200036,
               "options": ["household_connection"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1723459277039,
@@ -2469,23 +2211,10 @@
           },
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
               "id": 1723459277038,
               "options": ["household"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1723459267040,
@@ -2501,23 +2230,10 @@
           },
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
               "id": 1723459277038,
               "options": ["shared"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785210,
@@ -2529,23 +2245,10 @@
           "meta": false,
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
               "id": 1723459200036,
               "options": ["air_valve"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         },
         {
           "id": 1849622785211,
@@ -2557,23 +2260,10 @@
           "meta": false,
           "dependency": [
             {
-              "id": 1749622726348,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["reticulation"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["reticulation"]
-            },
-            {
               "id": 1723459200036,
               "options": ["washout"]
             }
-          ],
-          "dependency_rule": "OR"
+          ]
         }
       ],
       "repeat_text": "Add another"

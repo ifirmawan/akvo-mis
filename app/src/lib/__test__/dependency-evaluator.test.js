@@ -504,6 +504,233 @@ describe('isDependencySatisfied - OR rule with ancestor dependencies (recursive)
   });
 });
 
+describe('isDependencySatisfied - AND rule with ancestor dependencies (recursive)', () => {
+  // These tests verify that AND rule dependencies also check ancestors recursively
+  test('should check ancestors for AND dependencies - simple case', () => {
+    const allQuestions = [
+      {
+        id: 1,
+        name: 'parent',
+        type: 'option',
+      },
+      {
+        id: 2,
+        name: 'child',
+        type: 'option',
+        dependency: [{ id: 1, options: ['option_a'] }],
+      },
+    ];
+
+    const question = {
+      id: 3,
+      name: 'grandchild',
+      dependency_rule: 'AND',
+      dependency: [{ id: 2, options: ['option_b'] }],
+    };
+
+    // Parent satisfied, child satisfied
+    const answersAllSatisfied = {
+      1: 'option_a',
+      2: ['option_b'],
+    };
+    expect(isDependencySatisfied(question, answersAllSatisfied, allQuestions)).toBe(true);
+
+    // Parent NOT satisfied, child has value
+    const answersParentNotSatisfied = {
+      1: 'option_x',
+      2: ['option_b'],
+    };
+    expect(isDependencySatisfied(question, answersParentNotSatisfied, allQuestions)).toBe(false);
+  });
+
+  test('should handle multiple AND dependencies with ancestors', () => {
+    const allQuestions = [
+      {
+        id: 1,
+        name: 'project_type',
+        type: 'option',
+      },
+      {
+        id: 2,
+        name: 'surface_water_site',
+        type: 'multiple_option',
+        dependency: [{ id: 1, options: ['surface_water'] }],
+      },
+      {
+        id: 3,
+        name: 'pipeline_type',
+        type: 'option',
+        dependency: [{ id: 2, options: ['pipeline'] }],
+      },
+    ];
+
+    const question = {
+      id: 4,
+      name: 'pipeline_size',
+      dependency_rule: 'AND',
+      dependency: [
+        { id: 2, options: ['pipeline'] },
+        { id: 3, options: ['pvc'] },
+      ],
+    };
+
+    // All ancestors satisfied
+    const answersAllSatisfied = {
+      1: 'surface_water',
+      2: ['pipeline'],
+      3: ['pvc'],
+    };
+    expect(isDependencySatisfied(question, answersAllSatisfied, allQuestions)).toBe(true);
+
+    // Direct dependencies satisfied but ancestor not satisfied
+    const answersAncestorNotSatisfied = {
+      1: 'borehole', // Wrong project type
+      2: ['pipeline'],
+      3: ['pvc'],
+    };
+    expect(isDependencySatisfied(question, answersAncestorNotSatisfied, allQuestions)).toBe(false);
+  });
+});
+
+describe('isDependencySatisfied - Rural Water Project nested dependencies (issue reproduction)', () => {
+  // This test reproduces the exact issue from the GitHub issue:
+  // Nested dependency questions fail to appear when parent dependencies are satisfied
+
+  const allQuestions = [
+    {
+      id: 1749621851234,
+      name: 'type_of_project',
+      type: 'option',
+      // No dependencies
+    },
+    {
+      id: 1749622726348,
+      name: 'accessible_surface_water_construction_site',
+      type: 'multiple_option',
+      dependency: [{ id: 1749621851234, options: ['surface_water_project'] }],
+    },
+    {
+      id: 1749622726349,
+      name: 'accessible_borehole_construction_site',
+      type: 'multiple_option',
+      dependency: [{ id: 1749621851234, options: ['borehole'] }],
+    },
+    {
+      id: 1749622726350,
+      name: 'accessible_desalination_construction_site',
+      type: 'multiple_option',
+      dependency: [{ id: 1749621851234, options: ['desalination'] }],
+    },
+    {
+      id: 1723459210023,
+      name: 'reservoir_name',
+      type: 'multiple_option',
+      dependency_rule: 'OR',
+      dependency: [
+        { id: 1749622726348, options: ['reservoir'] },
+        { id: 1749622726349, options: ['reservoir'] },
+        { id: 1749622726350, options: ['reservoir'] },
+      ],
+    },
+    {
+      id: 1849622785213,
+      name: 'reservoir_inlet_type_of_pipe',
+      type: 'multiple_option',
+      dependency: [{ id: 1723459210023, options: ['reservoir_inlet'] }],
+    },
+  ];
+
+  test('Step 1: Type of Project selected → surface_water_project', () => {
+    // Q1749622726348 should be visible when surface_water_project is selected
+    const question = allQuestions.find((q) => q.id === 1749622726348);
+    const answers = {
+      1749621851234: 'surface_water_project',
+    };
+    expect(isDependencySatisfied(question, answers, allQuestions)).toBe(true);
+  });
+
+  test('Step 2: Site Visit → reservoir selected', () => {
+    // Q1723459210023 should be visible when reservoir is selected in surface water site
+    const question = allQuestions.find((q) => q.id === 1723459210023);
+    const answers = {
+      1749621851234: 'surface_water_project',
+      1749622726348: ['reservoir'],
+    };
+    expect(isDependencySatisfied(question, answers, allQuestions)).toBe(true);
+  });
+
+  test('Step 3: Reservoir Inspection → reservoir_inlet selected', () => {
+    // Q1849622785213 should be visible when reservoir_inlet is selected
+    const question = allQuestions.find((q) => q.id === 1849622785213);
+    const answers = {
+      1749621851234: 'surface_water_project',
+      1749622726348: ['reservoir'],
+      1723459210023: ['reservoir_inlet'],
+    };
+    expect(isDependencySatisfied(question, answers, allQuestions)).toBe(true);
+  });
+
+  test('Step 4: Nested dependency correctly handles stale data (should return false)', () => {
+    // In this scenario, borehole is selected, but the dependency chain isn't satisfied
+    const question = allQuestions.find((q) => q.id === 1849622785213);
+    const answers = {
+      1749621851234: 'borehole',
+      1749622726348: ['reservoir'], // Stale data from previous selection
+      1749622726349: [], // Empty - no borehole site selected
+      1723459210023: ['reservoir_inlet'], // This has a value but its dependency isn't satisfied
+    };
+    // Q1849622785213 depends on Q1723459210023 having reservoir_inlet ✓
+    // Q1723459210023 (OR rule) depends on Q1749622726348, Q1749622726349, or Q1749622726350 having reservoir
+    // Q1749622726348 depends on Q1749621851234 being surface_water_project ✗ (it's borehole)
+    // Q1749622726349 depends on Q1749621851234 being borehole ✓, but doesn't have reservoir ✗
+    // Result: Q1723459210023's ancestors aren't satisfied, so Q1849622785213 should be false
+    expect(isDependencySatisfied(question, answers, allQuestions)).toBe(false);
+  });
+
+  test('Step 5: Nested dependency should NOT appear when direct dependency not selected', () => {
+    // Q1849622785213 should NOT be visible if reservoir_inlet is not selected
+    const question = allQuestions.find((q) => q.id === 1849622785213);
+    const answers = {
+      1749621851234: 'surface_water_project',
+      1749622726348: ['reservoir'],
+      1723459210023: ['reservoir_outlet'], // Wrong option (not reservoir_inlet)
+    };
+    expect(isDependencySatisfied(question, answers, allQuestions)).toBe(false);
+  });
+
+  test('Full chain: All dependencies satisfied through nested path', () => {
+    // Full chain from Type → Site → Inspection → Inlet Type
+    const question = allQuestions.find((q) => q.id === 1849622785213);
+    const answers = {
+      1749621851234: 'surface_water_project',
+      1749622726348: ['reservoir', 'dam'], // Multiple options, including reservoir
+      1723459210023: ['reservoir_inlet', 'reservoir_outlet'], // Multiple options
+    };
+    expect(isDependencySatisfied(question, answers, allQuestions)).toBe(true);
+  });
+
+  test('Alternative path: Borehole project type with reservoir', () => {
+    // Test OR logic - using borehole path instead of surface water
+    const question = allQuestions.find((q) => q.id === 1723459210023);
+    const answers = {
+      1749621851234: 'borehole',
+      1749622726349: ['reservoir'], // Borehole site with reservoir
+    };
+    expect(isDependencySatisfied(question, answers, allQuestions)).toBe(true);
+  });
+
+  test('Deeply nested with borehole path', () => {
+    // Q1849622785213 via borehole path (OR dependency at intermediate level)
+    const question = allQuestions.find((q) => q.id === 1849622785213);
+    const answers = {
+      1749621851234: 'borehole',
+      1749622726349: ['reservoir'],
+      1723459210023: ['reservoir_inlet'],
+    };
+    expect(isDependencySatisfied(question, answers, allQuestions)).toBe(true);
+  });
+});
+
 describe('normalizeDeps', () => {
   test('should merge duplicate dependency IDs', () => {
     const deps = [

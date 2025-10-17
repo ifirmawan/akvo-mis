@@ -1,6 +1,6 @@
 /**
  * Utility module for evaluating question dependencies with support for AND/OR rules.
- * Based on akvo-react-form v2.7.2 implementation.
+ * Based on akvo-react-form v2.7.4 implementation with recursive ancestor checking.
  */
 
 /**
@@ -98,9 +98,7 @@ const isDependencyWithAncestorsSatisfied = (dep, answers, allQuestions) => {
   // For repeatable groups, dep.id might have a suffix like "123-0"
   // Strip the suffix to find the original question
   const depIdStr = String(dep.id);
-  const baseDepId = depIdStr.includes('-')
-    ? parseInt(depIdStr.split('-')[0], 10)
-    : dep.id;
+  const baseDepId = depIdStr.includes('-') ? parseInt(depIdStr.split('-')[0], 10) : dep.id;
 
   // Find the question this dependency refers to (using base ID)
   const question = allQuestions?.find((q) => q.id === baseDepId);
@@ -114,12 +112,12 @@ const isDependencyWithAncestorsSatisfied = (dep, answers, allQuestions) => {
   if (ancestorRule === 'OR') {
     // At least one ancestor must be satisfied (recursively)
     return question.dependency.some((ancestorDep) =>
-      isDependencyWithAncestorsSatisfied(ancestorDep, answers, allQuestions)
+      isDependencyWithAncestorsSatisfied(ancestorDep, answers, allQuestions),
     );
   }
   // All ancestors must be satisfied (recursively)
   return question.dependency.every((ancestorDep) =>
-    isDependencyWithAncestorsSatisfied(ancestorDep, answers, allQuestions)
+    isDependencyWithAncestorsSatisfied(ancestorDep, answers, allQuestions),
   );
 };
 
@@ -139,21 +137,16 @@ export const isDependencySatisfied = (question, answers, allQuestions = []) => {
     return true;
   }
 
-  // For AND rule with flattened dependencies (legacy/backward compatibility)
-  // Just check all dependencies directly
+  // For AND rule: check each dependency recursively with ancestors
+  // ALL dependencies (with their ancestors) must be fully satisfied
   if (rule === 'AND' && deps.length > 0) {
-    return deps.every((dep) => {
-      const answer = answers[String(dep.id)];
-      return validateDependency(dep, answer);
-    });
+    return deps.every((dep) => isDependencyWithAncestorsSatisfied(dep, answers, allQuestions));
   }
 
   // For OR rule: check each dependency recursively with ancestors
   // At least ONE dependency (with its ancestors) must be fully satisfied
   if (rule === 'OR') {
-    return deps.some((dep) =>
-      isDependencyWithAncestorsSatisfied(dep, answers, allQuestions)
-    );
+    return deps.some((dep) => isDependencyWithAncestorsSatisfied(dep, answers, allQuestions));
   }
 
   // Fallback (shouldn't reach here)

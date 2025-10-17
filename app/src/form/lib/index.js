@@ -14,22 +14,6 @@ export const intersection = (array1, array2) => {
   return result;
 };
 
-const getDependencyAncestors = (questions, current, dependencies) => {
-  const ids = dependencies.map((x) => x.id);
-  const ancestors = questions.filter((q) => ids.includes(q.id)).filter((q) => q?.dependency);
-  if (ancestors.length) {
-    // eslint-disable-next-line no-param-reassign
-    current = [current, ...ancestors.map((x) => x.dependency)].flatMap((x) => x);
-    ancestors.forEach((a) => {
-      if (a?.dependency) {
-        // eslint-disable-next-line no-param-reassign
-        current = getDependencyAncestors(questions, current, a.dependency);
-      }
-    });
-  }
-  return current;
-};
-
 /**
  * Helper to recursively check if a dependency and all its ancestors are satisfied
  * @param {Object} dep - Dependency to check
@@ -39,7 +23,13 @@ const getDependencyAncestors = (questions, current, dependencies) => {
  * @param {number} repeat - Repeat index for repeatable groups
  * @returns {boolean}
  */
-const isDependencyWithAncestorsSatisfied = (dep, values, allQuestions, currentGroup, repeat = 0) => {
+const isDependencyWithAncestorsSatisfied = (
+  dep,
+  values,
+  allQuestions,
+  currentGroup,
+  repeat = 0,
+) => {
   // Check if this is a dependency on a question in the same group and needs modification for repeats
   let dependencyId = dep.id;
   const questions = currentGroup.question.map((question) => question.id);
@@ -58,9 +48,7 @@ const isDependencyWithAncestorsSatisfied = (dep, values, allQuestions, currentGr
   // For repeatable groups, dep.id might have a suffix like "123-0"
   // Strip the suffix to find the original question
   const depIdStr = String(dep.id);
-  const baseDepId = depIdStr.includes('-')
-    ? parseInt(depIdStr.split('-')[0], 10)
-    : dep.id;
+  const baseDepId = depIdStr.includes('-') ? parseInt(depIdStr.split('-')[0], 10) : dep.id;
 
   // Find the question this dependency refers to (using base ID)
   const question = allQuestions?.find((q) => q.id === baseDepId);
@@ -74,12 +62,12 @@ const isDependencyWithAncestorsSatisfied = (dep, values, allQuestions, currentGr
   if (ancestorRule === 'OR') {
     // At least one ancestor must be satisfied (recursively)
     return question.dependency.some((ancestorDep) =>
-      isDependencyWithAncestorsSatisfied(ancestorDep, values, allQuestions, currentGroup, repeat)
+      isDependencyWithAncestorsSatisfied(ancestorDep, values, allQuestions, currentGroup, repeat),
     );
   }
   // All ancestors must be satisfied (recursively)
   return question.dependency.every((ancestorDep) =>
-    isDependencyWithAncestorsSatisfied(ancestorDep, values, allQuestions, currentGroup, repeat)
+    isDependencyWithAncestorsSatisfied(ancestorDep, values, allQuestions, currentGroup, repeat),
   );
 };
 
@@ -88,26 +76,20 @@ export const onFilterDependency = (currentGroup, values, q, repeat = 0, allQuest
     // Get the dependency rule (default to AND for backward compatibility)
     const dependencyRule = (q?.dependency_rule || 'AND').toUpperCase();
 
-    // For AND rule: check all dependencies directly
+    // For AND rule: ALL dependencies (with their ancestors) must be fully satisfied
     if (dependencyRule === 'AND') {
-      const dependencyResults = q.dependency.map((d) => {
-        let dependencyId = d.id;
-        const questions = currentGroup.question.map((question) => question.id);
-        if (questions.includes(d.id) && repeat) {
-          dependencyId = `${d.id}-${repeat}`;
-        }
-        return validateDependency(d, values?.[dependencyId]);
-      });
-      const unmatches = dependencyResults.filter((x) => x === false);
-      if (unmatches.length) {
+      const allSatisfied = q.dependency.every((dep) =>
+        isDependencyWithAncestorsSatisfied(dep, values, allQuestions, currentGroup, repeat),
+      );
+      if (!allSatisfied) {
         return false;
       }
     }
 
-    // For OR rule: check each dependency recursively with ancestors
+    // For OR rule: At least ONE dependency (with its ancestors) must be fully satisfied
     if (dependencyRule === 'OR') {
       const satisfied = q.dependency.some((dep) =>
-        isDependencyWithAncestorsSatisfied(dep, values, allQuestions, currentGroup, repeat)
+        isDependencyWithAncestorsSatisfied(dep, values, allQuestions, currentGroup, repeat),
       );
       if (!satisfied) {
         return false;
@@ -156,20 +138,12 @@ export const transformForm = (
     if (x?.dependency) {
       const dependencyRule = x?.dependency_rule || 'AND';
 
-      // For OR rules, DON'T flatten - keep original structure for recursive evaluation
-      // For AND rules, flatten as before (backward compatibility)
-      if (dependencyRule.toUpperCase() === 'OR') {
-        return {
-          ...x,
-          requiredSign: requiredSignTemp,
-          dependency: x.dependency, // Keep original, not flattened
-          dependency_rule: dependencyRule,
-        };
-      }
+      // DON'T flatten dependencies - keep original structure for ALL rules
+      // Use recursive evaluation for both AND and OR rules
       return {
         ...x,
         requiredSign: requiredSignTemp,
-        dependency: getDependencyAncestors(questions, x.dependency, x.dependency),
+        dependency: x.dependency, // Keep original, not flattened
         dependency_rule: dependencyRule,
       };
     }
@@ -205,7 +179,9 @@ export const transformForm = (
 
               // Filter out questions based on dependencies, etc.
               // Pass the repeatIndex to handle repeat-specific dependencies
-              if (!onFilterDependency(qg, currentValues, transformedQuestion, repeatIndex, questions)) {
+              if (
+                !onFilterDependency(qg, currentValues, transformedQuestion, repeatIndex, questions)
+              ) {
                 return null;
               }
 

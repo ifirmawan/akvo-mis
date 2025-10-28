@@ -780,7 +780,7 @@
       "label": "Rainwater Harvesting Tanks",
       "description": null,
       "order": 2,
-      "repeatable": true,
+      "repeatable": false,
       "questions": [
         {
           "id": 1723459240011,
@@ -1531,8 +1531,8 @@
       "label": "Pumps Inspection",
       "description": null,
       "order": 6,
-      "repeatable": true,
-      "repeat_text": "Add another",
+      "repeatable": false,
+      "repeat_text": null,
       "questions": [
         {
           "id": 1749622177890,

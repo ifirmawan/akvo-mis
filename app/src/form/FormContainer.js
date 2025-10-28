@@ -250,6 +250,18 @@ const FormContainer = ({
     fetchInitialValues();
   }, [fetchInitialValues]);
 
+  // Add the initial active group to visitedQuestionGroup
+  useEffect(() => {
+    const initialGroup = formDefinition?.question_group?.[activeGroup];
+    if (initialGroup?.id !== undefined) {
+      FormState.update((s) => {
+        if (!s.visitedQuestionGroup.includes(initialGroup.id)) {
+          s.visitedQuestionGroup = [...s.visitedQuestionGroup, initialGroup.id];
+        }
+      });
+    }
+  }, [formDefinition, activeGroup]);
+
   if (fillingForm) {
     return (
       <View

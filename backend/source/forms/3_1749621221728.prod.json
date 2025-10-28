@@ -255,13 +255,27 @@
           ]
         },
         {
-          "id": 1749622711234,
-          "name": "wsmp_letter",
-          "label": "Attach The DWS WSMP Letter",
+          "id": 1749622691334,
+          "name": "wsmp_letter_available",
+          "label": "Are you able to attach WSMP letter?",
           "order": 14,
-          "type": "attachment",
+          "type": "option",
           "required": true,
           "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622697234,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622697235,
+              "order": 2
+            }
+          ],
           "dependency": [
             {
               "id": 1749622675800,
@@ -270,10 +284,25 @@
           ]
         },
         {
+          "id": 1749622711234,
+          "name": "wsmp_letter",
+          "label": "Attach The DWS WSMP Letter",
+          "order": 15,
+          "type": "attachment",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622691334,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
           "id": 1749622701234,
           "name": "construction_start_date",
           "label": "Construction Start Date",
-          "order": 15,
+          "order": 16,
           "type": "date",
           "required": false,
           "meta": false,
@@ -288,7 +317,7 @@
           "id": 1749622715678,
           "name": "water_committee",
           "label": "Do you have Water Committee and Is it active?",
-          "order": 16,
+          "order": 17,
           "type": "option",
           "required": true,
           "meta": false,

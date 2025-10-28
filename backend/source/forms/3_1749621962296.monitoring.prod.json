@@ -92,7 +92,7 @@
           "label": "Take photo of sampling point",
           "order": 5,
           "type": "photo",
-          "required": false,
+          "required": true,
           "meta": false,
           "dependency": [
             {
@@ -136,7 +136,7 @@
           "label": "Which parameters were you able to test?",
           "order": 7,
           "type": "multiple_option",
-          "required": false,
+          "required": true,
           "meta": false,
           "options": [
             {
@@ -282,7 +282,7 @@
           "label": "Take photo of CBT Bag",
           "order": 11,
           "type": "photo",
-          "required": false,
+          "required": true,
           "meta": false,
           "dependency": [
             {
@@ -535,7 +535,7 @@
           "label": "Which part of the Surface Water Project construction sites you can visit?",
           "order": 21,
           "type": "multiple_option",
-          "required": false,
+          "required": true,
           "meta": false,
           "options": [
             {
@@ -594,7 +594,7 @@
           "label": "Which part of the Borehole construction sites you can visit?",
           "order": 22,
           "type": "multiple_option",
-          "required": false,
+          "required": true,
           "meta": false,
           "options": [
             {
@@ -665,7 +665,7 @@
           "label": "Which part of the Desalination construction sites you can visit?",
           "order": 23,
           "type": "multiple_option",
-          "required": false,
+          "required": true,
           "meta": false,
           "options": [
             {
@@ -736,7 +736,7 @@
           "label": "Which part of the Rainwater Harvesting construction sites you can visit?",
           "order": 24,
           "type": "multiple_option",
-          "required": false,
+          "required": true,
           "meta": false,
           "options": [
             {
@@ -770,222 +770,605 @@
               "options": ["rainwater_harvesting"]
             }
           ]
-        },
-        {
-          "id": 1749621517282,
-          "name": "has_borehole",
-          "label": "Construction of borehole?",
-          "order": 25,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749621523401,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749621523402,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749622726349,
-              "options": ["borehole"]
-            }
-          ]
-        },
-        {
-          "id": 1749621541234,
-          "name": "borehole_construction_photo",
-          "label": "Photo of the Borehole",
-          "order": 26,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621517282,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621557442,
-          "name": "has_pump_system",
-          "label": "Installation of Pump system?",
-          "order": 27,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749621564288,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749621564289,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749622726349,
-              "options": ["borehole"]
-            }
-          ]
-        },
-        {
-          "id": 1749621581234,
-          "name": "pump_system_photo",
-          "label": "Photo of the Pump System",
-          "order": 28,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621557442,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621611527,
-          "name": "has_rainwater_harvesting",
-          "label": "Installation of Rainwater Harvesting System?",
-          "order": 29,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749621619301,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749621619302,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749622726351,
-              "options": ["rainwater"]
-            }
-          ]
-        },
-        {
-          "id": 1749621711234,
-          "name": "rainwater_harvesting_photo",
-          "label": "Photo of the Rainwater Harvesting System",
-          "order": 30,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621611527,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621624568,
-          "name": "number_of_communial_rainwater_harvesting_systems",
-          "label": "Number of Communal rainwater harvesting system installed",
-          "order": 31,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726351,
-              "options": ["rainwater"]
-            }
-          ]
-        },
-        {
-          "id": 1749621624567,
-          "name": "number_of_rainwater_harvesting_systems",
-          "label": "Number of household rainwater harvesting system installed",
-          "order": 32,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621611527,
-              "options": ["yes"]
-            }
-          ]
-        },
-        {
-          "id": 1749621690983,
-          "name": "has_desalination",
-          "label": "Installation of Desalination Plant?",
-          "order": 33,
-          "type": "option",
-          "required": true,
-          "meta": false,
-          "options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "id": 1749621697642,
-              "order": 1
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "id": 1749621697643,
-              "order": 2
-            }
-          ],
-          "dependency": [
-            {
-              "id": 1749622726350,
-              "options": ["desalination"]
-            }
-          ]
-        },
-        {
-          "id": 1749621634567,
-          "name": "desalination_plant_photo",
-          "label": "Photo of the Desalination Plant",
-          "order": 34,
-          "type": "photo",
-          "required": false,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749621690983,
-              "options": ["yes"]
-            }
-          ]
         }
       ],
       "repeat_text": null
+    },
+    {
+      "id": 1723459250010,
+      "name": "rainwater_harvesting_tanks",
+      "label": "Rainwater Harvesting Tanks",
+      "description": null,
+      "order": 2,
+      "repeatable": true,
+      "questions": [
+        {
+          "id": 1723459240011,
+          "name": "rainwater_gps_location",
+          "label": "GPS Location of the Tank",
+          "order": 1,
+          "type": "geo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["rainwater"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240012,
+          "name": "rainwater_intended_tank_type",
+          "label": "Which type of Rainwater Harvesting Tank is intended for installation?",
+          "order": 2,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "communal_tank",
+              "label": "Communal Rainwater Harvesting Tank",
+              "id": 1723459241013,
+              "order": 1
+            },
+            {
+              "value": "household_tank",
+              "label": "Household Rainwater Harvesting Tank",
+              "id": 1723459241014,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["rainwater"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240013,
+          "name": "number_of_communal_rwh_tanks",
+          "label": "Number of Communal RWH tanks implemented",
+          "order": 3,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["communal_tank"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          }
+        },
+        {
+          "id": 1723459240014,
+          "name": "total_number_of_communal_rwh_tanks",
+          "label": "Total number of Communal RWH tanks to be implemented",
+          "order": 4,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["communal_tank"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          }
+        },
+        {
+          "id": 1723459240015,
+          "name": "size_of_communal_rwh_tanks",
+          "label": "Size of Tanks for Communal RWH",
+          "order": 5,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["communal_tank"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          }
+        },
+        {
+          "id": 1723459240016,
+          "name": "overflow_pipe_communal_rwh_tank",
+          "label": "Is there any overflow pipe for the Communal RWH Tank?",
+          "order": 6,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1723459241017,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1723459241018,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["communal_tank"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240017,
+          "name": "overflow_pipe_direction_communal_rwh_tank",
+          "label": "Is the pipe directed away from the tank foundation?",
+          "order": 7,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1723459241019,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1723459241020,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459240016,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240018,
+          "name": "reason_no_overflow_pipe_communal_rwh_tank",
+          "label": "Why is there no overflow pipe for the Communal RWH Tank?",
+          "order": 8,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240016,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240019,
+          "name": "backwash_pipe_communal_rwh_tank",
+          "label": "Is there any backwash pipe for the Communal RWH tank?",
+          "order": 9,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1723459241021,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1723459241022,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["communal_tank"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240020,
+          "name": "drainage_for_backwash_pipe_communal_rwh_tank",
+          "label": "Is proper drainage provided for this flush out pipe?",
+          "order": 10,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1723459241023,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1723459241024,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459240019,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240021,
+          "name": "reason_no_backwash_pipe_communal_rwh_tank",
+          "label": "Why is there no backwash pipe for the Communal RWH Tank?",
+          "order": 11,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240019,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240022,
+          "name": "installation_of_communal_rwh_system",
+          "label": "Installation of Communal Rainwater Harvesting System",
+          "order": 12,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1723459241025,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1723459241026,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["communal_tank"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240023,
+          "name": "issues_noted_communal_rwh_system",
+          "label": "List down any issues noted with the Communal Rainwater Harvesting System inspection?",
+          "order": 13,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["communal_tank"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250011,
+          "name": "number_of_household_rwh_tanks",
+          "label": "Number of Household RWH tanks implemented",
+          "order": 14,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["household_tank"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          }
+        },
+        {
+          "id": 1723459250012,
+          "name": "total_number_of_household_rwh_tanks",
+          "label": "Total number of Household RWH tanks to be implemented",
+          "order": 15,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["household_tank"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          }
+        },
+        {
+          "id": 1723459250113,
+          "name": "size_of_household_rwh_tanks",
+          "label": "Size of Tanks for Household RWH",
+          "order": 16,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["household_tank"]
+            }
+          ],
+          "rule": {
+            "allowDecimal": false,
+            "min": 0
+          }
+        },
+        {
+          "id": 1723459250114,
+          "name": "overflow_pipe_household_rwh_tank",
+          "label": "Is there any overflow pipe for the Household RWH Tank?",
+          "order": 17,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1723459251015,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1723459251016,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["household_tank"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250015,
+          "name": "overflow_pipe_direction_household_rwh_tank",
+          "label": "Is the pipe directed away from the tank foundation?",
+          "order": 18,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1723459251017,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1723459251018,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459250114,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250016,
+          "name": "reason_no_overflow_pipe_household_rwh_tank",
+          "label": "Why is there no overflow pipe for the Household RWH Tank?",
+          "order": 19,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459250114,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250017,
+          "name": "backwash_pipe_household_rwh_tank",
+          "label": "Is there any backwash pipe for the Household RWH tank?",
+          "order": 20,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1723459251019,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1723459251020,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["household_tank"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250018,
+          "name": "drainage_for_backwash_pipe_household_rwh_tank",
+          "label": "Is proper drainage provided for this flush out pipe?",
+          "order": 21,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1723459251021,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1723459251022,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459250017,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250019,
+          "name": "reason_no_backwash_pipe_household_rwh_tank",
+          "label": "Why is there no backwash pipe for the Household RWH Tank?",
+          "order": 22,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459250017,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250020,
+          "name": "installation_of_household_rwh_system",
+          "label": "Installation of Household Rainwater Harvesting System",
+          "order": 23,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1723459251023,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1723459251024,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["household_tank"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250021,
+          "name": "issues_noted_household_rwh_system",
+          "label": "List down any issues noted with the Household Rainwater Harvesting System inspection?",
+          "order": 24,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459240012,
+              "options": ["household_tank"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1723459250022,
+      "name": "rainwater_harvesting_tanks_photos",
+      "label": "Rainwater Harvesting Tanks Implementation Photos",
+      "description": null,
+      "order": 3,
+      "repeatable": true,
+      "repeat_text": "Add another",
+      "questions": [
+        {
+          "id": 1723459250023,
+          "name": "rainwater_harvesting_tank_photo",
+          "label": "Photo of the Rainwater Harvesting Tank Implementation",
+          "order": 1,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["rainwater"]
+            }
+          ]
+        },
+        {
+          "id": 1723459250024,
+          "name": "rainwater_harvesting_tank_photo_description",
+          "label": "Description of the Photo",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["rainwater"]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 1723459200010,
       "name": "dam_inspection",
       "label": "Dam Inspection",
       "description": null,
-      "order": 2,
+      "order": 4,
       "repeatable": false,
       "questions": [
         {
@@ -1055,6 +1438,50 @@
               "options": ["dam"]
             }
           ]
+        },
+        {
+          "id": 1723459210015,
+          "name": "dam_construction_implementation",
+          "label": "Dam Construction Implementation",
+          "order": 3,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1723459211016,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1723459211017,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["dam"]
+            }
+          ]
+        },
+        {
+          "id": 1723459220018,
+          "name": "dam_issues_noted",
+          "label": "List down any issues noted with the dam inspection?",
+          "order": 4,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["dam"]
+            }
+          ]
         }
       ]
     },
@@ -1063,7 +1490,7 @@
       "name": "dam_photos",
       "label": "Dam Photos",
       "description": null,
-      "order": 3,
+      "order": 5,
       "repeatable": true,
       "questions": [
         {
@@ -1099,11 +1526,332 @@
       ]
     },
     {
+      "id": 1749622171234,
+      "name": "pumps_inspection",
+      "label": "Pumps Inspection",
+      "description": null,
+      "order": 6,
+      "repeatable": true,
+      "repeat_text": "Add another",
+      "questions": [
+        {
+          "id": 1749622177890,
+          "name": "pumps_gps_location",
+          "label": "GPS Location of the Pumps",
+          "order": 1,
+          "type": "geo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622181234,
+          "name": "pumps_name",
+          "label": "Type of pump for this project",
+          "order": 2,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "dry_well_pump",
+              "label": "Dry Well Pump",
+              "id": 1749622187890,
+              "order": 1
+            },
+            {
+              "value": "wet_well_pump",
+              "label": "Wet Well Pump",
+              "id": 1749622187891,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622191234,
+          "name": "pumps_implementation",
+          "label": "Pump Implementation",
+          "order": 3,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749622197891,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749622197892,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622207890,
+          "name": "pumps_photo_available",
+          "label": "Are you able to take photo of the pump?",
+          "order": 4,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622207891,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622207892,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622197890,
+          "name": "pumps_photo",
+          "label": "Photo",
+          "order": 5,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622207890,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749622201234,
+          "name": "pumps_photo_description",
+          "label": "Description of Photo",
+          "order": 6,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622207890,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749622202234,
+          "name": "pumps_power_supply",
+          "label": "What is the source of Power Supply for this Pump?",
+          "order": 7,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "generator",
+              "label": "Generator",
+              "id": 1749622207893,
+              "order": 1
+            },
+            {
+              "value": "solar_powered",
+              "label": "Solar Powered",
+              "id": 1749622207894,
+              "order": 2
+            },
+            {
+              "value": "hybrid",
+              "label": "Hybrid",
+              "id": 1749622207895,
+              "order": 3
+            },
+            {
+              "value": "electricity",
+              "label": "Electricity",
+              "id": 1749622207896,
+              "order": 4
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622203234,
+          "name": "pumps_power_supply_photo_available",
+          "label": "Are you able to take photo of the Power Supply?",
+          "order": 8,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622207897,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622207898,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622204234,
+          "name": "pumps_power_supply_photo",
+          "label": "Photo of Power Supply",
+          "order": 9,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622203234,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749622205234,
+          "name": "pumps_power_supply_photo_description",
+          "label": "Description of Power Supply Photo",
+          "order": 10,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622203234,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749622206234,
+          "name": "pumps_issues_noted",
+          "label": "List down any issues noted with inspecting the pump?",
+          "order": 11,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["pumps"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["pumps"]
+            }
+          ],
+          "dependency_rule": "OR"
+        }
+      ]
+    },
+    {
       "id": 1723459200015,
       "name": "raw_water_main_inspection",
       "label": "Raw Water Main Inspection",
       "description": null,
-      "order": 4,
+      "order": 7,
       "repeatable": false,
       "questions": [
         {
@@ -1205,8 +1953,8 @@
         },
         {
           "id": 1723459222019,
-          "name": "raw_water_main_size",
-          "label": "Size of Pipe",
+          "name": "raw_water_main_size_pvc",
+          "label": "Size of PVC Pipe",
           "order": 4,
           "type": "multiple_option",
           "required": true,
@@ -1241,7 +1989,49 @@
           "dependency": [
             {
               "id": 1723459210020,
-              "options": ["pvc", "polyethelene"]
+              "options": ["pvc"]
+            }
+          ]
+        },
+        {
+          "id": 1723459222020,
+          "name": "raw_water_main_size_pe",
+          "label": "Size of Polyethelene Pipe",
+          "order": 5,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459210020,
+              "options": ["polyethelene"]
             }
           ]
         },
@@ -1249,7 +2039,22 @@
           "id": 1849622785206,
           "name": "air_valve_count",
           "label": "Number of Air Valve to be installed",
-          "order": 5,
+          "order": 6,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459200018,
+              "options": ["air_valve"]
+            }
+          ]
+        },
+        {
+          "id": 1849622786206,
+          "name": "air_valve_total_count",
+          "label": "Total Number of Air Valves to be installed",
+          "order": 7,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1264,7 +2069,7 @@
           "id": 1849622785207,
           "name": "washout_count",
           "label": "Number of Washout to be installed",
-          "order": 6,
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1274,6 +2079,83 @@
               "options": ["washout"]
             }
           ]
+        },
+        {
+          "id": 1849622786207,
+          "name": "washout_total_count",
+          "label": "Total Number of Washout to be installed",
+          "order": 9,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459200018,
+              "options": ["washout"]
+            }
+          ]
+        },
+        {
+          "id": 1723459310020,
+          "name": "raw_water_main_implementation",
+          "label": "Raw Water Main Implementation",
+          "order": 10,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1723459211021,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1723459211022,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1723459220020,
+          "name": "raw_water_main_issues_noted",
+          "label": "List down any issues noted with the raw water main inspection?",
+          "order": 11,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["raw_water_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["raw_water_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -1283,7 +2165,7 @@
       "name": "raw_water_main_photos",
       "label": "Raw Water Main Photos",
       "description": null,
-      "order": 5,
+      "order": 8,
       "repeatable": true,
       "questions": [
         {
@@ -1341,7 +2223,7 @@
       "name": "reservoir_inspection",
       "label": "Reservoir Inspection",
       "description": null,
-      "order": 6,
+      "order": 9,
       "repeatable": false,
       "questions": [
         {
@@ -1491,8 +2373,8 @@
         },
         {
           "id": 1849622785214,
-          "name": "reservoir_inlet_pipe_size",
-          "label": "Size of Reservoir Inlet Pipe",
+          "name": "reservoir_inlet_pipe_size_pvc",
+          "label": "Size of Reservoir Inlet PVC Pipe",
           "order": 4,
           "type": "multiple_option",
           "required": true,
@@ -1532,7 +2414,54 @@
           "dependency": [
             {
               "id": 1849622785213,
-              "options": ["pvc", "polyethelene"]
+              "options": ["pvc"]
+            }
+          ]
+        },
+        {
+          "id": 1849622785240,
+          "name": "reservoir_inlet_pipe_size_polyethelene",
+          "label": "Size of Reservoir Inlet Polyethelene Pipe",
+          "order": 5,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1,
+              "id": 1849622785241
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2,
+              "id": 1849622785242
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3,
+              "id": 1849622785243
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4,
+              "id": 1849622785244
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5,
+              "id": 1849622785245
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1849622785213,
+              "options": ["polyethelene"]
             }
           ]
         },
@@ -1540,7 +2469,7 @@
           "id": 1849622785215,
           "name": "reservoir_outlet_type_of_pipe",
           "label": "Type of Reservoir Outlet Pipe",
-          "order": 5,
+          "order": 6,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -1567,9 +2496,9 @@
         },
         {
           "id": 1849622785216,
-          "name": "reservoir_outlet_pipe_size",
-          "label": "Size of Reservoir Outlet Pipe",
-          "order": 6,
+          "name": "reservoir_outlet_pipe_size_pvc",
+          "label": "Size of Reservoir Outlet PVC Pipe",
+          "order": 7,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -1608,7 +2537,54 @@
           "dependency": [
             {
               "id": 1849622785215,
-              "options": ["pvc", "polyethelene"]
+              "options": ["pvc"]
+            }
+          ]
+        },
+        {
+          "id": 1849622785246,
+          "name": "reservoir_outlet_pipe_size_polyethelene",
+          "label": "Size of Reservoir Outlet Polyethelene Pipe",
+          "order": 8,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1,
+              "id": 1849622785247
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2,
+              "id": 1849622785248
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3,
+              "id": 1849622785249
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4,
+              "id": 1849622785250
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5,
+              "id": 1849622785251
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1849622785215,
+              "options": ["polyethelene"]
             }
           ]
         },
@@ -1616,7 +2592,7 @@
           "id": 1849622785217,
           "name": "reservoir_overflow_type_of_pipe",
           "label": "Type of Reservoir Overflow Pipe",
-          "order": 7,
+          "order": 9,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -1643,9 +2619,9 @@
         },
         {
           "id": 1849622785218,
-          "name": "reservoir_overflow_pipe_size",
-          "label": "Size of Reservoir Overflow Pipe",
-          "order": 8,
+          "name": "reservoir_overflow_pipe_size_pvc",
+          "label": "Size of Reservoir Overflow PVC Pipe",
+          "order": 10,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -1684,9 +2660,118 @@
           "dependency": [
             {
               "id": 1849622785217,
-              "options": ["pvc", "polyethelene"]
+              "options": ["pvc"]
             }
           ]
+        },
+        {
+          "id": 1849622785252,
+          "name": "reservoir_overflow_pipe_size_polyethelene",
+          "label": "Size of Reservoir Overflow Polyethelene Pipe",
+          "order": 11,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1,
+              "id": 1849622785253
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2,
+              "id": 1849622785254
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3,
+              "id": 1849622785255
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4,
+              "id": 1849622785256
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5,
+              "id": 1849622785257
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1849622785217,
+              "options": ["polyethelene"]
+            }
+          ]
+        },
+        {
+          "id": 1723459310033,
+          "name": "reservoir_implementation",
+          "label": "Reservoir Construction/ Implementation",
+          "order": 12,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1723459211034,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1723459211035,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1723459220024,
+          "name": "reservoir_issues_noted",
+          "label": "List down any issues noted with the reservoir inspection?",
+          "order": 13,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -1696,7 +2781,7 @@
       "name": "reservoir_photos",
       "label": "Reservoir Photos",
       "description": null,
-      "order": 7,
+      "order": 10,
       "repeatable": true,
       "questions": [
         {
@@ -1754,7 +2839,7 @@
       "name": "distribution_main_inspection",
       "label": "Distribution Main Inspection",
       "description": null,
-      "order": 8,
+      "order": 11,
       "repeatable": false,
       "questions": [
         {
@@ -1856,8 +2941,8 @@
         },
         {
           "id": 1723459230031,
-          "name": "distribution_main_size",
-          "label": "Size of Pipe",
+          "name": "distribution_main_size_pvc",
+          "label": "Size of PVC Pipe",
           "order": 4,
           "type": "multiple_option",
           "required": true,
@@ -1897,7 +2982,54 @@
           "dependency": [
             {
               "id": 1723459290032,
-              "options": ["pvc", "polyethelene"]
+              "options": ["pvc"]
+            }
+          ]
+        },
+        {
+          "id": 1723459240032,
+          "name": "distribution_main_size_polyethelene",
+          "label": "Size of Polyethelene Pipe",
+          "order": 5,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "id": 1723459240133,
+              "order": 1
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "id": 1723459240134,
+              "order": 2
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "id": 1723459240135,
+              "order": 3
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "id": 1723459240136,
+              "order": 4
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "id": 1723459240137,
+              "order": 5
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459290032,
+              "options": ["polyethelene"]
             }
           ]
         },
@@ -1905,7 +3037,7 @@
           "id": 1723459200033,
           "name": "distribution_main_length",
           "label": "Length of Pipe (meters)",
-          "order": 5,
+          "order": 6,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1923,7 +3055,22 @@
           "id": 1849622785208,
           "name": "distribution_air_valve_count",
           "label": "Number of Air Valve to be installed",
-          "order": 6,
+          "order": 7,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459200030,
+              "options": ["air_valve"]
+            }
+          ]
+        },
+        {
+          "id": 1849622786208,
+          "name": "distribution_air_valve_total_count",
+          "label": "Total Number of Air Valves to be installed",
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1938,7 +3085,7 @@
           "id": 1849622785209,
           "name": "distribution_washout_count",
           "label": "Number of Washout to be installed",
-          "order": 7,
+          "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1948,6 +3095,83 @@
               "options": ["washout"]
             }
           ]
+        },
+        {
+          "id": 1849622786209,
+          "name": "distribution_washout_total_count",
+          "label": "Total Number of Washout to be installed",
+          "order": 10,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459200030,
+              "options": ["washout"]
+            }
+          ]
+        },
+        {
+          "id": 1723459310036,
+          "name": "distribution_main_implementation",
+          "label": "Distribution Main Implementation",
+          "order": 11,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1723459211037,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1723459211038,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1723459220028,
+          "name": "distribution_main_issues_noted",
+          "label": "List down any issues noted with the distribution main inspection?",
+          "order": 12,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["distribution_main"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["distribution_main"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -1957,7 +3181,7 @@
       "name": "distribution_main_photos",
       "label": "Distribution Main Photos",
       "description": null,
-      "order": 9,
+      "order": 12,
       "repeatable": true,
       "questions": [
         {
@@ -2015,7 +3239,7 @@
       "name": "reticulation_inspection",
       "label": "Reticulation Inspection",
       "description": null,
-      "order": 10,
+      "order": 13,
       "repeatable": false,
       "questions": [
         {
@@ -2123,8 +3347,8 @@
         },
         {
           "id": 1723459200037,
-          "name": "reticulation_size",
-          "label": "Size of Pipe",
+          "name": "reticulation_size_pvc",
+          "label": "Size of PVC Pipe",
           "order": 4,
           "type": "multiple_option",
           "required": true,
@@ -2164,7 +3388,54 @@
           "dependency": [
             {
               "id": 1723459299038,
-              "options": ["pvc", "polyethelene"]
+              "options": ["pvc"]
+            }
+          ]
+        },
+        {
+          "id": 1723459267039,
+          "name": "reticulation_size_polyethelene",
+          "label": "Size of Polyethelene Pipe",
+          "order": 5,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "id": 1723459267041,
+              "order": 1
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "id": 1723459267042,
+              "order": 2
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "id": 1723459267043,
+              "order": 3
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "id": 1723459267044,
+              "order": 4
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "id": 1723459267045,
+              "order": 5
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459299038,
+              "options": ["polyethelene"]
             }
           ]
         },
@@ -2172,7 +3443,7 @@
           "id": 1723459277038,
           "name": "reticulation_connection_type",
           "label": "Type of Connection",
-          "order": 5,
+          "order": 6,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2201,7 +3472,7 @@
           "id": 1723459277039,
           "name": "number_of_household_connections",
           "label": "Number of Household Connections",
-          "order": 6,
+          "order": 7,
           "type": "number",
           "required": true,
           "meta": false,
@@ -2220,7 +3491,7 @@
           "id": 1723459267040,
           "name": "number_of_shared_connections",
           "label": "Number of Shared Connections",
-          "order": 7,
+          "order": 8,
           "type": "number",
           "required": true,
           "meta": false,
@@ -2239,7 +3510,22 @@
           "id": 1849622785210,
           "name": "reticulation_air_valve_count",
           "label": "Number of Air Valve to be installed",
-          "order": 8,
+          "order": 9,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459200036,
+              "options": ["air_valve"]
+            }
+          ]
+        },
+        {
+          "id": 1849622785210,
+          "name": "reticulation air_valve_total_count",
+          "label": "Total Number of Air Valves to be Installed",
+          "order": 10,
           "type": "number",
           "required": true,
           "meta": false,
@@ -2254,7 +3540,7 @@
           "id": 1849622785211,
           "name": "reticulation_washout_count",
           "label": "Number of Washout to be installed",
-          "order": 9,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
@@ -2264,6 +3550,83 @@
               "options": ["washout"]
             }
           ]
+        },
+        {
+          "id": 1849622786211,
+          "name": "reticulation_washout_total_count",
+          "label": "Total Number of Washout to be installed",
+          "order": 12,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459200036,
+              "options": ["washout"]
+            }
+          ]
+        },
+        {
+          "id": 1723459310040,
+          "name": "reticulation_implementation",
+          "label": "Reticulation Implementation",
+          "order": 13,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1723459211041,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1723459211042,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1723459220030,
+          "name": "reticulation_issues_noted",
+          "label": "List down any issues noted with the reticulation inspection?",
+          "order": 14,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reticulation"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reticulation"]
+            }
+          ],
+          "dependency_rule": "OR"
         }
       ],
       "repeat_text": "Add another"
@@ -2273,7 +3636,7 @@
       "name": "reticulation_photos",
       "label": "Reticulation Photos",
       "description": null,
-      "order": 11,
+      "order": 14,
       "repeatable": true,
       "questions": [
         {
@@ -2331,14 +3694,58 @@
       "name": "desalination_inspection",
       "label": "Desalination Inspection",
       "description": null,
-      "order": 12,
+      "order": 15,
       "repeatable": false,
       "questions": [
         {
-          "id": 1749621971234,
-          "name": "sea_water_storage",
-          "label": "Sea Water Storage",
+          "id": 1749621961233,
+          "name": "desalination_gps_location",
+          "label": "GPS Location of the Tank",
           "order": 1,
+          "type": "geo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
+        },
+        {
+          "id": 1749621971234,
+          "name": "sea_water_storage_implementation",
+          "label": "Sea Water Storage Implementation",
+          "order": 2,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749621977892,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749621977893,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
+        },
+        {
+          "id": 1749621972234,
+          "name": "sea_water_storage_status",
+          "label": "Sea Water Storage Operational Status",
+          "order": 3,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2360,14 +3767,62 @@
             {
               "id": 1749622726350,
               "options": ["desalination"]
+            },
+            {
+              "id": 1749621971234,
+              "options": ["completed"]
+            }
+          ]
+        },
+        {
+          "id": 1749621973234,
+          "name": "sea_water_storage_issues_noted",
+          "label": "Why is it non-operational?",
+          "order": 4,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621972234,
+              "options": ["non_operational"]
+            }
+          ]
+        },
+        {
+          "id": 1749621980096,
+          "name": "intake_system_suction_case_implementation",
+          "label": "Intake System Suction Case Implementation",
+          "order": 5,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749621987892,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749621987893,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
             }
           ]
         },
         {
           "id": 1749621981234,
-          "name": "intake_system_suction_case",
-          "label": "Intake System Suction Case",
-          "order": 2,
+          "name": "intake_system_suction_case_status",
+          "label": "Intake System Suction Case Operational Status",
+          "order": 6,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2389,14 +3844,62 @@
             {
               "id": 1749622726350,
               "options": ["desalination"]
+            },
+            {
+              "id": 1749621980096,
+              "options": ["completed"]
+            }
+          ]
+        },
+        {
+          "id": 1749621982234,
+          "name": "intake_system_suction_case_issues_noted",
+          "label": "Why is it non-operational?",
+          "order": 7,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621981234,
+              "options": ["non_operational"]
+            }
+          ]
+        },
+        {
+          "id": 1749621990096,
+          "name": "intake_system_suction_pipe_implementation",
+          "label": "Intake System Suction Pipe Implementation",
+          "order": 8,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749621997892,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749621997893,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
             }
           ]
         },
         {
           "id": 1749621991234,
-          "name": "intake_system_suction_pipe",
-          "label": "Intake System Suction Pipe",
-          "order": 3,
+          "name": "intake_system_suction_pipe_status",
+          "label": "Intake System Suction Pipe Operational Status",
+          "order": 9,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2418,28 +3921,47 @@
             {
               "id": 1749622726350,
               "options": ["desalination"]
+            },
+            {
+              "id": 1749621990096,
+              "options": ["completed"]
             }
           ]
         },
         {
-          "id": 1749622001234,
-          "name": "outfall_system",
-          "label": "Outfall System",
-          "order": 4,
+          "id": 1749621992234,
+          "name": "intake_system_suction_pipe_issues_noted",
+          "label": "Why is it non-operational?",
+          "order": 10,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749621991234,
+              "options": ["non_operational"]
+            }
+          ]
+        },
+        {
+          "id": 1749622000096,
+          "name": "outfall_system_implementation",
+          "label": "Outfall System Implementation",
+          "order": 11,
           "type": "option",
           "required": true,
           "meta": false,
           "options": [
             {
-              "value": "operational",
-              "label": "Operational",
-              "id": 1749622007890,
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749622007892,
               "order": 1
             },
             {
-              "value": "non_operational",
-              "label": "Non Operational",
-              "id": 1749622007891,
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749622007893,
               "order": 2
             }
           ],
@@ -2451,10 +3973,10 @@
           ]
         },
         {
-          "id": 1749622031234,
-          "name": "storage_tanks",
-          "label": "Storage Tanks",
-          "order": 5,
+          "id": 1749622001234,
+          "name": "outfall_system_status",
+          "label": "Outfall System Operational Status",
+          "order": 12,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2476,6 +3998,25 @@
             {
               "id": 1749622726350,
               "options": ["desalination"]
+            },
+            {
+              "id": 1749622000096,
+              "options": ["completed"]
+            }
+          ]
+        },
+        {
+          "id": 1749622002234,
+          "name": "outfall_system_issues_noted",
+          "label": "Why is it non-operational?",
+          "order": 13,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622001234,
+              "options": ["non_operational"]
             }
           ]
         },
@@ -2483,7 +4024,7 @@
           "id": 1749622041234,
           "name": "desalination_power_supply",
           "label": "Type of Power Supply",
-          "order": 6,
+          "order": 14,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2521,39 +4062,39 @@
           ]
         },
         {
-          "id": 1749622051234,
-          "name": "generator",
-          "label": "Generator",
-          "order": 7,
+          "id": 1749622051233,
+          "name": "desalination_power_supply_implementation",
+          "label": "Status of Power Supply Implementation",
+          "order": 15,
           "type": "option",
           "required": true,
           "meta": false,
           "options": [
             {
-              "value": "operational",
-              "label": "Operational",
-              "id": 1749622057890,
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749622057892,
               "order": 1
             },
             {
-              "value": "non_operational",
-              "label": "Non Operational",
-              "id": 1749622057891,
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749622057893,
               "order": 2
             }
           ],
           "dependency": [
             {
-              "id": 1749622041234,
-              "options": ["generator", "hybrid"]
+              "id": 1749622726350,
+              "options": ["desalination"]
             }
           ]
         },
         {
           "id": 1749622061234,
-          "name": "solar_powered",
-          "label": "Solar Powered",
-          "order": 8,
+          "name": "desalination_power_supply_status",
+          "label": "Power Supply Operational Status",
+          "order": 16,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2573,37 +4114,71 @@
           ],
           "dependency": [
             {
-              "id": 1749622041234,
-              "options": ["solar_powered", "hybrid"]
+              "id": 1749622726350,
+              "options": ["desalination"]
+            },
+            {
+              "id": 1749622051233,
+              "options": ["completed"]
             }
           ]
         },
         {
           "id": 1749622062234,
-          "name": "electricity",
-          "label": "Electricity",
-          "order": 9,
+          "name": "desalination_power_supply_issues_noted",
+          "label": "Why is it non-operational?",
+          "order": 17,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622061234,
+              "options": ["non_operational"]
+            }
+          ]
+        },
+        {
+          "id": 1749622163234,
+          "name": "desalination_implementation",
+          "label": "Overall Implementation of Desalination Plant",
+          "order": 18,
           "type": "option",
           "required": true,
           "meta": false,
           "options": [
             {
-              "value": "operational",
-              "label": "Operational",
+              "value": "ongoing",
+              "label": "Ongoing",
               "id": 1749622067892,
               "order": 1
             },
             {
-              "value": "non_operational",
-              "label": "Non Operational",
+              "value": "completed",
+              "label": "Completed",
               "id": 1749622067893,
               "order": 2
             }
           ],
           "dependency": [
             {
-              "id": 1749622041234,
-              "options": ["electricity"]
+              "id": 1749622726350,
+              "options": ["desalination"]
+            }
+          ]
+        },
+        {
+          "id": 1749622063234,
+          "name": "desalination_issues_noted",
+          "label": "List down any issues noted with the desalination inspection?",
+          "order": 19,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726350,
+              "options": ["desalination"]
             }
           ]
         }
@@ -2615,7 +4190,7 @@
       "name": "desalination_photos",
       "label": "Desalination Photos",
       "description": null,
-      "order": 13,
+      "order": 16,
       "repeatable": true,
       "questions": [
         {
@@ -2656,7 +4231,7 @@
       "name": "borehole_inspection",
       "label": "Borehole Inspection",
       "description": null,
-      "order": 14,
+      "order": 17,
       "repeatable": false,
       "questions": [
         {
@@ -2712,12 +4287,6 @@
               "label": "Power Board",
               "id": 1749622107894,
               "order": 5
-            },
-            {
-              "value": "solar_panel",
-              "label": "Solar Panel",
-              "id": 1749622107895,
-              "order": 6
             }
           ],
           "dependency": [
@@ -2769,10 +4338,69 @@
           ]
         },
         {
+          "id": 1749632112236,
+          "name": "borehole_power_supply_photo_available",
+          "label": "Are you able to take photo of the Power Supply?",
+          "order": 4,
+          "type": "option",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749632117896,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749632117897,
+              "order": 2
+            }
+          ],
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
+        },
+        {
+          "id": 1749632122236,
+          "name": "borehole_power_supply_photo",
+          "label": "Take photo of the Power Supply",
+          "order": 5,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749632112236,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749622113236,
+          "name": "borehole_power_supply_photo_description",
+          "label": "Description of Power Supply photo",
+          "order": 6,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749632112236,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
           "id": 1749622111236,
           "name": "borehole_generator",
           "label": "Generator",
-          "order": 4,
+          "order": 7,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2801,7 +4429,7 @@
           "id": 1749622111237,
           "name": "borehole_solar_powered",
           "label": "Solar Powered",
-          "order": 5,
+          "order": 8,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2830,7 +4458,7 @@
           "id": 1749622111238,
           "name": "borehole_electricity",
           "label": "Electricity",
-          "order": 6,
+          "order": 9,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2854,6 +4482,65 @@
               "options": ["electricity"]
             }
           ]
+        },
+        {
+          "id": 1749622111239,
+          "name": "borehole_implementation",
+          "label": "Borehole Construction/ Implementation",
+          "order": 10,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749622117901,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749622117902,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
+        },
+        {
+          "id": 1749622111240,
+          "name": "borehole_issues_noted",
+          "label": "List down any issues noted with the borehole inspection?",
+          "order": 11,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
+        },
+        {
+          "id": 1749622111241,
+          "name": "borehole_power_supply_issues_noted",
+          "label": "List down any issues noted with the power supply?",
+          "order": 12,
+          "type": "text",
+          "required": false,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["borehole"]
+            }
+          ]
         }
       ]
     },
@@ -2862,7 +4549,7 @@
       "name": "borehole_photos",
       "label": "Borehole Photos",
       "description": null,
-      "order": 15,
+      "order": 18,
       "repeatable": true,
       "questions": [
         {
@@ -2899,234 +4586,6 @@
       "repeat_text": "Add another"
     },
     {
-      "id": 1749622131234,
-      "name": "power_supply_inspection",
-      "label": "Power Supply Inspection",
-      "description": null,
-      "order": 16,
-      "repeatable": false,
-      "questions": [
-        {
-          "id": 1749622137890,
-          "name": "power_supply_gps_location",
-          "label": "GPS Location of the Power Supply",
-          "order": 1,
-          "type": "geo",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726349,
-              "options": ["power_supply"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["power_supply"]
-            }
-          ],
-          "dependency_rule": "OR"
-        },
-        {
-          "id": 1749622141234,
-          "name": "power_supply_name",
-          "label": "Name of component",
-          "order": 2,
-          "type": "multiple_option",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726349,
-              "options": ["power_supply"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["power_supply"]
-            }
-          ],
-          "options": [
-            {
-              "value": "generator",
-              "label": "Generator",
-              "id": 1749622147890,
-              "order": 1
-            },
-            {
-              "value": "solar_powered",
-              "label": "Solar Powered",
-              "id": 1749622147891,
-              "order": 2
-            },
-            {
-              "value": "electricity",
-              "label": "Electricity",
-              "id": 1749622147892,
-              "order": 3
-            }
-          ],
-          "dependency_rule": "OR"
-        }
-      ]
-    },
-    {
-      "id": 1749622151234,
-      "name": "power_supply_photos",
-      "label": "Power Supply Photos",
-      "description": null,
-      "order": 17,
-      "repeatable": true,
-      "questions": [
-        {
-          "id": 1749622157890,
-          "name": "power_supply_photo",
-          "label": "Photo",
-          "order": 1,
-          "type": "photo",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726349,
-              "options": ["power_supply"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["power_supply"]
-            }
-          ],
-          "dependency_rule": "OR"
-        },
-        {
-          "id": 1749622161234,
-          "name": "power_supply_description",
-          "label": "Description",
-          "order": 2,
-          "type": "text",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726349,
-              "options": ["power_supply"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["power_supply"]
-            }
-          ],
-          "dependency_rule": "OR"
-        }
-      ],
-      "repeat_text": "Add another"
-    },
-    {
-      "id": 1749622171234,
-      "name": "pumps_inspection",
-      "label": "Pumps Inspection",
-      "description": null,
-      "order": 18,
-      "repeatable": true,
-      "repeat_text": "Add another",
-      "questions": [
-        {
-          "id": 1749622177890,
-          "name": "pumps_gps_location",
-          "label": "GPS Location of the Pumps",
-          "order": 1,
-          "type": "geo",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726348,
-              "options": ["pumps"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["pumps"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["pumps"]
-            }
-          ],
-          "dependency_rule": "OR"
-        },
-        {
-          "id": 1749622181234,
-          "name": "pumps_name",
-          "label": "Name of component",
-          "order": 2,
-          "type": "input",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726348,
-              "options": ["pumps"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["pumps"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["pumps"]
-            }
-          ],
-          "dependency_rule": "OR"
-        },
-        {
-          "id": 1749622197890,
-          "name": "pumps_photo",
-          "label": "Photo",
-          "order": 3,
-          "type": "photo",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726348,
-              "options": ["pumps"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["pumps"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["pumps"]
-            }
-          ],
-          "dependency_rule": "OR"
-        },
-        {
-          "id": 1749622201234,
-          "name": "pumps_description",
-          "label": "Description",
-          "order": 4,
-          "type": "text",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726348,
-              "options": ["pumps"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["pumps"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["pumps"]
-            }
-          ],
-          "dependency_rule": "OR"
-        }
-      ]
-    },
-    {
       "id": 1749622211234,
       "name": "gutters_inspection",
       "label": "Gutters Inspection",
@@ -3151,11 +4610,216 @@
         },
         {
           "id": 1749622221234,
-          "name": "gutters_name",
-          "label": "Name of component",
+          "name": "gutters_fascia_board_fixed",
+          "label": "Are the gutters securely fixed to the fascia board?",
           "order": 2,
-          "type": "input",
+          "type": "option",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622227890,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622227891,
+              "order": 2
+            }
+          ],
           "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
+        },
+        {
+          "id": 1749622222234,
+          "name": "gutters_fascia_board_fixed_why",
+          "label": "If no, please explain why",
+          "order": 3,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622221234,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1749622223234,
+          "name": "gutters_downpipes_aligned",
+          "label": "Are the downpipes properly aligned and firmly connected to the gutters?",
+          "order": 4,
+          "type": "option",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622227892,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622227893,
+              "order": 2
+            }
+          ],
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
+        },
+        {
+          "id": 1749622224234,
+          "name": "gutters_downpipes_aligned_why",
+          "label": "If no, please explain why",
+          "order": 5,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622223234,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1749622225234,
+          "name": "gutters_joints_corners_sealed",
+          "label": "Are joints and corners properly sealed?",
+          "order": 6,
+          "type": "option",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622227894,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622227895,
+              "order": 2
+            }
+          ],
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
+        },
+        {
+          "id": 1749622226234,
+          "name": "gutters_joints_corners_sealed_why",
+          "label": "If no, please explain why",
+          "order": 7,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622225234,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1749622227234,
+          "name": "gutters_screening_at_outlet",
+          "label": "Is there provision of screening at gutter outlet?",
+          "order": 8,
+          "type": "option",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622227896,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622227897,
+              "order": 2
+            }
+          ],
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
+        },
+        {
+          "id": 1749622228234,
+          "name": "gutters_screening_at_outlet_why",
+          "label": "If no, please explain why",
+          "order": 9,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622227234,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1749622229234,
+          "name": "gutters_implementation",
+          "label": "Gutter Implementation",
+          "order": 10,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749622227898,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749622227899,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["gutters"]
+            }
+          ]
+        },
+        {
+          "id": 1749622230234,
+          "name": "gutters_issues_noted",
+          "label": "List down any issues noted with the gutter inspection?",
+          "order": 11,
+          "type": "text",
+          "required": false,
           "meta": false,
           "dependency": [
             {
@@ -3237,11 +4901,201 @@
         },
         {
           "id": 1749622261234,
-          "name": "tanks_name",
-          "label": "Name of component",
+          "name": "tanks_size",
+          "label": "Size of Tank used for this project",
           "order": 2,
-          "type": "input",
+          "type": "multiple_option",
           "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "20000L",
+              "label": "20000L",
+              "id": 1749622267890,
+              "order": 1
+            },
+            {
+              "value": "10000L",
+              "label": "10000L",
+              "id": 1749622267891,
+              "order": 2
+            },
+            {
+              "value": "5000L",
+              "label": "5000L",
+              "id": 1749622267892,
+              "order": 3
+            },
+            {
+              "value": "2500L",
+              "label": "2500L",
+              "id": 1749622267893,
+              "order": 4
+            },
+            {
+              "value": "2000L",
+              "label": "2000L",
+              "id": 1749622267894,
+              "order": 5
+            },
+            {
+              "value": "1000L",
+              "label": "1000L",
+              "id": 1749622267895,
+              "order": 6
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["tanks"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["tanks"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622262234,
+          "name": "tanks_used_for",
+          "label": "This tank is used for",
+          "order": 3,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "storage",
+              "label": "Storage",
+              "id": 1749622267896,
+              "order": 1
+            },
+            {
+              "value": "distribution",
+              "label": "Distribution",
+              "id": 1749622267897,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["tanks"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["tanks"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622263235,
+          "name": "tanks_photo_available",
+          "label": "Are you able to take photo of the Tank?",
+          "order": 4,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622267898,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622267899,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["tanks"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["tanks"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622264233,
+          "name": "tanks_photo_inspection",
+          "label": "Take photo of the Tank",
+          "order": 5,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622263235,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749622265234,
+          "name": "tanks_photo_description",
+          "label": "Description of Photo",
+          "order": 6,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622263235,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749622266234,
+          "name": "tanks_implementation",
+          "label": "Tanks Implementation",
+          "order": 7,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749622267900,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749622267901,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726349,
+              "options": ["tanks"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["tanks"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749622264234,
+          "name": "tanks_issues_noted",
+          "label": "List down any issues noted with inspecting the tank?",
+          "order": 8,
+          "type": "text",
+          "required": false,
           "meta": false,
           "dependency": [
             {
@@ -3333,11 +5187,84 @@
         },
         {
           "id": 1749622301234,
-          "name": "base_construction_name",
-          "label": "Name of component",
+          "name": "base_construction_status",
+          "label": "Status of base construction.",
           "order": 2,
-          "type": "input",
+          "type": "option",
+          "options": [
+            {
+              "value": "ongoing",
+              "label": "Ongoing",
+              "id": 1749622307890,
+              "order": 1
+            },
+            {
+              "value": "completed",
+              "label": "Completed",
+              "id": 1749622307891,
+              "order": 2
+            }
+          ],
           "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["base_construction"]
+            }
+          ]
+        },
+        {
+          "id": 1749622302234,
+          "name": "base_construction_standard_according_wsmp",
+          "label": "Is the standard of base construction carried out according to the approved WSMP?",
+          "order": 3,
+          "type": "option",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749622307892,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749622307893,
+              "order": 2
+            }
+          ],
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726351,
+              "options": ["base_construction"]
+            }
+          ]
+        },
+        {
+          "id": 1749622303233,
+          "name": "base_construction_standard_according_wsmp_why",
+          "label": "If no, please explain why",
+          "order": 4,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622302234,
+              "options": ["no"]
+            }
+          ]
+        },
+        {
+          "id": 1749622303234,
+          "name": "base_construction_issues_noted",
+          "label": "List down any issues noted with the base construction inspection?",
+          "order": 5,
+          "type": "text",
+          "required": false,
           "meta": false,
           "dependency": [
             {
@@ -3428,10 +5355,208 @@
         {
           "id": 1749623341234,
           "name": "piping_works_name",
-          "label": "Name of component",
+          "label": "What are the types of pipe used for this piping works?",
           "order": 2,
-          "type": "input",
+          "type": "multiple_option",
+          "options": [
+            {
+              "value": "pvc",
+              "label": "PVC",
+              "id": 1749623347890,
+              "order": 1
+            },
+            {
+              "value": "polyethylene",
+              "label": "Polyethylene",
+              "id": 1749623347891,
+              "order": 2
+            }
+          ],
           "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726351,
+              "options": ["piping_works"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749623351234,
+          "name": "pvc_pipe_sizes",
+          "label": "What are the sizes of PVC pipes used?",
+          "order": 3,
+          "type": "multiple_option",
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5
+            }
+          ],
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749623341234,
+              "options": ["pvc"]
+            }
+          ]
+        },
+        {
+          "id": 1749623361234,
+          "name": "polyethylene_pipe_sizes",
+          "label": "What are the sizes of Polyethylene pipes used?",
+          "order": 4,
+          "type": "multiple_option",
+          "options": [
+            {
+              "value": "200mm",
+              "label": "200mm",
+              "order": 1
+            },
+            {
+              "value": "150mm",
+              "label": "150mm",
+              "order": 2
+            },
+            {
+              "value": "100mm",
+              "label": "100mm",
+              "order": 3
+            },
+            {
+              "value": "80mm",
+              "label": "80mm",
+              "order": 4
+            },
+            {
+              "value": "50mm",
+              "label": "50mm",
+              "order": 5
+            }
+          ],
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749623341234,
+              "options": ["polyethylene"]
+            }
+          ]
+        },
+        {
+          "id": 1749623371234,
+          "name": "piping_works_photo_available",
+          "label": "Are you able to take photo of the piping works?",
+          "order": 5,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749623377890,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749623377891,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["piping_works"]
+            },
+            {
+              "id": 1749622726351,
+              "options": ["piping_works"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1749623381234,
+          "name": "piping_works_photo_inspection",
+          "label": "Take photo of the Piping Works",
+          "order": 6,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749623371234,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749723391234,
+          "name": "piping_works_photo_description",
+          "label": "Description of Photo",
+          "order": 7,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749623371234,
+              "options": ["yes"]
+            }
+          ]
+        },
+        {
+          "id": 1749623401234,
+          "name": "piping_works_issues_noted",
+          "label": "List down any issues noted with inspecting the piping works?",
+          "order": 8,
+          "type": "text",
+          "required": false,
           "meta": false,
           "dependency": [
             {
@@ -3456,78 +5581,11 @@
       ]
     },
     {
-      "id": 1749622351234,
-      "name": "piping_works_photos",
-      "label": "Piping Works Photos",
-      "description": null,
-      "order": 26,
-      "repeatable": true,
-      "questions": [
-        {
-          "id": 1749622357890,
-          "name": "piping_works_photo",
-          "label": "Photo",
-          "order": 1,
-          "type": "photo",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726348,
-              "options": ["piping_works"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["piping_works"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["piping_works"]
-            },
-            {
-              "id": 1749622726351,
-              "options": ["piping_works"]
-            }
-          ],
-          "dependency_rule": "OR"
-        },
-        {
-          "id": 1749622361234,
-          "name": "piping_works_description",
-          "label": "Description",
-          "order": 2,
-          "type": "text",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            {
-              "id": 1749622726348,
-              "options": ["piping_works"]
-            },
-            {
-              "id": 1749622726349,
-              "options": ["piping_works"]
-            },
-            {
-              "id": 1749622726350,
-              "options": ["piping_works"]
-            },
-            {
-              "id": 1749622726351,
-              "options": ["piping_works"]
-            }
-          ],
-          "dependency_rule": "OR"
-        }
-      ],
-      "repeat_text": "Add another"
-    },
-    {
       "id": 1749623648242,
       "name": "final_comments",
       "label": "Final Comments",
       "description": null,
-      "order": 28,
+      "order": 26,
       "repeatable": false,
       "questions": [
         {
@@ -3536,7 +5594,7 @@
           "label": "Final Comments and Recommendations",
           "order": 1,
           "type": "text",
-          "required": false,
+          "required": true,
           "meta": false
         },
         {
@@ -3568,7 +5626,7 @@
           "label": "What are some required actions?",
           "order": 3,
           "type": "text",
-          "required": false,
+          "required": true,
           "meta": false,
           "dependency": [
             {

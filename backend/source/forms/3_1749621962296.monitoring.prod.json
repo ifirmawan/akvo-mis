@@ -601,55 +601,49 @@
               "value": "raw_water_main",
               "label": "Raw Water Main",
               "id": 17496227330022,
-              "order": 2
+              "order": 1
             },
             {
               "value": "reservoir",
               "label": "Reservoir",
               "id": 17496227330032,
-              "order": 3
+              "order": 2
             },
             {
               "value": "distribution_main",
               "label": "Distribution Main",
               "id": 17496227330042,
-              "order": 4
+              "order": 3
             },
             {
               "value": "reticulation",
               "label": "Reticulation",
               "id": 17496227330052,
-              "order": 5
+              "order": 4
             },
             {
               "value": "borehole",
               "label": "Borehole",
               "id": 17496227330062,
-              "order": 6
-            },
-            {
-              "value": "power_supply",
-              "label": "Power Supply",
-              "id": 17496227330092,
-              "order": 9
+              "order": 5
             },
             {
               "value": "pumps",
               "label": "Pumps",
               "id": 17496227330102,
-              "order": 10
+              "order": 6
             },
             {
               "value": "tanks",
               "label": "Tanks",
               "id": 17496227330122,
-              "order": 12
+              "order": 7
             },
             {
               "value": "piping_works",
               "label": "Piping Works",
               "id": 17496227330142,
-              "order": 14
+              "order": 8
             }
           ],
           "dependency": [
@@ -672,55 +666,49 @@
               "value": "raw_water_main",
               "label": "Raw Water Main",
               "id": 17496227330023,
-              "order": 2
+              "order": 1
             },
             {
               "value": "reservoir",
               "label": "Reservoir",
               "id": 17496227330033,
-              "order": 3
+              "order": 2
             },
             {
               "value": "distribution_main",
               "label": "Distribution Main",
               "id": 17496227330043,
-              "order": 4
+              "order": 3
             },
             {
               "value": "reticulation",
               "label": "Reticulation",
               "id": 17496227330053,
-              "order": 5
+              "order": 4
             },
             {
               "value": "desalination",
               "label": "Desalination Unit",
               "id": 17496227330083,
-              "order": 8
-            },
-            {
-              "value": "power_supply",
-              "label": "Power Supply",
-              "id": 17496227330093,
-              "order": 9
+              "order": 5
             },
             {
               "value": "pumps",
               "label": "Pumps",
               "id": 17496227330103,
-              "order": 10
+              "order": 6
             },
             {
               "value": "tanks",
               "label": "Tanks",
               "id": 17496227330123,
-              "order": 12
+              "order": 7
             },
             {
               "value": "piping_works",
               "label": "Piping Works",
               "id": 17496227330143,
-              "order": 14
+              "order": 8
             }
           ],
           "dependency": [
@@ -915,7 +903,7 @@
         {
           "id": 1723459240017,
           "name": "overflow_pipe_direction_communal_rwh_tank",
-          "label": "Is the pipe directed away from the tank foundation?",
+          "label": "Is the pipe directed away from the tank foundation for the Communal RWH tank?",
           "order": 7,
           "type": "option",
           "required": true,
@@ -1162,7 +1150,7 @@
         {
           "id": 1723459250015,
           "name": "overflow_pipe_direction_household_rwh_tank",
-          "label": "Is the pipe directed away from the tank foundation?",
+          "label": "Is the pipe directed away from the tank foundation for the Household RWH tank?",
           "order": 18,
           "type": "option",
           "required": true,
@@ -1707,7 +1695,7 @@
           "name": "pumps_power_supply",
           "label": "What is the source of Power Supply for this Pump?",
           "order": 7,
-          "type": "multiple_option",
+          "type": "option",
           "required": true,
           "meta": false,
           "options": [
@@ -4025,7 +4013,7 @@
           "name": "desalination_power_supply",
           "label": "Type of Power Supply",
           "order": 14,
-          "type": "multiple_option",
+          "type": "option",
           "required": true,
           "meta": false,
           "options": [
@@ -4301,7 +4289,7 @@
           "name": "borehole_power_supply",
           "label": "Type of Power Supply",
           "order": 3,
-          "type": "multiple_option",
+          "type": "option",
           "required": true,
           "meta": false,
           "options": [

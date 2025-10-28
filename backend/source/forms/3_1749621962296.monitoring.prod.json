@@ -3765,7 +3765,7 @@
         {
           "id": 1749621973234,
           "name": "sea_water_storage_issues_noted",
-          "label": "Why is it non-operational?",
+          "label": "Why Sea Water Storage is non-operational?",
           "order": 4,
           "type": "text",
           "required": true,
@@ -3842,7 +3842,7 @@
         {
           "id": 1749621982234,
           "name": "intake_system_suction_case_issues_noted",
-          "label": "Why is it non-operational?",
+          "label": "Why Intake System Suction Case is non-operational?",
           "order": 7,
           "type": "text",
           "required": true,
@@ -3919,7 +3919,7 @@
         {
           "id": 1749621992234,
           "name": "intake_system_suction_pipe_issues_noted",
-          "label": "Why is it non-operational?",
+          "label": "Why Intake System Suction Pipe is non-operational?",
           "order": 10,
           "type": "text",
           "required": true,
@@ -3996,7 +3996,7 @@
         {
           "id": 1749622002234,
           "name": "outfall_system_issues_noted",
-          "label": "Why is it non-operational?",
+          "label": "Why Outfall System is non-operational?",
           "order": 13,
           "type": "text",
           "required": true,
@@ -4114,7 +4114,7 @@
         {
           "id": 1749622062234,
           "name": "desalination_power_supply_issues_noted",
-          "label": "Why is it non-operational?",
+          "label": "Why Power Supply is non-operational?",
           "order": 17,
           "type": "text",
           "required": true,

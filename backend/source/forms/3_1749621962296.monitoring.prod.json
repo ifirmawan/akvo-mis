@@ -2026,7 +2026,7 @@
         {
           "id": 1849622785206,
           "name": "air_valve_count",
-          "label": "Number of Air Valve to be installed",
+          "label": "Number of Air Valve installed",
           "order": 6,
           "type": "number",
           "required": true,
@@ -2056,7 +2056,7 @@
         {
           "id": 1849622785207,
           "name": "washout_count",
-          "label": "Number of Washout to be installed",
+          "label": "Number of Washout installed",
           "order": 8,
           "type": "number",
           "required": true,
@@ -3072,7 +3072,7 @@
         {
           "id": 1849622785209,
           "name": "distribution_washout_count",
-          "label": "Number of Washout to be installed",
+          "label": "Number of Washout installed",
           "order": 9,
           "type": "number",
           "required": true,
@@ -3497,7 +3497,7 @@
         {
           "id": 1849622785210,
           "name": "reticulation_air_valve_count",
-          "label": "Number of Air Valve to be installed",
+          "label": "Number of Air Valve installed",
           "order": 9,
           "type": "number",
           "required": true,
@@ -3527,7 +3527,7 @@
         {
           "id": 1849622785211,
           "name": "reticulation_washout_count",
-          "label": "Number of Washout to be installed",
+          "label": "Number of Washout installed",
           "order": 11,
           "type": "number",
           "required": true,

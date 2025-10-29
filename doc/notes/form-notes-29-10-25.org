@@ -1,0 +1,55 @@
+* Rural Water Monitoring
+
+*** TODO Fix the order for E-coli on CBT and Lab
+
+* EPS
+
+** Registration
+
+*** DONE Add
+- Number of households in the village
+- Total population of the village
+- Number of people benefiting
+
+** Monitoring - Project Construction
+
+*** DONE Add
+- Before Q3: "Is the project completed?" (YES/NO)
+- "Are you able to take a sample?" (YES/NO)
+- (Conditional) If YES → Take photo of the sampling point
+- Photo of the CBT Bag
+- Risk Levels: Low, Intermediate, High, Very High
+- Number of E-coli for the Lab
+
+*** DONE Modify
+- "Proposed completion date": Show only if "Is the project completed?" = NO
+- Q7 (Parameters tested): Add E-coli as first option in lab test parameters
+- "Percentage of Project Completion": Move to Final Remarks group (order 2)
+
+*** DONE Remove
+- Chemical Oxygen Demand
+- Dissolved Oxygen
+- Total Sulphides
+
+** Monitoring - Water Quality
+
+*** Add
+- Risk Level for CBT Test
+- Take photo of the CBT Bags
+- Number of E-coli for the Lab Test (dependent on E-coli option)
+- Photo of the EPS (Repeat Group), questions:
+  - Take photo of the EPS
+  - Description of the photo
+
+*** Modify
+- Fix the order of CBT and Lab dependency questions
+- Add E-coli options on the Lab Tests
+- Make Water Quality Testing a repeatable group
+- "Why the water sample could not be taken?" → Change to multiple options
+- General remarks should always show (not conditional)
+
+*** Remove
+- Chemical Oxygen Demand
+- Dissolved Oxygen
+- Oil & Grease
+- Total Sulphides

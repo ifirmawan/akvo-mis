@@ -35,19 +35,48 @@
           "meta": false
         },
         {
+          "id": 1749630516826,
+          "name": "is_project_completed",
+          "label": "Is the project completed?",
+          "order": 3,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749630516827,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749630516828,
+              "order": 2
+            }
+          ]
+        },
+        {
           "id": 1749630516825,
           "name": "proposed_completion_date",
           "label": "Proposed Completion Date?",
-          "order": 3,
+          "order": 4,
           "type": "date",
           "required": true,
-          "meta": false
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749630516826,
+              "options": ["no"]
+            }
+          ]
         },
         {
           "id": 1749630701234,
           "name": "weather_conditions",
           "label": "Weather Conditions",
-          "order": 4,
+          "order": 5,
           "type": "option",
           "required": true,
           "meta": false,
@@ -73,10 +102,44 @@
           ]
         },
         {
+          "id": 1749630785254,
+          "name": "able_to_take_sample",
+          "label": "Are you able to take a sample?",
+          "order": 6,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1749630785255,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1749630785256,
+              "order": 2
+            }
+          ]
+        },
+        {
+          "id": 1749630785257,
+          "name": "sampling_point_photo",
+          "label": "Take photo of the sampling point",
+          "order": 7,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [{ "id": 1749630785254, "options": ["yes"] }]
+        },
+        {
           "id": 1749630785253,
           "name": "water_test_type",
           "label": "Water test conducted?",
-          "order": 5,
+          "order": 8,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -93,13 +156,25 @@
               "id": 1749630801972,
               "order": 2
             }
-          ]
+          ],
+          "dependency": [{ "id": 1749630785254, "options": ["yes"] }]
+        },
+        {
+          "id": 1749630906303,
+          "name": "cbt_bag_photo",
+          "label": "Photo of the CBT Bag",
+          "order": 9,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5.0,
+          "dependency": [{ "id": 1749630785253, "options": ["cbt_bag"] }]
         },
         {
           "id": 1749630906302,
           "name": "cbt_bag_contamination_level",
           "label": "Level of Contamination using CBT bags?",
-          "order": 6,
+          "order": 10,
           "type": "number",
           "required": false,
           "meta": false,
@@ -107,64 +182,118 @@
           "rule": { "allowDecimal": true }
         },
         {
+          "id": 1749630906304,
+          "name": "risk_levels",
+          "label": "Risk Levels",
+          "order": 11,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "no_risk",
+              "label": "No risk",
+              "id": 1749630906305,
+              "order": 1
+            },
+            {
+              "value": "low_risk",
+              "label": "Low risk",
+              "id": 1749630906306,
+              "order": 2
+            },
+            {
+              "value": "moderate_risk",
+              "label": "Moderate Risk",
+              "id": 1749630906307,
+              "order": 3
+            },
+            {
+              "value": "high_risk",
+              "label": "High Risk",
+              "id": 1749630906308,
+              "order": 4
+            }
+          ],
+          "dependency": [{ "id": 1749630785253, "options": ["cbt_bag"] }]
+        },
+        {
           "id": 1749631050000,
           "name": "parameters_tested",
           "label": "Which parameters were you able to test?",
-          "order": 7,
+          "order": 12,
           "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
             {
+              "value": "e_coli",
+              "label": "E-coli",
+              "id": 1749631050008,
+              "order": 1
+            },
+            {
               "value": "total_coliform",
               "label": "Total Coliform in cfu/100ml",
               "id": 1749631050001,
-              "order": 1
+              "order": 2
             },
             {
               "value": "fecal_coliform",
               "label": "Fecal Coliform in cfu/100ml",
               "id": 1749631050002,
-              "order": 2
+              "order": 3
             },
             {
               "value": "turbidity_ntu",
               "label": "Turbidity in NTU",
               "id": 1749631050003,
-              "order": 3
+              "order": 4
             },
             {
               "value": "temperature_c",
               "label": "Temperature (\u00b0C)",
               "id": 1754995200002,
-              "order": 4
+              "order": 5
             },
-            { "value": "ph", "label": "pH", "id": 1754995200003, "order": 5 },
+            { "value": "ph", "label": "pH", "id": 1754995200003, "order": 6 },
             {
               "value": "physical_analysis_conductivity",
               "label": "Conductivity (\u00b5S/cm)",
               "id": 1754995200004,
-              "order": 6
+              "order": 7
             },
             {
               "value": "salinity",
               "label": "Salinity (PPT)",
               "id": 1754995200005,
-              "order": 7
+              "order": 8
             }
           ],
           "dependency": [{ "id": 1749630785253, "options": ["lab_test"] }]
         },
         {
-          "id": 1749631093126,
-          "name": "total_coliform_level",
-          "label": "What is the Total Coliform Level?",
-          "order": 8,
+          "id": 1749631050009,
+          "name": "e_coli_level",
+          "label": "Number of E-coli for the Lab",
+          "order": 13,
           "type": "number",
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749630785253, "options": ["lab_test"] },
+            { "id": 1749631050000, "options": ["e_coli"] }
+          ],
+          "rule": { "allowDecimal": true }
+        },
+        {
+          "id": 1749631093126,
+          "name": "total_coliform_level",
+          "label": "What is the Total Coliform Level?",
+          "order": 14,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
             { "id": 1749631050000, "options": ["total_coliform"] }
           ],
           "rule": { "allowDecimal": true }
@@ -173,12 +302,11 @@
           "id": 1749631148928,
           "name": "fecal_coliform_level",
           "label": "What is the Fecal Coliform Level?",
-          "order": 9,
+          "order": 15,
           "type": "number",
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749630785253, "options": ["lab_test"] },
             { "id": 1749631050000, "options": ["fecal_coliform"] }
           ],
           "rule": { "allowDecimal": true }
@@ -187,12 +315,11 @@
           "id": 1749631183056,
           "name": "turbidity_ntu",
           "label": "What is the Turbidity in NTU?",
-          "order": 10,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749630785253, "options": ["lab_test"] },
             { "id": 1749631050000, "options": ["turbidity_ntu"] }
           ],
           "rule": { "allowDecimal": true }
@@ -201,13 +328,12 @@
           "id": 1754995200101,
           "name": "temperature_c",
           "label": "Temperature \u00b0C - 2550B (APHA Method Code)",
-          "order": 11,
+          "order": 17,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
           "dependency": [
-            { "id": 1749630785253, "options": ["lab_test"] },
             { "id": 1749631050000, "options": ["temperature_c"] }
           ]
         },
@@ -215,13 +341,12 @@
           "id": 1754995200102,
           "name": "ph",
           "label": "pH - 4500-H+B (APHA Method Code)",
-          "order": 12,
+          "order": 18,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true, "min": 0, "max": 14 },
           "dependency": [
-            { "id": 1749630785253, "options": ["lab_test"] },
             { "id": 1749631050000, "options": ["ph"] }
           ]
         },
@@ -229,13 +354,12 @@
           "id": 1754995200103,
           "name": "physical_analysis_conductivity",
           "label": "Conductivity \u00b5S/cm - 2510B (APHA Method Code)",
-          "order": 13,
+          "order": 19,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
           "dependency": [
-            { "id": 1749630785253, "options": ["lab_test"] },
             {
               "id": 1749631050000,
               "options": ["physical_analysis_conductivity"]
@@ -246,48 +370,14 @@
           "id": 1754995200104,
           "name": "salinity",
           "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
-          "order": 14,
+          "order": 20,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
           "dependency": [
-            { "id": 1749630785253, "options": ["lab_test"] },
             { "id": 1749631050000, "options": ["salinity"] }
           ]
-        },
-        {
-          "id": 1754995200701,
-          "name": "chemical_oxygen_demand",
-          "label": "Chemical Oxygen Demand mg/L - 5220B (APHA Method Code)",
-          "order": 15,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749630785253, "options": ["lab_test"] }]
-        },
-        {
-          "id": 1754995200702,
-          "name": "dissolved_oxygen",
-          "label": "Dissolved Oxygen mg/L - 4500-O-C (APHA Method Code)",
-          "order": 16,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749630785253, "options": ["lab_test"] }]
-        },
-        {
-          "id": 1754995200706,
-          "name": "total_sulphides",
-          "label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
-          "order": 17,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749630785253, "options": ["lab_test"] }]
         }
       ],
       "repeat_text": null
@@ -358,16 +448,6 @@
               "order": 8
             }
           ]
-        },
-        {
-          "id": 1849635800001,
-          "name": "percentage_of_project_completion",
-          "label": "Percentage of Project Completion",
-          "order": 2,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true, "min": 0, "max": 100 }
         }
       ],
       "repeat_text": null
@@ -1112,10 +1192,20 @@
           "meta": false
         },
         {
+          "id": 1849635800001,
+          "name": "percentage_of_project_completion",
+          "label": "Percentage of Project Completion",
+          "order": 2,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": { "allowDecimal": true, "min": 0, "max": 100 }
+        },
+        {
           "id": 1749631698734,
           "name": "officer_signature",
           "label": "Signature of Officer",
-          "order": 2,
+          "order": 3,
           "type": "signature",
           "required": true,
           "meta": false
@@ -1124,7 +1214,7 @@
           "id": 1849633421497,
           "name": "officer_name",
           "label": "Name of Officer",
-          "order": 3,
+          "order": 4,
           "type": "input",
           "required": true,
           "meta": true

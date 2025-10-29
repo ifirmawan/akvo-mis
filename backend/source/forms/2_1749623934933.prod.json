@@ -150,10 +150,37 @@
           "meta": false
         },
         {
+          "id": 1749624452106,
+          "name": "number_of_households",
+          "label": "Number of households in the village",
+          "order": 11,
+          "type": "number",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749624452107,
+          "name": "total_population",
+          "label": "Total population of the village",
+          "order": 12,
+          "type": "number",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 1749624452108,
+          "name": "number_of_people_benefiting",
+          "label": "Number of people benefiting",
+          "order": 13,
+          "type": "number",
+          "required": true,
+          "meta": false
+        },
+        {
           "id": 1749624452105,
           "name": "water_committee",
           "label": "Do you have Water Committee and Is it active?",
-          "order": 11,
+          "order": 14,
           "type": "option",
           "required": true,
           "meta": false,

@@ -65,7 +65,7 @@
       "label": "Water Quality Testing",
       "description": null,
       "order": 2,
-      "repeatable": false,
+      "repeatable": true,
       "questions": [
         {
           "id": 1749632196724,
@@ -114,7 +114,7 @@
           "name": "reason_sample_not_taken",
           "label": "Why the water sample could not be taken?",
           "order": 3,
-          "type": "option",
+          "type": "multiple_option",
           "required": true,
           "meta": false,
           "options": [
@@ -216,55 +216,73 @@
           "meta": false,
           "options": [
             {
+              "value": "e_coli",
+              "label": "E-coli",
+              "id": 1749633127960,
+              "order": 1
+            },
+            {
               "value": "turbidity_ntu",
               "label": "Turbidity in NTU",
               "id": 1749633127963,
-              "order": 1
+              "order": 2
             },
             {
               "value": "total_coliform",
               "label": "Total Coliform in 1cfu/100ml",
               "id": 1749633145122,
-              "order": 2
+              "order": 3
             },
             {
               "value": "fecal_coliform",
               "label": "Fecal Coliform in 1cfu/100ml",
               "id": 1749633162046,
-              "order": 3
+              "order": 4
             },
             {
               "value": "temperature_c",
               "label": "Temperature in \u00b0C",
               "id": 1749633178123,
-              "order": 4
+              "order": 5
             },
-            { "value": "ph", "label": "pH", "id": 1749633193921, "order": 5 },
+            { "value": "ph", "label": "pH", "id": 1749633193921, "order": 6 },
             {
               "value": "conductivity",
               "label": "Conductivity in \u00b5S/cm",
               "id": 1749633209784,
-              "order": 6
+              "order": 7
             },
             {
               "value": "salinity",
               "label": "Salinity PPT",
               "id": 1749633219784,
-              "order": 7
+              "order": 8
             }
           ],
           "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
         },
         {
-          "id": 1749633220745,
-          "name": "turbidity_ntu",
-          "label": "What is the Turbidity in NTU?",
+          "id": 1749633220746,
+          "name": "e_coli_lab_count",
+          "label": "Number of E-coli for the Lab",
           "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749633001462, "options": ["lab_test"] },
+            { "id": 1749631050010, "options": ["e_coli"] }
+          ],
+          "rule": { "allowDecimal": true }
+        },
+        {
+          "id": 1749633220745,
+          "name": "turbidity_ntu",
+          "label": "What is the Turbidity in NTU?",
+          "order": 10,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
             { "id": 1749631050010, "options": ["turbidity_ntu"] }
           ],
           "rule": { "allowDecimal": true }
@@ -273,12 +291,11 @@
           "id": 1749633259392,
           "name": "total_coliform_cfu_100ml",
           "label": "What is the Total Coliform count in 1cfu/100ml?",
-          "order": 10,
+          "order": 11,
           "type": "number",
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749633001462, "options": ["lab_test"] },
             { "id": 1749631050010, "options": ["total_coliform"] }
           ],
           "rule": { "allowDecimal": true }
@@ -287,12 +304,11 @@
           "id": 1749633295165,
           "name": "fecal_coliform_cfu_100ml",
           "label": "What is the Fecal Coliform count in 1cfu/100ml?",
-          "order": 11,
+          "order": 12,
           "type": "number",
           "required": true,
           "meta": false,
           "dependency": [
-            { "id": 1749633001462, "options": ["lab_test"] },
             { "id": 1749631050010, "options": ["fecal_coliform"] }
           ],
           "rule": { "allowDecimal": true }
@@ -301,7 +317,7 @@
           "id": 1749633325456,
           "name": "e_coli_count_cbt",
           "label": "What is the E.Coli Count using CBT Bags?",
-          "order": 12,
+          "order": 13,
           "type": "number",
           "required": true,
           "meta": false,
@@ -309,16 +325,62 @@
           "rule": { "allowDecimal": true }
         },
         {
+          "id": 1749633325457,
+          "name": "cbt_risk_level",
+          "label": "Risk Level for CBT Test",
+          "order": 14,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "no_risk",
+              "label": "No risk",
+              "id": 1749633325458,
+              "order": 1
+            },
+            {
+              "value": "low_risk",
+              "label": "Low risk",
+              "id": 1749633325459,
+              "order": 2
+            },
+            {
+              "value": "moderate_risk",
+              "label": "Moderate Risk",
+              "id": 1749633325460,
+              "order": 3
+            },
+            {
+              "value": "high_risk",
+              "label": "High Risk",
+              "id": 1749633325461,
+              "order": 4
+            }
+          ],
+          "dependency": [{ "id": 1749633001462, "options": ["cbt_test"] }]
+        },
+        {
+          "id": 1749633325462,
+          "name": "cbt_bag_photo",
+          "label": "Take photo of the CBT Bags",
+          "order": 15,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5,
+          "dependency": [{ "id": 1749633001462, "options": ["cbt_test"] }]
+        },
+        {
           "id": 1797307852531,
           "name": "temperature_c",
           "label": "Temperature \u00b0C - 2550B (APHA Method Code)",
-          "order": 13,
+          "order": 16,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
           "dependency": [
-            { "id": 1749633001462, "options": ["lab_test"] },
             { "id": 1749631050010, "options": ["temperature_c"] }
           ]
         },
@@ -326,13 +388,12 @@
           "id": 1797307852532,
           "name": "ph",
           "label": "pH - 4500-H+B (APHA Method Code)",
-          "order": 14,
+          "order": 17,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true, "min": 0, "max": 14 },
           "dependency": [
-            { "id": 1749633001462, "options": ["lab_test"] },
             { "id": 1749631050010, "options": ["ph"] }
           ]
         },
@@ -340,13 +401,12 @@
           "id": 1797307852533,
           "name": "physical_analysis_conductivity",
           "label": "Conductivity \u00b5S/cm - 2510B (APHA Method Code)",
-          "order": 15,
+          "order": 18,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
           "dependency": [
-            { "id": 1749633001462, "options": ["lab_test"] },
             { "id": 1749631050010, "options": ["conductivity"] }
           ]
         },
@@ -354,69 +414,54 @@
           "id": 1797307852534,
           "name": "salinity",
           "label": "Salinity PPT 2520B 0.2 (APHA Method Code)",
-          "order": 16,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [
-            { "id": 1749633001462, "options": ["lab_test"] },
-            { "id": 1749631050010, "options": ["salinity"] }
-          ]
-        },
-        {
-          "id": 1797307850701,
-          "name": "chemical_oxygen_demand",
-          "label": "Chemical Oxygen Demand mg/L - 5220B (APHA Method Code)",
-          "order": 17,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
-        },
-        {
-          "id": 1797307850702,
-          "name": "dissolved_oxygen",
-          "label": "Dissolved Oxygen mg/L - 4500-O-C (APHA Method Code)",
-          "order": 18,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
-        },
-        {
-          "id": 1797307850705,
-          "name": "oil_and_grease",
-          "label": "Oil & Grease mg/L - 5520D (APHA Method Code)",
           "order": 19,
           "type": "number",
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
-        },
-        {
-          "id": 1797307850706,
-          "name": "total_sulphides",
-          "label": "Total Sulphides mg/L - 4500-S2-F (APHA Method Code)",
-          "order": 20,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "allowDecimal": true },
-          "dependency": [{ "id": 1749633001462, "options": ["lab_test"] }]
+          "dependency": [
+            { "id": 1749631050010, "options": ["salinity"] }
+          ]
         }
       ],
-      "repeat_text": null
+      "repeat_text": "Add more water quality testing"
+    },
+    {
+      "id": 1749730785259,
+      "name": "photo_of_eps_group",
+      "label": "Photo of the EPS",
+      "description": null,
+      "order": 3,
+      "repeatable": true,
+      "questions": [
+        {
+          "id": 1749730785260,
+          "name": "eps_photo",
+          "label": "Take photo of the EPS",
+          "order": 1,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "limit": 5
+        },
+        {
+          "id": 1749730785261,
+          "name": "eps_photo_description",
+          "label": "Description of the photo",
+          "order": 2,
+          "type": "text",
+          "required": true,
+          "meta": false
+        }
+      ],
+      "repeat_text": "Add more EPS photos"
     },
     {
       "id": 1749730785258,
       "name": "general_remarks_group",
       "label": "General Remarks",
       "description": null,
-      "order": 3,
+      "order": 4,
       "repeatable": false,
       "questions": [
         {
@@ -448,11 +493,8 @@
           "label": "General Remarks",
           "order": 2,
           "type": "text",
-          "required": true,
-          "meta": false,
-          "dependency": [
-            { "id": 1749633373968, "options": ["issue_with_system"] }
-          ]
+          "required": false,
+          "meta": false
         },
         {
           "id": 1749633421496,

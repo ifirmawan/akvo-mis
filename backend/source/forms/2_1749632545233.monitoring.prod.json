@@ -264,14 +264,12 @@
         {
           "id": 1749633220746,
           "name": "e_coli_lab_count",
-          "label": "Number of E-coli for the Lab",
+          "label": "Number of E-coli for the Lab Test",
           "order": 9,
           "type": "number",
           "required": true,
           "meta": false,
-          "dependency": [
-            { "id": 1749631050010, "options": ["e_coli"] }
-          ],
+          "dependency": [{ "id": 1749631050010, "options": ["e_coli"] }],
           "rule": { "allowDecimal": true }
         },
         {
@@ -282,9 +280,7 @@
           "type": "number",
           "required": true,
           "meta": false,
-          "dependency": [
-            { "id": 1749631050010, "options": ["turbidity_ntu"] }
-          ],
+          "dependency": [{ "id": 1749631050010, "options": ["turbidity_ntu"] }],
           "rule": { "allowDecimal": true }
         },
         {
@@ -380,9 +376,7 @@
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
-          "dependency": [
-            { "id": 1749631050010, "options": ["temperature_c"] }
-          ]
+          "dependency": [{ "id": 1749631050010, "options": ["temperature_c"] }]
         },
         {
           "id": 1797307852532,
@@ -393,9 +387,7 @@
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true, "min": 0, "max": 14 },
-          "dependency": [
-            { "id": 1749631050010, "options": ["ph"] }
-          ]
+          "dependency": [{ "id": 1749631050010, "options": ["ph"] }]
         },
         {
           "id": 1797307852533,
@@ -406,9 +398,7 @@
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
-          "dependency": [
-            { "id": 1749631050010, "options": ["conductivity"] }
-          ]
+          "dependency": [{ "id": 1749631050010, "options": ["conductivity"] }]
         },
         {
           "id": 1797307852534,
@@ -419,9 +409,7 @@
           "required": true,
           "meta": false,
           "rule": { "allowDecimal": true },
-          "dependency": [
-            { "id": 1749631050010, "options": ["salinity"] }
-          ]
+          "dependency": [{ "id": 1749631050010, "options": ["salinity"] }]
         }
       ],
       "repeat_text": "Add more water quality testing"

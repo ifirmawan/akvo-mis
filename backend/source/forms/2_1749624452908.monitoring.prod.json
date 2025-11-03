@@ -986,7 +986,7 @@
         {
           "id": 1849634060001,
           "name": "urf_tank_buffer_zone_between_media_and_outlet_pipe",
-          "label": "Is there a 10–15 cm buffer zone between the filtration media and the outlet pipe for the URF?",
+          "label": "Is there a 10-15 cm buffer zone between the filtration media and the outlet pipe for the URF?",
           "order": 22,
           "type": "option",
           "required": true,
@@ -1543,7 +1543,7 @@
         {
           "id": 1849634080002,
           "name": "eps_tank_buffer_zone_between_media_and_outlet_pipe",
-          "label": "Is there a 10–15 cm buffer zone between the filtration media and the outlet pipe for the EPS?",
+          "label": "Is there a 10-15 cm buffer zone between the filtration media and the outlet pipe for the EPS?",
           "order": 18,
           "type": "option",
           "required": true,
@@ -1875,7 +1875,7 @@
         {
           "id": 1849634750001,
           "name": "balance_tank_s_trap_overflow_pipe_installed",
-          "label": "Is there a an S-Trap Overflow Pipe installed for the balance tank?",
+          "label": "Is there an S-Trap Overflow Pipe installed for the balance tank?",
           "order": 9,
           "type": "option",
           "required": true,
@@ -2268,7 +2268,7 @@
         {
           "id": 1849635350001,
           "name": "storage_tank_s_trap_overflow_pipe_installed",
-          "label": "Is there a an S-Trap Overflow Pipe installed for the storage tank?",
+          "label": "Is there an S-Trap Overflow Pipe installed for the storage tank?",
           "order": 9,
           "type": "option",
           "required": true,

@@ -454,7 +454,7 @@
           "id": 1849633456789,
           "name": "concrete_base_construction_details",
           "label": "Concrete Base Construction",
-          "order": 2,
+          "order": 1,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -483,10 +483,101 @@
           ]
         },
         {
+          "id": 1849633499999,
+          "name": "concrete_base_construction_2m_x_2m_square_base",
+          "label": "2m x 2m square base",
+          "order": 2,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1849633490001,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1849633490002,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1849633456789,
+              "options": ["2m_x_2m_square_base"]
+            }
+          ]
+        },
+        {
+          "id": 1849633498888,
+          "name": "concrete_base_construction_300mm_vertical_offset_between_urf_and_eps",
+          "label": "Constructed within a 300mm vertical offset between URF and EPS",
+          "order": 3,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1849633495100,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1849633495103,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1849633456789,
+              "options": [
+                "constructed_within_300mm_vertical_offset_between_urf_and_eps"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 1849633497777,
+          "name": "concrete_base_construction_300mm_vertical_offset_between_eps_and_storage",
+          "label": "Constructed within a 300mm vertical offset between EPS and Storage",
+          "order": 4,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "id": 1849633495101,
+              "order": 1
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "id": 1849633495102,
+              "order": 2
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1849633456789,
+              "options": [
+                "constructed_within_300mm_vertical_offset_between_eps_and_storage"
+              ]
+            }
+          ]
+        },
+        {
           "id": 1849633500001,
           "name": "concrete_base_construction_photo",
           "label": "Take Photo of Concrete Base Construction",
-          "order": 3,
+          "order": 5,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -499,7 +590,7 @@
           "id": 1849633600001,
           "name": "concrete_base_construction_photo_desc",
           "label": "Description of Photo taken",
-          "order": 4,
+          "order": 6,
           "type": "text",
           "required": true,
           "meta": false,

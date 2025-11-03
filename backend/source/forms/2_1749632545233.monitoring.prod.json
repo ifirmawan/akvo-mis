@@ -264,7 +264,7 @@
         {
           "id": 1749633220746,
           "name": "e_coli_lab_count",
-          "label": "Number of E-coli for the Lab Test",
+          "label": "Number of E. coli for the Lab Test",
           "order": 12,
           "type": "number",
           "required": true,
@@ -312,7 +312,7 @@
         {
           "id": 1749633325456,
           "name": "e_coli_count_cbt",
-          "label": "What is the E.Coli Count using CBT Bags?",
+          "label": "What is the E. coli Count using CBT Bags?",
           "order": 8,
           "type": "number",
           "required": true,

@@ -63,6 +63,7 @@ class FormSeederTestCase(TestCase):
             "EPS Registration",
             "WAF Wastewater Treatment Plant - Monitoring",
             "Rural Water Project - Monitoring",
+            "Rural Water Project - Quick Monitoring",
             "Short HH Monitoring",
             "Short HH Testimonials",
             "Wastewater Pump Station - Monitoring",

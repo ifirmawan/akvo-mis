@@ -2221,8 +2221,8 @@
               "order": 1
             },
             {
-              "value": "rota",
-              "label": "Rota",
+              "value": "roto",
+              "label": "Roto",
               "order": 2
             },
             {
@@ -2317,8 +2317,8 @@
         },
         {
           "id": 1723459210033,
-          "name": "reservoir_size_rota",
-          "label": "What is the size of the rota reservoir?",
+          "name": "reservoir_size_roto",
+          "label": "What is the size of the roto reservoir?",
           "order": 6,
           "type": "multiple_option",
           "required": true,
@@ -2348,14 +2348,14 @@
           "dependency": [
             {
               "id": 1723459230022,
-              "options": ["rota"]
+              "options": ["roto"]
             }
           ]
         },
         {
           "id": 1723459210038,
-          "name": "other_size_rota_reservoir",
-          "label": "Please specify the other size of the rota reservoir in litres",
+          "name": "other_size_roto_reservoir",
+          "label": "Please specify the other size of the roto reservoir in litres",
           "order": 7,
           "type": "number",
           "required": true,

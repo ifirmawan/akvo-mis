@@ -658,8 +658,8 @@
         },
         {
           "id": 1749693489743,
-          "name": "visit_the_raw_water_source_on_this_visit",
-          "label": "Are you able to visit the raw water source on this visit?",
+          "name": "visit_the_surface_water_source_on_this_visit",
+          "label": "Are you able to visit the surface water source in this visit?",
           "order": 2,
           "type": "option",
           "required": true,
@@ -667,32 +667,50 @@
           "options": [
             { "value": "yes", "label": "Yes", "id": 1749693495308, "order": 1 },
             { "value": "no", "label": "No", "id": 1749693495309, "order": 2 }
+          ],
+          "dependency": [
+            {
+              "id": 1749652966061,
+              "options": ["surface_water"]
+            }
           ]
         },
         {
           "id": 1749694731204,
-          "name": "geo_raw_water_source",
-          "label": "Take Geolocation of the raw water source",
+          "name": "geo_surface_water_source",
+          "label": "Take Geolocation of the surface water source",
           "order": 3,
           "type": "geo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749693489743, "options": ["yes"] }]
+          "dependency": [
+            { "id": 1749693489743, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["surface_water"]
+            }
+          ]
         },
         {
           "id": 1749693516243,
-          "name": "source_photo",
-          "label": "Take Photo of source",
+          "name": "photo_of_surface_water_source",
+          "label": "Take photo of the surface water source",
           "order": 4,
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749693489743, "options": ["yes"] }]
+          "dependency": [
+            { "id": 1749693489743, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["surface_water"]
+            }
+          ]
         },
         {
           "id": 1749693552939,
-          "name": "issues_risk_associated_with_the_source",
-          "label": "Are there any issues / risk associated with the source?",
+          "name": "issues_risk_associated_with_surface_water_source",
+          "label": "Are there any issues/risks associated with the surface water source?",
           "order": 5,
           "type": "option",
           "required": true,
@@ -701,12 +719,18 @@
             { "value": "yes", "label": "Yes", "id": 1749693559580, "order": 1 },
             { "value": "no", "label": "No", "id": 1749693559581, "order": 2 }
           ],
-          "dependency": [{ "id": 1749693489743, "options": ["yes"] }]
+          "dependency": [
+            { "id": 1749693489743, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["surface_water"]
+            }
+          ]
         },
         {
           "id": 1749693588994,
-          "name": "provide_details_of_the_risks_with_the_source",
-          "label": "Please provide details of the risks",
+          "name": "surface_water_risks_details",
+          "label": "Please provide details for these risks for the surface water source?",
           "order": 6,
           "type": "multiple_option",
           "required": true,
@@ -747,8 +771,8 @@
         },
         {
           "id": 1749693691980,
-          "name": "provide_details_of_the_risks_with_the_source_other",
-          "label": "Please provide details of the risks (Other)",
+          "name": "surface_water_risks_details_other",
+          "label": "Please specify other risks for the surface water source",
           "order": 7,
           "type": "text",
           "required": true,
@@ -757,33 +781,184 @@
         },
         {
           "id": 1749693712512,
-          "name": "take_photo_of_risk",
-          "label": "Are you able to take photo of risk?",
+          "name": "surface_water_risks_photo_needed",
+          "label": "Are you able to take photo of the risks for the surface water source?",
           "order": 8,
           "type": "option",
           "required": true,
           "meta": false,
           "options": [
-            { "value": "yes", "label": "Yes", "id": 1749693719608, "order": 1 },
-            { "value": "no", "label": "No", "id": 1749693719609, "order": 2 }
+            { "value": "yes", "label": "Yes", "order": 1 },
+            { "value": "no", "label": "No", "order": 2 }
           ],
-          "dependency": [{ "id": 1749693552939, "options": ["yes"] }]
+          "dependency": [
+            { "id": 1749693552939, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["surface_water"]
+            }
+          ]
         },
         {
           "id": 1749693763655,
-          "name": "photo_of_risks",
-          "label": "Take Photo of risks",
+          "name": "surface_water_risks_photo",
+          "label": "Take Photo of risks for the surface water source",
           "order": 9,
           "type": "photo",
           "required": true,
           "meta": false,
-          "dependency": [{ "id": 1749693712512, "options": ["yes"] }]
+          "dependency": [
+            { "id": 1749693712512, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["surface_water"]
+            }
+          ]
+        },
+        {
+          "id": 1749694954321,
+          "name": "visit_the_ground_water_source_on_this_visit",
+          "label": "Are you able to visit the ground water source in this visit?",
+          "order": 10,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            { "value": "yes", "label": "Yes", "id": 1749694960123, "order": 1 },
+            { "value": "no", "label": "No", "id": 1749694960124, "order": 2 }
+          ],
+          "dependency": [
+            {
+              "id": 1749652966061,
+              "options": ["ground_water"]
+            }
+          ]
+        },
+        {
+          "id": 1749694987321,
+          "name": "geo_ground_water_source",
+          "label": "Take Geolocation of the ground water source",
+          "order": 11,
+          "type": "geo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            { "id": 1749694954321, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["ground_water"]
+            }
+          ]
+        },
+        {
+          "id": 1749695011234,
+          "name": "photo_of_ground_water_source",
+          "label": "Take photo of the ground water source",
+          "order": 12,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            { "id": 1749694954321, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["ground_water"]
+            }
+          ]
+        },
+        {
+          "id": 1749695045123,
+          "name": "issues_risk_associated_with_ground_water_source",
+          "label": "Are there any issues/risks associated with the ground water source?",
+          "order": 13,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            { "value": "yes", "label": "Yes", "order": 1 },
+            { "value": "no", "label": "No", "order": 2 }
+          ],
+          "dependency": [
+            { "id": 1749694954321, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["ground_water"]
+            }
+          ]
+        },
+        {
+          "id": 1749693712511,
+          "name": "ground_water_risks_details",
+          "label": "Please provide details for these risks for the ground water source?",
+          "order": 14,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "power_supply_issues",
+              "label": "Power supply issues",
+              "order": 1
+            },
+            {
+              "value": "clogging",
+              "label": "Clogging",
+              "order": 2
+            },
+            {
+              "value": "pump_failure",
+              "label": "Pump failure",
+              "order": 3
+            },
+            {
+              "value": "low_water_yield",
+              "label": "Low water yield",
+              "order": 4
+            }
+          ],
+          "dependency": [{ "id": 1749695045123, "options": ["yes"] }]
+        },
+        {
+          "id": 1749693763656,
+          "name": "ground_water_risks_photo_needed",
+          "label": "Are you able to take photo of the risks for the ground water source?",
+          "order": 15,
+          "type": "option",
+          "required": true,
+          "meta": false,
+          "options": [
+            { "value": "yes", "label": "Yes", "order": 1 },
+            { "value": "no", "label": "No", "order": 2 }
+          ],
+          "dependency": [
+            { "id": 1749695045123, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["ground_water"]
+            }
+          ]
+        },
+        {
+          "id": 1749693801234,
+          "name": "ground_water_risks_photo",
+          "label": "Take Photo of risks for the ground water source",
+          "order": 16,
+          "type": "photo",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            { "id": 1749693763656, "options": ["yes"] },
+            {
+              "id": 1749652966061,
+              "options": ["ground_water"]
+            }
+          ]
         },
         {
           "id": 1749693821961,
           "name": "raw_water_transport_method",
           "label": "How is the raw water transported to the plant?",
-          "order": 10,
+          "order": 17,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -830,7 +1005,7 @@
           "id": 1749693885123,
           "name": "raw_water_transport_method_other",
           "label": "Please specify other method of raw water transport",
-          "order": 11,
+          "order": 18,
           "type": "text",
           "required": true,
           "meta": false,
@@ -840,7 +1015,7 @@
           "id": 1754995400011,
           "name": "pumps_rising_main_count",
           "label": "How many Pumps/Rising Main are there?",
-          "order": 12,
+          "order": 19,
           "type": "number",
           "required": true,
           "meta": false,
@@ -852,7 +1027,7 @@
           "id": 1754995400012,
           "name": "pumps_rising_main_standby_count",
           "label": "How many Pumps/Rising Main are operational and on standby?",
-          "order": 13,
+          "order": 20,
           "type": "number",
           "required": true,
           "meta": false,
@@ -864,7 +1039,7 @@
           "id": 1754995400013,
           "name": "pumps_rising_main_has_risks",
           "label": "Are there any risks associated with the Pumps/Rising Main?",
-          "order": 14,
+          "order": 21,
           "type": "option",
           "required": true,
           "meta": false,
@@ -880,7 +1055,7 @@
           "id": 1754995400016,
           "name": "pumps_rising_main_risk_details",
           "label": "Please provide details of the risks associated with Pumps/Rising Main",
-          "order": 15,
+          "order": 22,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -916,7 +1091,7 @@
           "id": 1754995400021,
           "name": "pumps_rising_main_risk_details_other",
           "label": "Please provide details of other risks associated with Pumps/Rising Main",
-          "order": 16,
+          "order": 23,
           "type": "text",
           "required": true,
           "meta": false,
@@ -926,7 +1101,7 @@
           "id": 1754995400022,
           "name": "pumps_rising_main_can_take_photo",
           "label": "Are you able to take photo of the risks associated with Pumps/Rising Main?",
-          "order": 17,
+          "order": 24,
           "type": "option",
           "required": true,
           "meta": false,
@@ -940,7 +1115,7 @@
           "id": 1754995400025,
           "name": "pumps_rising_main_photo_of_risks",
           "label": "Take photo of the risks associated with Pumps/Rising Main",
-          "order": 18,
+          "order": 25,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -951,7 +1126,7 @@
           "id": 1754995400026,
           "name": "borehole_pump_count",
           "label": "How many Borehole Pump are there?",
-          "order": 19,
+          "order": 26,
           "type": "number",
           "required": true,
           "meta": false,
@@ -961,7 +1136,7 @@
           "id": 1754995400027,
           "name": "borehole_pump_standby_count",
           "label": "How many Borehole Pump are operational and on standby?",
-          "order": 20,
+          "order": 27,
           "type": "number",
           "required": true,
           "meta": false,
@@ -971,7 +1146,7 @@
           "id": 1754995400028,
           "name": "borehole_pump_has_risks",
           "label": "Are there any risks associated with the Borehole Pump?",
-          "order": 21,
+          "order": 28,
           "type": "option",
           "required": true,
           "meta": false,
@@ -985,7 +1160,7 @@
           "id": 1754995400031,
           "name": "borehole_pump_risk_details",
           "label": "Please provide details of the risks associated with Borehole Pump",
-          "order": 22,
+          "order": 29,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -1021,7 +1196,7 @@
           "id": 1754995400036,
           "name": "borehole_pump_risk_details_other",
           "label": "Please provide details of other risks associated with Borehole Pump",
-          "order": 23,
+          "order": 30,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1031,7 +1206,7 @@
           "id": 1754995400037,
           "name": "borehole_pump_can_take_photo",
           "label": "Are you able to take photo of the risks associated with Borehole Pump?",
-          "order": 24,
+          "order": 31,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1045,7 +1220,7 @@
           "id": 1754995400040,
           "name": "borehole_pump_photo_of_risks",
           "label": "Take photo of the risks associated with Borehole Pump",
-          "order": 25,
+          "order": 32,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -1056,7 +1231,7 @@
           "id": 1754995400041,
           "name": "borehole_gallery_pumps_count",
           "label": "How many Borehole Gallery Pumps are there?",
-          "order": 26,
+          "order": 33,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1068,7 +1243,7 @@
           "id": 1754995400042,
           "name": "borehole_gallery_pumps_standby_count",
           "label": "How many Borehole Gallery Pumps are operational and on standby?",
-          "order": 27,
+          "order": 34,
           "type": "number",
           "required": true,
           "meta": false,
@@ -1080,7 +1255,7 @@
           "id": 1754995400043,
           "name": "borehole_gallery_pumps_has_risks",
           "label": "Are there any risks associated with the Borehole Gallery Pumps?",
-          "order": 28,
+          "order": 35,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1096,7 +1271,7 @@
           "id": 1754995400046,
           "name": "borehole_gallery_pumps_risk_details",
           "label": "Please provide details of the risks associated with Borehole Gallery Pumps",
-          "order": 29,
+          "order": 36,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -1132,7 +1307,7 @@
           "id": 1754995400051,
           "name": "borehole_gallery_pumps_risk_details_other",
           "label": "Please provide details of other risks associated with Borehole Gallery Pumps",
-          "order": 30,
+          "order": 37,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1142,7 +1317,7 @@
           "id": 1754995400052,
           "name": "borehole_gallery_pumps_can_take_photo",
           "label": "Are you able to take photo of the risks associated with Borehole Gallery Pumps?",
-          "order": 31,
+          "order": 38,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1156,7 +1331,7 @@
           "id": 1754995400055,
           "name": "borehole_gallery_pumps_photo_of_risks",
           "label": "Take photo of the risks associated with Borehole Gallery Pumps",
-          "order": 32,
+          "order": 39,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -1167,7 +1342,7 @@
           "id": 1749694260130,
           "name": "risks_associated_with_the_raw_water_gravity_system",
           "label": "Are there any risks associated with the raw water gravity system?",
-          "order": 33,
+          "order": 40,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1181,7 +1356,7 @@
           "id": 1749694347720,
           "name": "gravity_system_issue_details",
           "label": "Please Provide details of the issues / risks for Raw Water Gravity System:",
-          "order": 34,
+          "order": 41,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -1217,7 +1392,7 @@
           "id": 1749694410980,
           "name": "gravity_system_issue_details_other",
           "label": "Please provide details of the issues / risks (Other)",
-          "order": 35,
+          "order": 42,
           "type": "text",
           "required": true,
           "meta": false,
@@ -1227,7 +1402,7 @@
           "id": 1749694427341,
           "name": "take_photo_of_the_issue_risks",
           "label": "Are you able to take photo of the issue / risks?",
-          "order": 36,
+          "order": 43,
           "type": "option",
           "required": true,
           "meta": false,
@@ -1241,7 +1416,7 @@
           "id": 1749694490283,
           "name": "photo_of_the_risks_associated_with_the_raw_water_gravity_system",
           "label": "Take photo of the risks associated with the raw water gravity system",
-          "order": 37,
+          "order": 44,
           "type": "photo",
           "required": true,
           "meta": false,
@@ -3828,20 +4003,10 @@
           ]
         },
         {
-          "id": 1754995400008,
-          "name": "project_completion_percentage",
-          "label": "What percentage of project is complete?",
-          "order": 4,
-          "type": "number",
-          "required": true,
-          "meta": false,
-          "rule": { "min": 0, "max": 100, "allowDecimal": true }
-        },
-        {
           "id": 1749700326877,
           "name": "final_recommendations",
           "label": "What are your final recommendation for the plant?(NOT to be shown to the interviewee)",
-          "order": 5,
+          "order": 4,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -3901,7 +4066,7 @@
           "id": 1749700436206,
           "name": "other_final_recommendations",
           "label": "Please specify other final recommendations for the plant",
-          "order": 6,
+          "order": 5,
           "type": "text",
           "required": true,
           "meta": false,
@@ -3911,7 +4076,7 @@
           "id": 1749700409140,
           "name": "signature_of_dws_officer",
           "label": "Signature of DWS Officer",
-          "order": 7,
+          "order": 6,
           "type": "signature",
           "required": true,
           "meta": false
@@ -3920,7 +4085,7 @@
           "id": 1749700428880,
           "name": "dws_officer_name",
           "label": "Name of DWS Officer",
-          "order": 8,
+          "order": 7,
           "type": "input",
           "required": true,
           "meta": true

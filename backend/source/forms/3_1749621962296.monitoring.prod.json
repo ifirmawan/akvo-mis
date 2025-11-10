@@ -2207,10 +2207,196 @@
           "dependency_rule": "OR"
         },
         {
+          "id": 1723459230022,
+          "name": "reservoir_type",
+          "label": "What is the type of reservoir?",
+          "order": 2,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "concrete",
+              "label": "Concrete",
+              "order": 1
+            },
+            {
+              "value": "roto",
+              "label": "Roto",
+              "order": 2
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "order": 3
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
+          "id": 1723459235022,
+          "name": "other_type_of_reservoir",
+          "label": "Please specify the other type of reservoir",
+          "order": 3,
+          "type": "text",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1723459230022,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
+          "id": 1723459215027,
+          "name": "reservoir_size_concrete",
+          "label": "What is the size of the concrete reservoir?",
+          "order": 4,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "22000l",
+              "label": "22,000L",
+              "order": 1
+            },
+            {
+              "value": "40000l",
+              "label": "40,000L",
+              "order": 2
+            },
+            {
+              "value": "80000l",
+              "label": "80,000L",
+              "order": 3
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "order": 4
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459230022,
+              "options": ["concrete"]
+            }
+          ]
+        },
+        {
+          "id": 1723459210032,
+          "name": "other_size_concrete_reservoir",
+          "label": "Please specify the other size of the concrete reservoir in litres",
+          "order": 5,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": { "allowDecimal": true },
+          "dependency": [
+            {
+              "id": 1723459215027,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
+          "id": 1723459210033,
+          "name": "reservoir_size_roto",
+          "label": "What is the size of the roto reservoir?",
+          "order": 6,
+          "type": "multiple_option",
+          "required": true,
+          "meta": false,
+          "options": [
+            {
+              "value": "10000l",
+              "label": "10,000L",
+              "order": 1
+            },
+            {
+              "value": "5000l",
+              "label": "5,000L",
+              "order": 2
+            },
+            {
+              "value": "2500l",
+              "label": "2,500L",
+              "order": 3
+            },
+            {
+              "value": "other",
+              "label": "Other",
+              "order": 4
+            }
+          ],
+          "dependency": [
+            {
+              "id": 1723459230022,
+              "options": ["roto"]
+            }
+          ]
+        },
+        {
+          "id": 1723459210038,
+          "name": "other_size_roto_reservoir",
+          "label": "Please specify the other size of the roto reservoir in litres",
+          "order": 7,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": { "allowDecimal": true },
+          "dependency": [
+            {
+              "id": 1723459210033,
+              "options": ["other"]
+            }
+          ]
+        },
+        {
+          "id": 1723459210039,
+          "name": "number_of_reservoirs",
+          "label": "How many reservoirs will be installed/constructed for this project?",
+          "order": 8,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "dependency": [
+            {
+              "id": 1749622726348,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726349,
+              "options": ["reservoir"]
+            },
+            {
+              "id": 1749622726350,
+              "options": ["reservoir"]
+            }
+          ],
+          "dependency_rule": "OR"
+        },
+        {
           "id": 1723459210023,
           "name": "reservoir_name",
           "label": "Reservoir Inspection Checklist",
-          "order": 2,
+          "order": 9,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2302,7 +2488,7 @@
           "id": 1849622785213,
           "name": "reservoir_inlet_type_of_pipe",
           "label": "Type of Reservoir Inlet Pipe",
-          "order": 3,
+          "order": 10,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2331,7 +2517,7 @@
           "id": 1849622785214,
           "name": "reservoir_inlet_pipe_size_pvc",
           "label": "Size of Reservoir Inlet PVC Pipe",
-          "order": 4,
+          "order": 11,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2378,7 +2564,7 @@
           "id": 1849622785240,
           "name": "reservoir_inlet_pipe_size_polyethelene",
           "label": "Size of Reservoir Inlet Polyethelene Pipe",
-          "order": 5,
+          "order": 12,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2425,7 +2611,7 @@
           "id": 1849622785215,
           "name": "reservoir_outlet_type_of_pipe",
           "label": "Type of Reservoir Outlet Pipe",
-          "order": 6,
+          "order": 13,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2454,7 +2640,7 @@
           "id": 1849622785216,
           "name": "reservoir_outlet_pipe_size_pvc",
           "label": "Size of Reservoir Outlet PVC Pipe",
-          "order": 7,
+          "order": 14,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2501,7 +2687,7 @@
           "id": 1849622785246,
           "name": "reservoir_outlet_pipe_size_polyethelene",
           "label": "Size of Reservoir Outlet Polyethelene Pipe",
-          "order": 8,
+          "order": 15,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2548,7 +2734,7 @@
           "id": 1849622785217,
           "name": "reservoir_overflow_type_of_pipe",
           "label": "Type of Reservoir Overflow Pipe",
-          "order": 9,
+          "order": 16,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2577,7 +2763,7 @@
           "id": 1849622785218,
           "name": "reservoir_overflow_pipe_size_pvc",
           "label": "Size of Reservoir Overflow PVC Pipe",
-          "order": 10,
+          "order": 17,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2624,7 +2810,7 @@
           "id": 1849622785252,
           "name": "reservoir_overflow_pipe_size_polyethelene",
           "label": "Size of Reservoir Overflow Polyethelene Pipe",
-          "order": 11,
+          "order": 18,
           "type": "multiple_option",
           "required": true,
           "meta": false,
@@ -2671,7 +2857,7 @@
           "id": 1723459310033,
           "name": "reservoir_implementation",
           "label": "Reservoir Construction/ Implementation",
-          "order": 12,
+          "order": 19,
           "type": "option",
           "required": true,
           "meta": false,
@@ -2709,7 +2895,7 @@
           "id": 1723459220024,
           "name": "reservoir_issues_noted",
           "label": "List down any issues noted with the reservoir inspection?",
-          "order": 13,
+          "order": 20,
           "type": "text",
           "required": false,
           "meta": false,

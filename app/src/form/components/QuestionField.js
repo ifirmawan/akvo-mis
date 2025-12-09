@@ -15,6 +15,8 @@ import {
   TypeAutofield,
   TypeAttachment,
   TypeSignature,
+  TypeGeotrace,
+  TypeGeoshape,
 } from '../fields';
 import styles from '../styles';
 import { FormState } from '../../store';
@@ -154,6 +156,10 @@ const QuestionField = ({
             {...questionField}
           />
         );
+      case QUESTION_TYPES.geotrace:
+        return <TypeGeotrace keyform={keyform} value={value} {...questionField} />;
+      case QUESTION_TYPES.geoshape:
+        return <TypeGeoshape keyform={keyform} value={value} {...questionField} />;
       default:
         return (
           <TypeInput

@@ -32,6 +32,8 @@ export const QUESTION_TYPES = {
   autofield: 'autofield',
   attachment: 'attachment',
   signature: 'signature',
+  geotrace: 'geotrace',
+  geoshape: 'geoshape',
 };
 
 export const jobStatus = {

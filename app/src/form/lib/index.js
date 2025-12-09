@@ -361,6 +361,18 @@ export const generateValidationSchemaFieldLevel = async (currentValue, field) =>
     case 'geo':
       yupType = Yup.array();
       break;
+    case 'geotrace':
+      yupType = Yup.array().nullable();
+      if (required) {
+        yupType = Yup.array().min(2, 'Geotrace requires at least 2 points').required(requiredError);
+      }
+      break;
+    case 'geoshape':
+      yupType = Yup.array().nullable();
+      if (required) {
+        yupType = Yup.array().min(3, 'Geoshape requires at least 3 points').required(requiredError);
+      }
+      break;
     default:
       yupType = Yup.string();
       break;
@@ -403,7 +415,13 @@ export const generateDataPointName = (forms, currentValues, cascades = {}, datap
         ?.sort((a, b) => a.order - b.order)
     : [];
   const dpName = dataPointNameValues
-    .filter((d) => d.type !== QUESTION_TYPES.geo && (d.value || d.value === 0))
+    .filter(
+      (d) =>
+        d.type !== QUESTION_TYPES.geo &&
+        d.type !== QUESTION_TYPES.geotrace &&
+        d.type !== QUESTION_TYPES.geoshape &&
+        (d.value || d.value === 0),
+    )
     .map((x) => x.value)
     .join(' - ');
   if (datapoint?.geo && typeof datapoint.geo === 'string') {

@@ -40,7 +40,7 @@ const FormPage = ({ navigation, route }) => {
   const currentFormId = route?.params?.id;
   // continue saved submission
   const savedDataPointId = route?.params?.dataPointId;
-  const isNewSubmission = route?.params?.newSubmission;
+  const [isNewSubmission, setIsNewSubmission] = useState(route?.params?.newSubmission);
   const [currentDataPoint, setCurrentDataPoint] = useState({});
   const [loading, setLoading] = useState(false);
   const db = SQLite.useSQLiteContext();

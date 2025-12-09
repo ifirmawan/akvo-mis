@@ -6,7 +6,7 @@ services:
       - 8081:8081
       - 19000:19000
   mobileapp:
-    image: akvo/akvo-node-24-alpine:20250923.073213.57d80cd
+    image: akvo/akvo-node-18-alpine:20250306.055839.23cadbd
     command: ["./start.sh"]
     volumes:
       - akvo-mis-mobile-docker-sync:/app/node_modules:nocopy

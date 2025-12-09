@@ -397,6 +397,17 @@ def transform_form_data_for_report(
                                 # Format answer as before
                                 if question.type == QuestionTypes.geo:
                                     value = ",".join(map(str, answer.options))
+                                if question.type in [
+                                    QuestionTypes.geotrace,
+                                    QuestionTypes.geoshape,
+                                ]:
+                                    # [[lat,lang], [lat,lang], ...]
+                                    value = ";".join(
+                                        [
+                                            ",".join(map(str, coord))
+                                            for coord in answer.options
+                                        ]
+                                    )
                                 elif question.type in [
                                     QuestionTypes.option,
                                     QuestionTypes.multiple_option,
@@ -506,6 +517,17 @@ def transform_form_data_for_report(
                             continue
                         if question.type == QuestionTypes.geo:
                             value = ",".join(map(str, answer.options))
+                        if question.type in [
+                            QuestionTypes.geotrace,
+                            QuestionTypes.geoshape,
+                        ]:
+                            # [[lat,lang], [lat,lang], ...]
+                            value = ";".join(
+                                [
+                                    ",".join(map(str, coord))
+                                    for coord in answer.options
+                                ]
+                            )
                         elif question.type in [
                             QuestionTypes.option,
                             QuestionTypes.multiple_option,

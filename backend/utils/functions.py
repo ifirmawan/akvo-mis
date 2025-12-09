@@ -16,6 +16,8 @@ def update_date_time_format(date):
 def get_answer_value(answer: Answers, webform: bool = False):
     if answer.question.type in [
         QuestionTypes.geo,
+        QuestionTypes.geotrace,
+        QuestionTypes.geoshape,
         QuestionTypes.option,
         QuestionTypes.multiple_option,
     ]:

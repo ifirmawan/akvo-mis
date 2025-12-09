@@ -110,6 +110,11 @@ def collect_answers(user: SystemUser, dp: dict, qs: dict, data_id):
                 answer.options = get_geo_value(aw=aw)
             else:
                 valid = False
+        if q.type in [QuestionTypes.geotrace, QuestionTypes.geoshape]:
+            if aw:
+                answer.options = aw
+            else:
+                valid = False
         if q.type == QuestionTypes.text or q.type == QuestionTypes.input:
             answer.name = aw
             if q.meta:

@@ -86,6 +86,8 @@ class SubmitFormDataAnswerSerializer(serializers.ModelSerializer):
             question = attrs.get("question")
             if question.type in [
                 QuestionTypes.geo,
+                QuestionTypes.geotrace,
+                QuestionTypes.geoshape,
                 QuestionTypes.option,
                 QuestionTypes.multiple_option,
             ] and not isinstance(attrs.get("value"), list):
@@ -134,6 +136,8 @@ class SubmitFormDataAnswerSerializer(serializers.ModelSerializer):
             "question"
         ).type in [
             QuestionTypes.geo,
+            QuestionTypes.geotrace,
+            QuestionTypes.geoshape,
             QuestionTypes.option,
             QuestionTypes.multiple_option,
         ]:
@@ -217,6 +221,8 @@ class SubmitFormSerializer(serializers.Serializer):
 
             if answer.get("question").type in [
                 QuestionTypes.geo,
+                QuestionTypes.geotrace,
+                QuestionTypes.geoshape,
                 QuestionTypes.option,
                 QuestionTypes.multiple_option,
             ]:
@@ -588,6 +594,8 @@ class SubmitPendingFormSerializer(serializers.Serializer):
 
             if question.type in [
                 QuestionTypes.geo,
+                QuestionTypes.geotrace,
+                QuestionTypes.geoshape,
                 QuestionTypes.option,
                 QuestionTypes.multiple_option,
             ]:
@@ -711,6 +719,8 @@ class SubmitUpdateDraftFormSerializer(SubmitPendingFormSerializer):
 
             if question.type in [
                 QuestionTypes.geo,
+                QuestionTypes.geotrace,
+                QuestionTypes.geoshape,
                 QuestionTypes.option,
                 QuestionTypes.multiple_option,
             ]:

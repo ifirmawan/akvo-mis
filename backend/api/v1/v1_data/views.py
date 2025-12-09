@@ -282,6 +282,8 @@ class FormDataAddListView(APIView):
             option = None
             if question.type in [
                 QuestionTypes.geo,
+                QuestionTypes.geotrace,
+                QuestionTypes.geoshape,
                 QuestionTypes.option,
                 QuestionTypes.multiple_option,
             ]:
@@ -618,6 +620,8 @@ class PendingFormDataView(APIView):
             option = None
             if question.type in [
                 QuestionTypes.geo,
+                QuestionTypes.geotrace,
+                QuestionTypes.geoshape,
                 QuestionTypes.option,
                 QuestionTypes.multiple_option,
             ]:

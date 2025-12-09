@@ -188,6 +188,8 @@ class Answers(models.Model):
         qname = f"{self.question.name}"
         if q.type in [
             QuestionTypes.geo,
+            QuestionTypes.geotrace,
+            QuestionTypes.geoshape,
             QuestionTypes.option,
             QuestionTypes.multiple_option,
         ]:
@@ -220,6 +222,8 @@ class Answers(models.Model):
         q = self.question
         if q.type in [
             QuestionTypes.geo,
+            QuestionTypes.geotrace,
+            QuestionTypes.geoshape,
             QuestionTypes.option,
             QuestionTypes.multiple_option,
         ]:

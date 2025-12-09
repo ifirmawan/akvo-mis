@@ -233,6 +233,16 @@ def validate_row_data(
         if err:
             default.update(err)
             return default
+    elif question.type in [QuestionTypes.geotrace, QuestionTypes.geoshape]:
+        # expected answer format: "lat1|long1; lat2|long2; lat3|long3"
+        answer = str(answer)
+        points = answer.split(";")
+        for point in points:
+            point = point.strip()
+            err = validate_geo(point)
+            if err:
+                default.update(err)
+                return default
     elif question.type == QuestionTypes.number:
         err = validate_number(answer, question)
         if err:

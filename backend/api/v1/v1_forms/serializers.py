@@ -390,6 +390,8 @@ class FormDataListQuestionSerializer(serializers.ModelSerializer):
     def get_option(self, instance: Questions):
         if instance.type in [
             QuestionTypes.geo,
+            QuestionTypes.geotrace,
+            QuestionTypes.geoshape,
             QuestionTypes.option,
             QuestionTypes.multiple_option,
         ]:

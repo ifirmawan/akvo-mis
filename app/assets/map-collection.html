@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+      }
+      html,
+      body,
+      #map {
+        height: 100%;
+        width: 100vw;
+      }
+      .marker-label {
+        background-color: white;
+        border: 1px solid #666;
+        border-radius: 3px;
+        padding: 2px 5px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    </style>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  </head>
+  <body>
+    <div id="map" 
+         style="height: 100vh" 
+         data-mode="{{mode}}"
+         data-points="{{points}}"
+         data-center-lat="{{centerLat}}"
+         data-center-lng="{{centerLng}}">
+    </div>
+    <script>
+      const selector = document.getElementById('map');
+      const mode = selector.getAttribute('data-mode'); // 'geotrace' or 'geoshape'
+      const pointsData = selector.getAttribute('data-points');
+      const centerLat = parseFloat(selector.getAttribute('data-center-lat'));
+      const centerLng = parseFloat(selector.getAttribute('data-center-lng'));
+      
+      let points = [];
+      try {
+        if (pointsData && pointsData !== '[]') {
+          points = JSON.parse(pointsData);
+        }
+      } catch (e) {
+        console.error('Error parsing points:', e);
+      }
+
+      const map = L.map('map', { zoomControl: false });
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 6,
+        maxZoom: 19,
+        zoom: 13,
+        attribution: '© OpenStreetMap',
+      }).addTo(map);
+
+      // Set initial view
+      if (points.length > 0) {
+        const bounds = L.latLngBounds(points.map(p => [p[0], p[1]]));
+        map.fitBounds(bounds, { padding: [50, 50] });
+      } else {
+        map.setView([centerLat, centerLng], 15);
+      }
+
+      L.control.zoom({
+        position: 'bottomleft',
+      }).addTo(map);
+
+      let markers = [];
+      let polyline = null;
+      let polygon = null;
+
+      // Custom marker icon with number
+      function createNumberedIcon(number) {
+        return L.divIcon({
+          className: 'numbered-marker',
+          html: `<div style="background-color: #2196F3; color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">${number}</div>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+        });
+      }
+
+      function updateMapDisplay() {
+        // Clear existing markers and lines
+        markers.forEach(m => map.removeLayer(m));
+        markers = [];
+        if (polyline) map.removeLayer(polyline);
+        if (polygon) map.removeLayer(polygon);
+
+        if (points.length === 0) return;
+
+        // Add numbered markers
+        points.forEach((point, index) => {
+          const marker = L.marker([point[0], point[1]], {
+            icon: createNumberedIcon(index + 1)
+          }).addTo(map);
+          markers.push(marker);
+        });
+
+        // Draw line or polygon
+        const latlngs = points.map(p => [p[0], p[1]]);
+        
+        if (mode === 'geoshape' && points.length >= 3) {
+          // Draw polygon (closed shape)
+          polygon = L.polygon(latlngs, {
+            color: '#2196F3',
+            fillColor: '#2196F3',
+            fillOpacity: 0.2,
+            weight: 3
+          }).addTo(map);
+        } else if (points.length >= 2) {
+          // Draw polyline
+          polyline = L.polyline(latlngs, {
+            color: '#2196F3',
+            weight: 3
+          }).addTo(map);
+        }
+
+        // Fit bounds if we have points
+        if (points.length > 0) {
+          const bounds = L.latLngBounds(latlngs);
+          map.fitBounds(bounds, { padding: [50, 50] });
+        }
+      }
+
+      // Handle map clicks (for tapping mode)
+      map.on('click', (e) => {
+        const eventData = {
+          type: 'mapClicked',
+          data: {
+            lat: e.latlng.lat,
+            lng: e.latlng.lng
+          }
+        };
+        window.ReactNativeWebView.postMessage(JSON.stringify(eventData));
+      });
+
+      // Listen for messages from React Native
+      document.addEventListener('message', function (event) {
+        const eventData = JSON.parse(event.data);
+        
+        if (eventData.type === 'addPoint') {
+          const { lat, lng } = eventData.data;
+          points.push([lat, lng]);
+          updateMapDisplay();
+          
+          // Send confirmation back
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'pointAdded',
+            data: { pointCount: points.length }
+          }));
+        }
+        
+        if (eventData.type === 'removeLastPoint') {
+          if (points.length > 0) {
+            points.pop();
+            updateMapDisplay();
+          }
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'pointRemoved',
+            data: { pointCount: points.length }
+          }));
+        }
+        
+        if (eventData.type === 'clearPoints') {
+          points = [];
+          updateMapDisplay();
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'pointsCleared',
+            data: { pointCount: 0 }
+          }));
+        }
+        
+        if (eventData.type === 'updatePoints') {
+          points = eventData.data.points || [];
+          updateMapDisplay();
+        }
+        
+        if (eventData.type === 'centerMap') {
+          const { lat, lng } = eventData.data;
+          map.setView([lat, lng], map.getZoom());
+        }
+      });
+
+      // Initial display
+      updateMapDisplay();
+    </script>
+  </body>
+</html>

@@ -56,6 +56,28 @@
           "options": null,
           "dependency": null,
           "limit": 5.0
+        },
+        {
+          "id": 1749612000000,
+          "name": "nearest_pump_station_route",
+          "label": "Nearest Pump Station Route",
+          "order": 5,
+          "type": "geotrace",
+          "required": false,
+          "meta": false,
+          "options": null,
+          "dependency": null
+        },
+        {
+          "id": 1749612100000,
+          "name": "pump_station_area",
+          "label": "Pump Station Area",
+          "order": 6,
+          "type": "geoshape",
+          "required": false,
+          "meta": false,
+          "options": null,
+          "dependency": null
         }
       ],
       "repeat_text": null

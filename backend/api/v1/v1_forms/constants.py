@@ -12,6 +12,8 @@ class QuestionTypes:
     attachment = 11
     signature = 12
     input = 13
+    geotrace = 14
+    geoshape = 15
 
     FieldStr = {
         geo: "Geo",
@@ -27,6 +29,8 @@ class QuestionTypes:
         attachment: "Attachment",
         signature: "Signature",
         input: "Input",
+        geotrace: "Geotrace",
+        geoshape: "Geoshape",
     }
 
 
